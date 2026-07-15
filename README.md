@@ -11,7 +11,8 @@ css/styles.css       all styling (light/dark via prefers-color-scheme)
 js/main.js           mobile nav toggle, footer year, screenshot lightbox
 assets/
   logo-mark.svg       the ChakataStat brand mark
-  favicon-256.png     favicon fallback / og:image placeholder
+  favicon-256.png     favicon fallback
+  og-image.jpg        1200x630 social-preview card (og:image / twitter:image)
   screenshots/        real app screenshots (captured from an actual release build)
 ```
 
@@ -34,8 +35,6 @@ wired up through your DNS provider.
 
 - [ ] Point the Download buttons (`index.html`, `#download` section) at real
       release artifacts instead of `#` placeholders.
-- [ ] Replace the `og:image` placeholder (`assets/favicon-256.png`) with a
-      proper 1200×630 social-preview card.
 - [ ] Decide on a Documentation link once/if the User Guide is hosted
       publicly.
 
