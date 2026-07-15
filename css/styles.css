@@ -547,3 +547,36 @@ section h2 {
     flex-direction: column;
   }
 }
+
+/* Simple content pages (privacy policy, etc.) — same shell, prose body. */
+.legal {
+  padding: 64px 0 96px;
+}
+
+.legal-content {
+  max-width: 72ch;
+}
+
+.legal-content h1 {
+  margin-bottom: 0.25em;
+}
+
+.legal-updated {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 2.5em;
+}
+
+.legal-content h2 {
+  margin-top: 2em;
+  font-size: 1.25rem;
+}
+
+.legal-content ul {
+  margin: 0 0 1em;
+  padding-left: 1.25em;
+}
+
+.legal-content li {
+  margin-bottom: 0.4em;
+}
