@@ -209,13 +209,18 @@
     <section class="download" id="download">
       <div class="container download-inner">
         <h2>Get ChakataStat</h2>
-        <p>Available for Windows, macOS and Linux.</p>
-        <!-- TODO: point these at real release artifacts before launch. -->
+        <p>Available for Windows now — macOS and Linux are coming soon.</p>
         <div class="download-buttons">
-          <a class="btn btn-primary btn-lg" href="#" data-platform="windows">Download for Windows</a>
-          <a class="btn btn-secondary btn-lg" href="#" data-platform="mac">macOS</a>
-          <a class="btn btn-secondary btn-lg" href="#" data-platform="linux">Linux</a>
+          <a class="btn btn-primary btn-lg" href="https://github.com/Tembocs/chakatastat-releases/releases/download/v0.5.0/chakatastat-0.5.0-windows-x64.zip" data-platform="windows">Download for Windows</a>
+          <span class="btn btn-disabled btn-lg" aria-disabled="true">macOS — coming soon</span>
+          <span class="btn btn-disabled btn-lg" aria-disabled="true">Linux — coming soon</span>
         </div>
+        <p class="download-note">
+          This early build isn't code-signed yet, so Windows may show a
+          SmartScreen "Unknown publisher" warning — click <strong>More
+          info</strong> → <strong>Run anyway</strong> to continue. It's a
+          .zip: unzip it and run ChakataStat.exe.
+        </p>
       </div>
     </section>
   </main>

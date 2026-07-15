@@ -33,8 +33,13 @@ wired up through your DNS provider.
 
 ## Before going live — TODO
 
-- [ ] Point the Download buttons (`index.html`, `#download` section) at real
-      release artifacts instead of `#` placeholders.
+- [x] Windows download wired to the [chakatastat-releases](https://github.com/Tembocs/chakatastat-releases)
+      GitHub release (currently a prerelease zip — unsigned, hence the
+      SmartScreen note on the button). Swap to the Microsoft Store URI once
+      that listing is approved.
+- [ ] Wire the macOS and Linux buttons once their release paths exist
+      (Linux → the Snap Store listing once approved; macOS has no release
+      path yet).
 - [ ] Decide on a Documentation link once/if the User Guide is hosted
       publicly.
 

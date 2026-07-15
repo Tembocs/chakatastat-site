@@ -130,6 +130,14 @@ a {
   border-color: var(--color-primary);
 }
 
+.btn-disabled {
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  border-color: var(--color-border);
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .btn-ghost {
   background: transparent;
   color: var(--color-text);
@@ -453,6 +461,13 @@ section h2 {
   justify-content: center;
   flex-wrap: wrap;
   margin-top: 28px;
+}
+
+.download-note {
+  max-width: 52ch;
+  margin: 20px auto 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
 }
 
 /* Footer */
