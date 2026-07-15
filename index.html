@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ChakataStat — Statistical analysis, done properly</title>
+  <meta name="description" content="ChakataStat is a desktop app for statistical data analysis: a fast, spreadsheet-style data editor backed by a native Rust engine, with a broad Analyze program, an AI assistant, and full reproducibility built in.">
+
+  <link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg">
+  <link rel="alternate icon" href="assets/favicon-256.png">
+  <link rel="apple-touch-icon" href="assets/favicon-256.png">
+  <link rel="canonical" href="https://chakatastat.app/">
+
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+
+  <!-- Open Graph / social preview. TODO: swap this og:image for a proper
+       1200x630 social card before launch — favicon-256.png is a placeholder. -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="ChakataStat — Statistical analysis, done properly">
+  <meta property="og:description" content="A desktop app for statistical data analysis: a spreadsheet-style editor backed by a native Rust engine, a broad Analyze program, an AI assistant, and full reproducibility.">
+  <meta property="og:url" content="https://chakatastat.app/">
+  <meta property="og:image" content="https://chakatastat.app/assets/favicon-256.png">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="#top">
+        <img class="brand-mark" src="assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav id="nav-links" class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#screenshots">Screenshots</a>
+        <a href="#analyze">Analyze</a>
+        <a href="#download">Download</a>
+        <a href="#cite">Cite</a>
+      </nav>
+
+      <a class="btn btn-primary nav-cta" href="#download">Download</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow">Desktop statistical analysis</p>
+          <h1>Statistical analysis, done properly.</h1>
+          <p class="lede">
+            ChakataStat is a desktop app for serious data analysis — a fast,
+            spreadsheet-style editor backed by a native Rust engine, with a
+            broad Analyze program, an in-app AI assistant, and full
+            reproducibility built in.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary btn-lg" href="#download">Download ChakataStat</a>
+            <a class="btn btn-ghost btn-lg" href="#features">See what it does</a>
+          </div>
+          <p class="hero-platforms">Windows · macOS · Linux</p>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <img src="assets/logo-mark.svg" alt="">
+        </div>
+      </div>
+    </section>
+
+    <section class="features" id="features">
+      <div class="container">
+        <h2>Everything you need for real analysis</h2>
+        <p class="section-lede">
+          One application, five ways to reach the same catalog: the GUI, an
+          editable syntax console, the AI assistant, an MCP server for
+          external agents, and a headless batch runner.
+        </p>
+
+        <div class="feature-grid">
+          <article class="feature-card">
+            <h3>Data editor</h3>
+            <p>
+              A fast, Excel-like sheet with a Variable View for metadata,
+              value labels, missing-value handling, and self-documenting
+              column tooltips.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <h3>A broad Analyze program</h3>
+            <p>
+              Descriptives, regression, GLM and mixed models, survival and
+              time series, multivariate methods, Bayesian tests and more —
+              87 analysis tools in one catalog.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <h3>Graphs</h3>
+            <p>
+              Histograms, scatterplots, boxplots and a unified Chart Builder,
+              painted straight into the output viewer.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <h3>AI assistant</h3>
+            <p>
+              A provider-neutral agent — Claude, or any OpenAI-compatible
+              backend, including a local Ollama — that runs analyses in
+              plain language and renders results inline.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <h3>Reproducibility</h3>
+            <p>
+              Every GUI action emits an editable, re-runnable command.
+              Export output to HTML, Markdown or LaTeX, or as a Python
+              script.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <h3>Native performance</h3>
+            <p>
+              A native Rust engine — an in-house columnar store with Parquet
+              I/O over Apache Arrow — does the heavy lifting off the UI
+              thread.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="screenshots" id="screenshots">
+      <div class="container">
+        <h2>See it in action</h2>
+        <p class="section-lede">
+          A real dataset, in the app — the data editor, its metadata view,
+          an Analyze dialog and the resulting output.
+        </p>
+
+        <div class="screenshot-grid">
+          <figure class="screenshot-card">
+            <img src="assets/screenshots/data-editor.png" alt="ChakataStat's data editor showing a loaded health-study dataset with numeric and categorical columns" loading="lazy">
+            <figcaption>Data editor — a fast, spreadsheet-style view of your dataset</figcaption>
+          </figure>
+
+          <figure class="screenshot-card">
+            <img src="assets/screenshots/variable-view.png" alt="ChakataStat's Variable View showing column metadata: type, width, label, values, missing and measure" loading="lazy">
+            <figcaption>Variable View — metadata for every column in one place</figcaption>
+          </figure>
+
+          <figure class="screenshot-card">
+            <img src="assets/screenshots/analyze-dialog.png" alt="The Frequencies dialog in ChakataStat with three variables selected, ready to run" loading="lazy">
+            <figcaption>Every Analyze dialog is a couple of clicks away</figcaption>
+          </figure>
+
+          <figure class="screenshot-card">
+            <img src="assets/screenshots/output-view.png" alt="ChakataStat's output view showing frequency tables for Education Level and Smoking Status" loading="lazy">
+            <figcaption>Results render straight into the output log</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="analyze" id="analyze">
+      <div class="container analyze-inner">
+        <div class="analyze-figure">
+          <p class="analyze-number">87</p>
+          <p class="analyze-caption">analysis tools, one catalog</p>
+        </div>
+        <div class="analyze-copy">
+          <h2>A statistics program that goes deep</h2>
+          <p>
+            Descriptive Statistics, Compare Means and Correlate; Regression
+            (linear, logistic, Poisson, regularized, robust, nonlinear,
+            instrumental variables); General Linear Model, Linear Mixed
+            Models and GLMM; Factor / PCA, Cluster and Discriminant
+            analysis; Survival (Kaplan-Meier, Cox, parametric); Time Series
+            (ARIMA, seasonal decomposition); Bayesian tests; and
+            Nonparametric methods.
+          </p>
+          <ul class="tag-list">
+            <li>Regression</li>
+            <li>Mixed models</li>
+            <li>Survival</li>
+            <li>Time series</li>
+            <li>Bayesian</li>
+            <li>Multivariate</li>
+            <li>Nonparametric</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="download" id="download">
+      <div class="container download-inner">
+        <h2>Get ChakataStat</h2>
+        <p>Available for Windows, macOS and Linux.</p>
+        <!-- TODO: point these at real release artifacts before launch. -->
+        <div class="download-buttons">
+          <a class="btn btn-primary btn-lg" href="#" data-platform="windows">Download for Windows</a>
+          <a class="btn btn-secondary btn-lg" href="#" data-platform="mac">macOS</a>
+          <a class="btn btn-secondary btn-lg" href="#" data-platform="linux">Linux</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="cite">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-cite">
+        Cite: Amani, E. (2026). <em>ChakataStat</em> (Version 0.5.0)
+        [Computer software].
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
