@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quick Start — ChakataStat</title>
+  <meta name="description" content="From install to your first statistical result in about ten minutes: open the bundled sample dataset, run Frequencies, Descriptives, a t test and a histogram.">
+
+  <link rel="icon" type="image/svg+xml" href="../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../assets/favicon-256.png">
+  <link rel="apple-touch-icon" href="../assets/favicon-256.png">
+  <link rel="canonical" href="https://chakatastat.app/quick-start/">
+
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Quick Start — ChakataStat">
+  <meta property="og:description" content="From install to your first statistical result in about ten minutes, on the bundled sample dataset.">
+  <meta property="og:url" content="https://chakatastat.app/quick-start/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://chakatastat.app/assets/og-image.jpg">
+
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../index.html#top">
+        <img class="brand-mark" src="../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav id="nav-links" class="nav-links">
+        <a href="../index.html#features">Features</a>
+        <a href="../index.html#screenshots">Screenshots</a>
+        <a href="../index.html#analyze">Analyze</a>
+        <a href="../index.html#download">Download</a>
+        <a href="../index.html#cite">Cite</a>
+      </nav>
+
+      <a class="btn btn-primary nav-cta" href="../index.html#download">Download</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="legal">
+      <div class="container legal-content">
+        <h1>Quick Start</h1>
+        <p class="legal-updated">From install to your first result in about ten minutes — one linear pass, no choices to make. Every step names the exact menu item.</p>
+
+        <h2>1. Install and launch</h2>
+        <ul>
+          <li><strong>Windows</strong> — install ChakataStat from the <a href="../index.html#download">Microsoft Store</a> and launch it from the Start menu.</li>
+          <li><strong>Ubuntu / Linux</strong> — <code>snap install chakatastat</code>, then launch <strong>ChakataStat</strong> from your applications.</li>
+        </ul>
+        <p>
+          You land in the <strong>Data View</strong>: an empty
+          spreadsheet-style editor (cases are rows, variables columns), with
+          the menu bar above and the AI assistant panel on the right — ignore
+          that panel for now (<kbd>Ctrl+Shift+A</kbd> hides it).
+        </p>
+
+        <h2>2. Open the sample dataset</h2>
+        <p>
+          <strong>File → Open Sample Dataset</strong> (<kbd>Ctrl+Shift+O</kbd>)
+          loads the bundled teaching dataset: a synthetic health study of 600
+          participants and 21 variables — age, sex, blood pressure, glucose,
+          cholesterol, smoking and more. It opens as a new, unsaved document,
+          so nothing you do can damage the sample.
+        </p>
+
+        <h2>3. Read the two views</h2>
+        <ul>
+          <li><strong>Data View</strong> — the values, one row per participant. Click any cell and its whole row and column tint, so you can trace a case across the sheet.</li>
+          <li><strong>Variable View</strong> (<kbd>Ctrl+2</kbd>) — one row per <em>variable</em>: name, type, label, value labels (open <em>EducationLevel</em>'s — codes 0–3 mean None/Primary/Secondary/Tertiary), declared missing values, and measure.</li>
+        </ul>
+        <p>That metadata is what turns a grid of numbers into a dataset.</p>
+
+        <h2>4. Run Frequencies on a categorical variable</h2>
+        <p>
+          <strong>Analyze → Descriptive Statistics → Frequencies…</strong>
+          Move <em>SmokingStatus</em> into the Variables list, click
+          <strong>Run</strong>. The app switches to the Output View with a
+          frequency table: each category with its count and percent.
+        </p>
+
+        <h2>5. Run Descriptives on scale variables</h2>
+        <p>
+          <strong>Analyze → Descriptive Statistics → Descriptives…</strong>
+          Move <em>Age</em>, <em>BMI</em> and <em>SystolicBP</em> across,
+          <strong>Run</strong> — valid N, minimum, maximum, mean and standard
+          deviation for each.
+        </p>
+
+        <h2>6. Compare two groups with a t test</h2>
+        <p>
+          <strong>Analyze → Compare Means → Independent-Samples T Test…</strong>
+          Test variable <em>SystolicBP</em>, grouping variable <em>Sex</em>,
+          <strong>Run</strong>. The output shows each group's mean and the
+          test statistics; a small <em>p</em> value ("Sig.") means the
+          difference is unlikely to be chance.
+        </p>
+
+        <h2>7. Draw a chart</h2>
+        <p>
+          <strong>Graphs → Histogram…</strong> (<kbd>Ctrl+Shift+H</kbd>), pick
+          <em>BMI</em>, <strong>Run</strong>. A histogram card appears in the
+          output right under your tables.
+        </p>
+
+        <h2>8. Keep your work</h2>
+        <ul>
+          <li><strong>File → Save</strong> (<kbd>Ctrl+S</kbd>) writes a <code>.ckd</code> document — data <em>and</em> every variable definition together.</li>
+          <li><strong>File → Export Output…</strong> writes the whole output log to HTML, Markdown or LaTeX.</li>
+          <li>Switch to the <strong>Syntax</strong> tab: every step you took was also recorded as an editable, re-runnable command — that trail is how work in ChakataStat stays reproducible.</li>
+        </ul>
+
+        <h2>Where to go next</h2>
+        <p>
+          The full <strong>User Guide</strong> and a ten-module
+          <strong>tutorial workbook</strong> (built on the same sample
+          dataset, with exercises for classroom training) ship inside the
+          app — press <kbd>F1</kbd> or open <strong>Help →
+          Documentation</strong>. Or ask the built-in AI assistant
+          (<kbd>Ctrl+Shift+A</kbd>) for an analysis in plain language.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="cite">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-cite">
+        Cite: Amani, E. (2026). <em>ChakataStat</em> (Version 0.5.0)
+        [Computer software].
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>
