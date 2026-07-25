@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Choosing a Procedure — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/reference/choosing-a-procedure/">
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Choosing a Procedure — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/reference/choosing-a-procedure/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../index.html">
+        <img class="brand-mark" src="../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../docs/">User Guide</a>
+        <a href="../../../index.html#validated">Validation</a>
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#screenshots">Screenshots</a>
+        <a href="../../../index.html#download">Download</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../../">Contents</a></li>
+        <li><a href="../../quick-start/">Quick Start</a></li>
+        <li><a href="../../overview/">Overview</a></li>
+        <li><a href="../../getting-started/">Getting Started</a></li>
+        <li><a href="../../tutorial/">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../../working-with-data/">Working with Data</a></li>
+        <li><a href="../../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../../analyze/">Analyzing Data</a></li>
+        <li><a href="../../graphs/">Graphs</a></li>
+        <li><a href="../../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
+        <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
+        <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="./" aria-current="page">Choosing a procedure</a></li>
+        <li><a href="../glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="choosing-a-procedure">Choosing a Procedure</h1>
+<p>Not sure which analysis you need? Start from <strong>what you have</strong> and <strong>what you want
+to know</strong>. Find the row that matches and follow the link.</p>
+<h2 id="i-want-to-describe--summarise">I want to describe / summarise</h2>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>You have</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>One categorical variable — how often each value occurs</td>
+<td><a href="../../analyze/descriptive-statistics/#frequencies">Frequencies</a></td>
+</tr>
+<tr>
+<td>Scale variables — mean, SD, range side by side</td>
+<td><a href="../../analyze/descriptive-statistics/#descriptives">Descriptives</a></td>
+</tr>
+<tr>
+<td>One scale variable — full distribution, normality, outliers</td>
+<td><a href="../../analyze/descriptive-statistics/#explore">Explore</a></td>
+</tr>
+<tr>
+<td>A breakdown of a scale variable by groups (no test)</td>
+<td><a href="../../analyze/compare-means/#means">Means</a></td>
+</tr>
+<tr>
+<td>The shape of a distribution, visually</td>
+<td><a href="../../graphs/#histogram">Histogram</a> / <a href="../../graphs/#boxplot">Boxplot</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="i-want-to-compare-groups-a-scale-outcome">I want to compare groups (a scale outcome)</h2>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Groups</th>
+<th>Assumptions OK?</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>One mean vs a fixed value</td>
+<td>yes</td>
+<td><a href="../../analyze/compare-means/#one-sample-t-test">One-Sample T Test</a></td>
+</tr>
+<tr>
+<td>Two independent groups</td>
+<td>yes</td>
+<td><a href="../../analyze/compare-means/#independent-samples-t-test">Independent-Samples T Test</a></td>
+</tr>
+<tr>
+<td>Two independent groups</td>
+<td>no (non-normal)</td>
+<td><a href="../../analyze/nonparametric/">Mann-Whitney U</a></td>
+</tr>
+<tr>
+<td>Two related measurements</td>
+<td>yes</td>
+<td><a href="../../analyze/compare-means/#paired-samples-t-test">Paired-Samples T Test</a></td>
+</tr>
+<tr>
+<td>Two related measurements</td>
+<td>no</td>
+<td><a href="../../analyze/nonparametric/">Wilcoxon / Sign</a></td>
+</tr>
+<tr>
+<td>Three+ independent groups</td>
+<td>yes</td>
+<td><a href="../../analyze/compare-means/#one-way-anova">One-Way ANOVA</a></td>
+</tr>
+<tr>
+<td>Three+ independent groups</td>
+<td>no</td>
+<td><a href="../../analyze/nonparametric/">Kruskal-Wallis</a></td>
+</tr>
+<tr>
+<td>Three+ related measurements</td>
+<td>no</td>
+<td><a href="../../analyze/nonparametric/">Friedman</a></td>
+</tr>
+<tr>
+<td>Several factors, ± covariates</td>
+<td>yes</td>
+<td><a href="../../analyze/correlation-and-regression/#general-linear-model">GLM</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="i-want-to-relate-two-categorical-variables">I want to relate two categorical variables</h2>
+<p>→ <a href="../../analyze/descriptive-statistics/#crosstabs">Crosstabs</a> (chi-square and
+association measures), or <a href="../../analyze/tables/">Custom Tables</a> for a bespoke
+pivot.</p>
+<h2 id="i-want-to-measure-association-between-scale-variables">I want to measure association between scale variables</h2>
+<p>→ <a href="../../analyze/correlation-and-regression/#correlate">Correlate</a> (Pearson,
+Spearman, Kendall; partial to control for other variables).</p>
+<h2 id="i-want-to-predict-an-outcome-from-predictors">I want to predict an outcome from predictors</h2>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Outcome type</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Continuous</td>
+<td><a href="../../analyze/correlation-and-regression/#linear">Linear regression</a></td>
+</tr>
+<tr>
+<td>Binary (yes/no)</td>
+<td><a href="../../analyze/correlation-and-regression/#binary-logistic">Binary logistic</a></td>
+</tr>
+<tr>
+<td>Count</td>
+<td><a href="../../analyze/correlation-and-regression/#poisson--negative-binomial">Poisson / Negative Binomial</a></td>
+</tr>
+<tr>
+<td>Unordered categories</td>
+<td><a href="../../analyze/correlation-and-regression/#multinomial--ordinal">Multinomial</a></td>
+</tr>
+<tr>
+<td>Ordered categories</td>
+<td><a href="../../analyze/correlation-and-regression/#multinomial--ordinal">Ordinal</a></td>
+</tr>
+<tr>
+<td>Continuous, clustered/repeated data</td>
+<td><a href="../../analyze/correlation-and-regression/#linear-mixed-model">Mixed model</a></td>
+</tr>
+<tr>
+<td>Known groups, from scale predictors</td>
+<td><a href="../../analyze/scale-reduction-classify/#discriminant">Discriminant</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="i-want-to-find-structure--reduce-variables">I want to find structure / reduce variables</h2>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Goal</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Do these items form one reliable scale?</td>
+<td><a href="../../analyze/scale-reduction-classify/#scale--reliability-analysis">Reliability</a></td>
+</tr>
+<tr>
+<td>Reduce many variables to a few factors</td>
+<td><a href="../../analyze/scale-reduction-classify/#dimension-reduction--factor">Factor</a></td>
+</tr>
+<tr>
+<td>Test a hypothesized factor structure</td>
+<td><a href="../../analyze/cfa/">Confirmatory Factor Analysis</a></td>
+</tr>
+<tr>
+<td>Group cases into a fixed number of clusters</td>
+<td><a href="../../analyze/scale-reduction-classify/#k-means-cluster">K-Means</a></td>
+</tr>
+<tr>
+<td>Group cases, see the structure</td>
+<td><a href="../../analyze/scale-reduction-classify/#hierarchical-cluster">Hierarchical</a></td>
+</tr>
+<tr>
+<td>Group cases, let the count be chosen</td>
+<td><a href="../../analyze/scale-reduction-classify/#two-step-cluster">Two-Step</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="i-have-time-to-event-or-time-ordered-data">I have time-to-event or time-ordered data</h2>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>You have</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Time until an event, with censoring</td>
+<td><a href="../../analyze/survival-and-time-series/#kaplan-meier">Kaplan-Meier</a> / <a href="../../analyze/survival-and-time-series/#cox-regression">Cox</a></td>
+</tr>
+<tr>
+<td>A series ordered in time, want its structure</td>
+<td><a href="../../analyze/survival-and-time-series/#autocorrelation">Autocorrelation</a></td>
+</tr>
+<tr>
+<td>A series ordered in time, want a forecast</td>
+<td><a href="../../analyze/survival-and-time-series/#arima--sarima">ARIMA / SARIMA</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="i-want-to-combine-results-across-studies">I want to combine results across studies</h2>
+<p>→ <a href="../../analyze/meta-analysis/">Meta-Analysis</a> (one row per study — an effect
+size and its standard error — pooled under fixed- and random-effects models,
+with heterogeneity statistics, a forest plot and a funnel plot with Egger's
+test).</p>
+<h2 id="still-unsure">Still unsure?</h2>
+<p>Ask the <a href="../../advanced/ai-assistant/">AI assistant</a> in plain language — describe
+your data and your question, and it will pick and run the appropriate procedure.
+See also the <a href="../glossary/">glossary</a> for unfamiliar terms.</p>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../index.html">Home</a> ·
+        <a href="../../../quick-start/">Quick Start</a> ·
+        <a href="../../../privacy-policy/">Privacy Policy</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../js/main.js"></script>
+</body>
+</html>

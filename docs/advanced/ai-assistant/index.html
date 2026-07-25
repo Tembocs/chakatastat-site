@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The AI Assistant — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/advanced/ai-assistant/">
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="The AI Assistant — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/advanced/ai-assistant/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../index.html">
+        <img class="brand-mark" src="../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../docs/">User Guide</a>
+        <a href="../../../index.html#validated">Validation</a>
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#screenshots">Screenshots</a>
+        <a href="../../../index.html#download">Download</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../../">Contents</a></li>
+        <li><a href="../../quick-start/">Quick Start</a></li>
+        <li><a href="../../overview/">Overview</a></li>
+        <li><a href="../../getting-started/">Getting Started</a></li>
+        <li><a href="../../tutorial/">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../../working-with-data/">Working with Data</a></li>
+        <li><a href="../../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../../analyze/">Analyzing Data</a></li>
+        <li><a href="../../graphs/">Graphs</a></li>
+        <li><a href="../../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="./" aria-current="page">AI Assistant</a></li>
+        <li><a href="../reproducibility/">Reproducibility</a></li>
+        <li><a href="../engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="the-ai-assistant">The AI Assistant</h1>
+<p>ChakataStat has a built-in assistant that can run analyses on your behalf when
+you describe what you want in plain language. It is not a separate chatbot bolted
+on — it drives the <strong>same engine</strong> the menus do, so anything it produces is a
+real ChakataStat result you could have run yourself.</p>
+<p>Open the panel with <strong>View → AI Assistant</strong> (<code>Ctrl+Shift+A</code>); it docks on the
+right of the workbench.</p>
+<h2 id="connecting-a-model-backend">Connecting a model backend</h2>
+<p>The assistant needs a model to talk to. ChakataStat is <strong>provider-neutral</strong> and
+works with:</p>
+<ul>
+<li><strong>Claude</strong> (Anthropic);</li>
+<li>any <strong>OpenAI-compatible</strong> endpoint — OpenAI itself, DeepSeek, <strong>Kimi</strong>
+(Moonshot AI), a local <strong>Ollama</strong> server, or other compatible providers and
+proxies.</li>
+</ul>
+<p>You supply an <strong>API key</strong> through an environment variable before launching, and
+a local endpoint needs no key. The recognized variables are:</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Backend</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ANTHROPIC_API_KEY</code></td>
+<td>Claude (Anthropic)</td>
+</tr>
+<tr>
+<td><code>DEEPSEEK_API_KEY</code></td>
+<td>DeepSeek</td>
+</tr>
+<tr>
+<td><code>OPENAI_API_KEY</code></td>
+<td>OpenAI</td>
+</tr>
+<tr>
+<td><code>MOONSHOT_API_KEY</code></td>
+<td>Kimi (Moonshot)</td>
+</tr>
+<tr>
+<td><code>ChakataStat_OLLAMA=1</code></td>
+<td>local Ollama (no key)</td>
+</tr>
+</tbody>
+</table></div>
+<p>These exact names are also listed under <strong>Settings → AI Assistant →
+Environment variables</strong>, each marked set or unset, so you can confirm you set
+the key under the name the app reads. The key is used in memory only — <strong>it is
+never written to disk or into your session</strong>.</p>
+<h3 id="choosing-among-several-backends">Choosing among several backends</h3>
+<p>If you have more than one backend configured, you can <strong>pick and switch</strong> the
+active one live from <strong>Settings → AI Assistant</strong>, and your choice is remembered
+between launches (the choice — never the key). The Settings page also exposes
+optional overrides: the model id, temperature, maximum response tokens, a custom
+base URL and headers, the tool-round cap, a system-prompt override, and a
+read-only toggle.</p>
+<h2 id="asking-for-an-analysis">Asking for an analysis</h2>
+<p>Type what you want in the panel's input box, for example:</p>
+<ul>
+<li><em>&quot;Show me descriptive statistics for age, BMI and systolic BP.&quot;</em></li>
+<li><em>&quot;Is fasting glucose different between diabetic and non-diabetic participants?&quot;</em></li>
+<li><em>&quot;Run a logistic regression predicting hypertension from age and BMI.&quot;</em></li>
+</ul>
+<p>The assistant chooses the right procedure, runs it through the engine, and shows
+the <strong>actual result tables and charts</strong> inline in the conversation — the same
+output you would get from the menus. Per-reply <strong>token usage</strong> is shown beneath
+each answer.</p>
+<h2 id="adding-context-about-your-data">Adding context about your data</h2>
+<p>The assistant sees your variable names, types and labels, so well-defined
+variables (see <a href="../../working-with-data/">Working with Data</a>) make it far more
+accurate. You can also add <strong>custom context</strong> in Settings — a note describing your
+study, your coding conventions, or what you are trying to find out — which is sent
+with each request so the assistant interprets your data correctly.</p>
+<h2 id="what-it-can-and-cannot-do">What it can and cannot do</h2>
+<ul>
+<li>It can run any analysis, chart or transform exposed as a tool.</li>
+<li>Under a <strong>read-only</strong> profile it can run analyses but <strong>cannot change your
+data</strong> — a safe way to let it explore.</li>
+</ul>
+<h2 id="reproducibility">Reproducibility</h2>
+<p>The assistant's actions are commands like any other, so they appear in the
+<a href="../reproducibility/">Syntax console</a> and can be reviewed, edited and replayed.
+The conversation itself persists with your session, so closing and reopening
+ChakataStat keeps the thread (you can start fresh with the panel's New
+conversation button).</p>
+<h2 id="privacy">Privacy</h2>
+<p>When you use a hosted backend, your prompts — including the data context you add
+and the result summaries — are sent to that provider. Use a local <strong>Ollama</strong>
+endpoint if the data must not leave your machine. No API key is ever stored by
+ChakataStat.</p>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../index.html">Home</a> ·
+        <a href="../../../quick-start/">Quick Start</a> ·
+        <a href="../../../privacy-policy/">Privacy Policy</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Correlation &amp; Regression — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/analyze/correlation-and-regression/">
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Correlation &amp; Regression — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/analyze/correlation-and-regression/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../index.html">
+        <img class="brand-mark" src="../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../docs/">User Guide</a>
+        <a href="../../../index.html#validated">Validation</a>
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#screenshots">Screenshots</a>
+        <a href="../../../index.html#download">Download</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../../">Contents</a></li>
+        <li><a href="../../quick-start/">Quick Start</a></li>
+        <li><a href="../../overview/">Overview</a></li>
+        <li><a href="../../getting-started/">Getting Started</a></li>
+        <li><a href="../../tutorial/">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../../working-with-data/">Working with Data</a></li>
+        <li><a href="../../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../">Analyzing Data</a></li>
+        <li><a href="../../graphs/">Graphs</a></li>
+        <li><a href="../../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
+        <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
+        <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="correlation--regression">Correlation &amp; Regression</h1>
+<p>This page covers the <strong>Correlate</strong>, <strong>Regression</strong>, <strong>General Linear Model</strong> and
+<strong>Linear Mixed Model</strong> menu groups — everything for measuring association between
+variables and modelling an outcome from predictors.</p>
+<h2 id="correlate">Correlate</h2>
+<p><strong>Analyze → Correlate.</strong></p>
+<h3 id="bivariate">Bivariate</h3>
+<p><strong>When.</strong> Measure the strength and direction of association between scale (or
+ordinal) variables.</p>
+<p><strong>Dialog.</strong> Move two or more variables into <strong>Variables</strong>; choose the
+coefficient(s): <strong>Pearson</strong> (linear), <strong>Spearman</strong> or <strong>Kendall's tau-b</strong> (rank).
+The Options section sets <strong>one- vs two-tailed</strong> significance and the
+<strong>missing-data policy</strong> (pairwise default, or listwise).</p>
+<p><strong>Output.</strong> A correlation matrix of coefficients with significance and the N
+behind each cell.</p>
+<p><strong>Example.</strong> <em>BMI</em>, <em>SystolicBP</em>, <em>FastingGlucose_mmolL</em> — do they move together?</p>
+<h3 id="partial">Partial</h3>
+<p><strong>When.</strong> Measure the association between two variables <strong>controlling for</strong> one or
+more others.</p>
+<p><strong>Dialog.</strong> The two variables plus the <strong>controlling</strong> variables. (Partial
+correlation is inherently listwise — it needs cases complete on all variables.)</p>
+<p><strong>Output.</strong> The partial correlation coefficient(s) with significance.</p>
+<h2 id="regression">Regression</h2>
+<p><strong>Analyze → Regression.</strong> Model one outcome from one or more predictors. Pick the
+member that matches your <strong>outcome type</strong>:</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Outcome</th>
+<th>Procedure</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Continuous</td>
+<td><strong>Linear</strong> (OLS)</td>
+</tr>
+<tr>
+<td>Continuous, positive and skewed (costs, durations)</td>
+<td><strong>Gamma</strong></td>
+</tr>
+<tr>
+<td>Binary (yes/no)</td>
+<td><strong>Binary Logistic</strong> (logit, probit or cloglog link)</td>
+</tr>
+<tr>
+<td>Count</td>
+<td><strong>Poisson</strong> or <strong>Negative Binomial</strong></td>
+</tr>
+<tr>
+<td>Unordered categories</td>
+<td><strong>Multinomial</strong></td>
+</tr>
+<tr>
+<td>Ordered categories</td>
+<td><strong>Ordinal</strong></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="linear">Linear</h3>
+<p><strong>Dialog.</strong> A <strong>Dependent</strong> scale variable and one or more <strong>Independent</strong>
+variables. Options include:</p>
+<ul>
+<li><strong>Robust standard errors</strong> (HC0/HC1/HC3 sandwich estimators);</li>
+<li><strong>Forward / backward stepwise</strong> variable selection;</li>
+<li><strong>casewise influence diagnostics</strong> — Cook's distance and leverage;</li>
+<li><strong>diagnostic plots</strong> — a Residuals vs Fitted scatter and a Normal Q-Q plot of
+the standardized residuals, the two pictures a linearity/homoscedasticity
+and normality check calls for;</li>
+<li><strong>save</strong> predicted values and residuals back as new variables.</li>
+</ul>
+<p><strong>Output.</strong> The model summary (R², adjusted R², standard error), the ANOVA of the
+regression, and the coefficients table (B, standard error, beta, t,
+significance, and confidence intervals).</p>
+<p><strong>Example.</strong> Predict <em>SystolicBP</em> from <em>Age</em>, <em>BMI</em> and <em>Weight_kg</em>.</p>
+<h3 id="binary-logistic">Binary Logistic</h3>
+<p>For a yes/no outcome (e.g. <em>Hypertensive</em>). A <strong>Link</strong> option chooses how the
+probability relates to the predictors: <strong>Logit</strong> (the default — coefficients are
+log-odds and report <strong>Exp(B) odds ratios</strong> with confidence intervals), <strong>Probit</strong>
+(a normal latent variable) or <strong>Complementary log-log</strong> (an asymmetric link
+suited to rare events). Logit reports odds ratios; probit and cloglog report
+coefficients on the link scale with a Wald interval. Optional robust standard
+errors and forward/backward selection.</p>
+<h3 id="poisson--negative-binomial">Poisson / Negative Binomial</h3>
+<p>For counts (e.g. a count of events). Negative Binomial adds an estimated
+dispersion parameter for over-dispersed counts. Both report rate ratios.</p>
+<h3 id="gamma">Gamma</h3>
+<p>For a <strong>strictly positive, right-skewed continuous</strong> outcome — costs, durations,
+concentrations — where the spread grows with the mean. A <strong>Link</strong> option offers
+the <strong>Log</strong> link (the default — a multiplicative model whose <strong>Exp(B)</strong> is the
+factor change in the mean per unit predictor) or the canonical <strong>Inverse</strong> link.
+Reports the coefficients, an estimated dispersion φ (so the standard errors
+account for the scale), and a deviance / Pearson goodness-of-fit table.</p>
+<h3 id="multinomial--ordinal">Multinomial / Ordinal</h3>
+<p>For categorical outcomes with three or more levels — unordered (Multinomial,
+baseline-category logit) or ordered (Ordinal, proportional-odds). Both report the
+per-category/threshold coefficients and significance.</p>
+<h3 id="mediation">Mediation</h3>
+<p>Asks <strong>how</strong> an independent variable <strong>X</strong> affects an outcome <strong>Y</strong> — how much of
+its effect runs <em>through</em> one or more <strong>mediators M</strong> (the path X → M → Y) versus
+directly. Pick the <strong>Outcome (Y)</strong>, the <strong>Independent (X)</strong>, one or more parallel
+<strong>Mediators</strong>, and any <strong>Covariates</strong> entered into every model. It fits, by OLS,
+the mediator model(s) <code>M ~ X</code> for the <strong>a</strong> path, the outcome model
+<code>Y ~ X + M</code> for the <strong>b</strong> paths and the <strong>direct</strong> effect <strong>c′</strong>, and the total
+model <code>Y ~ X</code> for the <strong>total</strong> effect <strong>c</strong> (with <code>c = c′ + Σ a·b</code>).</p>
+<p>Two tables come back: the <strong>path coefficients</strong> with standard errors, <em>t</em> and
+confidence intervals; and the <strong>indirect effect(s)</strong> — each <code>a·b</code>, plus a total
+indirect when there is more than one mediator. Because the indirect effect is a
+<em>product</em> of coefficients (its sampling distribution is skewed), its interval
+comes from a <strong>nonparametric bootstrap</strong> — Percentile or <strong>BCa</strong> — over
+<strong>B</strong> resamples, reproducible for a fixed <strong>Seed</strong>. <em>An indirect interval that
+excludes zero is the evidence of mediation.</em> The bootstrap is unweighted (a
+Weight Cases variable is noted, not applied); Select Cases and Split File are
+honored.</p>
+<p><em>Scope (v1):</em> a continuous outcome, single or parallel mediators. Moderated
+mediation (a moderator and simple slopes) and serial mediators are not in this
+version.</p>
+<h2 id="general-linear-model">General Linear Model</h2>
+<p><strong>Analyze → General Linear Model.</strong> A <strong>factorial between-subjects ANOVA /
+ANCOVA</strong> with <strong>Type III sums of squares</strong>: several factors, their interactions,
+and optional <strong>continuous covariates</strong>. Add post-hoc comparisons and contrasts as
+in One-Way ANOVA.</p>
+<p><strong>Example.</strong> <em>SystolicBP</em> by <em>Sex</em> and <em>SmokingStatus</em> (and their interaction),
+adjusting for <em>Age</em> as a covariate.</p>
+<h2 id="linear-mixed-model">Linear Mixed Model</h2>
+<p><strong>Analyze → Linear Mixed Model.</strong> For <strong>clustered or repeated</strong> data: a model
+with a <strong>random intercept</strong> and optional <strong>random slopes</strong>, using
+variance-components or unstructured covariance, estimated by <strong>ML or REML</strong>.
+Reports fixed effects and the estimated variance components.</p>
+<h2 id="the-within-subjects--multivariate-family">The within-subjects / multivariate family</h2>
+<p>Also under the modelling menus:</p>
+<ul>
+<li><strong>Repeated Measures ANOVA</strong> — for a factor measured several times on the same
+cases, with <strong>Mauchly's test</strong> of sphericity and the
+<strong>Greenhouse-Geisser / Huynh-Feldt</strong> corrections.</li>
+<li><strong>One-Way MANOVA</strong> — several dependent variables at once, reporting <strong>Pillai's
+trace, Wilks' lambda, Hotelling-Lawley and Roy's largest root</strong>.</li>
+</ul>
+<blockquote>
+<p><strong>Weighting.</strong> Repeated Measures ANOVA (its within-subjects partition) and
+MANOVA <strong>honour the Weight Cases setting</strong>: the case weight is a frequency
+weight, so a weight-2 case counts exactly as two — in the within-subjects sums
+of squares and the error/hypothesis scatter matrices alike.</p>
+</blockquote>
+<h2 id="choosing-among-them">Choosing among them</h2>
+<ul>
+<li>One outcome, continuous → <strong>Linear</strong>.</li>
+<li>One outcome, categorical → the matching <strong>Logistic / Poisson / Multinomial /
+Ordinal</strong> member.</li>
+<li>Several categorical factors (± covariates) on one continuous outcome → <strong>GLM</strong>.</li>
+<li>Repeated or clustered structure → <strong>Mixed</strong> or <strong>Repeated Measures</strong>.</li>
+<li>Several outcomes together → <strong>MANOVA</strong>.</li>
+</ul>
+<p>See <a href="../../reference/choosing-a-procedure/">Correlation vs regression</a> if you are
+unsure whether you want association or prediction.</p>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../index.html">Home</a> ·
+        <a href="../../../quick-start/">Quick Start</a> ·
+        <a href="../../../privacy-policy/">Privacy Policy</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../js/main.js"></script>
+</body>
+</html>

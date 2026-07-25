@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Module 3 — Describing your data — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/tutorial/03-descriptives/">
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Module 3 — Describing your data — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/tutorial/03-descriptives/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../index.html">
+        <img class="brand-mark" src="../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../docs/">User Guide</a>
+        <a href="../../../index.html#validated">Validation</a>
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#screenshots">Screenshots</a>
+        <a href="../../../index.html#download">Download</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../../">Contents</a></li>
+        <li><a href="../../quick-start/">Quick Start</a></li>
+        <li><a href="../../overview/">Overview</a></li>
+        <li><a href="../../getting-started/">Getting Started</a></li>
+        <li><a href="../">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../../working-with-data/">Working with Data</a></li>
+        <li><a href="../../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../../analyze/">Analyzing Data</a></li>
+        <li><a href="../../graphs/">Graphs</a></li>
+        <li><a href="../../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
+        <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
+        <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="module-3--describing-your-data">Module 3 — Describing your data</h1>
+<p><strong>Question:</strong> who is in this study? Every analysis starts here — know your
+distributions before you test anything.</p>
+<p>Open the sample (<code>Ctrl+Shift+O</code>). All three dialogs are under
+<strong>Analyze → Descriptive Statistics</strong>.</p>
+<h2 id="frequencies--categorical-variables">Frequencies — categorical variables</h2>
+<p><strong>Frequencies…</strong>, variables <em>Sex</em>, <em>SmokingStatus</em>, <em>StudyZone</em>, <strong>Run</strong>.</p>
+<p>Each variable gets a table of counts, percents and cumulative percents. Read
+<em>SmokingStatus</em>: roughly half never smoked. Percent vs Valid Percent differ
+only when values are missing — remember that for module 9.</p>
+<h2 id="descriptives--scale-variables">Descriptives — scale variables</h2>
+<p><strong>Descriptives…</strong>, variables <em>Age</em>, <em>BMI</em>, <em>SystolicBP</em>, <em>HeartRate</em>, <strong>Run</strong>.</p>
+<p>For each: valid N, minimum, maximum, mean, standard deviation. Sanity-check
+against the <a href="../codebook/">codebook</a>: ages should span 18–80, BMI should
+centre in the mid-20s. This kind of &quot;does the data look like it should&quot;
+check catches import mistakes before they become wrong conclusions.</p>
+<h2 id="explore--a-distribution-under-a-microscope-by-group">Explore — a distribution under a microscope, by group</h2>
+<p><strong>Explore…</strong>, variable <em>SystolicBP</em>, factor <em>Sex</em>, <strong>Run</strong>.</p>
+<p>Explore gives each group the full treatment: mean with confidence interval,
+median, quartiles, skewness — the numbers behind the boxplot you will draw
+in <a href="../04-graphs/">module 4</a>.</p>
+<h2 id="exercise">Exercise</h2>
+<ol>
+<li>Which <em>StudyZone</em> contributed the most participants, and what percent?</li>
+<li>From Descriptives: is <em>HeartRate</em>'s standard deviation large or small
+relative to its mean, compared with <em>SystolicBP</em>'s? (This foreshadows the
+codebook's warning that HeartRate is pure noise.)</li>
+<li>Explore <em>BMI</em> by <em>SmokingStatus</em>. Do the group means look different, or
+do their confidence intervals overlap heavily? Keep your answer for
+module 6, where you will test it properly.</li>
+</ol>
+<h2 id="the-syntax-trail">The syntax trail</h2>
+<pre><code>frequencies variables=[Sex, SmokingStatus, StudyZone]
+descriptives variables=[Age, BMI, SystolicBP, HeartRate]
+explore variables=[SystolicBP], factor=Sex
+</code></pre>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../index.html">Home</a> ·
+        <a href="../../../quick-start/">Quick Start</a> ·
+        <a href="../../../privacy-policy/">Privacy Policy</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Numerical-validation suite — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/validation/">
+  <link rel="icon" type="image/svg+xml" href="../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Numerical-validation suite — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/validation/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../index.html">
+        <img class="brand-mark" src="../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <nav id="nav-links" class="nav-links">
+        <a href="../../docs/">User Guide</a>
+        <a href="../../index.html#validated">Validation</a>
+        <a href="../../index.html#features">Features</a>
+        <a href="../../index.html#screenshots">Screenshots</a>
+        <a href="../../index.html#download">Download</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../">Contents</a></li>
+        <li><a href="../quick-start/">Quick Start</a></li>
+        <li><a href="../overview/">Overview</a></li>
+        <li><a href="../getting-started/">Getting Started</a></li>
+        <li><a href="../tutorial/">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../working-with-data/">Working with Data</a></li>
+        <li><a href="../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../analyze/">Analyzing Data</a></li>
+        <li><a href="../graphs/">Graphs</a></li>
+        <li><a href="../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../advanced/ai-assistant/">AI Assistant</a></li>
+        <li><a href="../advanced/reproducibility/">Reproducibility</a></li>
+        <li><a href="../advanced/engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="numerical-validation-suite">Numerical-validation suite</h1>
+<blockquote>
+<p><strong>Production-readiness gate 4.</strong> A statistics package has to be able to defend
+every number it prints. The per-core unit tests
+(<code>rust/src/stats.rs</code>,
+<code>rust/src/analyze/tests.rs</code>) check a handful
+of known answers by hand; that is good spot-checking, but it only confirms the
+cases we thought to write down. This suite is the complement: it runs the
+procedure catalog <strong>end to end through the real native engine</strong> and checks each
+printed statistic against a value computed independently by an established
+reference package. See production_readness.md gate 4.</p>
+</blockquote>
+<h2 id="how-it-works">How it works</h2>
+<p>Two committed artifacts, joined only by a stable string <code>id</code>:</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Artifact</th>
+<th>Produced by</th>
+<th>Holds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test/validation/reference_values.json</code></td>
+<td><code>tool/validation/generate_references.py</code></td>
+<td>for every checked statistic: the reference <code>value</code>, the <code>tol</code> the engine must meet, and the <code>source</code> (the exact reference call)</td>
+</tr>
+<tr>
+<td><code>test/numerical_validation_test.dart</code></td>
+<td>hand-written</td>
+<td>for every <code>id</code>: the engine request and the table cell to read</td>
+</tr>
+</tbody>
+</table></div>
+<p>The Python generator computes the reference numbers with <strong>SciPy, statsmodels,
+scikit-learn, lifelines and pingouin</strong>. The Dart test loads the same data into
+the native engine, runs each procedure, pulls the matching cell out of the result
+table by <strong>label</strong> (not by raw index, so a column reorder fails loudly rather than
+silently reading the wrong number), and asserts it is within <code>tol</code> of the
+reference. Neither side encodes the other's specifics: the JSON never mentions a
+table layout, and the test never hard-codes a reference number.</p>
+<p>A guard test — <em>&quot;every reference value is checked (no orphans either way)&quot;</em> —
+asserts the set of ids in the JSON and the set exercised by the probes are
+<strong>equal</strong>, so coverage cannot silently drift as either side changes.</p>
+<h3 id="shared-byte-identical-inputs">Shared, byte-identical inputs</h3>
+<p>The reference tools and the engine must see <em>exactly</em> the same data, or a
+disagreement could be an input difference rather than a numeric one. So the four
+datasets under <code>test/validation/data/</code> are
+committed CSVs, and <strong>both</strong> sides read those same bytes — the generator with
+<code>csv</code>, the test with a small typed-CSV loader
+(<code>test/validation/validation_data.dart</code>).
+The generator <em>creates</em> a dataset deterministically only if its file is absent;
+if the file exists it is read back verbatim, so a future NumPy RNG change can
+never drift the committed inputs out from under the committed references.</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>Shape</th>
+<th>Exercises</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>clinic.csv</code></td>
+<td>60×12: <code>group sex age bp chol bmi s1 s2 s3 outcome visits grp</code></td>
+<td>descriptives, crosstabs, the t-test / ANOVA / Levene family, correlation, every regression family, the GLM family, factor/PCA, clustering, discriminant, MANOVA, most nonparametrics</td>
+</tr>
+<tr>
+<td><code>paired.csv</code></td>
+<td>30×3: <code>pre post follow</code></td>
+<td>paired t, Wilcoxon, sign, Friedman</td>
+</tr>
+<tr>
+<td><code>surv.csv</code></td>
+<td>80×4: <code>time event arm age</code></td>
+<td>Kaplan-Meier (+ log-rank), Cox regression</td>
+</tr>
+<tr>
+<td><code>ts.csv</code></td>
+<td>120×1: <code>value</code> (AR(1))</td>
+<td>ACF / PACF / Box-Ljung, ARIMA</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="coverage">Coverage</h2>
+<p>191 statistics across 47 procedure families — essentially the full analytic
+catalog. (These two numbers are <strong>asserted</strong>, not transcribed: a guard in
+<code>numerical_validation_test.dart</code>
+parses this very sentence and fails if it disagrees with
+<code>reference_values.json</code>. It is worded this way because the count had already
+gone stale twice — quote it freely, the suite keeps it honest.) For each procedure the suite pins the statistics that matter (test
+statistics, p-values, parameter estimates, effect sizes), not every cell (the
+<em>shape</em> of every result is already guarded by
+<code>test/analysis_test.dart</code>).</p>
+<p>Descriptives/Explore · Frequencies · Crosstabs (Pearson, likelihood-ratio, phi,
+Cramér's V) · one-sample / independent / paired <em>t</em> (+ Welch, Cohen's <em>d</em>) ·
+one-way ANOVA (+ SS, η²) · Levene · Means · Pearson/Spearman/Kendall/partial
+correlation · linear / logistic / <strong>probit</strong> / Poisson / negative-binomial /
+<strong>gamma</strong> / <strong>multinomial</strong> /
+<strong>ordinal</strong> regression · <strong>nonlinear least squares</strong> (scipy <code>curve_fit</code>:
+the optimizer-invariant residual SS and R², plus well-identified parameters) ·
+<strong>instrumental variables / 2SLS</strong> (statsmodels <code>IV2SLS</code>: the coefficients, the
+corrected standard error and the first-stage weak-instrument <em>F</em>) ·
+<strong>mediation</strong> (statsmodels OLS, cross-checked against pingouin
+<code>mediation_analysis</code>: the a / b / c′ / c path coefficients and standard errors
+and the a·b indirect point estimate — the seed-dependent bootstrap CI is not
+pinned) ·
+<strong>meta-analysis</strong> (statsmodels <code>combine_effects(method_re=&quot;dl&quot;)</code> on the
+dedicated heterogeneous <code>meta.csv</code>: fixed- and random-effects pooled
+estimates and SEs, Cochran's Q and its p, I², the DerSimonian–Laird τ², and
+Egger's regression test — intercept, SE, t and p via scipy <code>linregress</code> of
+the standardized effect on the precision; <strong>REML pooling</strong> on the committed
+BCG-trials <code>bcg.csv</code>, whose published metafor results — Viechtbauer 2010,
+JSS — are asserted at generation time, verifying the transcription and the
+estimator at once) ·
+<strong>CFA</strong> (the canonical Holzinger–Swineford three-factor model on the
+committed <code>hs1939.csv</code>: free loadings and their expected-information SEs,
+the completely standardized solution, factor correlations, factor/residual
+variances with SEs, and the full fit block — χ², CFI, TLI, RMSEA with its
+90% CI, SRMR — against an independent scipy implementation of the same ML
+problem, with <strong>semopy agreement and the published lavaan tutorial values
+asserted at generation time</strong>) ·
+<strong>factorial GLM</strong> (Type III, + <strong>partial η²</strong>) · <strong>MANOVA</strong> ·
+<strong>repeated-measures ANOVA</strong> (+ <strong>partial η²</strong>) · Mann-Whitney (+ <strong>rank-biserial
+<em>r</em></strong>) · Kruskal-Wallis · Wilcoxon (+ <strong>rank-biserial <em>r</em></strong>) · sign · Friedman ·
+runs · binomial · Shapiro-Wilk / K-S normality · Cronbach's α · factor / PCA ·
+hierarchical clustering · discriminant · Kaplan-Meier (log-rank) · Cox
+(+ <strong>Grambsch-Therneau proportional-hazards test</strong>) ·
+ACF / PACF / Box-Ljung · ARIMA · <strong>ADF / KPSS stationarity</strong> ·
+<strong>simple exponential smoothing</strong>.</p>
+<p><strong>Deliberately not value-checked</strong> (and why):</p>
+<ul>
+<li><strong>k-means and two-step clustering</strong> — the partition depends on initialization
+and iteration order, so cluster labels and centers are implementation-specific;
+there is no stable cross-package reference. (Hierarchical clustering <em>is</em>
+checked, via its linkage-independent first-merge distance.)</li>
+<li><strong>Trended / seasonal exponential smoothing</strong> (Holt, Holt-Winters) — the
+smoothing parameters sit on flat objective surfaces, so different optimizers
+land on different (α, β, γ) with near-identical fit; there is no stable
+cross-package value. (<strong>Simple</strong> exponential smoothing <em>is</em> checked — its
+single parameter has a stable optimum.) The trended/seasonal recursions are
+instead unit-tested at fixed parameters, where the filter is deterministic.</li>
+<li><strong>Custom tables / multiple-response</strong> — these are layout generators over counts
+already covered by Frequencies/Crosstabs, not new statistics.</li>
+<li><strong>Power &amp; sample-size analysis</strong> — it takes <em>no dataset</em>, so it cannot ride the
+shared-CSV harness that joins the engine to <code>reference_values.json</code>. It is
+instead validated against the same independent reference (SciPy's noncentral
+<code>nct</code> / <code>ncf</code> / <code>ncx2</code> distributions, evaluated at the central critical value):
+the numeric cores in <code>rust/src/analyze/power.rs</code>
+reproduce SciPy to ~<code>1e-11</code> in the Rust unit tests, and
+<code>test/power_analysis_test.dart</code> re-checks
+those values end to end through the engine. The underlying noncentral CDFs added
+for it (<code>noncentral_f_cdf</code>, <code>noncentral_chi_square_cdf</code> in
+<code>rust/src/stats.rs</code>) carry their own identity
+cross-checks (χ²(1) against the shifted normal, <em>F</em>(1, ν) against the squared
+noncentral <em>t</em>).</li>
+<li><strong>ROC curve / AUC</strong> — validated against the <strong>Mann-Whitney <em>U</em> identity</strong>
+rather than the shared-CSV harness: the area under the ROC curve equals
+<code>U / (n₊·n₋)</code> — the share of positive/negative score pairs the positive
+outranks, ties at half. That is an algorithm wholly independent of the engine's
+sort-and-sweep trapezoid, so it is an exact cross-reference, not a second copy
+of the same code. <code>rust/src/analyze/tests.rs</code>
+pins the trapezoid AUC to a by-hand pair count (and to a direct pair-enumeration
+helper) including the tied-score case, and
+<code>test/roc_analysis_test.dart</code> re-checks the
+AUC end to end through the engine. The Hanley-McNeil standard error (the CI) and
+the null-hypothesis standard error (the chance test) are pinned to their
+closed-form definitions in the same Rust test.</li>
+<li><strong>Intraclass correlation (ICC)</strong> — validated against the <strong>published Shrout &amp;
+Fleiss (1979)</strong> worked example (6 targets × 4 judges), whose six ICC values are
+the canonical reference reproduced by R's <code>irr</code> and pingouin.
+<code>rust/src/analyze/tests.rs</code> pins all six forms
+to those values and checks every confidence interval brackets its estimate (and
+that a frequency weight equals replication);
+<code>test/icc_kendall_test.dart</code> re-checks them
+through the engine. It rides this dedicated test rather than the shared-CSV
+harness because the reference is a fixed published dataset, not a value derived
+from the committed validation CSVs.</li>
+<li><strong>Kendall's <em>W</em></strong> — pinned to <strong>hand-computed</strong> values (perfect agreement W = 1,
+reversed rankings W = 0, a worked tie-corrected case) and to the identity that,
+without ties, its equivalent χ² equals the already-validated Friedman statistic
+exactly — an independent cross-check of the same machinery. (Since the 0.8.0
+effect-size audit below, the Friedman test itself also reports this <em>W</em> inline,
+via the exact same rescaling <code>χ²/(N(k−1))</code> of its own already-validated χ² — the
+Rust unit tests below therefore validate both call sites at once.)</li>
+<li><strong>The 0.8.0 effect-size audit</strong> — a sweep of every test's output against the
+conventional effect size beside it (t tests → Cohen's <em>d</em>/Hedges' <em>g</em>; ANOVA →
+η²/partial η²/ω²; chi-square → Cramér's <em>V</em>/φ; nonparametric → rank-biserial/ε²)
+found and closed the gaps: <strong>rank-biserial <em>r</em></strong> on Mann-Whitney and Wilcoxon
+(validated against <code>pingouin.mwu</code>/<code>pingouin.wilcoxon</code>'s independent <code>RBC</code>, riding
+the existing shared-CSV harness above) and <strong>partial η²</strong> on factorial GLM and
+repeated-measures ANOVA (validated against <code>pingouin.anova</code>/<code>pingouin.rm_anova</code>'s
+independent <code>np2</code>, likewise on the shared harness). Three statistics stay off the
+shared harness because no package in the pinned reference set computes them
+independently — each instead rides a <strong>self-checking identity</strong> in
+<code>rust/src/analyze/nonparametric.rs</code> /
+<code>rust/src/analyze/glm.rs</code>, re-checked end to end
+in <code>test/analysis_test.dart</code> and
+<code>test/tool_dispatcher_test.dart</code>:
+<strong>Kruskal-Wallis epsilon-squared</strong> (<code>ε² = H/(N−1)</code>) is a deterministic rescaling
+of the already-validated <em>H</em>, checked against a hand computation (<code>H = 7.2</code>,
+<code>N = 9</code> ⇒ <code>ε² = 0.9</code>); <strong>Jonckheere-Terpstra's <em>r</em></strong> (<code>r = Z/√N</code>) likewise
+rescales the already-validated <em>Z</em> (itself pinned to the exact null-variance
+enumeration recorded below), checked against a worked perfect-trend example; and
+<strong>MANOVA's partial η²</strong> (Pillai <code>V/s</code>; Wilks <code>1 − Λ^(1/s)</code>; Hotelling-Lawley
+<code>T/(T+s)</code>; Roy's <code>θ/(1+θ)</code>, the SPSS/GLM convention) is checked against the
+already-validated Pillai/Wilks/Hotelling values on a two-group worked example,
+where <code>s = 1</code> collapses all four to the same number — an internal
+cross-consistency check the formulas must satisfy. <strong>Rank-biserial's sign
+convention</strong> (positive when the first-listed group/measurement ranks higher) is
+the Kerby (2014) favorable/unfavorable-pairs formula, cross-checked against
+<code>pingouin</code>'s <code>RBC</code> sign on the same (group-order-preserving) data rather than
+assumed.</li>
+<li><strong>Exact small-sample nonparametrics</strong> — the Mann-Whitney, Wilcoxon and
+Kruskal-Wallis exact significances are pinned to <strong>closed-form / hand-counted</strong>
+reference values that an enumerator must reproduce exactly: complete separation
+gives Mann-Whitney <code>2/C(m+n, m)</code> and Kruskal-Wallis <code>(g! relabellings)/(N!/Πnᵢ!)</code>
+(<code>6/90</code> for three pairs), the all-positive case gives Wilcoxon <code>2/2ⁿ</code>, and these
+match R's <code>wilcox.test</code> exact mode. <code>rust/src/analyze/tests.rs</code>
+also checks the count vector sums to <code>C(m+n, m)</code> and is symmetric, and that ties
+disable the exact path; <code>test/exact_nonparametric_test.dart</code>
+re-checks the p's through the engine.</li>
+<li><strong>Nonparametric family completion (Cochran's <em>Q</em>, Jonckheere-Terpstra, Dunn)</strong>
+— pinned to <strong>hand-computed / enumeration</strong> reference values rather than the
+shared-CSV harness, because the shared datasets carry no related dichotomous or
+ordered-trend variables and two of the three have no implementation in the
+pinned reference set (SciPy, statsmodels, scikit-learn, lifelines, pingouin
+ship neither Jonckheere-Terpstra nor Dunn). Each rides a self-checking identity:
+<strong>Cochran's <em>Q</em></strong> is pinned to a worked 5×3 table (<code>Q = 14/3</code>) and to the
+identity that, for two treatments, it equals the uncorrected McNemar χ²;
+<strong>Jonckheere-Terpstra</strong>'s tie-corrected null variance is checked against the
+<em>exact</em> null variance obtained by enumerating the equally-likely group
+assignments (untied <code>{1}|{2}|{3}</code> gives <code>11/12</code>; a tied <code>{1}|{1,2}</code> gives
+<code>0.5</code>), plus a perfect-trend worked value and the sign symmetry of a reversed
+trend; <strong>Dunn's</strong> pairwise z is pinned to a hand value (<code>z = −4/√3.5</code> for the
+extreme pair of <code>{1,2}|{3,4}|{5,6}</code>) and its zero/symmetry properties. All are
+in <code>rust/src/analyze/tests.rs</code> and re-checked
+end to end through the engine in
+<code>test/tool_dispatcher_test.dart</code>.</li>
+<li><strong>Hosmer-Lemeshow goodness-of-fit</strong> — the χ² on the logistic model's deciles of
+risk is pinned to a <strong>hand-computed</strong> value (four cases split into two groups
+give <code>Ĥ = 12/7</code>), with the deciles-of-risk grouping verified to scale a
+frequency weight exactly like replication (the χ² doubles when every weight
+doubles) and the degrees of freedom to be <code>g − 2</code>. It rides this dedicated test
+rather than the shared-CSV harness because the pinned reference set (SciPy,
+statsmodels, scikit-learn, lifelines, pingouin) has no Hosmer-Lemeshow
+implementation, and the statistic's group cutpoints are convention-dependent.
+<code>rust/src/analyze/tests.rs</code> pins the three
+properties; <code>test/tool_dispatcher_test.dart</code>
+re-checks it end to end through a fitted logistic model.</li>
+<li><strong>Bootstrap confidence intervals</strong> (the <code>bootstrap</code> kind) — a resampling
+procedure cannot ride the shared-CSV harness: the interval depends on a
+pseudo-random resample, and no two packages agree on a bootstrap CI unless they
+share a PRNG and draw order, so there is no cross-package value to pin. It is
+instead validated against four properties that <em>do</em> hold independent of the
+randomness, in <code>rust/src/analyze/resample.rs</code>
+and re-checked end to end in <code>test/bootstrap_test.dart</code>:
+(1) the <strong>observed</strong> statistic equals the direct statistic on the full sample,
+and the interval brackets it; (2) <strong>byte-identical reproducibility</strong> — the same
+data, statistic, seed and replicate count give the same interval on every run
+and platform (the SplitMix64 contract documented in the module), while a
+different seed gives a different one; (3) the bootstrap <strong>standard error of the
+mean</strong> converges to the analytic <code>s/√n</code> at large <em>B</em>; and (4) the <strong>BCa</strong>
+interval reduces to the percentile interval for symmetric data (<code>z₀ ≈ 0</code>,
+acceleration <code>≈ 0</code>). The pure statistic cores (mean, median, sd, variance, CV,
+Pearson, Spearman, mean difference) and the type-7 quantile are additionally
+pinned to hand-computed values, and Spearman is checked against the
+rank-of-a-monotone-transform identity (<code>ρ = 1</code>).</li>
+<li><strong>Multiple imputation + Rubin pooling</strong> (the <code>multiple_imputation</code> kind) — like
+the bootstrap, a procedure built on pseudo-random draws cannot ride the
+shared-CSV harness: the chained-equations imputer redraws each missing entry
+from a Bayesian predictive distribution, and no two packages agree on the
+imputed values (and so on the pooled estimate) unless they share a PRNG and
+draw order. It is instead validated against properties that hold <em>independent</em>
+of the randomness, in
+<code>rust/src/analyze/multiple_imputation.rs</code>
+and re-checked end to end in
+<code>test/multiple_imputation_test.dart</code>:
+(1) <strong>Rubin's rules are exact closed forms</strong> — with identical per-imputation
+estimates the between-variance <code>B = 0</code>, so the pooled SE is exactly <code>√Ū</code> and the
+fraction of missing information is <code>0</code>; with varying estimates the total variance
+is exactly <code>Ū + (1 + 1/m)·B</code>; (2) the <strong>no-missing identity</strong> — with no missing
+values the pooled linear regression equals plain OLS (the slope of <code>y = 2x + 3</code>
+is recovered exactly and FMI ≈ 0); (3) <strong>byte-identical reproducibility</strong> — the
+same data, analysis, <em>m</em>, cycle count and seed give the same pooled result on
+every run and platform (the SplitMix64 contract documented in the module), while
+a different seed gives a different one; and (4) the imputer <strong>recovers a known
+linear dependence</strong> — missing <code>y</code> at a known <code>x</code> on the line <code>y = 2x</code> imputes to
+a mean near the true value. The Cholesky factor used for the posterior coefficient
+draw is pinned to <code>L·Lᵀ = A</code> (and to rejecting a non-positive-definite matrix).</li>
+<li><strong>Dimension reduction — canonical correlation, correspondence analysis,
+classical MDS</strong> — validated against <strong>self-checking identities</strong> rather than the
+shared-CSV harness (the committed datasets carry no natural two-set or two-way
+categorical structure, and the pinned reference set does not ship a directly
+comparable canonical-correlation / correspondence routine). Each rides an exact
+identity in <code>rust/src/analyze/reduction.rs</code>,
+re-checked end to end in
+<code>test/dimension_reduction_test.dart</code>:
+the <strong>canonical correlation</strong> of one variable per set equals the absolute Pearson
+correlation between them (and Wilks' Λ = 1 − r²); the <strong>correspondence</strong> total
+inertia equals χ²/N on a worked 2×2 table (<code>O = [[3,1],[1,3]]</code>, χ² = 2, inertia
+= 0.25); and <strong>classical MDS</strong> reproduces the exact pairwise Euclidean distances
+of a planar configuration (a rectangle embedded in two dimensions), with a
+truly planar set leaving no spurious third dimension.</li>
+<li><strong>Parametric / AFT survival and competing risks</strong> — validated against
+<strong>closed-form identities</strong> the maximum-likelihood and cumulative-incidence cores
+must reproduce, in <code>rust/src/analyze/parametric.rs</code>
+and re-checked end to end in
+<code>test/parametric_survival_test.dart</code>.
+For the <strong>AFT</strong> fits the intercept-only MLE has a known answer: the exponential
+model's intercept is <code>ln(mean time)</code> and the log-normal model's intercept and
+scale are the ordinary normal MLE of <code>log t</code> (mean and population SD) — both
+reproduced to ~1e-3 by the Nelder-Mead fit — and replacing an event with
+right-censoring at the same time strictly increases the estimated survival time.
+The <strong>competing-risks</strong> CIF is pinned to a hand-worked example (times 1–4 with
+causes 1, 2, 1, censored give final cumulative incidence 0.5 and 0.25, summing to
+1 − S(end) = 0.75), with the weight verified to act as case replication. They
+ride these dedicated identities rather than the shared-CSV harness because the
+committed datasets carry no censored multi-cause survival structure and the
+pinned reference set's parametric-survival routines (lifelines) would re-import a
+near-identical Nelder-Mead fit rather than an independent check.</li>
+<li><strong>Quantile regression, GEE and loglinear</strong> (the C4 regression extensions) —
+validated against <strong>self-checking identities</strong> in
+<code>rust/src/analyze/regression_ext.rs</code>,
+re-checked end to end in
+<code>test/regression_ext_test.dart</code>. <strong>Quantile
+regression</strong> recovers an exact line <code>y = 2x + 1</code> at every τ (zero residuals ⇒ all
+quantiles coincide) and an intercept-only fit equals the sample τ-quantile — its
+point estimates are exact even though the sparsity-based SEs are only asymptotic.
+<strong>GEE</strong> with an <em>independence</em> working correlation has point estimates identical
+to the corresponding GLM (Gaussian ⇒ OLS), pinned by comparing to the engine's
+own weighted least squares; the exchangeable/AR(1) structures only change the
+(robust) standard errors. <strong>Loglinear</strong> independence fitted counts equal the
+expected counts <code>rowᵢ·colⱼ/n</code> and its deviance equals the table's likelihood-ratio
+G², with the saturated model fitting perfectly (deviance 0). These ride identities
+rather than the shared-CSV harness because the committed datasets carry no
+clustered or multi-way categorical structure, and the identities are exact (not
+tolerance-limited) cross-checks.</li>
+<li><strong>Bayesian t test</strong> (the <code>bayesian_ttest</code> kind, roadmap C4a) — the JZS Bayes
+factor is validated against a <strong>second, independent derivation</strong> rather than the
+shared-CSV harness, in <code>rust/src/analyze/bayesian.rs</code>.
+The reported BF₁₀ is the Rouder (2009) <strong>g-integral</strong> (the same integrand
+<code>pingouin.bayesfactor_ttest</code> evaluates); the test recomputes it a completely
+different way — as the ratio of marginal likelihoods, integrating the
+<strong>noncentral-t</strong> likelihood of the observed <em>t</em> against the Cauchy prior on δ —
+and requires the two to agree to <code>1e-3</code> across a range of (t, n, df). That dual
+agreement pins the math without a cross-package dependency (and one case is also
+pinned to the offline reference value <code>BF₁₀(t=2.5, n=20) ≈ 2.7023</code>, the quantity
+pingouin returns). The supporting pieces carry their own checks: the
+noncentral-t <strong>density integrates to 1</strong> and equals a central difference of the
+shipped <code>noncentral_t_cdf</code>; the <strong>posterior</strong> of δ is
+sign-symmetric, brackets its median, and shrinks the MLE δ̂ = t/√n toward 0; and
+the evidence scale maps to the Jeffreys / Lee-&amp;-Wagenmakers categories. It rides
+these identities rather than the shared harness because neither <code>scipy</code> nor
+<code>pingouin</code> is needed to defend the number — the two internal derivations are an
+exact cross-reference.</li>
+<li><strong>Bayesian correlation</strong> (the <code>bayesian_correlation</code> kind, roadmap C4b) — the
+Bayes factor for Pearson's ρ is validated against <strong>two further independent
+derivations</strong>, in <code>rust/src/analyze/bayesian.rs</code>.
+The reported BF₁₀ is the Ly et al. (2016) <strong>closed form</strong> (the quantity
+pingouin's default <code>bayesfactor_pearson</code> returns), evaluated through an
+Euler-transformed Gaussian hypergeometric ₂F₁; the tests require it to agree
+(to 1e-3) with (1) a direct <strong>ρ-integral</strong> of the exact reduced-likelihood ratio
+<code>L(ρ)/L(0)</code> against the prior, and (2) the <strong>Savage-Dickey density ratio</strong>
+<code>BF₁₀ = 1/[2·p(ρ=0 | data)]</code> read off the normalized posterior — three routes to
+the same number through different math. The ₂F₁ series itself is pinned against
+its <strong>Euler integral representation</strong> (an independent algorithm), and the
+closed form against the offline value <code>BF₁₀(r=0.5, n=20) ≈ 2.9159</code>. The
+posterior of ρ is checked for shrinkage toward 0, sign-symmetry under <code>r → −r</code>,
+and bracketing of its median. It rides these identities rather than the shared
+harness for the same reason as the t test — the number is fully defensible from
+the three internal cross-references.</li>
+<li><strong>Bayesian one-way ANOVA</strong> (the <code>bayesian_anova</code> kind, roadmap C4c) — the
+Zellner-Siow g-prior Bayes factor for the group-means model vs. the null is
+validated against <strong>independent derivations</strong> in
+<code>rust/src/analyze/bayesian.rs</code>. The
+reported BF₁₀ mixes the closed-form fixed-g ratio
+<code>BF(g) = (1+g)^((N−k)/2)/(1+g(1−R²))^((N−1)/2)</code> against a Cauchy prior on <em>g</em>;
+the tests pin that closed form against a <strong>brute-force design-matrix
+computation</strong> — <code>|I + gX(XʼX)⁻¹Xʼ|^(−1/2)·[SST/zʼ(I+…)⁻¹z]^((N−1)/2)</code> assembled
+from the actual sum-to-zero contrast matrix — agreeing to ~1e-16, and confirm
+the design-matrix R² equals the group-means SS_between/SS_total decomposition.
+The mixed (integrated) Bayes factor is checked across <strong>two integration
+substitutions</strong> (a log-<em>g</em> grid and <code>t = g/(1+g)</code>), pinned to the offline value
+<code>BF₁₀(N=30, k=3, R²=0.30) ≈ 4.1553</code>, and verified to favour the null at R²=0,
+increase with R² and N, and tend to 1 as the prior scale → 0. It rides these
+identities rather than the shared harness because R / <code>BayesFactor::anovaBF</code> is
+not available on CI; for a balanced design the g-prior BF coincides with
+Rouder et al.'s (2012) default-prior ANOVA up to the prior-scale convention.</li>
+<li><strong>Bayesian linear regression</strong> (the <code>bayesian_regression</code> kind, roadmap C4d) —
+validated by <strong>independent property tests</strong> in
+<code>rust/src/analyze/bayesian.rs</code>. The
+coefficient posterior (the reference-prior NIG conjugate posterior) has means
+equal to the OLS estimate, pinned against an independent OLS fit; the residual
+variance posterior is Inverse-Gamma((N−k)/2, SSE/2), whose mean SSE/(N−k−2) and
+χ²-quantile credible interval are checked (the χ² quantile — by bisection of the
+shipped <code>chi_square_p</code> — is itself pinned to textbook values). The regression
+Bayes factor reuses the <strong>same g-prior integral</strong> as the Bayesian ANOVA (with
+k = p+1), already validated there, and is pinned to the offline reference
+<code>BF₁₀(N=40, p=2, R²=0.25, r=√2/4) ≈ 4.4337</code> and checked to favour the null at
+R²=0. It rides these identities rather than the shared harness because
+R / <code>BayesFactor::regressionBF</code> is not available on CI, and the posterior means
+collapse to OLS by construction (the diffuse-prior limit).</li>
+</ul>
+<h2 id="nist-strd-certified-datasets">NIST StRD certified datasets</h2>
+<p>The cross-package suite above proves the engine <strong>agrees with other trusted
+software</strong>. The StRD leg proves something stronger for the procedures it
+covers: agreement with values <strong>certified by a national metrology institute</strong>.
+The <a href="https://www.itl.nist.gov/div898/strd/">NIST Statistical Reference Datasets</a>
+(StRD) were published by the U.S. National Institute of Standards and
+Technology specifically so statistical software can demonstrate its numerical
+accuracy: each dataset carries <em>certified values</em> computed at NIST in
+high-precision arithmetic — to 15 significant digits (11 for the nonlinear
+suite) — with graded numerical difficulty, including deliberately ill-behaved
+cases (Longley's extreme collinearity, Filip's 10th-degree polynomial, the
+NumAcc cancellation series). They are public domain and are the standard
+benchmark in the software-accuracy literature.</p>
+<h3 id="how-it-works-2">How it works</h3>
+<ul>
+<li><strong>The files are committed verbatim</strong> under
+<code>test/validation/data/nist/</code> — byte for
+byte as published. Each <code>.dat</code> file carries both the data <em>and</em> the
+certified values in one ASCII document.</li>
+<li><strong>Both are parsed out of the same file</strong> by
+<code>test/validation/nist_strd.dart</code>, so
+no certified number is hand-transcribed anywhere: if a check disagrees with
+NIST it can only be the engine, never a copying error. (The one transcription
+is the nonlinear <em>model expressions</em> — structure, not numbers — rewritten
+from each file's <code>Model:</code> block into the NLS tool's grammar.)
+<code>test/nist_strd_parser_test.dart</code>
+guards the files' integrity and the parser, engine-free.</li>
+<li><strong><code>test/nist_strd_test.dart</code></strong> drives every
+dataset end to end through the real native engine (the same
+<code>NativeEngine.open()</code> path as the cross-package suite) and scores each
+statistic by the <strong>log relative error</strong> — LRE, the number of significant
+digits on which the engine and NIST agree
+(<code>LRE = −log₁₀(|engine − certified| / |certified|)</code>), the metric of
+McCullough, <em>&quot;Assessing the Reliability of Statistical Software&quot;</em>, The
+American Statistician 52/53 (1998/1999). Every statistic must meet a
+minimum-LRE floor keyed on the suite and on NIST's published difficulty
+grade; the suite prints the per-dataset achieved LREs, recorded below.</li>
+</ul>
+<h3 id="coverage-2">Coverage</h3>
+<p>All four StRD suites, 45 datasets:</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Suite</th>
+<th>Datasets</th>
+<th>Engine path</th>
+<th>Statistics checked</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Univariate summary statistics</td>
+<td>all 9 (PiDigits … NumAcc4)</td>
+<td><code>explore</code>, <code>autocorrelation</code></td>
+<td>mean, s, lag-1 r</td>
+</tr>
+<tr>
+<td>One-way ANOVA</td>
+<td>all 11 (SiRstv, SmLs01–09, AtmWtAg)</td>
+<td><code>anova</code></td>
+<td>df (exact), SS, MS, F</td>
+</tr>
+<tr>
+<td>Linear least squares</td>
+<td>9 of 11 (Norris … Wampler5)</td>
+<td><code>regression_linear</code></td>
+<td>every coefficient and its SE, R², residual SD, F</td>
+</tr>
+<tr>
+<td>Nonlinear least squares</td>
+<td>16 across all difficulty grades</td>
+<td><code>nonlinear_regression</code></td>
+<td>every parameter and its SE, residual SS, residual SD</td>
+</tr>
+</tbody>
+</table></div>
+<p>The polynomial linear datasets (Pontius, Filip, Wampler) publish only <code>y</code> and
+<code>x</code>; the higher powers their certified models include are synthesized as
+columns by the loader. Nonlinear fits start from NIST's <strong>Start 2</strong>; Start-1
+robustness is an optimizer property, not a numerical-correctness one.</p>
+<p><strong>Deliberate exclusions</strong> (the same standard as the list above — documented,
+not silent):</p>
+<ul>
+<li><strong>NoInt1 / NoInt2</strong> (linear suite) — they certify regression <strong>through the
+origin</strong>, which the engine does not offer (every linear model fits an
+intercept). If a no-intercept option ever ships, these two files are the
+ready-made certification for it.</li>
+<li><strong>Nelson</strong> (nonlinear suite) — its certified fit is to <code>log(y)</code>, a response
+transform the NLS tool does not apply.</li>
+<li><strong>Wampler F statistics</strong> — the exact-fit Wampler datasets certify a zero
+residual sum of squares, so no finite F exists to compare; their
+coefficients, SEs, R² and residual SD are all still checked.</li>
+</ul>
+<h3 id="what-the-suite-found-and-fixed">What the suite found (and fixed)</h3>
+<p>Building the suite surfaced two numerical-hygiene defects and one genuine
+limitation — exactly the kind of discovery it exists for:</p>
+<ul>
+<li><strong>One-way ANOVA cancellation (fixed, 2026-07-02).</strong> The between-groups sum
+of squares was accumulated on the raw values; on data with many constant
+leading digits (SmLs07-09 are graded <em>higher difficulty</em> for exactly this)
+the group spread rounded away before the means were ever differenced,
+leaving <strong>0.5–2.7 digits</strong> of agreement. The fix in
+<code>rust/src/analyze/compare_means.rs</code>:
+the sums of squares are translation-invariant, so they are now accumulated
+about a data point (with Neumaier-compensated summation in <code>moments</code>),
+lifting SmLs07-09 to <strong>3.9–4.0</strong> — the double-precision ceiling for these
+files (see the floor note below) — and the average-difficulty tier from
+~6.5–8.5 to ~9.9–10.2. Pinned by the
+<code>one_way_anova_is_translation_invariant</code> Rust test in
+<code>rust/src/ffi.rs</code> (a 2³⁰ offset of exactly
+representable data must not change SS/MS/F).</li>
+<li><strong>NLS finite-difference step floor (fixed, 2026-07-02).</strong> The Jacobian's
+step had an absolute floor of <code>1e-6</code> — larger than some certified
+parameters themselves (Hahn1's b7 ≈ 1e-7) — so the optimizer steered on a
+meaningless derivative and stalled far from the minimum (Hahn1 <strong>0.7</strong>,
+Kirby2 <strong>4.5</strong>). The step in
+<code>rust/src/analyze/nonlinear.rs</code> is
+now relative to the parameter's own scale (floor only at exactly zero),
+lifting Hahn1 to <strong>8.0</strong> and Kirby2 to <strong>7.6</strong> and improving nearly every
+other fit.</li>
+<li><strong>Filip (known limitation, open).</strong> The linear solver cannot fit Filip's
+10th-degree polynomial design: its condition number (~1e15) is squared by
+the normal-equations path, and the returned coefficients are meaningless
+(LRE 0). This is the classic result this dataset was designed to expose —
+historically several major packages failed it too; solving it needs an
+orthogonal-decomposition (QR/SVD) least-squares path. Until then Filip is
+recorded in the test's <code>knownLimits</code> (still scored, and asserted to <em>stay</em>
+failing so an eventual solver improvement forces this record to be
+updated). <strong>Follow-up:</strong> a QR-based <code>regression_linear</code> core would close
+this and likely lift the Wampler family too; worth noting that on such
+designs today the engine also raises no conditioning warning — a gate-1
+style surface worth adding alongside.</li>
+</ul>
+<h3 id="achieved-lres">Achieved LREs</h3>
+<p>From the watched run of <code>flutter test test/nist_strd_test.dart</code> on
+2026-07-03 (Windows x64, ChakataStat engine 0.5.0 — the in-house tabular
+engine). This run re-recorded the table after the Polars removal, and every
+achieved LRE came out <strong>identical</strong> to the 2026-07-02 Polars-era run —
+including ENSO's build-sensitive worst statistic — confirming the storage
+swap did not perturb a single scored digit. <em>Min LRE</em> is the worst
+statistic of that dataset; the cap is 15 (11 nonlinear). The floors sit about
+a digit under the achieved values because the iterative NLS fits amplify
+last-bit codegen/libm differences across builds and platforms (an engine
+rebuild alone was observed to move ENSO's worst statistic between 5.0 and
+5.9); the closed-form suites are bit-stable. Two floors are bounded by the
+<em>problem</em>, not the algorithm: <strong>higher-difficulty ANOVA</strong> by data
+representation (nine constant leading digits leave an f64 only ~4 digits of
+the certified SS — NIST's decimal data simply cannot be represented more
+finely), and <strong>higher-difficulty linear</strong> by the exact-fit Wampler datasets,
+whose certified coefficient SDs are exactly 0 and score by absolute LRE.</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>Suite</th>
+<th>Difficulty</th>
+<th>Floor</th>
+<th>Min LRE</th>
+<th>Worst statistic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PiDigits</td>
+<td>univariate</td>
+<td>lower</td>
+<td>12.0</td>
+<td>13.0</td>
+<td>r1</td>
+</tr>
+<tr>
+<td>Lottery</td>
+<td>univariate</td>
+<td>lower</td>
+<td>12.0</td>
+<td>15.0</td>
+<td>mean</td>
+</tr>
+<tr>
+<td>Lew</td>
+<td>univariate</td>
+<td>lower</td>
+<td>12.0</td>
+<td>15.0</td>
+<td>r1</td>
+</tr>
+<tr>
+<td>Mavro</td>
+<td>univariate</td>
+<td>lower</td>
+<td>12.0</td>
+<td>13.1</td>
+<td>sd</td>
+</tr>
+<tr>
+<td>Michelso</td>
+<td>univariate</td>
+<td>lower</td>
+<td>12.0</td>
+<td>13.4</td>
+<td>r1</td>
+</tr>
+<tr>
+<td>NumAcc1</td>
+<td>univariate</td>
+<td>lower</td>
+<td>12.0</td>
+<td>15.0</td>
+<td>mean</td>
+</tr>
+<tr>
+<td>NumAcc2</td>
+<td>univariate</td>
+<td>average</td>
+<td>9.0</td>
+<td>13.7</td>
+<td>r1</td>
+</tr>
+<tr>
+<td>NumAcc3</td>
+<td>univariate</td>
+<td>average</td>
+<td>9.0</td>
+<td>9.5</td>
+<td>sd</td>
+</tr>
+<tr>
+<td>NumAcc4</td>
+<td>univariate</td>
+<td>higher</td>
+<td>7.5</td>
+<td>8.3</td>
+<td>sd</td>
+</tr>
+<tr>
+<td>SiRstv</td>
+<td>anova</td>
+<td>lower</td>
+<td>12.0</td>
+<td>13.1</td>
+<td>F</td>
+</tr>
+<tr>
+<td>SmLs01</td>
+<td>anova</td>
+<td>lower</td>
+<td>12.0</td>
+<td>15.0</td>
+<td>between_ss</td>
+</tr>
+<tr>
+<td>SmLs02</td>
+<td>anova</td>
+<td>lower</td>
+<td>12.0</td>
+<td>15.0</td>
+<td>between_ss</td>
+</tr>
+<tr>
+<td>SmLs03</td>
+<td>anova</td>
+<td>lower</td>
+<td>12.0</td>
+<td>13.0</td>
+<td>F</td>
+</tr>
+<tr>
+<td>AtmWtAg</td>
+<td>anova</td>
+<td>average</td>
+<td>9.0</td>
+<td>10.2</td>
+<td>F</td>
+</tr>
+<tr>
+<td>SmLs04</td>
+<td>anova</td>
+<td>average</td>
+<td>9.0</td>
+<td>10.1</td>
+<td>between_ss</td>
+</tr>
+<tr>
+<td>SmLs05</td>
+<td>anova</td>
+<td>average</td>
+<td>9.0</td>
+<td>9.9</td>
+<td>between_ss</td>
+</tr>
+<tr>
+<td>SmLs06</td>
+<td>anova</td>
+<td>average</td>
+<td>9.0</td>
+<td>9.9</td>
+<td>between_ss</td>
+</tr>
+<tr>
+<td>SmLs07</td>
+<td>anova</td>
+<td>higher</td>
+<td>3.5</td>
+<td>4.0</td>
+<td>between_ss</td>
+</tr>
+<tr>
+<td>SmLs08</td>
+<td>anova</td>
+<td>higher</td>
+<td>3.5</td>
+<td>3.9</td>
+<td>between_ss</td>
+</tr>
+<tr>
+<td>SmLs09</td>
+<td>anova</td>
+<td>higher</td>
+<td>3.5</td>
+<td>3.9</td>
+<td>between_ss</td>
+</tr>
+<tr>
+<td>Norris</td>
+<td>linear</td>
+<td>lower</td>
+<td>10.0</td>
+<td>13.3</td>
+<td>B0_est</td>
+</tr>
+<tr>
+<td>Pontius</td>
+<td>linear</td>
+<td>lower</td>
+<td>10.0</td>
+<td>10.8</td>
+<td>B0_est</td>
+</tr>
+<tr>
+<td>Filip</td>
+<td>linear</td>
+<td>higher</td>
+<td>—</td>
+<td>0.0</td>
+<td><em>known limitation (above)</em></td>
+</tr>
+<tr>
+<td>Longley</td>
+<td>linear</td>
+<td>higher</td>
+<td>4.5</td>
+<td>7.4</td>
+<td>B5_est</td>
+</tr>
+<tr>
+<td>Wampler1</td>
+<td>linear</td>
+<td>higher</td>
+<td>4.5</td>
+<td>4.8</td>
+<td>B1_sd</td>
+</tr>
+<tr>
+<td>Wampler2</td>
+<td>linear</td>
+<td>higher</td>
+<td>4.5</td>
+<td>8.6</td>
+<td>B3_est</td>
+</tr>
+<tr>
+<td>Wampler3</td>
+<td>linear</td>
+<td>higher</td>
+<td>4.5</td>
+<td>5.7</td>
+<td>B1_est</td>
+</tr>
+<tr>
+<td>Wampler4</td>
+<td>linear</td>
+<td>higher</td>
+<td>4.5</td>
+<td>5.7</td>
+<td>B1_est</td>
+</tr>
+<tr>
+<td>Wampler5</td>
+<td>linear</td>
+<td>higher</td>
+<td>4.5</td>
+<td>5.7</td>
+<td>B1_est</td>
+</tr>
+<tr>
+<td>Misra1a</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>6.0</td>
+<td>9.3</td>
+<td>b1_sd</td>
+</tr>
+<tr>
+<td>Misra1b</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>6.0</td>
+<td>8.5</td>
+<td>b2_sd</td>
+</tr>
+<tr>
+<td>Chwirut1</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>6.0</td>
+<td>7.5</td>
+<td>b1_est</td>
+</tr>
+<tr>
+<td>Chwirut2</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>6.0</td>
+<td>7.4</td>
+<td>b1_est</td>
+</tr>
+<tr>
+<td>DanWood</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>6.0</td>
+<td>9.8</td>
+<td>b2_sd</td>
+</tr>
+<tr>
+<td>Gauss1</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>6.0</td>
+<td>10.2</td>
+<td>b8_sd</td>
+</tr>
+<tr>
+<td>Lanczos3</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>6.0</td>
+<td>7.0</td>
+<td>b2_sd</td>
+</tr>
+<tr>
+<td>Kirby2</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>4.5</td>
+<td>7.6</td>
+<td>b1_est</td>
+</tr>
+<tr>
+<td>Hahn1</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>4.5</td>
+<td>8.0</td>
+<td>b1_est</td>
+</tr>
+<tr>
+<td>Roszman1</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>4.5</td>
+<td>7.8</td>
+<td>b2_est</td>
+</tr>
+<tr>
+<td>ENSO</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>4.5</td>
+<td>5.0</td>
+<td>b8_est</td>
+</tr>
+<tr>
+<td>Thurber</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>4.5</td>
+<td>5.7</td>
+<td>b7_sd</td>
+</tr>
+<tr>
+<td>BoxBOD</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>4.5</td>
+<td>7.1</td>
+<td>b2_sd</td>
+</tr>
+<tr>
+<td>Rat42</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>4.5</td>
+<td>8.0</td>
+<td>b1_sd</td>
+</tr>
+<tr>
+<td>Eckerle4</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>4.5</td>
+<td>8.5</td>
+<td>b3_sd</td>
+</tr>
+<tr>
+<td>MGH09</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>4.5</td>
+<td>5.9</td>
+<td>b2_est</td>
+</tr>
+</tbody>
+</table></div>
+<p>For context, McCullough's published assessments graded major commercial
+packages of the era at similar or lower LREs on the same files (several
+failed Filip outright, and low single digits on SmLs07-09 were common). A
+current run always prints this table (the suite's <code>tearDownAll</code>), so the
+recorded numbers can be refreshed by pasting from any watched run.</p>
+<h2 id="tolerances-and-recorded-conventions">Tolerances and recorded conventions</h2>
+<p>Most statistics agree to <code>1e-4</code>–<code>1e-6</code>. A looser tolerance always names a
+<em>reason</em> in the reference's <code>source</code> string. Where a statistic has more than one
+defensible definition, the reference is computed in the engine's convention and
+the choice is recorded here — these are <strong>agreements about definitions, not
+discrepancies</strong>:</p>
+<ul>
+<li><strong>Quantiles</strong> (Explore percentiles) — the engine uses the <strong>Hazen</strong> definition
+(plotting position <code>(k − ½)/n</code>); the reference uses
+<code>numpy.percentile(method=&quot;hazen&quot;)</code>. (NumPy's default <code>&quot;linear&quot;</code> is a different,
+equally valid convention.)</li>
+<li><strong>Mann-Whitney</strong> — the engine reports the asymptotic test from a <strong>tie-corrected
+z with no continuity correction</strong>; the reference derives both <em>z</em> and <em>p</em> from
+that same z, rather than SciPy's continuity-corrected <em>p</em>.</li>
+<li><strong>Type III SS</strong> (factorial GLM) — only well-defined under <strong>sum-to-zero
+contrasts</strong>; the reference fits <code>C(group, Sum)*C(sex, Sum)</code> so statsmodels'
+<code>anova_lm(typ=3)</code> reproduces the engine's main-effect SS in the presence of an
+interaction.</li>
+<li><strong>ARIMA</strong> — the engine fits AR by <strong>conditional least squares</strong>; the AR(1)
+reference is the OLS lag-1 regression (the exact CLS estimator), not
+statsmodels' unconditional ML, which would differ slightly.</li>
+<li><strong>Negative binomial</strong> — the dispersion <code>α</code> is ML-estimated, with a looser <code>5e-2</code>
+tolerance on the dispersion alone (the mean-model coefficients match tightly).</li>
+<li><strong>CFA</strong> — five recorded conventions, each pinned against the references.
+(1) <strong>Scale setting</strong>: each factor's first indicator is the reference,
+its loading fixed at 1; factor variances are free. (2) <strong>χ² = N·F</strong> with
+divisor <strong>N</strong> (not N−1) — pinned by reproducing lavaan's published
+Holzinger–Swineford χ² = 85.306 = 301·F. (3) Standard errors use the
+<strong>expected (Fisher) information</strong> with divisor N — the lavaan/semopy
+default; the observed-Hessian alternative disagrees with both references
+exactly where the model misfits, so it is deliberately not used.
+(4) The <strong>baseline model</strong> behind CFI/TLI is the independence model
+(diagonal Σ at the ML variances, closed form <code>F_b = Σ ln s_jj − ln|S|</code>);
+a saturated (df = 0) model reports CFI = TLI = 1 and no χ² p-value by
+convention. (5) The RMSEA CI is <strong>90%</strong> by convention (not the analysis
+CI level), from inverting the noncentral χ². The sample covariance uses
+divisor N (weighted: Σw), matching the estimates the references produce.</li>
+<li><strong>Meta-analysis</strong> — three recorded conventions. (1) The between-study
+variance is the <strong>DerSimonian–Laird moment estimate, truncated at zero</strong>
+(as is I²) — the metafor/textbook convention; statsmodels'
+<code>combine_effects</code> reports the <em>raw</em> (possibly negative) τ² and pools with
+it, so <code>meta.csv</code> is built deliberately heterogeneous (the generator
+asserts raw τ² &gt; 0) to keep the two sides comparable — a homogeneous
+dataset would make the engine's truncated RE collapse onto FE while
+statsmodels' would not. (2) Pooled and per-study intervals are
+<strong>large-sample Wald (z-based)</strong>; the Knapp–Hartung adjustment is out of
+scope for v1. (3) <strong>Egger's test</strong> is the classic OLS of the standardized
+effect on the precision with the intercept tested at k − 2 df (equivalent
+to WLS of effect on SE under 1/SE² weights). The dataset's Weight Cases
+setting is <strong>meaningless by design</strong> for meta-analysis — rows are studies
+and the inverse-variance weights are the statistic's own — so, like time
+series, it carries the standard unweighted note and has no weighted
+reference.</li>
+<li><strong>Case weighting</strong> — the engine treats Weight Cases as a <strong>frequency weight</strong>:
+a weight-<code>w</code> case behaves exactly like <code>w</code> coincident copies (the procedures
+weighted on 2026-06-18 — clustering, discriminant, RM-ANOVA/MANOVA, survival —
+are tested against that <em>weight ≡ replication</em> identity). One sub-case carries a
+convention: <strong>Cox with the Efron ties correction</strong> under <em>non-integer</em> weights.
+The tied-event discount steps over the weighted event total, which reproduces
+replication exactly for integer weights but is an approximation for fractional
+ones (the same approach lifelines takes); the default Breslow correction is
+exact for any weights. <strong>Time series</strong> (ACF/PACF, ARIMA) is deliberately
+<em>unweighted</em> — a frequency weight is undefined for a series taken in order — so
+it has no weighted reference. The <strong>REML τ²</strong> (0.11.0) is the standard
+fixed-point iteration on the restricted likelihood — metafor's default
+estimator — bounded at zero, iteration-capped with a hit cap reported in
+the output note; Q, its p and I² stay defined from the fixed-effect fit
+and are estimator-independent, so only τ², the random-effects pooling and
+the per-study random weights change with the <code>tau_method</code> choice.</li>
+</ul>
+<h2 id="regenerating">Regenerating</h2>
+<p>The reference toolchain is needed only to <em>author</em> the values — CI just reads the
+committed JSON (so the suite runs everywhere the Dart suite runs, with no Python
+dependency on the CI machines). To regenerate after adding a procedure or
+changing a number:</p>
+<pre><code class="language-sh">python3 -m venv /tmp/refenv
+/tmp/refenv/bin/pip install scipy statsmodels scikit-learn lifelines pingouin
+/tmp/refenv/bin/python tool/validation/generate_references.py
+dart run tool/cstool.dart test test/numerical_validation_test.dart
+</code></pre>
+<p>The package versions used for the committed values are recorded in the JSON
+header (<code>_versions</code>) — at the time of writing SciPy 1.18, statsmodels 0.14,
+scikit-learn 1.9, lifelines 0.30, pingouin 0.6, NumPy 2.5.</p>
+<h3 id="adding-a-procedure">Adding a procedure</h3>
+<ol>
+<li>In the generator, add a <code>add(&quot;&lt;family&gt;/&lt;stat&gt;&quot;, value, tol, &quot;&lt;source&gt;&quot;)</code> line
+computing the statistic with a reference package; re-run it.</li>
+<li>In the Dart test, add a <code>Probe</code> (or an entry to an existing one) mapping each
+new <code>id</code> to the engine request and the result cell that holds it.</li>
+<li>Run the test. The orphan-guard will tell you immediately if the two sides are
+not in step.</li>
+</ol>
+<p>When the reference disagrees, decide whether it is a real engine bug or a
+<strong>convention</strong> difference (a different-but-valid definition). If the latter,
+compute the reference in the engine's convention and record the choice in the
+<em>Tolerances and recorded conventions</em> list above — never just loosen the
+tolerance to make a genuine discrepancy pass.</p>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../index.html">Home</a> ·
+        <a href="../../quick-start/">Quick Start</a> ·
+        <a href="../../privacy-policy/">Privacy Policy</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../js/main.js"></script>
+</body>
+</html>

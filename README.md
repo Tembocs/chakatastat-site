@@ -8,8 +8,9 @@ Plain HTML/CSS/JS — no build step, no `node_modules`, no framework:
 ```
 index.html          one-page site: hero, validation, features, command stream,
                     screenshots, analyze catalog, download, footer
+docs/                the User Guide — GENERATED, do not hand-edit (see below)
 robots.txt           crawl policy; points at the sitemap
-sitemap.xml          the three public URLs — update when a page is added
+sitemap.xml          GENERATED with docs/; every public URL
 css/styles.css       all styling (light/dark: system setting + a header toggle)
 js/main.js           theme toggle, platform-aware download hint, tab groups,
                      scroll reveal, mobile nav, footer year, screenshot lightbox
@@ -20,6 +21,40 @@ assets/
   fonts/              Inter (Latin subset, variable) — self-hosted, see below
   screenshots/        real app screenshots (captured from an actual release build)
 ```
+
+## Licensing, in three parts
+
+Three different things live in this repository under three different terms, and
+conflating them is the easy mistake:
+
+| | Terms |
+|---|---|
+| **The ChakataStat software** | Proprietary. Free to use for any purpose, including commercial use — but not open source. |
+| **The documentation text** under `docs/` | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — share and adapt, including commercially, with attribution. |
+| **The ChakataStat name and logo** | Trademarks. Not licensed for reuse; CC BY 4.0 does not cover them. |
+
+Every generated documentation page carries that scope statement in its footer,
+emitted by `tool/publish_docs.dart`. If the licence ever changes, change it
+there — editing the HTML here is overwritten on the next render.
+
+The site's own marketing copy (`index.html`, `quick-start/`, `privacy-policy/`)
+is **not** CC BY; only the User Guide text is.
+
+## `docs/` and `sitemap.xml` are generated — do not edit them here
+
+Everything under `docs/` is the ChakataStat User Guide, rendered from Markdown
+that lives in the (private) application repository. `sitemap.xml` is written by
+the same tool. **Editing either by hand is pointless — the next release
+overwrites it.** Fix the Markdown in the app repo and re-run:
+
+```sh
+dart run tool/publish_docs.dart --out /path/to/chakatastat-site
+```
+
+The same Markdown is bundled inside the application and rendered by its in-app
+viewer, so the guide has two consumers and one source. That is also why an
+unresolvable link fails the render rather than shipping a 404: a bad link is
+usually broken in the app too.
 
 ## Things that will bite you when editing
 

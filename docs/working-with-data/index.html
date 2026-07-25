@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Working with Data — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/working-with-data/">
+  <link rel="icon" type="image/svg+xml" href="../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Working with Data — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/working-with-data/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../index.html">
+        <img class="brand-mark" src="../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <nav id="nav-links" class="nav-links">
+        <a href="../../docs/">User Guide</a>
+        <a href="../../index.html#validated">Validation</a>
+        <a href="../../index.html#features">Features</a>
+        <a href="../../index.html#screenshots">Screenshots</a>
+        <a href="../../index.html#download">Download</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../">Contents</a></li>
+        <li><a href="../quick-start/">Quick Start</a></li>
+        <li><a href="../overview/">Overview</a></li>
+        <li><a href="../getting-started/">Getting Started</a></li>
+        <li><a href="../tutorial/">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="./" aria-current="page">Working with Data</a></li>
+        <li><a href="../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../analyze/">Analyzing Data</a></li>
+        <li><a href="../graphs/">Graphs</a></li>
+        <li><a href="../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../advanced/ai-assistant/">AI Assistant</a></li>
+        <li><a href="../advanced/reproducibility/">Reproducibility</a></li>
+        <li><a href="../advanced/engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="working-with-data">Working with Data</h1>
+<p>Everything in ChakataStat starts with a dataset. This page covers getting data
+in and out, the two ways you look at a dataset (Data View and Variable View),
+the native <code>.ckd</code> document, and the tools for tidying a dataset up.</p>
+<h2 id="the-shape-of-a-dataset">The shape of a dataset</h2>
+<p>A dataset is a rectangle: <strong>rows are cases</strong>, <strong>columns are variables</strong>. Behind
+the scenes a variable holds one of just two storage types:</p>
+<ul>
+<li><strong>Numeric</strong> — numbers; a blank or non-number is <em>missing</em>.</li>
+<li><strong>String</strong> — text (and dates are entered as text in ISO <code>YYYY-MM-DD</code> form).</li>
+</ul>
+<p>On top of storage sits each variable's <strong>definition</strong> (label, value labels,
+measurement level, missing rules) — that lives in the Variable View and travels
+with the data inside an <code>.ckd</code> file.</p>
+<h2 id="importing-data">Importing data</h2>
+<p><strong>File → Import Data…</strong> reads:</p>
+<ul>
+<li><strong>CSV / TSV</strong> — the delimiter and header row are detected; each column's type
+is <strong>inferred</strong> (all-numeric → numeric, otherwise string). An import-options
+dialog lets you confirm before loading.</li>
+<li><strong>Excel (<code>.xlsx</code>)</strong> — the first worksheet, read in pure Dart.</li>
+<li><strong>Parquet</strong> — typed columns read directly by the native engine.</li>
+<li><strong>JSON</strong> — either an array of records (<code>[{&quot;age&quot;: 30, …}, …]</code>, one object per
+case) or a columnar object (<code>{&quot;age&quot;: [30, 31, …], …}</code>). The column names come
+from the JSON, so there is no header prompt; each column's type is inferred
+like CSV.</li>
+</ul>
+<p>A progress dialog shows while large files load, and the import runs without
+freezing the window.</p>
+<blockquote>
+<p><strong>Tip.</strong> After importing a CSV, visit the Variable View and set measurement
+levels and labels. Type inference gets storage right but cannot know that a
+numeric <code>1/2</code> column means <em>Male/Female</em> — that is a value-label job (below).</p>
+</blockquote>
+<h2 id="exporting-data">Exporting data</h2>
+<p><strong>File → Export Data…</strong> writes the current dataset (honouring any active case
+filter) to <strong>CSV/TSV</strong>, <strong>Excel</strong>, <strong>Parquet</strong> or <strong>JSON</strong> (an array of
+records) — the format is chosen from the file extension you give.</p>
+<p>To export <em>results</em> rather than data, see
+<a href="../advanced/reproducibility/#exporting-the-output-log">the output log export</a>.</p>
+<h2 id="the-data-view">The Data View</h2>
+<p>The Data View (<code>Ctrl+1</code>) is the spreadsheet you type into:</p>
+<ul>
+<li>Click a cell and type to edit; <strong>Tab</strong>/<strong>Enter</strong> move the active cell.</li>
+<li><strong>Paste</strong> (<code>Ctrl+V</code>) a block from another spreadsheet; rows and columns grow to
+fit. Typing into the empty grid creates the first variables automatically.</li>
+<li><strong>Find &amp; Replace</strong> (<code>Ctrl+F</code>) opens a search bar with <em>match case</em>, <em>entire
+cell</em> and <em>wrap-around</em> options; <strong>Replace All</strong> is a single undoable edit.</li>
+<li>Hover any <strong>column header</strong> to see that variable's label, type and measurement
+level as a tooltip — the editor documents itself.</li>
+<li>When the dataset is empty, the view shows an <strong>empty state</strong> with Open and
+Import buttons instead of a blank grid.</li>
+<li><strong>Hide a column</strong> you don't need right now: right-click its header and choose
+<strong>Hide column</strong> (selecting several headers first hides them all together). A
+thin double line marks where columns are hidden — click it, or right-click the
+header on either side and choose <strong>Unhide</strong>, to bring them back. <strong>View →
+Unhide All Columns</strong> is the escape hatch if you lose track. Hiding is a
+display preference, not a data change: the variable still exists, still
+appears in every dialog's variable list, and stays valid in <code>.cks</code> syntax —
+it just isn't shown in the grid.</li>
+</ul>
+<p>Edits are undoable (<code>Ctrl+Z</code> / <code>Ctrl+Y</code>).</p>
+<h2 id="the-variable-view">The Variable View</h2>
+<p>The Variable View (<code>Ctrl+2</code>) shows <strong>one row per variable</strong>. The columns are the
+variable's metadata; click a cell to edit it:</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Name</strong></td>
+<td>The variable's identifier (used in commands and expressions).</td>
+</tr>
+<tr>
+<td><strong>Type</strong></td>
+<td>Numeric or String.</td>
+</tr>
+<tr>
+<td><strong>Width / Decimals</strong></td>
+<td>Display width and decimal places (numeric).</td>
+</tr>
+<tr>
+<td><strong>Label</strong></td>
+<td>A human-readable description shown in output instead of the name.</td>
+</tr>
+<tr>
+<td><strong>Values</strong></td>
+<td><strong>Value labels</strong> — map stored codes to text (e.g. <code>1 → Male</code>).</td>
+</tr>
+<tr>
+<td><strong>Missing</strong></td>
+<td><strong>User-missing values</strong> — codes that mean &quot;no answer&quot; and are excluded from analysis (e.g. <code>99 → declined</code>).</td>
+</tr>
+<tr>
+<td><strong>Measure</strong></td>
+<td>Measurement level: <strong>Scale</strong>, <strong>Ordinal</strong> or <strong>Nominal</strong>.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="why-the-measurement-level-matters">Why the measurement level matters</h3>
+<p>The <strong>Measure</strong> tells procedures how to treat a variable:</p>
+<ul>
+<li><strong>Scale</strong> — a true number (age, blood pressure): means, correlations, the
+numeric axis of a histogram.</li>
+<li><strong>Ordinal</strong> — ordered categories (education level): ranks and ordered tests.</li>
+<li><strong>Nominal</strong> — unordered categories (region, sex): counts, crosstabs, grouping.</li>
+</ul>
+<p>Charts and dialogs use the level to offer sensible defaults and to label output,
+so setting it correctly is worth the minute it takes.</p>
+<h3 id="value-labels-and-missing-values">Value labels and missing values</h3>
+<p>Both are edited in a small dialog from the relevant Variable View cell:</p>
+<ul>
+<li><strong>Value labels</strong> make output readable — a crosstab shows <em>Male/Female</em> instead
+of <em>1/2</em>, and the underlying codes stay numeric for analysis.</li>
+<li><strong>User-missing values</strong> mark specific codes as &quot;not a real value&quot;. They reach
+the engine as nulls and are dropped from every statistic, while still being
+visible (and editable) in the Data View.</li>
+</ul>
+<h2 id="saving-the-ckd-document">Saving: the <code>.ckd</code> document</h2>
+<p><strong>File → Save</strong> (<code>Ctrl+S</code>) writes an <strong><code>.ckd</code></strong> file — ChakataStat's native
+document. Unlike a CSV, it stores <strong>both the data and every variable
+definition</strong> (labels, value labels, missing rules, measurement levels), plus
+document provenance. Reopening an <code>.ckd</code> restores the dataset exactly.</p>
+<p>Internally <code>.ckd</code> is a versioned ZIP of a <code>meta.json</code> (all metadata) and a typed
+<code>data.parquet</code> (the columns). You never need to look inside, but the format is
+documented for the curious in <a href="../file-format/">docs/file_format.md</a>.</p>
+<p>Your wider <strong>session</strong> — the open document, the results log, the AI conversation
+and the syntax — is also remembered between launches, and the unsaved working
+dataset is autosaved for crash recovery.</p>
+<h2 id="tidying-a-dataset">Tidying a dataset</h2>
+<p>A few tools under the <strong>Data</strong> menu help with messy or wide datasets:</p>
+<ul>
+<li><strong>Define Variable Properties…</strong> — scan the data and set value labels,
+measurement levels and missing rules for several variables at once, guided by
+the values actually present.</li>
+<li><strong>Bulk Rename Variables…</strong> — rename many variables with a <strong>regular
+expression</strong> (with <code>$1</code> group references), a live preview and collision-safe
+de-duplication. Ideal for stripping a common prefix or renaming <code>q1, q2, …</code>.</li>
+<li><strong>Define Variable Sets…</strong> — group related variables under a name; the Variable
+View's set filter then focuses on just that group. Sets are a view convenience
+— they never change the data — and persist with the session.</li>
+</ul>
+<h3 id="the-data-dictionary-ckdict">The data dictionary (<code>.ckdict</code>)</h3>
+<p><strong>File → Export Data Dictionary…</strong> writes all variable metadata to a standalone,
+versioned JSON <strong><code>.ckdict</code></strong> file — names, labels, types, value labels and
+missing rules, <em>without</em> the data. <strong>Import Data Dictionary…</strong> applies one to the
+current dataset: it matches by variable name, writes only the fields each (even
+hand-edited, partial) entry carries, leaves your data untouched, and reports the
+fit (applied / unmatched / not in dictionary).</p>
+<p>This is how you reuse one carefully-defined codebook across many data files.</p>
+<h2 id="where-to-go-next">Where to go next</h2>
+<ul>
+<li><strong><a href="../cases-and-transforms/">Case Semantics &amp; Transforms</a></strong> — filter, weight and
+split cases; compute, recode and rank.</li>
+<li><strong><a href="../analyze/">Analyzing Data</a></strong> — run statistics on your dataset.</li>
+</ul>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../index.html">Home</a> ·
+        <a href="../../quick-start/">Quick Start</a> ·
+        <a href="../../privacy-policy/">Privacy Policy</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../js/main.js"></script>
+</body>
+</html>

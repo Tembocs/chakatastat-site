@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reproducibility — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/advanced/reproducibility/">
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Reproducibility — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/advanced/reproducibility/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../index.html">
+        <img class="brand-mark" src="../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../docs/">User Guide</a>
+        <a href="../../../index.html#validated">Validation</a>
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#screenshots">Screenshots</a>
+        <a href="../../../index.html#download">Download</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../../">Contents</a></li>
+        <li><a href="../../quick-start/">Quick Start</a></li>
+        <li><a href="../../overview/">Overview</a></li>
+        <li><a href="../../getting-started/">Getting Started</a></li>
+        <li><a href="../../tutorial/">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../../working-with-data/">Working with Data</a></li>
+        <li><a href="../../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../../analyze/">Analyzing Data</a></li>
+        <li><a href="../../graphs/">Graphs</a></li>
+        <li><a href="../../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../ai-assistant/">AI Assistant</a></li>
+        <li><a href="./" aria-current="page">Reproducibility</a></li>
+        <li><a href="../engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="reproducibility">Reproducibility</h1>
+<p>Reproducible analysis means you can re-run exactly what you did — on the same data
+or on new data — and get the same result, and that someone else can read and
+verify your steps. ChakataStat is built around this: every menu action is also a
+<strong>command</strong>, and the commands form a stream you can read, edit, save, replay,
+batch and export.</p>
+<h2 id="the-syntax-console-cks">The syntax console (<code>.cks</code>)</h2>
+<p>Open it with <strong>View → Syntax</strong> (<code>Ctrl+4</code>). It shows your session as an editable
+<strong>ChakataStat syntax</strong> script — the <code>.cks</code> language. Every analysis, chart and
+journalable transform you run from the menus appends a line here automatically:</p>
+<pre><code>descriptives variables=[Age, BMI, SystolicBP]
+correlate variables=[BMI, SystolicBP], method=pearson
+compute target=BMI_cat, expr=&quot;IF(BMI &gt;= 30, 1, 0)&quot;
+histogram variable=BMI
+</code></pre>
+<p>The grammar is small and readable: <code>toolname arg=value, arg=[a, b], arg=&quot;text&quot;</code>,
+with <code>#</code> for comments.</p>
+<h3 id="running-and-editing">Running and editing</h3>
+<ul>
+<li><strong>Run all</strong> / <strong>Run selection</strong> parse the script and dispatch each command into
+the Output log. Replaying does <strong>not</strong> re-record the commands.</li>
+<li>Parse errors and failed commands are reported in a status panel as data — a bad
+line never crashes the run.</li>
+<li>The console and the GUI are <strong>two views of one stream</strong>: edit the text and
+re-run, or keep clicking menus and watch the script grow.</li>
+</ul>
+<h3 id="saving-and-opening-scripts">Saving and opening scripts</h3>
+<p>Save the script as an <code>.cks</code> file and open it later (or hand it to a colleague).
+The session also remembers the script between launches.</p>
+<h2 id="the-command-palette">The command palette</h2>
+<p><strong>View → Command Palette…</strong> (<code>Ctrl+Shift+P</code>) is a fast, keyboard-driven launcher:
+start typing the name of any analysis, chart, transform, file or view command and
+run it without hunting through menus. It is built from the same tool catalog the
+menus, the AI and MCP use, so it can never drift out of sync.</p>
+<h2 id="headless-batch-mode---run">Headless batch mode (<code>--run</code>)</h2>
+<p>For pipelines, CI and reproducible research, run a script against a dataset with
+no window:</p>
+<pre><code>ChakataStat --run script.cks data.ckd --out report.html
+</code></pre>
+<p>This loads the dataset, runs every command in the <code>.cks</code> script through the same
+engine, and writes the output log as a report. The output format follows the
+<code>--out</code> extension — <strong>HTML</strong>, <strong>Markdown</strong> or <strong>LaTeX</strong>. It shares the headless
+engine bootstrap with the MCP mode, so batch results match what the GUI produces.</p>
+<h2 id="exporting-the-output-log">Exporting the output log</h2>
+<p><strong>File → Export Output…</strong> (or the Output view's <strong>Export…</strong> button) writes your
+whole results log to <strong>HTML</strong>, <strong>Markdown</strong> or <strong>LaTeX</strong> — the format chosen from
+the file extension. Tables are escaped per format and charts are rendered as their
+geometry. For a single result, right-click its card and choose <strong>Export as
+CSV…</strong> to drop it straight into a spreadsheet (or use copy-to-clipboard).</p>
+<h2 id="exporting-a-session-as-python">Exporting a session as Python</h2>
+<p><strong>Export as Python…</strong> (from the syntax console) renders your recorded session as a
+runnable <strong>Python script</strong> for the ChakataStat Python client. The client (the
+<code>ChakataStat</code> Python package) drives a headless engine over MCP and exposes
+every analysis as a method:</p>
+<pre><code class="language-python">import ChakataStat as ig
+
+ds = ig.open(&quot;health_study.ckd&quot;)     # spawns the headless engine
+ds.descriptives([&quot;Age&quot;, &quot;BMI&quot;, &quot;SystolicBP&quot;])
+ds.regression(&quot;SystolicBP&quot;, [&quot;Age&quot;, &quot;BMI&quot;])
+
+for col in ds.numeric_vars():         # real Python: loops, logic
+    ds.frequencies([col])
+
+df = ds.to_polars()                   # escape hatch into the Polars ecosystem
+</code></pre>
+<p>This gives you full programmatic control and the whole Python data ecosystem
+(<code>polars</code>, <code>numpy</code>, <code>scipy</code>, <code>statsmodels</code>) without ChakataStat embedding any of
+it — Python is an external client over the same seam the AI and MCP use, so the
+single engine and the errors-as-data discipline are preserved.</p>
+<h2 id="why-this-matters">Why this matters</h2>
+<p>The flat command stream is the one canonical record of an analysis. Because the
+GUI both <em>emits</em> it and can <em>reconstruct itself</em> from it, &quot;what I clicked&quot; and
+&quot;what I can replay&quot; are the same thing — the foundation that the batch mode, the
+command palette, user-defined tools and the Python export all build on.</p>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="../engine-access/">Direct Engine Access</a> — engine diagnostics and MCP.</li>
+</ul>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../index.html">Home</a> ·
+        <a href="../../../quick-start/">Quick Start</a> ·
+        <a href="../../../privacy-policy/">Privacy Policy</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../js/main.js"></script>
+</body>
+</html>

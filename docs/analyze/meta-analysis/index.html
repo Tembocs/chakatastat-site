@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Meta-Analysis — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/analyze/meta-analysis/">
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Meta-Analysis — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/analyze/meta-analysis/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../index.html">
+        <img class="brand-mark" src="../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../docs/">User Guide</a>
+        <a href="../../../index.html#validated">Validation</a>
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#screenshots">Screenshots</a>
+        <a href="../../../index.html#download">Download</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../../">Contents</a></li>
+        <li><a href="../../quick-start/">Quick Start</a></li>
+        <li><a href="../../overview/">Overview</a></li>
+        <li><a href="../../getting-started/">Getting Started</a></li>
+        <li><a href="../../tutorial/">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../../working-with-data/">Working with Data</a></li>
+        <li><a href="../../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../">Analyzing Data</a></li>
+        <li><a href="../../graphs/">Graphs</a></li>
+        <li><a href="../../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
+        <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
+        <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="meta-analysis">Meta-Analysis</h1>
+<p><strong>Analyze → Meta-Analysis.</strong> Combines the results of several <strong>studies</strong> into
+one pooled estimate — the standard tool of systematic reviews. Each row of
+your dataset is <strong>one study</strong>, not one participant.</p>
+<h2 id="the-data-layout">The data layout</h2>
+<p>Two numeric columns, one row per study:</p>
+<ul>
+<li><strong>Effect</strong> — each study's effect size, already on a <strong>common scale</strong>: a log
+odds ratio, a log risk ratio, a standardized mean difference (Cohen's d /
+Hedges' g), a correlation after Fisher's z transform, a mean difference in
+shared units, …</li>
+<li><strong>Std. error</strong> — the standard error of that effect. Every included row must
+have <strong>both</strong> values, and every standard error must be positive; a missing
+cell stops the analysis with a message naming the study (silently dropping
+a study would change the meta-analysis).</li>
+</ul>
+<p>An optional <strong>study labels</strong> column (any type — names, years, IDs) titles the
+rows in the tables and the forest plot; without it the rows are labelled
+&quot;Study 1…k&quot;.</p>
+<blockquote>
+<p><strong>Ratio measures go in as logs.</strong> Pooling odds/risk ratios on their raw
+scale is not meaningful; enter the <strong>log</strong> ratio and its SE (as reported by
+the primary studies or computed from their 2×2 tables), and exponentiate
+the pooled estimate and its interval afterwards if you want a ratio.</p>
+</blockquote>
+<blockquote>
+<p><strong>Weighting.</strong> The Weight Cases setting does <strong>not</strong> apply here — the
+pooling weights are the statistic's own (inverse-variance), and a frequency
+weight over studies has no meaning. An active weight variable is noted on
+the output, not applied.</p>
+</blockquote>
+<h2 id="the-dialog">The dialog</h2>
+<p>Pick the <strong>Effect</strong> and <strong>Std. error</strong> variables (and <strong>Study labels</strong> if you
+have them). Then:</p>
+<ul>
+<li><strong>Model</strong> — <em>Fixed and random</em> (default) reports both pooled estimates side
+by side; <em>Fixed effect</em> or <em>Random effects</em> reports just one. The
+fixed-effect model assumes every study estimates the <strong>same</strong> true effect;
+the random-effects model lets the true effect <strong>vary between studies</strong>
+(with the between-study variance estimated per the <strong>τ² estimator</strong>
+below) and widens the pooled interval accordingly. When the studies
+genuinely differ in populations or protocols — the usual case — read the
+random-effects row.</li>
+<li><strong>Confidence (%)</strong> — the level for the pooled and per-study intervals
+(default 95).</li>
+<li><strong>τ² estimator</strong> — how the between-study variance is estimated:
+<strong>DerSimonian–Laird</strong> (the default; the classic closed-form moment
+estimator) or <strong>REML</strong> (restricted maximum likelihood, iterative — the
+modern default of the reference packages, typically a little larger and
+less biased when heterogeneity is substantial). The choice drives the
+random-effects pooling, the per-study random weights and the τ² in the
+Heterogeneity table; Q, its significance and I² do not depend on it.
+With little heterogeneity the two agree closely — when they disagree
+noticeably, that itself says the heterogeneity is substantial and worth
+attention.</li>
+<li><strong>Forest plot</strong> / <strong>Funnel plot</strong> — the two charts, both on by default. The
+funnel plot brings <strong>Egger's test</strong> with it; unticking the funnel drops
+both.</li>
+</ul>
+<h2 id="reading-the-output">Reading the output</h2>
+<ul>
+<li><strong>Per-Study Effects</strong> — each study's effect, standard error, confidence
+interval, and its <strong>percentage weight</strong> under each model. The weights show
+who drives the answer: precise (small-SE) studies dominate the fixed-effect
+weights; random-effects weights are more equal, because between-study
+variance affects every study alike.</li>
+<li><strong>Pooled Estimates</strong> — the combined effect per model with its standard
+error, z, significance and confidence interval. <em>An interval that excludes
+the no-effect value (0 on a difference or log scale) is the evidence of an
+overall effect.</em></li>
+<li><strong>Heterogeneity</strong> — <strong>Cochran's Q</strong> tests whether the studies share one
+true effect (a small Sig. says they do not); <strong>I²</strong> is the percentage of
+the total variation due to real between-study differences (a rule of
+thumb: 25% low, 50% moderate, 75% high); <strong>τ²</strong> is the estimated
+between-study variance itself, under whichever estimator you chose in
+the dialog (the note names it; τ² and I² are truncated at zero). Substantial heterogeneity is the signal to
+prefer the random-effects row — and to ask <em>why</em> the studies differ.</li>
+<li><strong>Egger's Test</strong> — a regression test for <strong>funnel-plot asymmetry</strong>: a
+significant intercept suggests <strong>small-study effects</strong> — small, imprecise
+studies reporting systematically larger effects, the classic signature of
+publication bias (though not proof of it; genuine heterogeneity can mimic
+it). <em>With few studies (k ≲ 10) the test has little power — read it, and
+the funnel, with restraint.</em> It needs at least three studies and is
+skipped (with a note) when it cannot be computed.</li>
+</ul>
+<h2 id="the-plots">The plots</h2>
+<ul>
+<li><strong>Forest plot</strong> — the meta-analysis at a glance: one row per study (the
+square marks the effect, <strong>sized by the study's weight</strong>; the whiskers span
+its confidence interval), a vertical <strong>no-effect line</strong>, and one
+<strong>diamond</strong> per pooled model below — the diamond's center is the pooled
+estimate, its width the pooled interval. Studies whose whiskers cross the
+line are individually inconclusive; a diamond clear of the line is the
+pooled conclusion.</li>
+<li><strong>Funnel plot</strong> — each study's effect against its standard error, most
+precise at the top, with a shaded pseudo-95%-CI funnel around the pooled
+estimate. With no bias, studies scatter symmetrically inside the funnel;
+a missing lower corner (small studies only on the favourable side) is the
+visual counterpart of Egger's test.</li>
+</ul>
+<p>Both charts export and copy like any other chart — see
+<a href="../../graphs/#working-with-chart-output">Working with chart output</a>.</p>
+<h2 id="reproducibility">Reproducibility</h2>
+<p>Like every analysis, a run journals a syntax command, e.g.:</p>
+<pre><code>meta_analysis effect=logOR, se=se, study=trial, model=random, tau_method=reml
+</code></pre>
+<p>with <code>forest=false</code> / <code>funnel=false</code> recorded when a chart was unticked — so
+re-running the script reproduces the same tables <strong>and the same charts</strong>. The
+same tool is available to the AI assistant, MCP and batch scripts.</p>
+<p><em>Scope:</em> the effects and standard errors are taken as given (computing
+them from raw 2×2 tables or means/SDs is a recorded follow-up), pooling is
+fixed-effect and random-effects with a DerSimonian–Laird or REML τ²
+(REML arrived in 0.11.0), and publication-bias corrections beyond Egger's
+test (trim-and-fill) are not included. Validated against reference
+implementations (statsmodels/scipy) — see the
+<a href="../../validation/">validation suite</a>.</p>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../index.html">Home</a> ·
+        <a href="../../../quick-start/">Quick Start</a> ·
+        <a href="../../../privacy-policy/">Privacy Policy</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../js/main.js"></script>
+</body>
+</html>

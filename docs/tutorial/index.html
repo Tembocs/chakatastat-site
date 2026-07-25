@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The ChakataStat Tutorial Workbook — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/tutorial/">
+  <link rel="icon" type="image/svg+xml" href="../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="The ChakataStat Tutorial Workbook — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/tutorial/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../index.html">
+        <img class="brand-mark" src="../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <nav id="nav-links" class="nav-links">
+        <a href="../../docs/">User Guide</a>
+        <a href="../../index.html#validated">Validation</a>
+        <a href="../../index.html#features">Features</a>
+        <a href="../../index.html#screenshots">Screenshots</a>
+        <a href="../../index.html#download">Download</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../">Contents</a></li>
+        <li><a href="../quick-start/">Quick Start</a></li>
+        <li><a href="../overview/">Overview</a></li>
+        <li><a href="../getting-started/">Getting Started</a></li>
+        <li><a href="./" aria-current="page">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../working-with-data/">Working with Data</a></li>
+        <li><a href="../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../analyze/">Analyzing Data</a></li>
+        <li><a href="../graphs/">Graphs</a></li>
+        <li><a href="../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../advanced/ai-assistant/">AI Assistant</a></li>
+        <li><a href="../advanced/reproducibility/">Reproducibility</a></li>
+        <li><a href="../advanced/engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="the-chakatastat-tutorial-workbook">The ChakataStat Tutorial Workbook</h1>
+<p>A ten-module course that teaches ChakataStat by doing — built for self-study
+and for classroom training of students, teaching staff and researchers. Every
+module works on the same <strong>bundled sample health study</strong> (600 synthetic
+participants; see the <a href="codebook/">codebook</a>), so there is nothing to
+download: <strong>File → Open Sample Dataset</strong> (<code>Ctrl+Shift+O</code>) and you are ready.</p>
+<p>Each module has the same shape: a <strong>question</strong> a researcher would actually
+ask, the <strong>menu path</strong> that answers it, <strong>how to read the output</strong>, an
+<strong>exercise</strong> to do on your own, and — at the end — <strong>the syntax</strong> the module
+generated, because every GUI action in ChakataStat also records an editable,
+re-runnable command. By module 10 that trail is the star of the show.</p>
+<p>If you have not run the app before, do the ten-minute
+<a href="../quick-start/">Quick Start</a> first; it previews modules 1–7 in one pass.</p>
+<h2 id="the-modules">The modules</h2>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Module</th>
+<th>You learn</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><a href="01-open-and-views/">Opening data &amp; the two Views</a></td>
+<td>The sample dataset, Data vs Variable View, and a CSV export→import round trip</td>
+</tr>
+<tr>
+<td>2</td>
+<td><a href="02-variable-view/">The Variable View</a></td>
+<td>Types, labels, value labels, missing codes, measures — and why they matter</td>
+</tr>
+<tr>
+<td>3</td>
+<td><a href="03-descriptives/">Describing your data</a></td>
+<td>Frequencies, Descriptives, Explore</td>
+</tr>
+<tr>
+<td>4</td>
+<td><a href="04-graphs/">Graphs</a></td>
+<td>Histogram, Boxplot, the Chart Builder</td>
+</tr>
+<tr>
+<td>5</td>
+<td><a href="05-crosstabs/">Two categorical variables</a></td>
+<td>Crosstabs and the chi-square test</td>
+</tr>
+<tr>
+<td>6</td>
+<td><a href="06-compare-means/">Comparing group means</a></td>
+<td>Independent/paired t tests, One-Way ANOVA</td>
+</tr>
+<tr>
+<td>7</td>
+<td><a href="07-correlation-regression/">Relationships</a></td>
+<td>Correlation and linear regression</td>
+</tr>
+<tr>
+<td>8</td>
+<td><a href="08-transforms/">Making new variables</a></td>
+<td>Compute Variable and Recode (grouping BMI into categories)</td>
+</tr>
+<tr>
+<td>9</td>
+<td><a href="09-missing-data/">Missing data</a></td>
+<td>Blanks vs declared missing codes; Missing Value Analysis</td>
+</tr>
+<tr>
+<td>10</td>
+<td><a href="10-reproducibility/">Reproducibility</a></td>
+<td>The Syntax console, <code>.cks</code> scripts, exporting output</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="for-instructors">For instructors</h2>
+<ul>
+<li>Modules are 20–40 minutes each including the exercise; 1–5 make a
+half-day introductory session, 6–10 a second session.</li>
+<li>The dataset's structure is <strong>planted and documented</strong> — the
+<a href="codebook/">codebook</a> lists which effects are real, and which
+relationships are deliberately null so students also experience a
+non-significant result. Answers to each exercise are therefore checkable.</li>
+<li>The sample always opens as a <em>new, unsaved document</em>: students can never
+damage it, and a fresh copy is one <code>Ctrl+Shift+O</code> away.</li>
+<li>The data are <strong>synthetic</strong>. No statistic derived from them describes any
+real population — they exist so the <em>methods</em> can be taught.</li>
+</ul>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../index.html">Home</a> ·
+        <a href="../../quick-start/">Quick Start</a> ·
+        <a href="../../privacy-policy/">Privacy Policy</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../js/main.js"></script>
+</body>
+</html>

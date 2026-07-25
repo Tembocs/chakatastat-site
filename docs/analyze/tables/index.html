@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Custom Tables — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/analyze/tables/">
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Custom Tables — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/analyze/tables/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../index.html">
+        <img class="brand-mark" src="../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../docs/">User Guide</a>
+        <a href="../../../index.html#validated">Validation</a>
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#screenshots">Screenshots</a>
+        <a href="../../../index.html#download">Download</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../../">Contents</a></li>
+        <li><a href="../../quick-start/">Quick Start</a></li>
+        <li><a href="../../overview/">Overview</a></li>
+        <li><a href="../../getting-started/">Getting Started</a></li>
+        <li><a href="../../tutorial/">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../../working-with-data/">Working with Data</a></li>
+        <li><a href="../../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../">Analyzing Data</a></li>
+        <li><a href="../../graphs/">Graphs</a></li>
+        <li><a href="../../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
+        <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
+        <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="custom-tables">Custom Tables</h1>
+<p><strong>Analyze → Tables.</strong> When the fixed-shape tables from the other procedures are
+not the layout you want, these two build a table to your specification.</p>
+<h2 id="custom-tables-2">Custom Tables</h2>
+<p><strong>When to use it.</strong> To pivot one or more categorical variables against others,
+with a cell statistic of your choosing — a generalisation of a crosstab and of a
+means-by-factor breakdown in one tool.</p>
+<p><strong>Dialog.</strong></p>
+<ul>
+<li><strong>Rows</strong> and (nested) <strong>Rows</strong> — the categorical variables down the side.</li>
+<li><strong>Columns</strong> and (nested) <strong>Columns</strong> — the categorical variables across the
+top.</li>
+<li><strong>Statistics</strong> — what each cell shows. Choose any of: <strong>Count</strong>, <strong>Valid N</strong>,
+<strong>Mean, Sum, Median, Min, Max, Std. Deviation</strong> of a measure variable, or
+<strong>Row / Column / Total percentage</strong>. You can show several at once (e.g. count
+<strong>and</strong> column percentage together).</li>
+<li><strong>Compare column proportions</strong> — adds a column-proportions z-test (Bonferroni
+adjusted) to test whether column percentages differ.</li>
+</ul>
+<p><strong>Output.</strong> The pivot table you described, with margins computed over the margin
+cases, and (if requested) a <strong>Column Proportions Comparisons</strong> table.</p>
+<p><strong>Example.</strong> <em>StudyZone</em> (rows) × <em>Sex</em> (columns) showing the <strong>mean</strong> <em>SystolicBP</em>
+in each cell; or <em>SmokingStatus</em> (rows) × <em>Hypertensive</em> (columns) showing count
+and column percentage together, with a column-proportions test.</p>
+<h2 id="multiple-response">Multiple Response</h2>
+<p><strong>When to use it.</strong> When a &quot;pick all that apply&quot; question is stored across
+<strong>several variables</strong> — either as a set of yes/no <strong>dichotomies</strong> (one variable
+per option) or as several variables sharing a common <strong>category</strong> coding.</p>
+<p><strong>Dialog.</strong> Move the variables of the response set in, and choose the <strong>set
+type</strong>:</p>
+<ul>
+<li><strong>Dichotomy</strong> (default) — each variable is a yes/no flag; set the <strong>counted
+value</strong> that means &quot;selected&quot; (default 1).</li>
+<li><strong>Category</strong> — the variables share a category coding; the table pools the
+distinct categories across them.</li>
+</ul>
+<p><strong>Output.</strong> A frequency table over the set: for each option/category, the count,
+the <strong>percent of responses</strong> and the <strong>percent of cases</strong>. A case counts as valid
+if it is non-missing on at least one variable in the set.</p>
+<p><strong>Example.</strong> If several columns recorded different reported symptoms as yes/no,
+a dichotomy multiple-response table shows how often each symptom was reported,
+both as a share of all responses and as a share of participants.</p>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="../descriptive-statistics/#crosstabs">Crosstabs</a> — for the standard
+two-variable contingency table with chi-square and association measures.</li>
+</ul>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../index.html">Home</a> ·
+        <a href="../../../quick-start/">Quick Start</a> ·
+        <a href="../../../privacy-policy/">Privacy Policy</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../js/main.js"></script>
+</body>
+</html>

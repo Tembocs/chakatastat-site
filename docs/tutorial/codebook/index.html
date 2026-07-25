@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sample health study — codebook — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/tutorial/codebook/">
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Sample health study — codebook — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/tutorial/codebook/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../index.html">
+        <img class="brand-mark" src="../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../docs/">User Guide</a>
+        <a href="../../../index.html#validated">Validation</a>
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#screenshots">Screenshots</a>
+        <a href="../../../index.html#download">Download</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../../">Contents</a></li>
+        <li><a href="../../quick-start/">Quick Start</a></li>
+        <li><a href="../../overview/">Overview</a></li>
+        <li><a href="../../getting-started/">Getting Started</a></li>
+        <li><a href="../">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../../working-with-data/">Working with Data</a></li>
+        <li><a href="../../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../../analyze/">Analyzing Data</a></li>
+        <li><a href="../../graphs/">Graphs</a></li>
+        <li><a href="../../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
+        <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
+        <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="sample-health-study--codebook">Sample health study — codebook</h1>
+<p>The dataset behind <strong>File → Open Sample Dataset</strong>: a <strong>synthetic</strong> cross-
+sectional health study of <strong>600 participants</strong>, 21 variables. It is generated
+(deterministically, by <code>tool/generate_health_study.dart</code> in the project
+repository) purely for training — <strong>no value in it describes any real person
+or population</strong>. Zone names are deliberately abstract for the same reason.</p>
+<p>The same data ship in two forms:</p>
+<ul>
+<li>the dressed <code>.ckd</code> document the app opens — all the metadata below already
+set;</li>
+<li>a raw CSV (<code>sample_test_data/health_study.csv</code> in the repository) — the
+same values with <em>no</em> metadata, which is what
+<a href="../01-open-and-views/">module 1</a>'s import exercise recreates.</li>
+</ul>
+<h2 id="variables">Variables</h2>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Type</th>
+<th>Measure</th>
+<th>Meaning / coding</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ParticipantID</td>
+<td>String</td>
+<td>Nominal</td>
+<td><code>P1000</code>–<code>P1599</code></td>
+</tr>
+<tr>
+<td>Age</td>
+<td>Numeric</td>
+<td>Scale</td>
+<td>Years, 18–80</td>
+</tr>
+<tr>
+<td>Sex</td>
+<td>String</td>
+<td>Nominal</td>
+<td><code>Male</code> / <code>Female</code></td>
+</tr>
+<tr>
+<td>StudyZone</td>
+<td>String</td>
+<td>Nominal</td>
+<td>Enrolment zone, <code>Zone A</code>–<code>Zone D</code> (synthetic)</td>
+</tr>
+<tr>
+<td>Residence</td>
+<td>String</td>
+<td>Nominal</td>
+<td><code>Urban</code> / <code>Rural</code></td>
+</tr>
+<tr>
+<td>EducationLevel</td>
+<td>Numeric</td>
+<td>Ordinal</td>
+<td><strong>Coded</strong> 0=None, 1=Primary, 2=Secondary, 3=Tertiary (value labels in the <code>.ckd</code>)</td>
+</tr>
+<tr>
+<td>MaritalStatus</td>
+<td>String</td>
+<td>Nominal</td>
+<td><code>Single</code> / <code>Married</code> / <code>Divorced</code> / <code>Widowed</code></td>
+</tr>
+<tr>
+<td>Height_cm</td>
+<td>Numeric</td>
+<td>Scale</td>
+<td>Centimetres</td>
+</tr>
+<tr>
+<td>Weight_kg</td>
+<td>Numeric</td>
+<td>Scale</td>
+<td>Kilograms</td>
+</tr>
+<tr>
+<td>BMI</td>
+<td>Numeric</td>
+<td>Scale</td>
+<td>kg/m² — the classic recode-into-categories candidate</td>
+</tr>
+<tr>
+<td>SystolicBP</td>
+<td>Numeric</td>
+<td>Scale</td>
+<td>mmHg</td>
+</tr>
+<tr>
+<td>DiastolicBP</td>
+<td>Numeric</td>
+<td>Scale</td>
+<td>mmHg</td>
+</tr>
+<tr>
+<td>HeartRate</td>
+<td>Numeric</td>
+<td>Scale</td>
+<td>Beats/min</td>
+</tr>
+<tr>
+<td>FastingGlucose_mmolL</td>
+<td>Numeric</td>
+<td>Scale</td>
+<td>mmol/L; <strong><code>99</code> = &quot;Not measured&quot;</strong>, declared user-missing (~5% of cases)</td>
+</tr>
+<tr>
+<td>TotalCholesterol_mmolL</td>
+<td>Numeric</td>
+<td>Scale</td>
+<td>mmol/L; ~4% blank (system-missing)</td>
+</tr>
+<tr>
+<td>PhysicalActivity_minWk</td>
+<td>Numeric</td>
+<td>Scale</td>
+<td>Minutes/week; ~3% blank (system-missing)</td>
+</tr>
+<tr>
+<td>FamilyHistoryDM</td>
+<td>String</td>
+<td>Nominal</td>
+<td>Family history of diabetes, <code>Yes</code> / <code>No</code></td>
+</tr>
+<tr>
+<td>SmokingStatus</td>
+<td>String</td>
+<td>Nominal</td>
+<td><code>Never</code> / <code>Former</code> / <code>Current</code></td>
+</tr>
+<tr>
+<td>AlcoholUse</td>
+<td>String</td>
+<td>Nominal</td>
+<td><code>None</code> / <code>Occasional</code> / <code>Regular</code></td>
+</tr>
+<tr>
+<td>Hypertensive</td>
+<td>String</td>
+<td>Nominal</td>
+<td><code>Yes</code> / <code>No</code> (SBP ≥ 140 or DBP ≥ 90, with a little noise)</td>
+</tr>
+<tr>
+<td>Diabetic</td>
+<td>String</td>
+<td>Nominal</td>
+<td><code>Yes</code> / <code>No</code> (fasting glucose ≥ 7.0 mmol/L, with a little noise)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="the-planted-structure-instructors-key">The planted structure (instructor's key)</h2>
+<p>Because the data are generated, we can say exactly what is in them — which is
+what makes exercises checkable:</p>
+<p><strong>Real effects</strong> (students should find these):</p>
+<ul>
+<li><strong>SystolicBP rises with Age and with BMI</strong>, and is higher again in current
+smokers; DiastolicBP tracks SystolicBP. Correlation, regression and the
+smoking group comparisons all show it.</li>
+<li><strong>FastingGlucose rises with BMI and with a family history of diabetes</strong>; a
+small cluster of diabetic-range values makes the <code>Diabetic</code> outcome real.</li>
+<li><strong>Hypertensive prevalence differs by SmokingStatus</strong> (via the SBP effect) —
+the module 5 crosstab's chi-square is significant.</li>
+<li>The outcome labels carry <strong>~3% classification noise</strong>, so
+Hypertensive/Diabetic agree strongly with their thresholds without being
+tautologies.</li>
+</ul>
+<p><strong>Deliberate nulls</strong> (students should find <em>nothing</em> — and learn to say so):</p>
+<ul>
+<li><strong>HeartRate relates to nothing</strong> — it is pure noise around 72 bpm.</li>
+<li><strong>PhysicalActivity_minWk is independent of TotalCholesterol_mmolL</strong> — the
+workbook's standing example of a plausible hypothesis the data do not
+support.</li>
+</ul>
+<p><strong>Missingness</strong>, for module 9:</p>
+<ul>
+<li><code>FastingGlucose_mmolL</code> — the <em>declared code</em> pattern: <code>99</code> is a real stored
+value, flagged user-missing in the metadata, labelled &quot;Not measured&quot;.</li>
+<li><code>TotalCholesterol_mmolL</code>, <code>PhysicalActivity_minWk</code> — plain blank cells
+(system-missing).</li>
+</ul>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../index.html">Home</a> ·
+        <a href="../../../quick-start/">Quick Start</a> ·
+        <a href="../../../privacy-policy/">Privacy Policy</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../js/main.js"></script>
+</body>
+</html>

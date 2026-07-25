@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Module 4 — Graphs — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/tutorial/04-graphs/">
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Module 4 — Graphs — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/tutorial/04-graphs/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../index.html">
+        <img class="brand-mark" src="../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../docs/">User Guide</a>
+        <a href="../../../index.html#validated">Validation</a>
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#screenshots">Screenshots</a>
+        <a href="../../../index.html#download">Download</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../../">Contents</a></li>
+        <li><a href="../../quick-start/">Quick Start</a></li>
+        <li><a href="../../overview/">Overview</a></li>
+        <li><a href="../../getting-started/">Getting Started</a></li>
+        <li><a href="../">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../../working-with-data/">Working with Data</a></li>
+        <li><a href="../../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../../analyze/">Analyzing Data</a></li>
+        <li><a href="../../graphs/">Graphs</a></li>
+        <li><a href="../../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
+        <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
+        <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="module-4--graphs">Module 4 — Graphs</h1>
+<p><strong>Question:</strong> what does the distribution actually look like? Numbers
+summarize; pictures reveal shape, outliers and comparisons at a glance.</p>
+<p>Open the sample (<code>Ctrl+Shift+O</code>). Charts land as cards in the Output View,
+interleaved with tables; right-click a card to copy it as an image straight
+into a document.</p>
+<h2 id="histogram--one-scale-variables-shape">Histogram — one scale variable's shape</h2>
+<p><strong>Graphs → Histogram…</strong> (<code>Ctrl+Shift+H</code>), variable <em>BMI</em>, <strong>Run</strong>.</p>
+<p>A roughly bell-shaped pile centred in the mid-20s with a right tail — real
+BMI data look like this too. Re-run with the <strong>bins</strong> slider at different
+values: more bins show more detail and more noise. The bins are <em>display
+only</em> — they change no data. (Turning BMI into actual categories is a
+transform — <a href="../08-transforms/">module 8</a>.)</p>
+<h2 id="boxplot--a-scale-variable-across-groups">Boxplot — a scale variable across groups</h2>
+<p><strong>Graphs → Boxplot…</strong> (<code>Ctrl+Shift+B</code>), variable <em>SystolicBP</em>, category
+<em>SmokingStatus</em>, <strong>Run</strong>.</p>
+<p>Each box is a group's median and quartiles, whiskers and outlier points.
+The <em>Current</em> box should sit visibly higher — the picture version of the
+test you will run in module 6.</p>
+<h2 id="line-chart--a-trend-across-a-scale-variable">Line Chart — a trend across a scale variable</h2>
+<p><strong>Graphs → Line Chart…</strong> (<code>Ctrl+Shift+L</code>), Y series <em>SystolicBP</em>, X axis
+<em>Age</em>, split by <em>SmokingStatus</em>, <strong>Run</strong>.</p>
+<p><em>health_study</em> is one row per participant, not one row per visit, so this
+connects each smoking group's points in age order rather than tracing a
+single patient over time — the mechanics are the same chart you would use for
+a real time series (repeated visits, a stock price, a sensor log). Turn on
+<strong>point markers</strong> to see the individual participants along each line.</p>
+<h2 id="the-chart-builder">The Chart Builder</h2>
+<p><strong>Graphs → Chart Builder…</strong> (<code>Ctrl+Shift+G</code>) is the general dialog: pick the
+chart type, assign variables to its roles. Rebuild the boxplot above in it,
+then try a <strong>Scatterplot</strong> of <em>BMI</em> (X) against <em>SystolicBP</em> (Y) — the cloud
+should visibly climb, previewing module 7's correlation.</p>
+<h2 id="exercise">Exercise</h2>
+<ol>
+<li>Histogram of <em>FastingGlucose_mmolL</em>. There is a small second bump well to
+the right of the main pile — what is it? (Codebook: a diabetic-range
+cluster.) Note that the declared-missing <code>99</code>s are <em>not</em> in the plot.</li>
+<li>Boxplot of <em>BMI</em> by <em>Sex</em>. Do the medians differ much?</li>
+<li>Scatterplot <em>Age</em> (X) vs <em>HeartRate</em> (Y). Describe what &quot;no relationship&quot;
+looks like — you will want this picture in mind whenever a correlation
+comes out near zero.</li>
+</ol>
+<h2 id="the-syntax-trail">The syntax trail</h2>
+<pre><code>histogram variable=BMI
+boxplot variable=SystolicBP, category=SmokingStatus
+line_chart y=[SystolicBP], x=Age, split=SmokingStatus
+scatter x=BMI, y=SystolicBP
+</code></pre>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../index.html">Home</a> ·
+        <a href="../../../quick-start/">Quick Start</a> ·
+        <a href="../../../privacy-policy/">Privacy Policy</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../js/main.js"></script>
+</body>
+</html>

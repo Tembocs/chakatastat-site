@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Case Semantics &amp; Transforms — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/cases-and-transforms/">
+  <link rel="icon" type="image/svg+xml" href="../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Case Semantics &amp; Transforms — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/cases-and-transforms/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../index.html">
+        <img class="brand-mark" src="../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <nav id="nav-links" class="nav-links">
+        <a href="../../docs/">User Guide</a>
+        <a href="../../index.html#validated">Validation</a>
+        <a href="../../index.html#features">Features</a>
+        <a href="../../index.html#screenshots">Screenshots</a>
+        <a href="../../index.html#download">Download</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../">Contents</a></li>
+        <li><a href="../quick-start/">Quick Start</a></li>
+        <li><a href="../overview/">Overview</a></li>
+        <li><a href="../getting-started/">Getting Started</a></li>
+        <li><a href="../tutorial/">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../working-with-data/">Working with Data</a></li>
+        <li><a href="./" aria-current="page">Cases &amp; Transforms</a></li>
+        <li><a href="../analyze/">Analyzing Data</a></li>
+        <li><a href="../graphs/">Graphs</a></li>
+        <li><a href="../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../advanced/ai-assistant/">AI Assistant</a></li>
+        <li><a href="../advanced/reproducibility/">Reproducibility</a></li>
+        <li><a href="../advanced/engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="case-semantics--transforms">Case Semantics &amp; Transforms</h1>
+<p>Two related ideas: <strong>case semantics</strong> change <em>which</em> cases an analysis sees and
+<em>how much</em> each counts, and <strong>transforms</strong> create or reshape variables. Both live
+under the <strong>Data</strong> and <strong>Transform</strong> menus, and both are respected by every
+analysis automatically.</p>
+<h2 id="case-semantics-data-menu">Case semantics (Data menu)</h2>
+<p>These three settings travel with every analysis, chart and transform you run. The
+status bar shows when any of them is active.</p>
+<h3 id="select-cases">Select Cases</h3>
+<p><strong>Data → Select Cases…</strong> (<code>Ctrl+Alt+S</code>). Restrict the analysis to a subset of
+cases — for example, only participants where <code>Age &gt;= 60</code>, or a random sample.
+Unselected cases are filtered out of every subsequent statistic until you clear
+the selection. You can choose to filter (hide) or to mark unselected cases.</p>
+<h3 id="weight-cases">Weight Cases</h3>
+<p><strong>Data → Weight Cases…</strong> (<code>Ctrl+Alt+W</code>). Give each case a <strong>frequency weight</strong>
+from a variable, so a case with weight 3 counts as three observations. Used for
+data stored as a frequency table, or to apply survey weights. Counts, means and
+tests all honour the weight.</p>
+<h3 id="split-file">Split File</h3>
+<p><strong>Data → Split File…</strong> (<code>Ctrl+Alt+T</code>). Repeat every analysis <strong>separately for
+each group</strong> of a categorical variable — e.g. run all your descriptives once per
+<em>StudyZone</em>. Output is produced per split group until you turn the split off.</p>
+<blockquote>
+<p><strong>Order of operations.</strong> Select narrows the cases, Weight scales their counts,
+and Split partitions the result into groups — and every analysis you run sees
+all three at once.</p>
+</blockquote>
+<h2 id="transforms-transform--data-menus">Transforms (Transform &amp; Data menus)</h2>
+<h3 id="compute-variable">Compute Variable</h3>
+<p><strong>Transform → Compute Variable…</strong> (<code>Ctrl+Shift+C</code>). Create a new variable (or
+overwrite one) from an <strong>expression</strong>. The expression language is missing-aware
+and typed (number, string or date):</p>
+<ul>
+<li><strong>Arithmetic</strong> — <code>+ - * /</code>, parentheses, <code>MOD</code>.</li>
+<li><strong>Numeric functions</strong> — <code>SQRT</code>, <code>LN</code>, <code>LOG10</code>, <code>EXP</code>, <code>ABS</code>, <code>MIN</code>, <code>MAX</code>,
+the trig family, <code>ROUND(x[, digits])</code>, and the <code>SD</code> / <code>VARIANCE</code> aggregates.</li>
+<li><strong>Logic</strong> — comparisons (<code>&lt; &lt;= &gt; &gt;= = ~=</code>), <code>AND OR NOT</code>, and
+<code>IF(cond, then, else)</code>.</li>
+<li><strong>String</strong> — <code>CONCAT</code>, <code>LENGTH</code>, <code>UPCASE</code>, <code>LOWCASE</code>, <code>LTRIM</code>, <code>RTRIM</code>,
+<code>SUBSTR</code>, <code>INDEX</code>, <code>REPLACE</code>, <code>STRING</code>, <code>NUMBER</code>, and quoted literals.</li>
+<li><strong>Date</strong> (ISO <code>YYYY-MM-DD</code>) — <code>DATE.DMY</code>, <code>DATE.MDY</code>, <code>YEAR</code>, <code>MONTH</code>, <code>DAY</code>,
+<code>DATEDIFF</code>.</li>
+</ul>
+<p>The new variable takes the <strong>type of its expression</strong> — a string expression makes
+a string variable, a date expression a date variable.</p>
+<p><strong>Example.</strong> <code>BMI_category = IF(BMI &gt;= 30, &quot;Obese&quot;, IF(BMI &gt;= 25, &quot;Overweight&quot;, &quot;Normal&quot;))</code>.</p>
+<h3 id="recode">Recode</h3>
+<p><strong>Transform → Recode…</strong> (<code>Ctrl+Shift+R</code>). Map a variable's values into new ones —
+into the same variable or a new one. Use it to collapse categories (e.g. five
+education levels into three) or to band a scale variable.</p>
+<h4 id="grouping-a-scale-variable-vs-histogram-bins">Grouping a scale variable vs. histogram bins</h4>
+<p>Two things look alike but do different jobs:</p>
+<ul>
+<li>The <a href="../graphs/#histogram">histogram</a>'s <strong>bins</strong> slider groups a scale
+variable <em>in the picture only</em> — display, no data change. Use it to explore
+shape.</li>
+<li>A <strong>Recode into Different Variables</strong> (or <strong>Bin Variable</strong>, below, for the
+common numeric-cutpoints case) makes a <em>real</em> categorical variable (BMI →
+Underweight/Normal/Overweight/Obese) that crosstabs, boxplots and ANOVA can
+use, and that is saved with the document. Use it when the groups are part
+of the analysis.</li>
+</ul>
+<p>The <a href="../tutorial/08-transforms/">tutorial workbook's transforms module</a> walks
+this exact recode end to end.</p>
+<h3 id="rank-cases">Rank Cases</h3>
+<p><strong>Transform → Rank Cases…</strong> (<code>Ctrl+Shift+K</code>). Create a new variable holding each
+case's rank on a chosen variable, with the usual tie-handling options.</p>
+<h3 id="bin-variable">Bin Variable</h3>
+<p><strong>Transform → Bin Variable…</strong> (<code>Ctrl+Shift+N</code>). The purpose-built front end for
+grouping a scale variable into a new ordinal one — Recode works for this too,
+but means typing every cutpoint and label by hand. Pick a variable and a
+method:</p>
+<ul>
+<li><strong>Equal width</strong> — <em>N</em> groups of equal size along the value range (e.g. four
+10-point-wide BMI bands).</li>
+<li><strong>Equal count (quantiles)</strong> — <em>N</em> groups with (about) the same number of
+cases in each, e.g. splitting into quartiles.</li>
+<li><strong>Custom</strong> — your own ascending cutpoints (e.g. <code>18.5, 25, 30</code> for the
+standard BMI categories).</li>
+</ul>
+<p>A live preview shows the resolved boundaries as cut lines over a histogram of
+the variable, and the generated group labels (<code>&lt; 18.5</code>, <code>18.5 – 25</code>, …), before
+you commit. The new variable is numeric with Ordinal measure and value labels
+already set — nothing left to finish in Variable View. Cutpoints are resolved
+against the currently active Select Cases/Weight Cases, like every analysis.</p>
+<h3 id="reshaping-the-dataset-data-menu">Reshaping the dataset (Data menu)</h3>
+<ul>
+<li><strong>Sort Cases</strong> (<code>Ctrl+Shift+D</code>) — reorder rows by one or more variables.</li>
+<li><strong>Transpose</strong> (<code>Ctrl+Alt+P</code>) — swap rows and columns.</li>
+<li><strong>Merge Files</strong> (<code>Ctrl+Alt+M</code>) — add cases or add variables from another
+dataset, matched by a key.</li>
+<li><strong>Define Variable Properties</strong> (<code>Ctrl+Alt+D</code>), <strong>Bulk Rename</strong> and <strong>Variable
+Sets</strong> — covered in <a href="../working-with-data/#tidying-a-dataset">Working with Data</a>.</li>
+</ul>
+<h2 id="reproducibility-note">Reproducibility note</h2>
+<p>Compute, Rank, Sort and Bin Variable are <strong>journalled</strong> — they appear in the
+<a href="../advanced/reproducibility/">Syntax console</a> as commands, so a data-preparation
+pipeline can be saved and replayed on fresh data exactly. Bin Variable's
+journaled command always records the <em>resolved</em> cutpoints, even for the
+Equal width/Equal count methods — so replaying it later reproduces the same
+groups rather than silently re-deriving different ones from changed data.
+Recode is the deliberate exception: its ordered rule list does not reduce to a
+one-line command, so it stays a dialog transform — the recoded variable itself
+is preserved by saving the <code>.ckd</code>.</p>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../index.html">Home</a> ·
+        <a href="../../quick-start/">Quick Start</a> ·
+        <a href="../../privacy-policy/">Privacy Policy</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../js/main.js"></script>
+</body>
+</html>

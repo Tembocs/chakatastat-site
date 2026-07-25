@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Descriptive Statistics — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/analyze/descriptive-statistics/">
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Descriptive Statistics — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/analyze/descriptive-statistics/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../index.html">
+        <img class="brand-mark" src="../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../docs/">User Guide</a>
+        <a href="../../../index.html#validated">Validation</a>
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#screenshots">Screenshots</a>
+        <a href="../../../index.html#download">Download</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../../">Contents</a></li>
+        <li><a href="../../quick-start/">Quick Start</a></li>
+        <li><a href="../../overview/">Overview</a></li>
+        <li><a href="../../getting-started/">Getting Started</a></li>
+        <li><a href="../../tutorial/">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../../working-with-data/">Working with Data</a></li>
+        <li><a href="../../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../">Analyzing Data</a></li>
+        <li><a href="../../graphs/">Graphs</a></li>
+        <li><a href="../../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
+        <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
+        <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="descriptive-statistics">Descriptive Statistics</h1>
+<p><strong>Analyze → Descriptive Statistics.</strong> These four procedures summarise a dataset
+before you model it: how each variable is distributed, and how categorical
+variables relate. They are the right first stop for any new dataset.</p>
+<h2 id="frequencies">Frequencies</h2>
+<p><strong>When to use it.</strong> To see how often each value of a categorical (or
+coarse-numeric) variable occurs.</p>
+<p><strong>Dialog.</strong> Move one or more variables into <strong>Variables</strong>. Optional statistics
+(mean, median, quartiles) and a bar/pie chart can be requested.</p>
+<p><strong>Output.</strong> One <strong>frequency table</strong> per variable: each value, its count, percent,
+valid percent (excluding missing) and cumulative percent.</p>
+<p><strong>Example.</strong> <code>StudyZone</code> and <code>SmokingStatus</code> from the sample data each yield a table
+of category counts — e.g. how many participants are from each region, and the
+split of Never/Former/Current smokers.</p>
+<h2 id="descriptives">Descriptives</h2>
+<p><strong>When to use it.</strong> To get the standard summary statistics for <strong>scale</strong>
+variables side by side.</p>
+<p><strong>Dialog.</strong> Move scale variables into <strong>Variables</strong>. The Options section lets you
+choose which statistics appear (mean, SD, variance, range, min, max, S.E.,
+skewness, kurtosis) and whether to save standardised (<em>z</em>) scores as new
+variables.</p>
+<p><strong>Output.</strong> A single <strong>Descriptive Statistics</strong> table: one row per variable with
+N, minimum, maximum, mean and standard deviation (plus any extras you enabled).</p>
+<p><strong>Example.</strong> <em>Age</em>, <em>BMI</em>, <em>SystolicBP</em>, <em>FastingGlucose_mmolL</em> → a compact table
+of their valid N, range, mean and SD.</p>
+<h2 id="explore">Explore</h2>
+<p><strong>When to use it.</strong> For a deeper look at a scale variable's distribution, on its
+own or <strong>split by a factor</strong> — including normality and outliers.</p>
+<p><strong>Dialog.</strong> Put the scale variable(s) in <strong>Dependent List</strong> and an optional
+grouping variable in <strong>Factor List</strong>.</p>
+<p><strong>Output.</strong></p>
+<ul>
+<li><strong>Descriptives</strong> with a confidence interval for the mean, trimmed mean,
+median, variance, skewness and kurtosis.</li>
+<li><strong>Tests of Normality</strong> — Shapiro-Wilk and Kolmogorov-Smirnov (with Lilliefors
+significance), and a <em>Decision</em> column that rejects normality at your chosen α.</li>
+<li>Percentiles.</li>
+</ul>
+<p><strong>Example.</strong> <em>BMI</em> by <em>Sex</em> shows each group's distribution and whether each is
+plausibly normal — useful before choosing a t-test vs a nonparametric test.</p>
+<h2 id="crosstabs">Crosstabs</h2>
+<p><strong>When to use it.</strong> To cross two categorical variables and test whether they are
+associated.</p>
+<p><strong>Dialog.</strong> Choose a <strong>Row</strong> and a <strong>Column</strong> variable; optionally a <strong>Layer</strong>
+variable for a stratified (three-way) table. Tick the tests and measures you
+want.</p>
+<p><strong>Output.</strong></p>
+<ul>
+<li>The <strong>contingency table</strong> of counts (with optional row/column/total percents).</li>
+<li><strong>Chi-square tests</strong> — Pearson, likelihood-ratio, Fisher's exact and (for 2×2)
+McNemar.</li>
+<li><strong>Association measures</strong> — phi and Cramér's V, Goodman &amp; Kruskal's gamma and
+lambda (with its significance), and Cohen's kappa for a matched table.</li>
+<li>With a layer: the <strong>Cochran/Mantel-Haenszel</strong> statistics —
+conditional-independence test, the common odds ratio, and the Breslow-Day test
+of homogeneity.</li>
+</ul>
+<p><strong>Example.</strong> <code>SmokingStatus × Hypertensive</code> tests whether smoking and
+hypertension are associated; adding <code>Sex</code> as a layer asks whether that
+association holds within each sex.</p>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="../compare-means/">Compare Means</a> — when one variable is a scale outcome.</li>
+<li><a href="../../graphs/">Graphs</a> — histograms and boxplots for these distributions.</li>
+</ul>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../index.html">Home</a> ·
+        <a href="../../../quick-start/">Quick Start</a> ·
+        <a href="../../../privacy-policy/">Privacy Policy</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../js/main.js"></script>
+</body>
+</html>

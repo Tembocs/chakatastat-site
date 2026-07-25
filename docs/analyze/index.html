@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Analyzing Data — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/analyze/">
+  <link rel="icon" type="image/svg+xml" href="../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Analyzing Data — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/analyze/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../index.html">
+        <img class="brand-mark" src="../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <nav id="nav-links" class="nav-links">
+        <a href="../../docs/">User Guide</a>
+        <a href="../../index.html#validated">Validation</a>
+        <a href="../../index.html#features">Features</a>
+        <a href="../../index.html#screenshots">Screenshots</a>
+        <a href="../../index.html#download">Download</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../">Contents</a></li>
+        <li><a href="../quick-start/">Quick Start</a></li>
+        <li><a href="../overview/">Overview</a></li>
+        <li><a href="../getting-started/">Getting Started</a></li>
+        <li><a href="../tutorial/">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../working-with-data/">Working with Data</a></li>
+        <li><a href="../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="./" aria-current="page">Analyzing Data</a></li>
+        <li><a href="../graphs/">Graphs</a></li>
+        <li><a href="../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../advanced/ai-assistant/">AI Assistant</a></li>
+        <li><a href="../advanced/reproducibility/">Reproducibility</a></li>
+        <li><a href="../advanced/engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="analyzing-data">Analyzing Data</h1>
+<p>The <strong>Analyze</strong> menu is the heart of ChakataStat. This section documents every
+procedure, grouped the way the menu is. Each page tells you <strong>when to use</strong> a
+procedure, <strong>how to fill the dialog</strong>, and <strong>how to read the output</strong>, with
+worked examples on the bundled sample data (<strong>File → Open Sample Dataset</strong>).</p>
+<p>If you are not sure which test you need, start with the
+<a href="../reference/choosing-a-procedure/">procedure chooser</a>.</p>
+<h2 id="how-every-analysis-dialog-works">How every analysis dialog works</h2>
+<p>The dialogs share one shape, so once you know one you know them all:</p>
+<ul>
+<li>A <strong>source list</strong> of variables on the left; <strong>target list(s)</strong> (Variables,
+Factor, Dependent, …) on the right. Double-click or use the arrows to move
+variables across.</li>
+<li>An <strong>Options</strong> section (collapsible) holds the advanced knobs — confidence
+level, significance level (α), one/two-tailed, missing-data handling, random
+seed — hidden by default so the common path stays simple.</li>
+<li>A <strong>Run</strong> button (also <strong>Enter</strong>) dispatches the analysis; it shows a spinner
+while the engine works and blocks a double-submit. <strong>Esc</strong> cancels.</li>
+<li>Results append to the <strong>Output View</strong> as titled cards. Many dialogs also offer
+a <strong>Plot…</strong> checkbox that adds a chart built from the result.</li>
+</ul>
+<p>Every analysis respects the active <strong>case semantics</strong> — Select, Weight and Split
+— described in <a href="../cases-and-transforms/">Case Semantics &amp; Transforms</a>. And
+every run is recorded in the <a href="../advanced/reproducibility/">Syntax console</a>.</p>
+<h2 id="the-procedures">The procedures</h2>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Page</th>
+<th>Menu group</th>
+<th>Covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><a href="descriptive-statistics/">Descriptive Statistics</a></strong></td>
+<td>Descriptive Statistics</td>
+<td>Frequencies, Descriptives, Explore, Crosstabs</td>
+</tr>
+<tr>
+<td><strong><a href="compare-means/">Compare Means</a></strong></td>
+<td>Compare Means, Bayesian</td>
+<td>Means, the three T tests, One-Way ANOVA, and the Bayesian <a href="compare-means/#bayesian-t-test">t test</a> / <a href="compare-means/#bayesian-correlation">correlation</a> / <a href="compare-means/#bayesian-anova">ANOVA</a> / <a href="compare-means/#bayesian-linear-regression">linear regression</a> (Bayes factors + posteriors)</td>
+</tr>
+<tr>
+<td><strong><a href="correlation-and-regression/">Correlation &amp; Regression</a></strong></td>
+<td>Correlate, Regression, GLM, Mixed</td>
+<td>Bivariate/partial correlation; linear, logistic, Poisson, negative-binomial, multinomial and ordinal regression; mediation analysis; factorial GLM/ANCOVA; mixed models; repeated measures &amp; MANOVA</td>
+</tr>
+<tr>
+<td><strong><a href="meta-analysis/">Meta-Analysis</a></strong></td>
+<td>Meta-Analysis</td>
+<td>Fixed-effect and DerSimonian-Laird random-effects pooling of per-study effect sizes; heterogeneity (Q, I², τ²); forest and funnel plots with Egger's test</td>
+</tr>
+<tr>
+<td><strong><a href="nonparametric/">Nonparametric Tests</a></strong></td>
+<td>Nonparametric Tests</td>
+<td>Mann-Whitney, Wilcoxon, Sign, Kruskal-Wallis, Friedman, Kendall's W, Runs, Binomial, Tests of Normality</td>
+</tr>
+<tr>
+<td><strong><a href="scale-reduction-classify/">Scale, Reduction &amp; Classify</a></strong></td>
+<td>Scale, Dimension Reduction, Classify, ROC Curve</td>
+<td>Reliability; intraclass correlation; factor analysis; k-means, hierarchical &amp; two-step cluster; discriminant analysis; ROC curve / AUC</td>
+</tr>
+<tr>
+<td><strong><a href="cfa/">Confirmatory Factor Analysis</a></strong></td>
+<td>Dimension Reduction</td>
+<td>Testing a hypothesized measurement structure: ML loadings with standard errors, factor correlations, and the conventional fit block (χ², CFI, TLI, RMSEA, SRMR)</td>
+</tr>
+<tr>
+<td><strong><a href="survival-and-time-series/">Survival &amp; Time Series</a></strong></td>
+<td>Survival, Time Series</td>
+<td>Kaplan-Meier, Cox regression; autocorrelation, ARIMA/SARIMA with forecasting</td>
+</tr>
+<tr>
+<td><strong><a href="tables/">Custom Tables</a></strong></td>
+<td>Tables</td>
+<td>Custom (pivot) tables; multiple-response tables</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="a-note-on-assumptions">A note on assumptions</h2>
+<p>Many procedures carry optional <strong>assumption checks</strong> (Levene's test of equal
+variances, Mauchly's sphericity test, Tests of Normality, casewise influence
+diagnostics). Where they exist, the relevant page points them out — turning them
+on costs nothing and keeps you honest about whether the headline test is valid.</p>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../index.html">Home</a> ·
+        <a href="../../quick-start/">Quick Start</a> ·
+        <a href="../../privacy-policy/">Privacy Policy</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../js/main.js"></script>
+</body>
+</html>

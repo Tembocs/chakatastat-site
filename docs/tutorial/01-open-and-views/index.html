@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Module 1 — Opening data &amp; the two Views — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/tutorial/01-open-and-views/">
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Module 1 — Opening data &amp; the two Views — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/tutorial/01-open-and-views/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../index.html">
+        <img class="brand-mark" src="../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../docs/">User Guide</a>
+        <a href="../../../index.html#validated">Validation</a>
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#screenshots">Screenshots</a>
+        <a href="../../../index.html#download">Download</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../../">Contents</a></li>
+        <li><a href="../../quick-start/">Quick Start</a></li>
+        <li><a href="../../overview/">Overview</a></li>
+        <li><a href="../../getting-started/">Getting Started</a></li>
+        <li><a href="../">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../../working-with-data/">Working with Data</a></li>
+        <li><a href="../../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../../analyze/">Analyzing Data</a></li>
+        <li><a href="../../graphs/">Graphs</a></li>
+        <li><a href="../../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
+        <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
+        <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="module-1--opening-data--the-two-views">Module 1 — Opening data &amp; the two Views</h1>
+<p><strong>Question:</strong> what does a dataset look like in ChakataStat, and how does data
+get in and out?</p>
+<h2 id="open-the-sample">Open the sample</h2>
+<p><strong>File → Open Sample Dataset</strong> (<code>Ctrl+Shift+O</code>). The status bar reports 600
+cases; the title shows an unsaved document — the bundled sample can never be
+overwritten, so you can experiment freely.</p>
+<h2 id="the-two-views">The two Views</h2>
+<p>The bottom-left tabs switch between two faces of the same dataset:</p>
+<ul>
+<li><strong>Data View</strong> (<code>Ctrl+1</code>) — one row per participant, one column per
+variable. Click a cell: its full row and column tint so you can trace a
+case; type to edit; <code>Ctrl+F</code> finds values. Hover a column header for the
+variable's description.</li>
+<li><strong>Variable View</strong> (<code>Ctrl+2</code>) — one row per <em>variable</em>, holding everything
+ChakataStat knows about it: name, type, label, value labels, missing
+values, measure. <a href="../02-variable-view/">Module 2</a> lives here.</li>
+</ul>
+<h2 id="round-trip-export-then-import">Round trip: export, then import</h2>
+<p>The sample opened fully <em>dressed</em> — labels and codes all set. To see what raw
+data looks like, push it out and bring it back:</p>
+<ol>
+<li><strong>File → Export…</strong>, format <strong>CSV</strong>, save as <code>mystudy.csv</code>.</li>
+<li><strong>File → Import Data…</strong>, choose <code>mystudy.csv</code>, accept the header-row
+prompt.</li>
+</ol>
+<p>Same values — but check Variable View: <em>EducationLevel</em>'s value labels and
+<em>FastingGlucose_mmolL</em>'s missing code are <strong>gone</strong>. A CSV carries values
+only; the metadata lives in the <code>.ckd</code> document. That is why the last step of
+any session is <strong>File → Save</strong> (<code>Ctrl+S</code>) — it keeps data <em>and</em> definitions.</p>
+<p>Re-open the dressed original with <strong>File → Open Sample Dataset</strong> before the
+next module.</p>
+<h2 id="exercise">Exercise</h2>
+<ol>
+<li>In Data View, find participant <code>P1234</code> (<code>Ctrl+F</code>). What is their BMI?</li>
+<li>Export to CSV and re-import. Which columns import as <em>String</em> and which as
+<em>Numeric</em>? Why did the importer decide that way?</li>
+<li>Save your imported copy as <code>mystudy.ckd</code>, close and reopen it. Did it
+remember anything the CSV did not? (Not yet — you have added no metadata.
+Module 2 fixes that.)</li>
+</ol>
+<h2 id="the-syntax-trail">The syntax trail</h2>
+<p>Open the <strong>Syntax</strong> tab: even this module left commands (the export). From
+here on, every module ends with the commands it generated — the growing,
+re-runnable record of your session.</p>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../index.html">Home</a> ·
+        <a href="../../../quick-start/">Quick Start</a> ·
+        <a href="../../../privacy-policy/">Privacy Policy</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../js/main.js"></script>
+</body>
+</html>

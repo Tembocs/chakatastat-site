@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Module 2 — The Variable View — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/tutorial/02-variable-view/">
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Module 2 — The Variable View — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/tutorial/02-variable-view/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../index.html">
+        <img class="brand-mark" src="../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../docs/">User Guide</a>
+        <a href="../../../index.html#validated">Validation</a>
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#screenshots">Screenshots</a>
+        <a href="../../../index.html#download">Download</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../../">Contents</a></li>
+        <li><a href="../../quick-start/">Quick Start</a></li>
+        <li><a href="../../overview/">Overview</a></li>
+        <li><a href="../../getting-started/">Getting Started</a></li>
+        <li><a href="../">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../../working-with-data/">Working with Data</a></li>
+        <li><a href="../../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../../analyze/">Analyzing Data</a></li>
+        <li><a href="../../graphs/">Graphs</a></li>
+        <li><a href="../../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
+        <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
+        <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="module-2--the-variable-view">Module 2 — The Variable View</h1>
+<p><strong>Question:</strong> what turns a grid of numbers into a dataset a stranger could
+analyze?</p>
+<p>Open the sample (<code>Ctrl+Shift+O</code>) and switch to <strong>Variable View</strong> (<code>Ctrl+2</code>).
+Each row describes one variable; work across the columns with the sample's
+own examples:</p>
+<ul>
+<li><strong>Name / Label</strong> — <em>BMI</em> is the name; &quot;Body mass index (kg/m²)&quot; is the
+label that output tables print. Names stay short; labels stay readable.</li>
+<li><strong>Type</strong> — <em>Age</em> is Numeric; <em>Sex</em> is String. Type decides what the value
+<em>is</em>; you cannot compute a mean of Strings.</li>
+<li><strong>Value labels</strong> — open <em>EducationLevel</em>'s value-labels cell: the stored
+values are the codes 0–3, the labels None/Primary/Secondary/Tertiary. The
+Data View and all output show the labels; the file stores the codes. This
+is how surveys are coded in practice.</li>
+<li><strong>Missing values</strong> — <em>FastingGlucose_mmolL</em> declares <code>99</code> as user-missing,
+labelled &quot;Not measured&quot;. A <code>99</code> in the data is a real recorded value — but
+every analysis excludes it, exactly like a blank. <a href="../09-missing-data/">Module
+9</a> is devoted to this.</li>
+<li><strong>Measure</strong> — Scale (<em>Age</em>), Ordinal (<em>EducationLevel</em>), Nominal (<em>Sex</em>).
+The measure tells procedures and charts how to treat the variable: you get
+a mean of a Scale variable, a frequency table of a Nominal one.</li>
+</ul>
+<p><strong>Define Variable Properties</strong> (Data menu) scans a variable's actual values
+and offers them for labelling — the fast way to dress a freshly imported
+column.</p>
+<h2 id="exercise">Exercise</h2>
+<p>Use your undressed <code>mystudy.csv</code> import from module 1 (or re-import it):</p>
+<ol>
+<li>Give <em>EducationLevel</em> its four value labels (0=None … 3=Tertiary) — type
+them in Variable View, or let <strong>Data → Define Variable Properties…</strong> offer
+the observed values.</li>
+<li>Declare <code>99</code> user-missing on <em>FastingGlucose_mmolL</em> and label it &quot;Not
+measured&quot;.</li>
+<li>Set <em>EducationLevel</em>'s measure to <strong>Ordinal</strong>.</li>
+<li>Run <strong>Analyze → Descriptive Statistics → Frequencies…</strong> on
+<em>EducationLevel</em> before and after step 1. What changed in the output?</li>
+<li>Save as <code>mystudy.ckd</code>. <em>Now</em> the round trip keeps your work.</li>
+</ol>
+<h2 id="the-syntax-trail">The syntax trail</h2>
+<p>Metadata edits are document edits (they change what is saved, not what is
+computed), so they do not emit analysis commands — but the Frequencies runs
+in step 4 did:</p>
+<pre><code>frequencies variables=[EducationLevel]
+</code></pre>
+<p>Run it twice from the Syntax tab and compare outputs — same command, richer
+table once the labels exist.</p>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../index.html">Home</a> ·
+        <a href="../../../quick-start/">Quick Start</a> ·
+        <a href="../../../privacy-policy/">Privacy Policy</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../js/main.js"></script>
+</body>
+</html>

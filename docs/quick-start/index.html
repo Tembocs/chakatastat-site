@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quick Start — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/quick-start/">
+  <link rel="icon" type="image/svg+xml" href="../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Quick Start — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/quick-start/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../index.html">
+        <img class="brand-mark" src="../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <nav id="nav-links" class="nav-links">
+        <a href="../../docs/">User Guide</a>
+        <a href="../../index.html#validated">Validation</a>
+        <a href="../../index.html#features">Features</a>
+        <a href="../../index.html#screenshots">Screenshots</a>
+        <a href="../../index.html#download">Download</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../">Contents</a></li>
+        <li><a href="./" aria-current="page">Quick Start</a></li>
+        <li><a href="../overview/">Overview</a></li>
+        <li><a href="../getting-started/">Getting Started</a></li>
+        <li><a href="../tutorial/">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../working-with-data/">Working with Data</a></li>
+        <li><a href="../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../analyze/">Analyzing Data</a></li>
+        <li><a href="../graphs/">Graphs</a></li>
+        <li><a href="../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../advanced/ai-assistant/">AI Assistant</a></li>
+        <li><a href="../advanced/reproducibility/">Reproducibility</a></li>
+        <li><a href="../advanced/engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="quick-start">Quick Start</h1>
+<p>From install to your first result in about ten minutes — one linear pass, no
+choices to make. Every step names the exact menu item. When you finish, the
+<a href="../">User Guide</a> has the depth, and the
+<a href="../tutorial/">tutorial workbook</a> turns this walk into a full course.</p>
+<h2 id="1-install-and-launch">1. Install and launch</h2>
+<ul>
+<li><strong>Windows</strong> — install <strong>ChakataStat</strong> from the Microsoft Store and launch it
+from the Start menu.</li>
+<li><strong>Ubuntu / Linux</strong> — <code>snap install chakatastat</code>, then launch <strong>ChakataStat</strong>
+from your applications, or run <code>chakatastat</code>.</li>
+</ul>
+<p>You land in the <strong>Data View</strong>: an empty spreadsheet-style editor (cases will be
+rows, variables columns), with the menu bar above and the AI assistant panel on
+the right — ignore that panel for now (<code>Ctrl+Shift+A</code> hides it).</p>
+<h2 id="2-open-the-sample-dataset">2. Open the sample dataset</h2>
+<p><strong>File → Open Sample Dataset</strong> (<code>Ctrl+Shift+O</code>).</p>
+<p>That loads the bundled teaching dataset: a synthetic health study of <strong>600
+participants</strong> and <strong>21 variables</strong> — age, sex, blood pressure, glucose,
+cholesterol, smoking, and more (the
+<a href="../tutorial/codebook/">codebook</a> describes every variable). It opens as a new,
+unsaved document, so nothing you do here can damage the sample.</p>
+<h2 id="3-read-the-two-views">3. Read the two views</h2>
+<p>Look at the bottom-left tabs:</p>
+<ul>
+<li><strong>Data View</strong> — the values, one row per participant. Click any cell and
+notice its whole row and column tint, so you can trace a case across the
+sheet.</li>
+<li><strong>Variable View</strong> (<code>Ctrl+2</code>) — one row per <em>variable</em>: its name, type,
+label, <strong>value labels</strong> (open <em>EducationLevel</em>'s — the codes 0–3 mean
+None/Primary/Secondary/Tertiary), missing values (<em>FastingGlucose_mmolL</em>
+declares <code>99</code> = &quot;Not measured&quot;), and measure (Scale/Ordinal/Nominal).</li>
+</ul>
+<p>That metadata is what turns a grid of numbers into a dataset.</p>
+<h2 id="4-run-frequencies-on-a-categorical-variable">4. Run Frequencies on a categorical variable</h2>
+<p><strong>Analyze → Descriptive Statistics → Frequencies…</strong> Move <strong>SmokingStatus</strong>
+into the Variables list and click <strong>Run</strong>.</p>
+<p>The app switches to the <strong>Output View</strong> with a frequency table: each smoking
+category with its count, percent and cumulative percent.</p>
+<h2 id="5-run-descriptives-on-scale-variables">5. Run Descriptives on scale variables</h2>
+<p><strong>Analyze → Descriptive Statistics → Descriptives…</strong> Move <strong>Age</strong>, <strong>BMI</strong> and
+<strong>SystolicBP</strong> across, <strong>Run</strong>.</p>
+<p>You get valid N, minimum, maximum, mean and standard deviation for each — your
+first numeric summary of the study.</p>
+<h2 id="6-compare-two-groups-with-a-t-test">6. Compare two groups with a t test</h2>
+<p><strong>Analyze → Compare Means → Independent-Samples T Test…</strong> Test variable
+<strong>SystolicBP</strong>; grouping variable <strong>Sex</strong>; <strong>Run</strong>.</p>
+<p>The output shows each group's mean and the test: <em>t</em>, degrees of freedom and
+the <em>p</em> value (&quot;Sig.&quot;). A small <em>p</em> (below .05, say) means the difference
+between men's and women's mean systolic pressure is unlikely to be chance.</p>
+<h2 id="7-draw-a-chart">7. Draw a chart</h2>
+<p><strong>Graphs → Histogram…</strong> (<code>Ctrl+Shift+H</code>), pick <strong>BMI</strong>, <strong>Run</strong>. A histogram
+card appears in the output right under your tables — tick the normal-curve
+overlay in the dialog if you want a shape reference.</p>
+<h2 id="8-keep-your-work">8. Keep your work</h2>
+<ul>
+<li><strong>File → Save</strong> (<code>Ctrl+S</code>) saves the dataset as a <code>.ckd</code> document — data
+<em>and</em> every variable definition together.</li>
+<li>Right-click any output card to <strong>copy</strong> it, or <strong>File → Export Output…</strong>
+writes the whole log to HTML/Markdown/LaTeX.</li>
+<li>Switch to the <strong>Syntax</strong> tab: every step you just took was also recorded as
+an editable, re-runnable command — select them all and <strong>Run</strong> to reproduce
+your session. That command trail is how work in ChakataStat stays
+reproducible.</li>
+</ul>
+<h2 id="where-to-go-next">Where to go next</h2>
+<ul>
+<li><strong><a href="../tutorial/">The tutorial workbook</a></strong> — this walk as a full
+course: ten modules with exercises, on the same dataset.</li>
+<li><strong><a href="../overview/">ChakataStat at a glance</a></strong> — the whole application in one
+read.</li>
+<li><strong><a href="../analyze/">Analyzing Data</a></strong> — every procedure, with worked
+examples.</li>
+<li><strong>The AI assistant</strong> (<code>Ctrl+Shift+A</code>) — ask for an analysis in plain
+language; see <a href="../advanced/ai-assistant/">AI Assistant</a> to connect a
+provider.</li>
+</ul>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../index.html">Home</a> ·
+        <a href="../../quick-start/">Quick Start</a> ·
+        <a href="../../privacy-policy/">Privacy Policy</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../js/main.js"></script>
+</body>
+</html>

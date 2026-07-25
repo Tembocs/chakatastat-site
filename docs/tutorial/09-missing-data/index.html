@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Module 9 — Missing data — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/tutorial/09-missing-data/">
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Module 9 — Missing data — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/tutorial/09-missing-data/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../index.html">
+        <img class="brand-mark" src="../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../docs/">User Guide</a>
+        <a href="../../../index.html#validated">Validation</a>
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#screenshots">Screenshots</a>
+        <a href="../../../index.html#download">Download</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../../">Contents</a></li>
+        <li><a href="../../quick-start/">Quick Start</a></li>
+        <li><a href="../../overview/">Overview</a></li>
+        <li><a href="../../getting-started/">Getting Started</a></li>
+        <li><a href="../">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../../working-with-data/">Working with Data</a></li>
+        <li><a href="../../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../../analyze/">Analyzing Data</a></li>
+        <li><a href="../../graphs/">Graphs</a></li>
+        <li><a href="../../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
+        <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
+        <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="module-9--missing-data">Module 9 — Missing data</h1>
+<p><strong>Question:</strong> some participants have no glucose measurement. What is the
+honest way to see, count and handle that?</p>
+<p>Open the sample (<code>Ctrl+Shift+O</code>). The dataset plants both kinds of
+missingness on purpose (<a href="../codebook/">codebook</a>).</p>
+<h2 id="two-kinds-of-missing">Two kinds of missing</h2>
+<ul>
+<li><strong>System-missing</strong> — the cell is simply blank. <em>TotalCholesterol_mmolL</em>
+(~4%) and <em>PhysicalActivity_minWk</em> (~3%) have these.</li>
+<li><strong>User-missing</strong> — a real recorded code, <em>declared</em> missing in Variable
+View. <em>FastingGlucose_mmolL</em> stores <code>99</code>, labelled &quot;Not measured&quot;: the
+Data View shows the value, every analysis excludes it. The declaration
+lives in the metadata — which is why the CSV round trip in module 1 lost
+it, and why <code>99</code> would silently poison a mean if it were undeclared.</li>
+</ul>
+<p>See both: run <strong>Frequencies</strong> on <em>FastingGlucose_mmolL</em> — the <code>99</code>s sit in
+their own &quot;Missing&quot; block of the table — and <strong>Descriptives</strong> on
+<em>TotalCholesterol_mmolL</em>, whose valid N is below 600.</p>
+<h2 id="missing-value-analysis">Missing Value Analysis</h2>
+<p><strong>Analyze → Missing Value Analysis…</strong>, variables <em>FastingGlucose_mmolL</em>,
+<em>TotalCholesterol_mmolL</em>, <em>PhysicalActivity_minWk</em>, <strong>Run</strong>.</p>
+<p>You get per-variable missing counts and pattern summaries, plus <strong>Little's
+MCAR test</strong> — &quot;is the missingness unrelated to the data?&quot; This sample's
+missingness is generated at random, so expect no evidence against MCAR;
+real studies are rarely so lucky, which is exactly why you check.</p>
+<h2 id="what-analyses-do-about-it">What analyses do about it</h2>
+<p>Procedures exclude incomplete cases per-analysis (listwise/pairwise —
+correlation's pairwise Ns are why its valid N varies cell by cell). The
+serious upgrade — filling values in a defensible, uncertainty-preserving way
+— is <strong>multiple imputation</strong> (<strong>Analyze → Multiple Imputation…</strong>), beyond
+this course; see <a href="../../analyze/">Analyzing Data</a>.</p>
+<h2 id="exercise">Exercise</h2>
+<ol>
+<li>How many of the 600 cases lack a glucose measurement? (Frequencies gives
+it directly.)</li>
+<li>Undeclare <code>99</code> on <em>FastingGlucose_mmolL</em> (clear it in Variable View), run
+Descriptives, and watch the mean and maximum jump. Re-declare it.
+That before/after is the whole argument for declared missing codes.</li>
+<li>Does correlate <em>TotalCholesterol_mmolL</em> with <em>PhysicalActivity_minWk</em>
+report N ≈ 560? Where did the other cases go?</li>
+</ol>
+<h2 id="the-syntax-trail">The syntax trail</h2>
+<pre><code>frequencies variables=[FastingGlucose_mmolL]
+descriptives variables=[TotalCholesterol_mmolL]
+missing_value_analysis variables=[FastingGlucose_mmolL, TotalCholesterol_mmolL, PhysicalActivity_minWk]
+</code></pre>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../index.html">Home</a> ·
+        <a href="../../../quick-start/">Quick Start</a> ·
+        <a href="../../../privacy-policy/">Privacy Policy</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../js/main.js"></script>
+</body>
+</html>

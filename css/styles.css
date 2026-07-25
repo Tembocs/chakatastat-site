@@ -1064,6 +1064,19 @@ section h2 {
   margin: 0;
 }
 
+/* Documentation pages only: the CC BY 4.0 notice. Full width beneath the rest
+   of the footer, because the scope line matters — it has to be readable, not
+   tucked into a column. */
+.footer-inner .footer-docs-licence {
+  flex-basis: 100%;
+  max-width: 88ch;
+  margin-top: 8px;
+  padding-top: 14px;
+  border-top: 1px solid var(--color-border);
+  font-size: 0.84rem;
+  line-height: 1.6;
+}
+
 /* Responsive */
 
 /* The nav collapses to the toggle at 860px, not 640px: with the Validation
@@ -1171,6 +1184,231 @@ section h2 {
 
   .footer-inner {
     flex-direction: column;
+  }
+}
+
+/* User Guide pages, generated from Markdown by tool/publish_docs.dart in the
+   application repository. Sidebar plus prose; the shell above is shared with
+   the rest of the site, so these only need the layout and the body styling. */
+
+.docs {
+  padding: 40px 0 96px;
+}
+
+.docs-layout {
+  display: grid;
+  grid-template-columns: 232px minmax(0, 1fr);
+  gap: 48px;
+  align-items: start;
+}
+
+.docs-sidebar {
+  position: sticky;
+  top: 92px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  font-size: 0.92rem;
+}
+
+/* Headings are padded to match the links' own left padding, instead of the
+   links being pulled outward with a negative margin. The sidebar sets
+   overflow-y, and CSS then forces overflow-x to match — so anything hanging
+   outside the box gets clipped, which ate the links' left padding and the left
+   half of their rounded corners. Keep every child inside the box. */
+.docs-sidebar-title {
+  margin: 0 0 12px;
+  padding-left: 10px;
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.docs-sidebar ul {
+  list-style: none;
+  margin: 0;
+  /* The scroll container clips at its padding edge, so a rounded pill flush
+     against it would lose a sliver of its corner. A little room on each side
+     keeps the whole shape visible. */
+  padding: 0 4px;
+}
+
+.docs-sidebar li {
+  margin: 0;
+}
+
+.docs-sidebar a {
+  display: block;
+  padding: 5px 10px;
+  border-radius: 7px;
+  color: var(--color-text-muted);
+  text-decoration: none;
+}
+
+.docs-sidebar a:hover {
+  color: var(--color-text);
+  background: var(--color-bg-alt);
+}
+
+.docs-sidebar a[aria-current="page"] {
+  color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  font-weight: 600;
+}
+
+.docs-nav-section {
+  margin: 18px 0 6px;
+  padding-left: 10px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.docs-content {
+  min-width: 0;
+  max-width: 76ch;
+}
+
+.docs-content h1 {
+  font-size: clamp(1.9rem, 3.4vw, 2.5rem);
+  margin-bottom: 0.4em;
+}
+
+.docs-content h2 {
+  margin-top: 1.8em;
+  padding-top: 0.6em;
+  border-top: 1px solid var(--color-border);
+  font-size: 1.4rem;
+}
+
+.docs-content h3 {
+  margin-top: 1.5em;
+  font-size: 1.1rem;
+}
+
+.docs-content p,
+.docs-content li {
+  color: var(--color-text-muted);
+}
+
+.docs-content ul,
+.docs-content ol {
+  padding-left: 1.3em;
+}
+
+.docs-content li {
+  margin-bottom: 0.4em;
+}
+
+.docs-content strong {
+  color: var(--color-text);
+}
+
+.docs-content blockquote {
+  margin: 1.4em 0;
+  padding: 2px 18px;
+  border-left: 3px solid var(--color-primary);
+  background: var(--color-bg-alt);
+  border-radius: 0 8px 8px 0;
+}
+
+.docs-content code {
+  padding: 0.12em 0.38em;
+  border-radius: 5px;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo,
+    Consolas, monospace;
+  font-size: 0.88em;
+  color: var(--color-text);
+}
+
+.docs-content pre {
+  margin: 1.4em 0;
+  padding: 16px 18px;
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-bg-alt);
+  line-height: 1.6;
+}
+
+/* Inside a block, the inline chrome would double up. */
+.docs-content pre code {
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: 0.85rem;
+}
+
+/* The guide leans on tables heavily; they must scroll rather than widen the
+   page on a phone. */
+.docs-table-wrap {
+  overflow-x: auto;
+  margin: 1.4em 0;
+}
+
+.docs-content table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.92rem;
+}
+
+.docs-content th,
+.docs-content td {
+  padding: 9px 14px;
+  border: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: top;
+  color: var(--color-text-muted);
+}
+
+.docs-content th {
+  background: var(--color-bg-alt);
+  color: var(--color-text);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.docs-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.docs-content hr {
+  margin: 2.2em 0;
+  border: none;
+  border-top: 1px solid var(--color-border);
+}
+
+@media (max-width: 900px) {
+  .docs-layout {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .docs-sidebar {
+    position: static;
+    max-height: none;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  /* Horizontal on narrow screens, so the guide does not open with a full
+     screen of navigation before any content. */
+  .docs-sidebar ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .docs-nav-section {
+    width: 100%;
+    margin: 10px 0 2px;
   }
 }
 

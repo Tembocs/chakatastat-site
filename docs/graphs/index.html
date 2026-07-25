@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Graphs — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/graphs/">
+  <link rel="icon" type="image/svg+xml" href="../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Graphs — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/graphs/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../index.html">
+        <img class="brand-mark" src="../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <nav id="nav-links" class="nav-links">
+        <a href="../../docs/">User Guide</a>
+        <a href="../../index.html#validated">Validation</a>
+        <a href="../../index.html#features">Features</a>
+        <a href="../../index.html#screenshots">Screenshots</a>
+        <a href="../../index.html#download">Download</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../">Contents</a></li>
+        <li><a href="../quick-start/">Quick Start</a></li>
+        <li><a href="../overview/">Overview</a></li>
+        <li><a href="../getting-started/">Getting Started</a></li>
+        <li><a href="../tutorial/">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../working-with-data/">Working with Data</a></li>
+        <li><a href="../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../analyze/">Analyzing Data</a></li>
+        <li><a href="./" aria-current="page">Graphs</a></li>
+        <li><a href="../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../advanced/ai-assistant/">AI Assistant</a></li>
+        <li><a href="../advanced/reproducibility/">Reproducibility</a></li>
+        <li><a href="../advanced/engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="graphs">Graphs</h1>
+<p><strong>Graphs</strong> menu. ChakataStat draws charts straight into the Output log, next to
+your tables. There are seven quick chart dialogs plus a free-form <strong>Chart
+Builder</strong>, and several analyses can attach their own plots.</p>
+<h2 id="the-quick-charts">The quick charts</h2>
+<h3 id="histogram">Histogram</h3>
+<p><strong>Graphs → Histogram…</strong> (<code>Ctrl+Shift+H</code>). Pick one <strong>scale</strong> variable to see the
+shape of its distribution — the spread, skew and any outliers. An optional normal
+curve overlay helps judge normality by eye.</p>
+<p><strong>Example.</strong> A histogram of <em>BMI</em> shows whether the sample is centred around a
+healthy range or skewed.</p>
+<blockquote>
+<p>The <strong>bins</strong> control changes the display only — no data changes. To turn a
+scale variable into real analysis groups, use a
+<a href="../cases-and-transforms/#grouping-a-scale-variable-vs-histogram-bins">Recode</a>
+instead.</p>
+</blockquote>
+<p><strong>Bin labels</strong> chooses how the bars are labelled on the x axis: <strong>Edges</strong> (a
+plain tick at each bin boundary, the default), <strong>Range</strong> (each bar's interval,
+e.g. <code>11 – 20</code> — the same wording as <a href="../cases-and-transforms/">Bin Variable</a>'s
+groups for the same cutpoints, so the two never disagree), <strong>Bar start</strong> (the
+value each bar starts at), or <strong>Custom (start + width)</strong> — set the leftmost
+bar's label range minimum and a fixed range width, and the rest of the bars'
+labels are computed from those two numbers, shown as clean, non-overlapping
+brackets (<code>10 – 19</code>, <code>20 – 29</code>, <code>30 – 39</code>, …) when both are whole numbers.
+This is a relabelling only: it doesn't change how the bars themselves are
+computed, so use it to lay your own numbering (e.g. age brackets) over bars
+whose actual computed edges are inconvenient floating-point values.</p>
+<p>Every bar gets its own label under <strong>Custom</strong> (unlike the other modes, which
+thin to roughly 8 labels to avoid crowding a wide bin count) — the point of a
+hand-chosen numbering is a complete set of brackets. <strong>Label every</strong> is a
+dropdown that overrides either default — <strong>Auto</strong>, <strong>Every bar</strong>, or every
+2nd/3rd/4th/5th/10th bar — if a high bin count still gets crowded.</p>
+<h3 id="scatterplot">Scatterplot</h3>
+<p><strong>Graphs → Scatterplot…</strong> (<code>Ctrl+Shift+T</code>). Pick an <strong>X</strong> and a <strong>Y</strong> scale
+variable to see how two variables relate — the visual companion to a
+<a href="../analyze/correlation-and-regression/#correlate">correlation</a>.</p>
+<p><strong>Example.</strong> <em>BMI</em> (X) against <em>SystolicBP</em> (Y) — does blood pressure rise with
+BMI?</p>
+<h3 id="boxplot">Boxplot</h3>
+<p><strong>Graphs → Boxplot…</strong> (<code>Ctrl+Shift+B</code>). Summarise a scale variable's median,
+quartiles and outliers, optionally <strong>split by a categorical variable</strong> to compare
+groups side by side.</p>
+<p><strong>Example.</strong> <em>SystolicBP</em> boxed by <em>SmokingStatus</em>.</p>
+<h3 id="line-chart">Line Chart</h3>
+<p><strong>Graphs → Line Chart…</strong> (<code>Ctrl+Shift+L</code>). Plot one or more <strong>scale</strong>
+variables against an X variable (or case order, when none is given),
+optionally <strong>split by a categorical variable</strong> to compare one line per group.
+Turn on point markers to see the individual data points along each line.</p>
+<p><strong>Example.</strong> <em>SystolicBP</em> against <em>Age</em>, split by <em>SmokingStatus</em> — does the
+age trend differ across smoking groups?</p>
+<h3 id="bar-chart">Bar Chart</h3>
+<p><strong>Graphs → Bar Chart…</strong>. Pick a <strong>category</strong> variable to chart the count of
+cases per level, or switch <strong>Bars show</strong> to the <strong>mean</strong>, <strong>sum</strong> or
+<strong>median</strong> of a scale variable per level. An optional <strong>Cluster by</strong> category
+groups bars side by side (one color per cluster level, with a legend), or —
+with <strong>Stacked bars</strong> ticked — stacks those segments into one bar per level
+(part-to-whole). Value labels drive the category axis, so a <code>1/2</code> coded
+variable labelled <code>Male/Female</code> charts by its labels.</p>
+<p><strong>Example.</strong> The mean <em>SystolicBP</em> by <em>SmokingStatus</em>, clustered by <em>Sex</em>.</p>
+<h3 id="error-bar">Error Bar</h3>
+<p><strong>Graphs → Error Bar…</strong>. The mean of a <strong>scale</strong> variable per level of a
+<strong>category</strong>, each mean with an error bar: a <strong>confidence interval</strong> of the
+mean (default 95%), or <strong>± standard error</strong> / <strong>± standard deviation</strong> with a
+multiplier of your choice. A second <strong>Cluster by</strong> category turns it into the
+classic interaction/profile plot — one connected point-run per level — the
+picture to check alongside a <a href="../analyze/compare-means/">two-way ANOVA</a>.</p>
+<p><strong>Example.</strong> Mean <em>SystolicBP</em> by <em>SmokingStatus</em> with 95% CIs; cluster by
+<em>Sex</em> to see whether the smoking effect differs between the sexes.</p>
+<h3 id="q-q-plot">Q-Q Plot</h3>
+<p><strong>Graphs → Q-Q Plot…</strong>. The standard visual normality check: a <strong>scale</strong>
+variable's sorted values against the quantiles of a theoretical distribution
+(normal by default, or Student t / chi-square at a chosen df), with a
+reference line fitted through the quartiles. Points hugging the line mean the
+distribution fits; systematic bowing means skew, S-shapes mean heavy or light
+tails. The formal companion tests live under
+<a href="../analyze/nonparametric/">Tests of Normality</a>.</p>
+<p><strong>Example.</strong> A Q-Q plot of <em>BMI</em> before deciding between a t test and a
+Mann-Whitney.</p>
+<h4 id="styling-a-chart">Styling a chart</h4>
+<p>The Line Chart dialog's collapsed <strong>Style</strong> section controls presentation
+without touching the data: <strong>Legend</strong> placement (Auto/Right/Bottom/Hidden), a
+<strong>Line width</strong> stepper, and, when there is no split (so the series are known
+up front), a color swatch per series. Because these are options on the
+journaled command rather than a post-hoc chart editor, they show up in the
+<code>.cks</code> syntax too and reproduce exactly on re-run:</p>
+<pre><code>line_chart y=[SystolicBP], x=Age, legend=bottom, colors=[&quot;#1f77b4&quot;], line_width=2.5
+</code></pre>
+<p><strong>Example.</strong> <em>colors=[&quot;#1f77b4&quot;]</em> keeps the first series' color fixed across
+re-runs even if the underlying palette rotation ever changes.</p>
+<h2 id="the-chart-builder">The Chart Builder</h2>
+<p><strong>Graphs → Chart Builder…</strong> (<code>Ctrl+Shift+G</code>) is the general dialog: choose the
+chart type and assign variables to its roles. Use it when you want more control
+than the three quick dialogs give.</p>
+<h2 id="charts-attached-to-analyses">Charts attached to analyses</h2>
+<p>Some analyses can draw a chart built directly from their own result — look for a
+<strong>Plot…</strong> checkbox in the dialog. These include:</p>
+<ul>
+<li>the <strong>Kaplan-Meier</strong> survival curve (and cumulative-hazard curve), with an
+optional <strong>Show point markers</strong> checkbox at each step;</li>
+<li>the <strong>ACF/PACF correlogram</strong> from Autocorrelation;</li>
+<li>the <strong>ARIMA forecast</strong> plot (observed, forecast and prediction band);</li>
+<li>the <strong>canonical discriminant</strong> scatter (optionally with a territorial map);</li>
+<li>the <strong>scree plot</strong> from Factor Analysis (eigenvalues per component, with the
+Kaiser criterion line at 1 — on by default);</li>
+<li>the <strong>forest plot</strong> and <strong>funnel plot</strong> from
+<a href="../analyze/meta-analysis/">Meta-Analysis</a> (per-study effects with the
+pooled diamond; effect against precision with the pseudo-CI funnel — both
+on by default);</li>
+<li>the <strong>dendrogram</strong> from Hierarchical Cluster (the merge tree from the
+agglomeration schedule — on by default; a very wide tree is rendered as its
+last merges, with collapsed clusters sized in parentheses and a note saying
+so).</li>
+</ul>
+<p>See the relevant <a href="../analyze/">analysis pages</a> for each.</p>
+<h2 id="working-with-chart-output">Working with chart output</h2>
+<ul>
+<li>Charts appear as cards in the <strong>Output View</strong>, interleaved with tables in the
+order you ran them.</li>
+<li>The output <strong>chart width</strong> is a setting — see <a href="../settings/">Settings</a>.</li>
+<li>Charts are included when you <strong>export the output log</strong> to HTML/Markdown/LaTeX
+(rendered as their geometry) — see
+<a href="../advanced/reproducibility/#exporting-the-output-log">Reproducibility</a>.</li>
+</ul>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../index.html">Home</a> ·
+        <a href="../../quick-start/">Quick Start</a> ·
+        <a href="../../privacy-policy/">Privacy Policy</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../js/main.js"></script>
+</body>
+</html>

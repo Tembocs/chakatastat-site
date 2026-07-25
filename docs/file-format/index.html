@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The ChakataStat dataset format (`.ckd`) — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/file-format/">
+  <link rel="icon" type="image/svg+xml" href="../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="The ChakataStat dataset format (`.ckd`) — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/file-format/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../index.html">
+        <img class="brand-mark" src="../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <nav id="nav-links" class="nav-links">
+        <a href="../../docs/">User Guide</a>
+        <a href="../../index.html#validated">Validation</a>
+        <a href="../../index.html#features">Features</a>
+        <a href="../../index.html#screenshots">Screenshots</a>
+        <a href="../../index.html#download">Download</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../">Contents</a></li>
+        <li><a href="../quick-start/">Quick Start</a></li>
+        <li><a href="../overview/">Overview</a></li>
+        <li><a href="../getting-started/">Getting Started</a></li>
+        <li><a href="../tutorial/">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../working-with-data/">Working with Data</a></li>
+        <li><a href="../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../analyze/">Analyzing Data</a></li>
+        <li><a href="../graphs/">Graphs</a></li>
+        <li><a href="../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../advanced/ai-assistant/">AI Assistant</a></li>
+        <li><a href="../advanced/reproducibility/">Reproducibility</a></li>
+        <li><a href="../advanced/engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="the-chakatastat-dataset-format-ckd">The ChakataStat dataset format (<code>.ckd</code>)</h1>
+<p><code>.ckd</code> is ChakataStat's native document format — what File → Open and File →
+Save read and write. This document specifies version <strong>2</strong> of the format and
+records the engineering decisions behind it.</p>
+<p>Reference implementation: <code>lib/io/document_codec.dart</code>,
+exercised by <code>test/document_format_test.dart</code>.</p>
+<h2 id="at-a-glance">At a glance</h2>
+<p>A <code>.ckd</code> file is a <strong>ZIP archive</strong> — the same container approach as <code>.xlsx</code>
+and <code>.ods</code> — with two members:</p>
+<pre><code>example.ckd  (ZIP)
+├── meta.json      — variables + provenance (UTF-8 JSON)
+└── data.parquet   — the dataset's columns, typed and columnar (Apache Parquet)
+</code></pre>
+<ul>
+<li><strong><code>meta.json</code></strong> holds everything ChakataStat knows about the dataset <em>except</em>
+the cell values: each variable's full metadata, plus document provenance
+(format/version, timestamps, the writing app and engine). It is
+human-readable — unzip the file and open it.</li>
+<li><strong><code>data.parquet</code></strong> holds the cell values as typed, columnar Parquet, written
+and read by the native engine (over the Apache Arrow / Parquet crates). It is
+<strong>omitted</strong> when the dataset has
+no variables (an empty document is just <code>meta.json</code>).</li>
+</ul>
+<p>The file holds <strong>data only</strong>. Session and application state — the Select /
+Weight / Split case state, the output log, window layout, the AI conversation —
+is deliberately <em>not</em> in the document; it is owned by the session store. The
+document owns what belongs to the dataset; the session owns the rest.</p>
+<h2 id="metajson"><code>meta.json</code></h2>
+<pre><code class="language-json">{
+  &quot;format&quot;: &quot;ChakataStat-dataset&quot;,
+  &quot;version&quot;: 2,
+  &quot;created&quot;: &quot;2026-01-02T03:04:05.000Z&quot;,
+  &quot;modified&quot;: &quot;2026-06-14T09:00:00.000Z&quot;,
+  &quot;writer&quot;: { &quot;app&quot;: &quot;0.5.0+6&quot;, &quot;engine&quot;: &quot;ChakataStat engine 0.5.0 (native)&quot; },
+  &quot;rows&quot;: 3,
+  &quot;variables&quot;: [
+    {
+      &quot;name&quot;: &quot;Age&quot;,
+      &quot;type&quot;: &quot;numeric&quot;,
+      &quot;width&quot;: 5,
+      &quot;decimals&quot;: 0,
+      &quot;label&quot;: &quot;Age in years&quot;,
+      &quot;valueLabels&quot;: { &quot;99&quot;: &quot;Unknown&quot; },
+      &quot;missingValues&quot;: [&quot;99&quot;],
+      &quot;alignment&quot;: &quot;right&quot;,
+      &quot;measure&quot;: &quot;scale&quot;
+    }
+  ]
+}
+</code></pre>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>format</code></td>
+<td>Always <code>&quot;ChakataStat-dataset&quot;</code>; identifies the file.</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td>Format version. This build reads <code>2</code> only (see <em>Versioning</em>).</td>
+</tr>
+<tr>
+<td><code>created</code></td>
+<td>ISO-8601 UTC; when the document was first saved. Preserved across later saves. Optional.</td>
+</tr>
+<tr>
+<td><code>modified</code></td>
+<td>ISO-8601 UTC; when the document was last saved. Optional.</td>
+</tr>
+<tr>
+<td><code>writer.app</code></td>
+<td>ChakataStat version that wrote the file, taken verbatim from <code>pubspec.yaml</code>'s <code>version</code> (single-sourced via <code>lib/version.g.dart</code>, generated at build time). Optional, provenance only.</td>
+</tr>
+<tr>
+<td><code>writer.engine</code></td>
+<td>Analysis engine that wrote it (e.g. <code>&quot;ChakataStat engine 0.5.0 (native)&quot;</code>; files saved by 0.4.x-era builds carry the engine string of that era, e.g. <code>&quot;Polars 0.46 (native)&quot;</code>). Optional, provenance only.</td>
+</tr>
+<tr>
+<td><code>rows</code></td>
+<td>Used row (case) count. Informational; the authoritative shape is the Parquet part.</td>
+</tr>
+<tr>
+<td><code>variables</code></td>
+<td>One object per column, <strong>in column order</strong>, each the serialization of a <code>Variable</code> (<code>Variable.toJson</code>): <code>name</code>, <code>type</code> (<code>numeric</code>/<code>string</code>/<code>date</code>), <code>width</code>, <code>decimals</code>, <code>label</code>, <code>valueLabels</code>, <code>missingValues</code>, <code>alignment</code>, <code>measure</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<p>The <code>variables</code> array is the source of truth for the variable list. The Parquet
+part's column <strong>names are ignored</strong> on read — display names come from
+<code>meta.json</code> — which is how duplicate variable names survive (the data part
+deduplicates them only to satisfy Parquet's unique-name requirement).</p>
+<h2 id="dataparquet"><code>data.parquet</code></h2>
+<p>One Parquet column per variable, in the same order as <code>meta.json</code>'s
+<code>variables</code>, with the engine's two storage types:</p>
+<ul>
+<li>a <strong>numeric</strong> variable → an <code>f64</code> column;</li>
+<li>a <strong>string</strong> or <strong>date</strong> variable → a UTF-8 string column.</li>
+</ul>
+<p>The data is stored <strong>faithfully</strong> — and this is the key design point:</p>
+<blockquote>
+<p>A value a variable <em>declares</em> user-missing (e.g. <code>99</code> flagged as a missing
+code) is a <strong>real value</strong>, so the file stores it as <code>99</code>, not as null. The
+missing-value <em>definition</em> lives in <code>meta.json</code> and is reapplied when the file
+is opened, so analyses still exclude it. Missing-ness is metadata, not a hole
+in the data.</p>
+</blockquote>
+<p>This is why saving does <strong>not</strong> reuse the engine's analysis frame (which nulls
+user-missing values): a dedicated, frame-independent write path
+(<code>ig_write_parquet_staged</code>) persists a faithful, typed view of the sheet. It is
+the mirror image of <code>ig_read_parquet</code>, which also leaves the active frame
+untouched.</p>
+<h3 id="what-is-and-isnt-preserved">What is and isn't preserved</h3>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Numeric value</td>
+<td>Round-trips as a number; integral values print without a trailing <code>.0</code> (<code>34</code>, not <code>34.0</code>).</td>
+</tr>
+<tr>
+<td>Numeric <em>formatting</em> (e.g. <code>3.10</code>, <code>007</code>)</td>
+<td><strong>Normalised</strong> by typed storage — <code>3.10</code> → <code>3.1</code>, <code>007</code> → <code>7</code>. Keep such values in a <strong>string</strong> column to preserve exact text.</td>
+</tr>
+<tr>
+<td>Declared user-missing value</td>
+<td><strong>Preserved</strong> (real value kept; definition restored from <code>meta.json</code>).</td>
+</tr>
+<tr>
+<td>Off-type text in a numeric column (a stray word)</td>
+<td><strong>Dropped to blank.</strong> It cannot be represented as <code>f64</code>; this is the one inherent loss of typed columnar storage. Same mapping the engine already applies.</td>
+</tr>
+<tr>
+<td>String / date value</td>
+<td>Round-trips <strong>exactly</strong>, including numeric-looking text.</td>
+</tr>
+<tr>
+<td>Blank cell</td>
+<td>Stays blank (sparse — only non-empty cells are stored).</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="versioning">Versioning</h2>
+<p>The format is versioned and the reader validates it. This build reads
+<strong>version 2 only</strong>.</p>
+<ul>
+<li><strong>Version 1</strong> was a single pretty-printed JSON object (<code>{ &quot;format&quot;: …, &quot;version&quot;: 1, &quot;variables&quot;: […], &quot;cells&quot;: [[row, col, value], …] }</code>). It is
+<strong>not read</strong> by this build: the format was reworked while the project is still
+pre-1.0, so backward compatibility was traded for a clean design. A v1 file is
+<em>detected</em> (it begins with <code>{</code>) and rejected with a clear message rather than a
+cryptic ZIP error.</li>
+<li>A future <strong>version 3</strong> would add a migration path here: the reader dispatches
+on <code>version</code>, so an upgrade reads the old shape and produces the new model.</li>
+</ul>
+<h2 id="compatibility-commitment">Compatibility commitment</h2>
+<p>This is the promise users can rely on for their saved work — what
+production_readness.md gate 3 (file-format stability)
+asks for. It applies <strong>from 1.0 onward</strong>; pre-1.0 is explicitly exempt (which is
+why version 1 was dropped, above).</p>
+<p><strong>For <code>.ckd</code> documents:</strong></p>
+<ol>
+<li><strong>Forward-readable.</strong> Every 1.x release reads <strong>every <code>.ckd</code> version ≥ 2</strong> —
+the version this build writes. A file you save today keeps opening in later
+1.x releases.</li>
+<li><strong>Additive evolution.</strong> A new format version is introduced only when the model
+genuinely grows, and the reader gains a <strong>migration path</strong> for it (it
+dispatches on <code>version</code> and upgrades the old shape). A newer version is never
+made to <em>silently</em> fail on an older file: an unreadable file is rejected with
+a <strong>clear message</strong>, never a cryptic error or silent data loss.</li>
+<li><strong>Retiring a version is a major event.</strong> An old version's read support is
+removed <strong>only at a major release</strong> (e.g. 2.0), only after it has been
+readable across the whole prior major line, and the release notes say so. The
+pre-1.0 → v2 break will not recur within 1.x.</li>
+<li><strong>Faithful round-trip.</strong> Within these rules the documented round-trip
+guarantees (the <em>What is and isn't preserved</em> table) hold across versions.</li>
+</ol>
+<p><strong>For the session / recovery file</strong> (session_state.dart):
+best-effort and <strong>forward-tolerant</strong>, not a hard guarantee. It holds recoverable
+application state, not user documents, so an unreadable or newer-than-expected
+session <strong>falls back to a clean start</strong> and never blocks launch. Older sessions
+load with newer sections defaulted (the reader is deliberately lenient).</p>
+<p><strong>How this is enforced.</strong> A committed <strong>golden file</strong> —
+<code>test/fixtures/golden_v2.ckd</code>, a real v2 file
+written by an earlier build — is opened and checked on every run by
+<code>test/format_compat_test.dart</code>, alongside an
+old-version session fixture. A change that breaks reading a prior file fails that
+test. (The in-build round-trip tests in
+<code>test/document_format_test.dart</code> prove
+self-consistency; the golden file proves <em>cross-build</em> compatibility.) Regenerate
+the fixture only on a deliberate format change:</p>
+<pre><code class="language-sh">flutter test --dart-define=GENERATE_FIXTURES=true test/format_compat_test.dart
+</code></pre>
+<h2 id="determinism">Determinism</h2>
+<p>The format avoids gratuitous nondeterminism so a content-identical re-save is
+as reproducible as the toolchain allows:</p>
+<ul>
+<li>ZIP entries use a <strong>fixed</strong> modification time (the real timestamps live in
+<code>meta.json</code>), so the archive structure does not churn.</li>
+<li><code>created</code> is stable across saves; only <code>modified</code> advances.</li>
+</ul>
+<p><code>meta.json</code> is fully deterministic for identical content. The Parquet part's
+exact bytes are the engine's (the Parquet writer's) to define and are not guaranteed
+byte-stable — a property intentionally not relied upon (the app tracks unsaved
+changes in memory, not by hashing files).</p>
+<h2 id="why-these-choices">Why these choices</h2>
+<ul>
+<li><strong>ZIP container, not single-file.</strong> A data-analysis document wants typed,
+columnar, compressed storage that loads straight into the engine. Parquet is
+exactly that, and the engine already reads and writes it. Variable metadata
+doesn't fit in Parquet columns; rather than depend on Parquet footer
+key-value metadata (which the engine's Parquet write path deliberately does
+not use) and the
+fragile low-level code needed to write it, the metadata rides in a sibling
+<code>meta.json</code>. The container reuses stable, tested engine endpoints with no
+changes to the Parquet writer — the robust choice for a format we want to get
+right once.</li>
+<li><strong>Opening requires the native engine.</strong> Reading the Parquet part goes through
+the engine (FFI). That is acceptable: the engine is already a hard
+requirement for the app to run at all.</li>
+<li><strong>Data only; state lives elsewhere.</strong> Keeping the document to data (and
+data-about-the-data: timestamps, writer) keeps a clean boundary with the
+session store, which already owns application and session state.</li>
+</ul>
+<h2 id="engine-endpoints">Engine endpoints</h2>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ig_write_parquet_staged(path)</code></td>
+<td>Writes the <em>staged</em> columns to a Parquet file without touching the stored frame — the faithful save path used by Save. Stage columns with <code>ig_dataset_load_begin</code> + <code>ig_stage_*</code> first.</td>
+</tr>
+<tr>
+<td><code>ig_read_parquet(path)</code></td>
+<td>Reads a Parquet file into columnar form without touching the stored frame — used by Open and Merge.</td>
+</tr>
+<tr>
+<td><code>ig_write_parquet(path)</code></td>
+<td>Writes the <em>stored</em> frame (the engine's analysis view, user-missing nulled). Used by File → <strong>Export</strong> to Parquet, not by the <code>.ckd</code> document path.</td>
+</tr>
+</tbody>
+</table></div>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../index.html">Home</a> ·
+        <a href="../../quick-start/">Quick Start</a> ·
+        <a href="../../privacy-policy/">Privacy Policy</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Compare Means — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/analyze/compare-means/">
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Compare Means — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/analyze/compare-means/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../index.html">
+        <img class="brand-mark" src="../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../docs/">User Guide</a>
+        <a href="../../../index.html#validated">Validation</a>
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#screenshots">Screenshots</a>
+        <a href="../../../index.html#download">Download</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../../">Contents</a></li>
+        <li><a href="../../quick-start/">Quick Start</a></li>
+        <li><a href="../../overview/">Overview</a></li>
+        <li><a href="../../getting-started/">Getting Started</a></li>
+        <li><a href="../../tutorial/">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../../working-with-data/">Working with Data</a></li>
+        <li><a href="../../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../">Analyzing Data</a></li>
+        <li><a href="../../graphs/">Graphs</a></li>
+        <li><a href="../../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
+        <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
+        <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="compare-means">Compare Means</h1>
+<p><strong>Analyze → Compare Means.</strong> These procedures ask whether the <strong>mean</strong> of a scale
+variable differs — between groups, against a fixed value, or across paired
+measurements.</p>
+<h2 id="means">Means</h2>
+<p><strong>When to use it.</strong> To get summary statistics for a scale variable <strong>broken down
+by the categories of one or more factors</strong> — a descriptive breakdown, not a test.</p>
+<p><strong>Dialog.</strong> A <strong>Dependent</strong> scale variable and one or more <strong>Independent</strong>
+(grouping) variables.</p>
+<p><strong>Output.</strong> A table of the dependent's mean, N and standard deviation within each
+group (and overall).</p>
+<p><strong>Example.</strong> Mean <em>SystolicBP</em> by <em>StudyZone</em> and by <em>SmokingStatus</em>.</p>
+<h2 id="t-tests">T Tests</h2>
+<p>All three live under <strong>Compare Means</strong> and each can be run <strong>one- or two-tailed</strong>
+(set in the Options section).</p>
+<h3 id="one-sample-t-test">One-Sample T Test</h3>
+<p><strong>When.</strong> Compare a variable's mean against a <strong>known test value</strong>.</p>
+<p><strong>Dialog.</strong> The <strong>Test Variable(s)</strong> and the <strong>Test Value</strong>.</p>
+<p><strong>Output.</strong> The mean, the t statistic, degrees of freedom, the significance, and
+the confidence interval of the difference.</p>
+<p><strong>Example.</strong> Is mean <em>BMI</em> different from 25 (the overweight threshold)?</p>
+<h3 id="independent-samples-t-test">Independent-Samples T Test</h3>
+<p><strong>When.</strong> Compare the means of <strong>two independent groups</strong>.</p>
+<p><strong>Dialog.</strong> A <strong>Test Variable</strong> and a <strong>Grouping Variable</strong> (define the two groups
+by their values).</p>
+<p><strong>Output.</strong> Group statistics, <strong>Levene's test</strong> for equal variances, and the
+t-test reported both ways (equal and unequal variances assumed) with the CI of
+the difference.</p>
+<p><strong>Example.</strong> Does mean <em>FastingGlucose_mmolL</em> differ between <em>Diabetic</em> = Yes and
+No?</p>
+<h3 id="paired-samples-t-test">Paired-Samples T Test</h3>
+<p><strong>When.</strong> Compare <strong>two measurements on the same cases</strong>.</p>
+<p><strong>Dialog.</strong> One or more <strong>variable pairs</strong>.</p>
+<p><strong>Output.</strong> The paired differences' mean, the t statistic, df, significance and
+CI.</p>
+<p><strong>Example.</strong> <em>SystolicBP</em> vs <em>DiastolicBP</em> (illustrative paired comparison).</p>
+<h2 id="one-way-anova">One-Way ANOVA</h2>
+<p><strong>When to use it.</strong> Compare the means of a scale variable across <strong>three or more
+groups</strong>.</p>
+<p><strong>Dialog.</strong> A <strong>Dependent</strong> scale variable and a <strong>Factor</strong> (the grouping
+variable). The Options section adds:</p>
+<ul>
+<li><strong>Levene's test</strong> of homogeneity of variances;</li>
+<li>the <strong>Welch</strong> robust test (for unequal variances);</li>
+<li><strong>post-hoc comparisons</strong> — Bonferroni, Scheffé, Tukey HSD;</li>
+<li><strong>a-priori contrasts</strong> (custom weighted comparisons).</li>
+</ul>
+<p><strong>Output.</strong> The <strong>ANOVA table</strong> (between/within sums of squares, F, significance),
+plus any homogeneity test, post-hoc table and contrast results you requested.</p>
+<p><strong>Example.</strong> Mean <em>SystolicBP</em> across the levels of <em>EducationLevel</em>, with Tukey
+HSD to see which education levels differ.</p>
+<h2 id="bayesian-t-test">Bayesian t test</h2>
+<p>A Bayesian counterpart to the three t tests, under <strong>Analyze → Bayesian → t
+Test…</strong>. Where a classical t test gives a p-value — which can only ever <em>fail to
+reject</em> the null, never support it — a Bayesian t test reports a <strong>Bayes factor</strong>
+that grades the evidence in either direction.</p>
+<p><strong>When to use it.</strong> Whenever you would run a one-sample, paired or
+independent-samples t test but want to quantify evidence <strong>for</strong> the null as well
+as against it (e.g. to argue two groups are <em>equivalent</em>), or want a posterior on
+the effect size rather than a confidence interval.</p>
+<p><strong>Dialog.</strong> A <strong>One-Sample / Paired / Independent</strong> selector (the same three
+designs as the classical t tests), the test variables, and:</p>
+<ul>
+<li><strong>Prior scale r</strong> — the width of the Cauchy prior on the standardized effect
+size δ; the default 0.707 (≈ 1/√2) is the standard &quot;medium&quot; scale.</li>
+<li><strong>Credible %</strong> — the level for the posterior interval of δ (default 95).</li>
+</ul>
+<p><strong>Output.</strong> A <strong>Bayesian t Test</strong> table with, per variable/pair:</p>
+<ul>
+<li><strong>BF₁₀</strong> — the evidence for a difference, and <strong>BF₀₁ = 1/BF₁₀</strong> — the evidence
+for the null. A BF₁₀ of 6 means the data are 6× more likely under a real
+effect; a BF₁₀ of 0.2 (BF₀₁ = 5) means they are 5× more likely under the null.</li>
+<li><strong>Evidence</strong> — a verbal category for the Bayes factor (Anecdotal, Moderate,
+Strong, Very strong, Extreme), tagged with the favoured hypothesis.</li>
+<li><strong>Median δ</strong> and its <strong>credible interval</strong> — the posterior for the standardized
+effect size.</li>
+</ul>
+<p><strong>Example.</strong> A paired Bayesian t test of <em>Pre</em> vs <em>Post</em>: a BF₁₀ of 0.3
+(&quot;Moderate (H0)&quot;) is positive evidence that the intervention made no difference —
+a conclusion a non-significant p-value could not have supported.</p>
+<h3 id="bayesian-correlation">Bayesian correlation</h3>
+<p>Also under <strong>Analyze → Bayesian → Correlation…</strong>: the Bayesian counterpart to
+<a href="../correlation-and-regression/">bivariate correlation</a>. Pick two or more numeric
+variables; each <strong>pair</strong> is reported with its Pearson <strong>r</strong>, the <strong>BF₁₀</strong> /
+<strong>BF₀₁</strong> (evidence for / against a correlation) and evidence category, and the
+<strong>posterior median and credible interval</strong> of ρ.</p>
+<ul>
+<li><strong>Prior width κ</strong> — the stretched-beta prior on ρ; the default 1 is a uniform
+prior on −1…1. (Smaller κ pulls the prior toward 0.)</li>
+<li><strong>Credible %</strong> — the level for the posterior interval of ρ.</li>
+</ul>
+<p>A BF₁₀ well above 1 is evidence the two variables <em>are</em> correlated; a BF₀₁ above 1
+is evidence they are <em>not</em> — the latter being something a significance test on <em>r</em>
+cannot deliver.</p>
+<h3 id="bayesian-anova">Bayesian ANOVA</h3>
+<p>Under <strong>Analyze → Bayesian → ANOVA…</strong>: the Bayesian counterpart to the one-way
+ANOVA. Pick one or more numeric <strong>dependent</strong> variables and a <strong>factor</strong>; each is
+reported with its group count, <strong>η²</strong> (the variance explained), and the <strong>BF₁₀</strong> /
+<strong>BF₀₁</strong> for the <em>group-means model against the no-effect null</em> — i.e. whether the
+factor matters at all.</p>
+<ul>
+<li><strong>Prior scale r</strong> — the Cauchy prior on the standardized group effects; the
+default 0.5 is the standard &quot;medium&quot; fixed-effect scale.</li>
+</ul>
+<p>A BF₁₀ above 1 is evidence the groups differ; a BF₀₁ above 1 is evidence they do
+<em>not</em> — direct support for a null that an ANOVA <em>F</em> test cannot provide.</p>
+<h3 id="bayesian-linear-regression">Bayesian linear regression</h3>
+<p>Under <strong>Analyze → Bayesian → Linear Regression…</strong>: the Bayesian counterpart to
+<a href="../correlation-and-regression/">linear regression</a>. Pick a <strong>dependent</strong> variable
+and one or more numeric <strong>predictors</strong>. It reports:</p>
+<ul>
+<li><strong>Coefficients</strong> — each predictor's <strong>posterior mean</strong> (the OLS estimate under
+the diffuse prior) and its <strong>credible interval</strong>.</li>
+<li><strong>Model summary</strong> — N, the predictor count, R², and the <strong>residual variance</strong>
+posterior (mean and credible interval).</li>
+<li><strong>Bayes factor</strong> — <strong>BF₁₀</strong> / <strong>BF₀₁</strong> for the full model against the
+intercept-only null: whether the predictors collectively matter.</li>
+</ul>
+<p>Controls: a <strong>Prior scale r</strong> (the g-prior on the effects; default √2/4 ≈ 0.354)
+and a <strong>Credible %</strong> for the intervals. A BF₁₀ above 1 favours the predictors; a
+BF₀₁ above 1 is evidence that an intercept-only model suffices.</p>
+<h2 id="choosing-among-them">Choosing among them</h2>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Procedure</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>One mean vs a fixed number</td>
+<td>One-Sample T Test</td>
+</tr>
+<tr>
+<td>Two independent groups</td>
+<td>Independent-Samples T Test</td>
+</tr>
+<tr>
+<td>Two measurements, same cases</td>
+<td>Paired-Samples T Test</td>
+</tr>
+<tr>
+<td>Three or more groups</td>
+<td>One-Way ANOVA</td>
+</tr>
+<tr>
+<td>Just a breakdown, no test</td>
+<td>Means</td>
+</tr>
+<tr>
+<td>Evidence <em>for</em> a null, or a Bayes factor</td>
+<td>Bayesian t test</td>
+</tr>
+</tbody>
+</table></div>
+<p>If a normality or variance assumption looks shaky (check it in
+<a href="../descriptive-statistics/#explore">Explore</a>), consider the
+<a href="../nonparametric/">nonparametric equivalents</a>.</p>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../index.html">Home</a> ·
+        <a href="../../../quick-start/">Quick Start</a> ·
+        <a href="../../../privacy-policy/">Privacy Policy</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ChakataStat at a glance — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/overview/">
+  <link rel="icon" type="image/svg+xml" href="../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="ChakataStat at a glance — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/overview/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../index.html">
+        <img class="brand-mark" src="../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <nav id="nav-links" class="nav-links">
+        <a href="../../docs/">User Guide</a>
+        <a href="../../index.html#validated">Validation</a>
+        <a href="../../index.html#features">Features</a>
+        <a href="../../index.html#screenshots">Screenshots</a>
+        <a href="../../index.html#download">Download</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../">Contents</a></li>
+        <li><a href="../quick-start/">Quick Start</a></li>
+        <li><a href="./" aria-current="page">Overview</a></li>
+        <li><a href="../getting-started/">Getting Started</a></li>
+        <li><a href="../tutorial/">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../working-with-data/">Working with Data</a></li>
+        <li><a href="../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../analyze/">Analyzing Data</a></li>
+        <li><a href="../graphs/">Graphs</a></li>
+        <li><a href="../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../advanced/ai-assistant/">AI Assistant</a></li>
+        <li><a href="../advanced/reproducibility/">Reproducibility</a></li>
+        <li><a href="../advanced/engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="chakatastat-at-a-glance">ChakataStat at a glance</h1>
+<p>This page is the <strong>whole application in one read</strong>. It is deliberately short: it
+tells you what ChakataStat is, what each part of the window does, and where to go
+next for detail. If you have never opened the app before, read this first, then
+follow <a href="../getting-started/">Getting Started</a> for your first analysis.</p>
+<h2 id="what-chakatastat-is">What ChakataStat is</h2>
+<p>ChakataStat is a desktop application for <strong>statistical data analysis</strong>. It pairs
+a spreadsheet-style <strong>data editor</strong> with a fast <strong>statistics engine</strong>, so you can
+type or import a table of data, describe and model it, draw charts, and save the
+whole thing as a single document — without writing any code.</p>
+<p>Two things make it more than a spreadsheet:</p>
+<ul>
+<li><strong>A real statistics engine.</strong> Everything from a frequency table to ARIMA
+forecasting, factor analysis and Cox regression runs natively, on a background
+worker so the window never freezes.</li>
+<li><strong>One command for every surface.</strong> Every analysis you run from a menu can also
+be run by typing a command, asked for in plain language from the built-in AI
+assistant, or driven by an external program. They are all the same underlying
+operation, so anything you do by clicking can be reproduced exactly later.</li>
+</ul>
+<h2 id="the-workbench-part-by-part">The workbench, part by part</h2>
+<p>When you open ChakataStat you see the <strong>workbench</strong> — one window with these
+pieces:</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Part</th>
+<th>What it is</th>
+<th>Where it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Menu bar</strong></td>
+<td>File, Edit, View, Data, Transform, Analyze, Graphs, Help</td>
+<td>Top</td>
+</tr>
+<tr>
+<td><strong>Toolbar</strong></td>
+<td>One-click buttons for the most common actions</td>
+<td>Under the menu</td>
+</tr>
+<tr>
+<td><strong>View tabs</strong></td>
+<td>Switch between Data, Variable, Output and Syntax</td>
+<td>Left of the work area</td>
+</tr>
+<tr>
+<td><strong>Work area</strong></td>
+<td>The active view — your data, your variable definitions, or your results</td>
+<td>Centre</td>
+</tr>
+<tr>
+<td><strong>AI assistant panel</strong></td>
+<td>Ask for analyses in plain language</td>
+<td>Right (toggle with Ctrl+Shift+A)</td>
+</tr>
+<tr>
+<td><strong>Status bar</strong></td>
+<td>Case count, active filters, engine state</td>
+<td>Bottom</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="the-four-views">The four views</h3>
+<p>You spend all your time in one of these tabs. Switch with the tabs or <code>Ctrl+1</code>…<code>Ctrl+4</code>.</p>
+<ul>
+<li><strong>Data View</strong> (<code>Ctrl+1</code>) — the spreadsheet. Rows are <strong>cases</strong> (observations);
+columns are <strong>variables</strong>. This is where you type, paste and edit data.</li>
+<li><strong>Variable View</strong> (<code>Ctrl+2</code>) — one row per variable, where you set each
+variable's <strong>name, type, label, value labels, measurement level and
+missing-value rules</strong>. Defining variables well here makes every analysis and
+chart read better.</li>
+<li><strong>Output View</strong> (<code>Ctrl+3</code>) — the <strong>log of results</strong>. Every analysis and chart
+you run appends a titled card here. You can copy, export, or clear it.</li>
+<li><strong>Syntax console</strong> (<code>Ctrl+4</code>) — <em>advanced.</em> The editable command stream that
+records what you have done and lets you re-run it. See
+<a href="../advanced/reproducibility/">Reproducibility</a>.</li>
+</ul>
+<p>(Earlier versions had a fifth, Advanced-mode SQL tab; it has been removed — see
+<a href="../advanced/engine-access/">Direct engine access</a>.)</p>
+<h2 id="what-you-can-do--the-menus-in-one-line-each">What you can do — the menus in one line each</h2>
+<ul>
+<li><strong>File</strong> — new dataset, open/save <code>.ckd</code> documents, import/export CSV, Excel
+and Parquet, import/export a data dictionary, export the output log.</li>
+<li><strong>Edit</strong> — undo/redo, cut/copy/paste, select all, find &amp; replace (<code>Ctrl+F</code>).</li>
+<li><strong>View</strong> — switch views, open the <strong>Command Palette</strong> (<code>Ctrl+Shift+P</code>), toggle
+the AI panel, and (in Advanced mode) Engine Diagnostics.</li>
+<li><strong>Data</strong> — define variable properties, sort, select / weight / split cases,
+merge files, transpose, bulk-rename variables, define variable sets.</li>
+<li><strong>Transform</strong> — compute a new variable from an expression, recode, rank cases.</li>
+<li><strong>Analyze</strong> — the statistics: Descriptives, Compare Means, Correlate,
+Regression, the General Linear and Mixed models, Nonparametric tests, Scale,
+Dimension Reduction, Classify, Meta-Analysis, Survival, Time Series and
+custom Tables.</li>
+<li><strong>Graphs</strong> — Histogram, Scatterplot, Boxplot and a free-form Chart Builder.</li>
+<li><strong>Help</strong> — documentation and the About box.</li>
+</ul>
+<h2 id="how-a-session-usually-flows">How a session usually flows</h2>
+<pre><code>  Open or import data ─▶ Define variables ─▶ (optionally) filter / weight / split
+        │                                                  │
+        ▼                                                  ▼
+   Transform / compute new variables ───────────▶  Run analyses &amp; graphs
+                                                          │
+                                                          ▼
+                                          Read the Output log ─▶ Export / save .ckd
+</code></pre>
+<p>Everything you run is also recorded as a re-runnable command in the
+<a href="../advanced/reproducibility/">Syntax console</a>, so a finished analysis can be
+replayed on new data with one click.</p>
+<h2 id="the-advanced-features-in-brief">The advanced features, in brief</h2>
+<p>These have their own sections because they reward a closer read:</p>
+<ul>
+<li><strong><a href="../advanced/ai-assistant/">The AI assistant</a></strong> — connect a model (Claude or
+any OpenAI-compatible endpoint) and ask for analyses in plain English; results
+come back as real tables and charts in the chat.</li>
+<li><strong><a href="../advanced/reproducibility/">Reproducibility</a></strong> — the <code>.cks</code> syntax stream,
+the command palette, headless batch runs (<code>--run</code>), exporting the output log to
+HTML/Markdown/LaTeX, and exporting a session as a Python script.</li>
+<li><strong><a href="../advanced/engine-access/">Direct engine access</a></strong> — the engine
+diagnostics panel, Advanced mode, and driving ChakataStat from another
+program over MCP.</li>
+</ul>
+<h2 id="where-to-go-next">Where to go next</h2>
+<ul>
+<li>New here? → <strong><a href="../getting-started/">Getting Started</a></strong> (install + first analysis).</li>
+<li>Have data to load? → <strong><a href="../working-with-data/">Working with Data</a></strong>.</li>
+<li>Want to run a specific test? → <strong><a href="../analyze/">Analyzing Data</a></strong> or the
+<strong><a href="../reference/choosing-a-procedure/">procedure chooser</a></strong>.</li>
+<li>Want to automate or script? → the <strong><a href="../advanced/">advanced sections</a></strong>.</li>
+</ul>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../index.html">Home</a> ·
+        <a href="../../quick-start/">Quick Start</a> ·
+        <a href="../../privacy-policy/">Privacy Policy</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../js/main.js"></script>
+</body>
+</html>

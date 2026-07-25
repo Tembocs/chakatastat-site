@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scale, Dimension Reduction &amp; Classify — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/analyze/scale-reduction-classify/">
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Scale, Dimension Reduction &amp; Classify — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/analyze/scale-reduction-classify/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../index.html">
+        <img class="brand-mark" src="../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../docs/">User Guide</a>
+        <a href="../../../index.html#validated">Validation</a>
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#screenshots">Screenshots</a>
+        <a href="../../../index.html#download">Download</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../../">Contents</a></li>
+        <li><a href="../../quick-start/">Quick Start</a></li>
+        <li><a href="../../overview/">Overview</a></li>
+        <li><a href="../../getting-started/">Getting Started</a></li>
+        <li><a href="../../tutorial/">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../../working-with-data/">Working with Data</a></li>
+        <li><a href="../../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../">Analyzing Data</a></li>
+        <li><a href="../../graphs/">Graphs</a></li>
+        <li><a href="../../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
+        <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
+        <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="scale-dimension-reduction--classify">Scale, Dimension Reduction &amp; Classify</h1>
+<p>Three menu groups for <strong>multivariate</strong> work: assessing a set of items as a scale,
+reducing many variables to a few, and grouping or classifying cases.</p>
+<h2 id="scale--reliability-analysis">Scale → Reliability Analysis</h2>
+<p><strong>When to use it.</strong> To check whether a set of items (e.g. questionnaire
+questions) measure one underlying construct consistently.</p>
+<p><strong>Dialog.</strong> Move the item variables into the list.</p>
+<p><strong>Output.</strong> <strong>Cronbach's alpha</strong> for the scale, plus <strong>item-total statistics</strong> —
+how each item correlates with the rest and what alpha would become if the item
+were dropped. Low item-total correlation flags an item that does not belong.</p>
+<h2 id="scale--intraclass-correlation">Scale → Intraclass Correlation</h2>
+<p><strong>When to use it.</strong> To measure the <strong>reliability or agreement of ratings</strong> when
+several raters score the same subjects (inter-rater reliability), or one measure
+is repeated (test-retest). The data are a <em>wide</em> layout: one column per rater,
+one row per subject.</p>
+<p><strong>Dialog.</strong> Move the rater columns into the <strong>Raters</strong> list and pick a
+<strong>confidence interval</strong> level (95% by default).</p>
+<p><strong>Output.</strong> A table of the six <strong>Shrout &amp; Fleiss</strong> ICC forms, each with its
+confidence interval, F test and significance, plus the ANOVA mean squares they
+are built from. Pick the form from your design:</p>
+<ul>
+<li><strong>One-way vs two-way</strong> — one-way if each subject is rated by a <em>different</em>
+random set of raters; two-way if the <em>same</em> raters score every subject.</li>
+<li><strong>Absolute agreement vs consistency</strong> — agreement if the raters' actual values
+must match; consistency if a constant offset between raters is acceptable.</li>
+<li><strong>Single vs average measures</strong> — single if one rater's score will be used;
+average if you will use the mean of all raters.</li>
+</ul>
+<blockquote>
+<p>ICC reuses the two-way variance decomposition of the repeated-measures ANOVA.
+Values near 1 mean highly reliable ratings; near 0, no better than chance.</p>
+</blockquote>
+<h2 id="dimension-reduction--factor">Dimension Reduction → Factor</h2>
+<p><strong>When to use it.</strong> To find a small number of latent <strong>factors</strong> behind many
+correlated variables. (Testing a structure you already <em>hypothesize</em> is the
+complementary procedure — see
+<a href="../cfa/">Confirmatory Factor Analysis</a>.)</p>
+<p><strong>Dialog.</strong> Move the variables in. In Options choose:</p>
+<ul>
+<li><strong>Extraction</strong> — principal components (default), principal-axis factoring, or
+exact-discrepancy maximum likelihood;</li>
+<li><strong>Rotation</strong> — none, <strong>Varimax</strong> (orthogonal) or <strong>Promax</strong> (oblique);</li>
+<li><strong>Scree plot</strong> — on by default, the eigenvalues as a marked line with the
+Kaiser criterion line at 1 (the classic pick-the-elbow view);</li>
+<li><strong>save</strong> factor scores back as new variables.</li>
+</ul>
+<p><strong>Output.</strong> Communalities, total variance explained, the component/factor matrix
+(loadings), the scree plot, and — for ML — a goodness-of-fit χ² test. Oblique
+rotation adds Pattern, Structure and Factor-Correlation matrices.</p>
+<p><strong>Example.</strong> Reduce the body-measurement and blood-pressure variables to a couple
+of interpretable factors.</p>
+<h2 id="classify">Classify</h2>
+<p><strong>Analyze → Classify.</strong> Four ways to group or classify cases.</p>
+<h3 id="k-means-cluster">K-Means Cluster</h3>
+<p>Partition cases into a <strong>fixed number K</strong> of clusters. Reports the final cluster
+centers, an ANOVA of how each variable separates the clusters, the cluster sizes,
+and (optionally saved) each case's cluster membership and distance. A <strong>random
+seed</strong> in Options makes a random start reproducible.</p>
+<h3 id="hierarchical-cluster">Hierarchical Cluster</h3>
+<p>Build a nested clustering by <strong>agglomeration</strong> (single, complete, average or
+Ward linkage). Reports the agglomeration schedule, a <strong>dendrogram</strong> of the
+merge tree (on by default; a very wide tree is rendered as its last merges,
+with collapsed clusters sized in parentheses and a note saying so), and,
+optionally, each case's membership at a chosen number of clusters.</p>
+<blockquote>
+<p><strong>Scope limits.</strong> Capped at <strong>200 cases</strong> by default, because the method's cost
+grows steeply with case count (cubic in time, quadratic in memory). Raise
+<strong>Maximum cases</strong> — or set it to <strong>0</strong> to remove the limit — to cluster more;
+the result then carries a note that the cap was lifted. The agglomeration
+<strong>honours the Weight Cases setting</strong>: each case enters as a cluster of its own
+weight, so the size-weighted linkages (between-groups average, Ward) are
+weighted. Single and complete linkage use nearest/furthest distances, which do
+not depend on how many times a case is counted, so they are unaffected.</p>
+</blockquote>
+<h3 id="two-step-cluster">Two-Step Cluster</h3>
+<p>Find the <strong>number of clusters automatically</strong> (minimising a BIC criterion) or fix
+it. Reports the auto-clustering BIC table, the centers, the counts and the saved
+membership. Handles larger datasets via a pre-clustering pass.</p>
+<h3 id="discriminant">Discriminant</h3>
+<p><strong>When.</strong> Predict a <strong>known group membership</strong> from scale predictors (the
+supervised counterpart to clustering).</p>
+<p><strong>Dialog.</strong> A <strong>grouping</strong> variable and the <strong>predictor</strong> variables. Options add
+<strong>forward/backward stepwise</strong> selection (by Wilks' lambda) and <strong>classification /
+cross-validation</strong> (resubstitution and leave-one-out confusion matrices).</p>
+<p><strong>Output.</strong> Canonical discriminant functions, eigenvalues and canonical
+correlations, the overall Wilks' lambda, Fisher classification functions, and the
+classification results table with percent correctly classified. A <strong>Plot…</strong>
+option draws the combined-groups canonical scatter (optionally with a territorial
+map).</p>
+<blockquote>
+<p><strong>Scope limits.</strong> Leave-one-out cross-validation is capped at <strong>500 cases</strong> and
+the canonical-scores table behind the plot at <strong>2000 cases</strong>, since both are
+expensive on large datasets. Each cap is configurable in the dialog (<strong>0</strong>
+removes it); when a cap applies, the output says the cross-validation was
+skipped or the table truncated, and how to lift it. The analysis <strong>honours the
+Weight Cases setting</strong>: the case weight is a frequency weight, folded into the
+group means, the within- and between-groups scatter, and the classification
+tallies.</p>
+</blockquote>
+<p><strong>Example.</strong> Predict <em>Diabetic</em> (Yes/No) from <em>BMI</em>, <em>FastingGlucose</em>, <em>Age</em> and
+<em>SystolicBP</em>, with leave-one-out cross-validation to gauge real accuracy.</p>
+<h3 id="roc-curve">ROC Curve</h3>
+<p><strong>When.</strong> Judge how well a <strong>continuous score</strong> (a measurement, or a fitted
+probability from logistic regression) separates two known classes — the standard
+way to assess a diagnostic test or a binary classifier. <strong>Analyze → ROC Curve…</strong>
+(a top-level item, next to Classify).</p>
+<p><strong>Dialog.</strong> A <strong>Test variable</strong> (the numeric score) and a <strong>State variable</strong> (the
+true class). Set the <strong>Value of state (positive)</strong> to whichever state value marks
+the positive / condition-present case (default <code>1</code>); every other value is taken as
+negative. <strong>Positive if test value is</strong> chooses whether a <em>larger</em> score (the
+default) or a <em>smaller</em> one points to a positive case. <strong>Plot ROC curve</strong> is on by
+default.</p>
+<p><strong>Output.</strong> The <strong>Area Under the Curve</strong> (AUC) with its standard error, confidence
+interval and the asymptotic significance of the test against chance (AUC = 0.5);
+the <strong>Coordinates of the Curve</strong> (sensitivity and 1 − specificity at every
+cut-point); and the <strong>Optimal Cut-Point</strong> maximising Youden's <em>J</em> (sensitivity +
+specificity − 1). The plot draws the curve on the unit square against the chance
+diagonal, annotates the AUC, and marks the optimal cut-point.</p>
+<blockquote>
+<p>The AUC equals the Mann-Whitney <em>U</em> statistic divided by the number of
+positive×negative pairs (ties counted as half) — the probability that a random
+positive scores above a random negative. A natural workflow is to fit a binary
+<strong>Logistic</strong> regression, <strong>save</strong> its predicted probabilities, and run ROC on
+that saved column.</p>
+</blockquote>
+<p><strong>Example.</strong> Assess <em>FastingGlucose</em> as a screen for <em>Diabetic</em> (positive value
+<code>1</code>): read the AUC, and take the cut-point that best balances sensitivity and
+specificity.</p>
+<h2 id="choosing-among-them">Choosing among them</h2>
+<ul>
+<li>Are the groups <strong>known</strong>? → <strong>Discriminant</strong> (supervised).</li>
+<li>Groups <strong>unknown</strong>, want a fixed number → <strong>K-Means</strong>.</li>
+<li>Groups unknown, want the <strong>structure / a dendrogram-style schedule</strong> →
+<strong>Hierarchical</strong>.</li>
+<li>Groups unknown, want the count <strong>chosen for you</strong> → <strong>Two-Step</strong>.</li>
+<li>Checking that <strong>items form one scale</strong> → <strong>Reliability</strong>.</li>
+<li>Measuring <strong>rater / repeated-measurement agreement</strong> → <strong>Intraclass
+Correlation</strong>.</li>
+<li>Reducing <strong>many variables to a few</strong> → <strong>Factor</strong>.</li>
+</ul>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../index.html">Home</a> ·
+        <a href="../../../quick-start/">Quick Start</a> ·
+        <a href="../../../privacy-policy/">Privacy Policy</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../js/main.js"></script>
+</body>
+</html>
