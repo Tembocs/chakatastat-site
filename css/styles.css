@@ -53,8 +53,22 @@
     Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 }
 
+/* The dark palette is written out twice, on purpose. The theme has two
+   independent triggers — the visitor's system setting, and the header's
+   toggle, which writes data-theme onto <html> — and plain CSS has no way to
+   name one declaration block and reuse it under two selectors. The
+   alternatives were worse: `light-dark()` would unify them but leaves every
+   colour undefined on a browser that lacks it, and this is a page academics
+   open on whatever machine they have.
+   Read as: dark when the system says so *unless* light was explicitly chosen,
+   and dark whenever it was explicitly chosen. Keep the two blocks identical;
+   the second one wins on specificity and order, which is what makes an
+   explicit choice override the system.
+   `color-scheme` follows along so form controls, scrollbars and the like get
+   the matching native styling. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
     --color-bg: #0f1412;
     --color-bg-alt: #141a17;
     --color-surface: #171f1b;
@@ -70,6 +84,27 @@
     --shadow-hover: 0 3px 6px rgba(0, 0, 0, 0.4),
       0 14px 32px rgba(0, 0, 0, 0.5);
   }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-bg: #0f1412;
+  --color-bg-alt: #141a17;
+  --color-surface: #171f1b;
+  --color-text: #eef2f0;
+  --color-text-muted: #9fb0a8;
+  --color-primary: #2fae6c;
+  --color-primary-dark: #4fc584;
+  --color-primary-contrast: #08130d;
+  --color-border: #23302a;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.3), 0 12px 28px rgba(0, 0, 0, 0.4),
+    0 40px 80px rgba(0, 0, 0, 0.45);
+  --shadow-hover: 0 3px 6px rgba(0, 0, 0, 0.4), 0 14px 32px rgba(0, 0, 0, 0.5);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
 }
 
 * {
@@ -244,9 +279,82 @@ a {
   white-space: nowrap;
 }
 
+/* Brand on the left, links taking the slack, then the actions cluster. The
+   theme toggle lives here rather than inside .nav-links so it survives the
+   mobile collapse — a control you cannot reach without first opening a menu
+   is a control people do not find. */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: 12px;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  color: var(--color-text);
+  border-color: var(--border-hover);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.theme-toggle svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+/* Only one of the two icons is ever shown; which one is decided in CSS from
+   the same signals that decide the palette, so the button is correct on first
+   paint with no JavaScript involved. */
+.theme-toggle .icon-dark {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .icon-light {
+    display: none;
+  }
+
+  :root:not([data-theme="light"]) .theme-toggle .icon-dark {
+    display: block;
+  }
+}
+
+:root[data-theme="dark"] .theme-toggle .icon-light {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-toggle .icon-dark {
+  display: block;
+}
+
+:root[data-theme="light"] .theme-toggle .icon-light {
+  display: block;
+}
+
+:root[data-theme="light"] .theme-toggle .icon-dark {
+  display: none;
+}
+
 .nav-toggle {
   display: none;
-  margin-left: auto;
   background: none;
   border: none;
   padding: 8px;
@@ -787,6 +895,10 @@ section h2 {
   .nav-links,
   .nav-cta {
     display: none;
+  }
+
+  .nav-actions {
+    margin-left: auto;
   }
 
   .nav-toggle {
