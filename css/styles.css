@@ -1277,8 +1277,13 @@ section h2 {
   font-weight: 600;
 }
 
-.docs-nav-section {
-  margin: 18px 0 6px;
+/* Scoped under .docs-sidebar deliberately. `.docs-sidebar li { margin: 0 }`
+   above scores (0,1,1) and would beat a bare `.docs-nav-section` at (0,1,0) —
+   which it did, silently: the computed margin-top was 0, so these headings sat
+   *tighter* than the links around them (19px against a 33px row rhythm) and
+   read as a cramped item rather than the start of a section. */
+.docs-sidebar .docs-nav-section {
+  margin: 26px 0 6px;
   padding-left: 10px;
   font-size: 0.74rem;
   font-weight: 700;
@@ -1426,9 +1431,10 @@ section h2 {
     gap: 4px;
   }
 
-  .docs-nav-section {
+  /* Same specificity trap as the desktop rule above — must stay scoped. */
+  .docs-sidebar .docs-nav-section {
     width: 100%;
-    margin: 10px 0 2px;
+    margin: 14px 0 2px;
   }
 }
 
