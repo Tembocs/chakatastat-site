@@ -28,6 +28,44 @@
 
   <!-- Self-hosted, so the page still makes no third-party requests. Preloaded
        because it is the only font and it renders the headline. -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "ChakataStat",
+  "applicationCategory": "https://schema.org/BusinessApplication",
+  "applicationSubCategory": "Statistical analysis",
+  "operatingSystem": "Windows 10, Windows 11, Linux",
+  "softwareVersion": "0.11.0",
+  "url": "https://chakatastat.app/",
+  "description": "A desktop application for statistical data analysis: a spreadsheet-style data editor backed by a native Rust engine, with 95 analysis tools, an AI assistant, an MCP server, a headless batch runner and full reproducibility.",
+  "image": "https://chakatastat.app/assets/og-image.jpg",
+  "screenshot": [
+    "https://chakatastat.app/assets/screenshots/data-editor.png",
+    "https://chakatastat.app/assets/screenshots/output-view.png",
+    "https://chakatastat.app/assets/screenshots/forest-plot.png"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Edward Amani"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "downloadUrl": "https://apps.microsoft.com/detail/9MZNTHP2LF4S",
+  "featureList": [
+    "Spreadsheet-style data editor with a Variable View",
+    "95 analysis tools: regression, GLM, mixed models, survival, time series, Bayesian and nonparametric methods",
+    "Confirmatory factor analysis and meta-analysis with forest and funnel plots",
+    "Charts: histogram, scatterplot, boxplot, line, bar, error bar and Q-Q",
+    "Provider-neutral AI assistant",
+    "MCP server and headless batch runner",
+    "Reproducible syntax, plus HTML, Markdown, LaTeX and Python export"
+  ]
+}
+  </script>
   <link rel="preload" href="assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/styles.css">
 
@@ -139,7 +177,7 @@
         </p>
 
         <ul class="stat-row">
-          <li class="stat-item">
+          <li class="stat-item" data-reveal>
             <p class="stat-figure">191</p>
             <p class="stat-label">
               statistics pinned to independently computed reference values,
@@ -147,7 +185,7 @@
               tolerance.
             </p>
           </li>
-          <li class="stat-item">
+          <li class="stat-item" data-reveal>
             <p class="stat-figure">45</p>
             <p class="stat-label">
               <a href="https://www.itl.nist.gov/div898/strd/">NIST Statistical
@@ -155,7 +193,7 @@
               agreement against their certified values.
             </p>
           </li>
-          <li class="stat-item">
+          <li class="stat-item" data-reveal>
             <p class="stat-figure">1,575</p>
             <p class="stat-label">
               automated tests across the engine and the application, run green
@@ -185,61 +223,110 @@
         </p>
 
         <div class="feature-grid">
-          <article class="feature-card">
-            <h3>Data editor</h3>
-            <p>
-              A fast, Excel-like sheet with a Variable View for metadata,
-              value labels, missing-value handling, and self-documenting
-              column tooltips.
-            </p>
-          </article>
-
-          <article class="feature-card">
+          <article class="feature-card feature-card--wide" data-reveal>
+            <span class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
+            </span>
             <h3>A broad Analyze program</h3>
-            <p>
-              Descriptives, regression, GLM and mixed models, survival and
-              time series, multivariate methods, Bayesian tests and more —
-              95 analysis tools in one catalog.
-            </p>
+            <p>Descriptives, regression, GLM and mixed models, survival and time series, multivariate methods, confirmatory factor analysis, meta-analysis and Bayesian tests &mdash; 95 analysis tools in one catalog, each reporting the conventional effect sizes beside the test they describe.</p>
           </article>
-
-          <article class="feature-card">
+          <article class="feature-card" data-reveal>
+            <span class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.5h18v13H3zM3 10h18M9 10v8.5M15 10v8.5"/></svg>
+            </span>
+            <h3>Data editor</h3>
+            <p>A fast, Excel-like sheet with a Variable View for metadata, value labels, missing-value handling, and self-documenting column tooltips.</p>
+          </article>
+          <article class="feature-card" data-reveal>
+            <span class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-6 4 3 5-8M3 21h18"/></svg>
+            </span>
             <h3>Graphs</h3>
-            <p>
-              Histograms, scatterplots, boxplots, line, bar (clustered or
-              stacked), error-bar and Q-Q charts in a unified Chart
-              Builder — plus scree plots,
-              dendrograms, forest and funnel plots and regression
-              diagnostics beside their analyses.
-            </p>
+            <p>Histograms, scatterplots, boxplots, line, bar, error-bar and Q-Q charts in a unified Chart Builder &mdash; plus scree plots, dendrograms, forest and funnel plots beside their analyses.</p>
           </article>
-
-          <article class="feature-card">
+          <article class="feature-card feature-card--wide" data-reveal>
+            <span class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9zM18 15l.9 2.1L21 18l-2.1.9L18 21l-.9-2.1L15 18l2.1-.9z"/></svg>
+            </span>
             <h3>AI assistant</h3>
-            <p>
-              A provider-neutral agent — Claude, or any OpenAI-compatible
-              backend, including a local Ollama — that runs analyses in
-              plain language and renders results inline.
-            </p>
+            <p>A provider-neutral agent &mdash; Claude, or any OpenAI-compatible backend, including a local Ollama that never leaves your machine &mdash; that runs real analyses on your open dataset in plain language, and renders the resulting tables and charts inline in the reply.</p>
           </article>
-
-          <article class="feature-card">
+          <article class="feature-card" data-reveal>
+            <span class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 7.5L4 12l4.5 4.5M15.5 7.5L20 12l-4.5 4.5M13.5 4l-3 16"/></svg>
+            </span>
             <h3>Reproducibility</h3>
-            <p>
-              Every GUI action emits an editable, re-runnable command.
-              Export output to HTML, Markdown or LaTeX, or as a Python
-              script.
-            </p>
+            <p>Every action emits an editable, re-runnable command. Export to HTML, Markdown, LaTeX or a Python script.</p>
           </article>
-
-          <article class="feature-card">
+          <article class="feature-card feature-card--wide" data-reveal>
+            <span class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4.5 13.5H11l-1 8.5 8.5-11.5H12z"/></svg>
+            </span>
             <h3>Native performance</h3>
-            <p>
-              A native Rust engine — an in-house columnar store with Parquet
-              I/O over Apache Arrow — does the heavy lifting off the UI
-              thread.
-            </p>
+            <p>A native Rust engine &mdash; an in-house columnar store with Parquet I/O over Apache Arrow &mdash; does the heavy lifting on a worker thread, so the interface never freezes on a long fit.</p>
           </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="stream" id="stream">
+      <div class="container">
+        <p class="eyebrow">One command stream</p>
+        <h2>Five ways in. The same analysis underneath.</h2>
+        <p class="section-lede">
+          The menus, the syntax console, the AI assistant, the MCP server and
+          the headless batch runner are not five integrations &mdash; they are
+          five front doors onto one command layer. Whichever you use, the same
+          engine runs the same call, so a result you got by clicking is a
+          result you can re-run in a script.
+        </p>
+
+        <ul class="stream-ways" data-reveal>
+          <li>Menus &amp; dialogs</li>
+          <li>Syntax console</li>
+          <li>AI assistant</li>
+          <li>MCP server</li>
+          <li>Batch runner</li>
+        </ul>
+
+        <div class="code-tabs" data-reveal>
+          <div class="code-tablist" role="tablist" aria-label="Ways to run the same analysis">
+            <button role="tab" id="tab-cks" aria-controls="panel-cks" aria-selected="true" class="code-tab" type="button">Syntax</button>
+            <button role="tab" id="tab-ai" aria-controls="panel-ai" aria-selected="false" tabindex="-1" class="code-tab" type="button">AI assistant</button>
+            <button role="tab" id="tab-py" aria-controls="panel-py" aria-selected="false" tabindex="-1" class="code-tab" type="button">Python</button>
+            <button role="tab" id="tab-cli" aria-controls="panel-cli" aria-selected="false" tabindex="-1" class="code-tab" type="button">Batch</button>
+          </div>
+
+          <div class="code-panel" role="tabpanel" id="panel-cks" aria-labelledby="tab-cks" tabindex="0">
+<pre><code><span class="c">// Recorded automatically as you click, and editable in place.</span>
+descriptives variables=[Age, BMI, SystolicBP]
+independent_ttest variables=[SystolicBP], grouping=Hypertensive</code></pre>
+          </div>
+
+          <div class="code-panel" role="tabpanel" id="panel-ai" aria-labelledby="tab-ai" tabindex="0" hidden>
+<pre><code><span class="c">// Plain language. The reply carries the real tables and charts.</span>
+Compare systolic blood pressure between the hypertensive
+and non-hypertensive groups, and show me the effect size.</code></pre>
+          </div>
+
+          <div class="code-panel" role="tabpanel" id="panel-py" aria-labelledby="tab-py" tabindex="0" hidden>
+<pre><code><span class="c"># The dataset stays in the native engine; nothing runs in Python.</span>
+import ChakataStat as ig
+
+with ig.open("health_study.ckd") as ds:
+    print(ds.descriptives(variables=["Age", "BMI", "SystolicBP"]))
+    ds.independent_ttest(variables=["SystolicBP"], grouping="Hypertensive")
+
+    df = ds.to_polars()          <span class="c"># one hop to the wider ecosystem</span></code></pre>
+          </div>
+
+          <div class="code-panel" role="tabpanel" id="panel-cli" aria-labelledby="tab-cli" tabindex="0" hidden>
+<pre><code><span class="c"># No window. CI-friendly exit code, report written to disk.</span>
+ChakataStat --run analysis.cks health_study.csv --out report.html
+
+<span class="c"># Or serve the same tools to an external agent over MCP:</span>
+ChakataStat --mcp health_study.csv</code></pre>
+          </div>
         </div>
       </div>
     </section>
@@ -248,59 +335,79 @@
       <div class="container">
         <h2>See it in action</h2>
         <p class="section-lede">
-          A real dataset, in the app — the data editor, its metadata view,
-          an Analyze dialog and its output — plus a meta-analysis
-          forest plot and the dark theme.
+          A real dataset, in the real application — not a mock-up. Pick a
+          view; click the shot to enlarge it.
         </p>
 
-        <div class="screenshot-grid">
-          <figure class="screenshot-card">
-            <button class="shot-trigger" type="button">
-              <img src="assets/screenshots/data-editor.png" alt="ChakataStat's data editor showing a loaded health-study dataset with numeric and categorical columns" loading="lazy">
-              <span class="visually-hidden"> — enlarge</span>
-            </button>
-            <figcaption>Data editor — a fast, spreadsheet-style view of your dataset</figcaption>
-          </figure>
+        <div class="shot-tabs" data-reveal>
+          <div class="shot-tablist" role="tablist" aria-label="Application screenshots">
+            <button role="tab" id="shot-tab-data" aria-controls="shot-panel-data" aria-selected="true" class="shot-tab" type="button">Data</button>
+            <button role="tab" id="shot-tab-vars" aria-controls="shot-panel-vars" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Variables</button>
+            <button role="tab" id="shot-tab-dialog" aria-controls="shot-panel-dialog" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Analyze</button>
+            <button role="tab" id="shot-tab-output" aria-controls="shot-panel-output" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Output</button>
+            <button role="tab" id="shot-tab-meta" aria-controls="shot-panel-meta" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Meta-analysis</button>
+            <button role="tab" id="shot-tab-dark" aria-controls="shot-panel-dark" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Dark theme</button>
+          </div>
 
-          <figure class="screenshot-card">
-            <button class="shot-trigger" type="button">
-              <img src="assets/screenshots/variable-view.png" alt="ChakataStat's Variable View showing column metadata: type, width, label, values, missing and measure" loading="lazy">
-              <span class="visually-hidden"> — enlarge</span>
-            </button>
-            <figcaption>Variable View — metadata for every column in one place</figcaption>
-          </figure>
+          <div class="shot-panel" role="tabpanel" id="shot-panel-data" aria-labelledby="shot-tab-data" tabindex="0">
+            <figure class="screenshot-card">
+              <button class="shot-trigger" type="button">
+                <img src="assets/screenshots/data-editor.png" alt="ChakataStat's data editor showing a loaded health-study dataset with numeric and categorical columns">
+                <span class="visually-hidden"> &mdash; enlarge</span>
+              </button>
+              <figcaption>A fast, spreadsheet-style view of your dataset &mdash; one case per row, one variable per column.</figcaption>
+            </figure>
+          </div>
 
-          <figure class="screenshot-card">
-            <button class="shot-trigger" type="button">
-              <img src="assets/screenshots/analyze-dialog.png" alt="The Frequencies dialog in ChakataStat with three variables selected, ready to run" loading="lazy">
-              <span class="visually-hidden"> — enlarge</span>
-            </button>
-            <figcaption>Every Analyze dialog is a couple of clicks away</figcaption>
-          </figure>
+          <div class="shot-panel" role="tabpanel" id="shot-panel-vars" aria-labelledby="shot-tab-vars" tabindex="0" hidden>
+            <figure class="screenshot-card">
+              <button class="shot-trigger" type="button">
+                <img src="assets/screenshots/variable-view.png" alt="ChakataStat's Variable View showing column metadata: type, width, label, values, missing and measure" loading="lazy">
+                <span class="visually-hidden"> &mdash; enlarge</span>
+              </button>
+              <figcaption>Variable View &mdash; type, label, value labels, missing values and measure for every column.</figcaption>
+            </figure>
+          </div>
 
-          <figure class="screenshot-card">
-            <button class="shot-trigger" type="button">
-              <img src="assets/screenshots/output-view.png" alt="ChakataStat's output view showing frequency tables for Smoking Status and Hypertensive" loading="lazy">
-              <span class="visually-hidden"> — enlarge</span>
-            </button>
-            <figcaption>Results render straight into the output log</figcaption>
-          </figure>
+          <div class="shot-panel" role="tabpanel" id="shot-panel-dialog" aria-labelledby="shot-tab-dialog" tabindex="0" hidden>
+            <figure class="screenshot-card">
+              <button class="shot-trigger" type="button">
+                <img src="assets/screenshots/analyze-dialog.png" alt="The Frequencies dialog in ChakataStat with three variables selected, ready to run" loading="lazy">
+                <span class="visually-hidden"> &mdash; enlarge</span>
+              </button>
+              <figcaption>Every procedure is a dialog away, and every run is journaled as a re-runnable command.</figcaption>
+            </figure>
+          </div>
 
-          <figure class="screenshot-card">
-            <button class="shot-trigger" type="button">
-              <img src="assets/screenshots/forest-plot.png" alt="A meta-analysis forest plot in ChakataStat: eight studies with confidence intervals and the pooled fixed- and random-effects diamonds" loading="lazy">
-              <span class="visually-hidden"> — enlarge</span>
-            </button>
-            <figcaption>Meta-analysis — forest and funnel plots, pooled and ready to read</figcaption>
-          </figure>
+          <div class="shot-panel" role="tabpanel" id="shot-panel-output" aria-labelledby="shot-tab-output" tabindex="0" hidden>
+            <figure class="screenshot-card">
+              <button class="shot-trigger" type="button">
+                <img src="assets/screenshots/output-view.png" alt="ChakataStat's output view showing frequency tables for Smoking Status and Hypertensive" loading="lazy">
+                <span class="visually-hidden"> &mdash; enlarge</span>
+              </button>
+              <figcaption>Results render straight into the output log, ready to export as HTML, Markdown or LaTeX.</figcaption>
+            </figure>
+          </div>
 
-          <figure class="screenshot-card">
-            <button class="shot-trigger" type="button">
-              <img src="assets/screenshots/histogram-dark.png" alt="ChakataStat's output view in dark theme showing a histogram of systolic blood pressure" loading="lazy">
-              <span class="visually-hidden"> — enlarge</span>
-            </button>
-            <figcaption>Every view, charts included, in light and dark themes</figcaption>
-          </figure>
+          <div class="shot-panel" role="tabpanel" id="shot-panel-meta" aria-labelledby="shot-tab-meta" tabindex="0" hidden>
+            <figure class="screenshot-card">
+              <button class="shot-trigger" type="button">
+                <img src="assets/screenshots/forest-plot.png" alt="A meta-analysis forest plot in ChakataStat: eight studies with confidence intervals and the pooled fixed- and random-effects diamonds" loading="lazy">
+                <span class="visually-hidden"> &mdash; enlarge</span>
+              </button>
+              <figcaption>Forest and funnel plots, pooled by fixed-effect, DerSimonian&ndash;Laird or REML random effects.</figcaption>
+            </figure>
+          </div>
+
+          <div class="shot-panel" role="tabpanel" id="shot-panel-dark" aria-labelledby="shot-tab-dark" tabindex="0" hidden>
+            <figure class="screenshot-card">
+              <button class="shot-trigger" type="button">
+                <img src="assets/screenshots/histogram-dark.png" alt="ChakataStat's output view in dark theme showing a histogram of systolic blood pressure" loading="lazy">
+                <span class="visually-hidden"> &mdash; enlarge</span>
+              </button>
+              <figcaption>Every view, charts included, in light and dark themes.</figcaption>
+            </figure>
+          </div>
         </div>
       </div>
     </section>
@@ -348,6 +455,7 @@
           <a class="btn btn-primary btn-lg" href="https://snapcraft.io/chakatastat" data-platform="linux">Get it from the Snap Store</a>
           <span class="btn btn-disabled btn-lg" aria-disabled="true">macOS — coming soon</span>
         </div>
+        <p class="download-meta">Version 0.11.0 · free to use · no account needed</p>
         <p class="download-note">
           Store installs are signed and update automatically. On Linux you
           can also grab the Debian/Ubuntu .deb from the

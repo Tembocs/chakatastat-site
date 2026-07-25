@@ -116,6 +116,85 @@ document.querySelectorAll(".shot-trigger").forEach((trigger) => {
 
 lightboxClose.addEventListener("click", closeLightbox);
 
+// Highlight the download button matching the visitor's platform. Deliberately
+// only a highlight: the other buttons stay exactly as available, because UA
+// sniffing is a guess and being wrong must not cost anyone their download.
+const platform = (navigator.userAgentData?.platform || navigator.platform || "")
+  .toLowerCase();
+const guess = platform.includes("win")
+  ? "windows"
+  : platform.includes("linux") && !platform.includes("android")
+    ? "linux"
+    : null;
+if (guess) {
+  const match = document.querySelector(`.download-buttons [data-platform="${guess}"]`);
+  if (match) match.classList.add("btn-suggested");
+}
+
+// Tabs — used by both the code samples and the screenshot frame. Implements
+// the standard pattern: one tab in the tab order, arrow keys to move between
+// them, Home/End to jump. Anything less means a keyboard user has to Tab
+// through every panel to reach the last one.
+function initTablist(list) {
+  const tabs = [...list.querySelectorAll('[role="tab"]')];
+  if (!tabs.length) return;
+
+  function select(tab, focus) {
+    tabs.forEach((t) => {
+      const on = t === tab;
+      t.setAttribute("aria-selected", String(on));
+      // Only the selected tab stays tabbable, so Tab leaves the group rather
+      // than walking through it.
+      if (on) t.removeAttribute("tabindex");
+      else t.setAttribute("tabindex", "-1");
+      const panel = document.getElementById(t.getAttribute("aria-controls"));
+      if (panel) panel.hidden = !on;
+    });
+    if (focus) tab.focus();
+  }
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => select(tab, false));
+    tab.addEventListener("keydown", (event) => {
+      const i = tabs.indexOf(tab);
+      let next = null;
+      if (event.key === "ArrowRight") next = tabs[(i + 1) % tabs.length];
+      else if (event.key === "ArrowLeft") next = tabs[(i - 1 + tabs.length) % tabs.length];
+      else if (event.key === "Home") next = tabs[0];
+      else if (event.key === "End") next = tabs[tabs.length - 1];
+      if (next) {
+        event.preventDefault();
+        select(next, true);
+      }
+    });
+  });
+}
+
+document.querySelectorAll('[role="tablist"]').forEach(initTablist);
+
+// Scroll reveal. The armed class is added here rather than sitting in the
+// markup so that with JavaScript disabled nothing is ever hidden — the
+// failure mode of a CSS-only version is a blank page.
+const revealTargets = document.querySelectorAll("[data-reveal]");
+if (
+  revealTargets.length &&
+  "IntersectionObserver" in window &&
+  window.matchMedia("(prefers-reduced-motion: no-preference)").matches
+) {
+  revealTargets.forEach((el) => el.classList.add("reveal-armed"));
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-revealed");
+        observer.unobserve(entry.target); // Reveal once, not on every pass.
+      });
+    },
+    { rootMargin: "0px 0px -10% 0px" },
+  );
+  revealTargets.forEach((el) => observer.observe(el));
+}
+
 // Keep Tab inside the dialog while it is open. The lightbox holds exactly one
 // focusable control, so the whole trap is "put focus back on it" — without
 // this, Tab walks off into the page behind the overlay, which is still there

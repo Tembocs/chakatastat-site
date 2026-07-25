@@ -6,9 +6,13 @@ statistical data analysis.
 Plain HTML/CSS/JS — no build step, no `node_modules`, no framework:
 
 ```
-index.html          one-page site: hero, features, screenshots, analyze catalog, download, footer
-css/styles.css       all styling (light/dark via prefers-color-scheme)
-js/main.js           mobile nav toggle, footer year, screenshot lightbox
+index.html          one-page site: hero, validation, features, command stream,
+                    screenshots, analyze catalog, download, footer
+robots.txt           crawl policy; points at the sitemap
+sitemap.xml          the three public URLs — update when a page is added
+css/styles.css       all styling (light/dark: system setting + a header toggle)
+js/main.js           theme toggle, platform-aware download hint, tab groups,
+                     scroll reveal, mobile nav, footer year, screenshot lightbox
 assets/
   logo-mark.svg       the ChakataStat brand mark
   favicon-256.png     favicon fallback
@@ -16,6 +20,27 @@ assets/
   fonts/              Inter (Latin subset, variable) — self-hosted, see below
   screenshots/        real app screenshots (captured from an actual release build)
 ```
+
+## Things that will bite you when editing
+
+- **The dark palette is written out twice** in `css/styles.css` — once behind
+  `prefers-color-scheme` (excluding an explicit light choice) and once behind
+  `[data-theme="dark"]`, because the theme has two independent triggers and
+  plain CSS cannot reuse one block under two selectors. Keep them identical.
+- **The hero's dark shot is a `<picture>` `<source>` keyed on a media query**,
+  which the theme toggle cannot affect. `js/main.js` rewrites that source's
+  `media` attribute when an explicit choice is active. If you touch either,
+  check both: the failure mode is a dark page around a light screenshot.
+- **Scroll reveal is armed from JavaScript**, not from the markup. That is
+  deliberate — a CSS-only version starts at `opacity: 0`, so with scripts off
+  the page would be blank rather than merely static.
+- **Structured data carries the version.** The JSON-LD block in `index.html`
+  has `softwareVersion`, and the download section prints it too. Both are part
+  of the version-bump sweep, along with the footer citation on **all three**
+  pages (the privacy policy was missed for six releases).
+- Chrome's `--force-dark-mode` is **not** a faithful way to check dark mode:
+  its auto-darkening filter blanks the already-dark screenshot. Force the
+  media queries on instead, or just use the toggle.
 
 ## Fonts
 

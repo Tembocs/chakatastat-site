@@ -596,11 +596,36 @@ section h2 {
   padding: 88px 0;
 }
 
+/* Bento rather than a uniform 3x2: two-column cards for the three features
+   that carry the most weight, so the grid has a rhythm and the eye is told
+   what matters. The card order and the spans together fill exactly three rows
+   of three — 2+1, 1+2, 1+2 — so there is never a hole to design around. */
 .feature-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   margin-top: 40px;
+}
+
+.feature-card--wide {
+  grid-column: span 2;
+}
+
+.feature-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  margin-bottom: 14px;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+  color: var(--color-primary);
+}
+
+.feature-icon svg {
+  width: 20px;
+  height: 20px;
 }
 
 .feature-card {
@@ -632,8 +657,7 @@ section h2 {
    state change itself still applies, it just arrives instantly). */
 @media (hover: hover) {
   .feature-card:hover,
-  .stat-item:hover,
-  .screenshot-card:hover {
+  .stat-item:hover {
     border-color: var(--border-hover);
     box-shadow: 0 0 0 1px var(--border-hover), var(--shadow-hover);
   }
@@ -641,8 +665,7 @@ section h2 {
 
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .feature-card,
-  .stat-item,
-  .screenshot-card {
+  .stat-item {
     transition: box-shadow 0.2s ease, border-color 0.2s ease;
   }
 }
@@ -657,6 +680,122 @@ section h2 {
   margin: 0;
 }
 
+/* The command-stream section: the architecture argument, made concrete. */
+
+.stream {
+  padding: 88px 0;
+}
+
+.stream h2 {
+  max-width: 20ch;
+}
+
+.stream-ways {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 0;
+  margin: 28px 0 32px;
+  list-style: none;
+}
+
+.stream-ways li {
+  position: relative;
+  padding: 8px 16px 8px 30px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.stream-ways li::before {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  margin-top: -3.5px;
+  border-radius: 50%;
+  background: var(--color-primary);
+}
+
+/* Code tabs and screenshot tabs share their shell. */
+.code-tabs,
+.shot-tabs {
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.code-tablist,
+.shot-tablist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px;
+  background: var(--color-bg-alt);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.code-tab,
+.shot-tab {
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: none;
+  color: var(--color-text-muted);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.code-tab:hover,
+.shot-tab:hover {
+  color: var(--color-text);
+}
+
+.code-tab[aria-selected="true"],
+.shot-tab[aria-selected="true"] {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-primary);
+}
+
+.code-tab:focus-visible,
+.shot-tab:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+}
+
+.code-panel:focus-visible,
+.shot-panel:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+.code-panel pre {
+  margin: 0;
+  padding: 24px;
+  overflow-x: auto;
+  font-size: 0.88rem;
+  line-height: 1.65;
+}
+
+.code-panel code {
+  font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo,
+    Consolas, monospace;
+  color: var(--color-text);
+}
+
+.code-panel .c {
+  color: var(--color-text-muted);
+}
+
 .screenshots {
   padding: 88px 0;
   background: var(--color-bg-alt);
@@ -664,11 +803,22 @@ section h2 {
   border-bottom: 1px solid var(--color-border);
 }
 
-.screenshot-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
+/* One large shot at a time instead of six thumbnails: at grid size every
+   capture was the same 1920x1080 window and none of them could actually be
+   read. */
+.shot-tabs {
   margin-top: 40px;
+}
+
+.shot-panel {
+  padding: 8px;
+}
+
+.shot-panel .screenshot-card {
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  background: none;
 }
 
 .screenshot-card {
@@ -699,9 +849,24 @@ section h2 {
   overflow: hidden;
 }
 
+/* Since the shot now sits inside the tab shell, the trigger itself carries the
+   hover and focus response rather than the card around it — the card's own
+   border and shadow would double up with the shell's. */
 .shot-trigger:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 3px;
+}
+
+@media (hover: hover) {
+  .shot-trigger:hover {
+    box-shadow: 0 0 0 1px var(--border-hover), var(--shadow-hover);
+  }
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .shot-trigger {
+    transition: box-shadow 0.2s ease;
+  }
 }
 
 .screenshot-card img {
@@ -709,13 +874,6 @@ section h2 {
   width: 100%;
   height: auto;
   border-radius: calc(var(--radius) - 4px);
-}
-
-/* Keyboard focus gets the same card treatment as hover — deliberately outside
-   the `hover: hover` block above, since focus reaches devices hover does not. */
-.screenshot-card:focus-within {
-  border-color: var(--border-hover);
-  box-shadow: 0 0 0 1px var(--border-hover), var(--shadow-hover);
 }
 
 /* Available to assistive technology, invisible on screen. */
@@ -849,6 +1007,36 @@ section h2 {
   margin-top: 28px;
 }
 
+.download-meta {
+  margin: 18px 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The visitor's own platform, promoted. Added by main.js from the UA so the
+   markup stays platform-neutral for anyone with JavaScript off — they simply
+   see all three buttons weighted equally, which is the current behaviour. */
+.btn-suggested {
+  position: relative;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 28%, transparent);
+}
+
+.download-buttons .btn-suggested::after {
+  content: "for your system";
+  position: absolute;
+  top: -10px;
+  right: -8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--color-text);
+  color: var(--color-bg);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
 .download-note {
   max-width: 52ch;
   margin: 20px auto 0;
@@ -940,16 +1128,45 @@ section h2 {
     grid-template-columns: repeat(2, 1fr);
   }
 
+  /* Two columns: a "wide" card spanning both is still a sensible emphasis, so
+     the spans are kept rather than flattened. */
   .analyze-inner {
     grid-template-columns: 1fr;
     text-align: left;
   }
 }
 
+/* Scroll reveal. One shared observer in main.js adds .is-revealed; everything
+   here is inside a reduced-motion guard, and the un-revealed state is only
+   ever applied by the script — so with JavaScript off, or motion reduced,
+   content is simply visible rather than stuck at opacity 0. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal].reveal-armed {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  [data-reveal].reveal-armed.is-revealed {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+}
+
 @media (max-width: 640px) {
-  .feature-grid,
-  .screenshot-grid {
+  .feature-grid {
     grid-template-columns: 1fr;
+  }
+
+  /* Every card is full width here, so the bento spans have to be cancelled or
+     they would ask for two of the one column that exists. */
+  .feature-card--wide {
+    grid-column: auto;
+  }
+
+  .code-panel pre {
+    padding: 18px;
+    font-size: 0.82rem;
   }
 
   .footer-inner {
