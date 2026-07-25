@@ -42,11 +42,26 @@ function closeLightbox() {
   if (lastFocused) lastFocused.focus();
 }
 
-document.querySelectorAll(".screenshot-card img").forEach((img) => {
-  img.addEventListener("click", () => openLightbox(img));
+// Bound to the button rather than the image, so Enter and Space open the
+// lightbox as well as a click — the image alone was mouse-only.
+document.querySelectorAll(".shot-trigger").forEach((trigger) => {
+  trigger.addEventListener("click", () => {
+    openLightbox(trigger.querySelector("img"));
+  });
 });
 
 lightboxClose.addEventListener("click", closeLightbox);
+
+// Keep Tab inside the dialog while it is open. The lightbox holds exactly one
+// focusable control, so the whole trap is "put focus back on it" — without
+// this, Tab walks off into the page behind the overlay, which is still there
+// and still clickable even though it looks dismissed.
+lightbox.addEventListener("keydown", (event) => {
+  if (event.key === "Tab") {
+    event.preventDefault();
+    lightboxClose.focus();
+  }
+});
 
 lightbox.addEventListener("click", (event) => {
   if (event.target === lightbox) closeLightbox();

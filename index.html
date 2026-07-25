@@ -85,9 +85,17 @@
                 <span></span><span></span><span></span>
               </span>
             </div>
-            <img src="assets/screenshots/data-editor.png" width="1920" height="1080"
-                 alt="The ChakataStat data editor showing a health-study dataset of 21 variables and 600 cases, with participant, age, sex, study zone and clinical measurement columns"
-                 fetchpriority="high" decoding="async">
+            <picture>
+              <!-- The dark capture is 1036px tall rather than 1080: it comes
+                   from a Windows run of the capture harness, whose client area
+                   is shorter than the Linux one. Each source carries its own
+                   dimensions so neither theme shifts layout while loading. -->
+              <source srcset="assets/screenshots/data-editor-dark.png"
+                      media="(prefers-color-scheme: dark)" width="1920" height="1036">
+              <img src="assets/screenshots/data-editor.png" width="1920" height="1080"
+                   alt="The ChakataStat data editor showing a health-study dataset of 21 variables and 600 cases, with participant, age, sex, study zone and clinical measurement columns"
+                   fetchpriority="high" decoding="async">
+            </picture>
           </figure>
         </div>
       </div>
@@ -222,32 +230,50 @@
 
         <div class="screenshot-grid">
           <figure class="screenshot-card">
-            <img src="assets/screenshots/data-editor.png" alt="ChakataStat's data editor showing a loaded health-study dataset with numeric and categorical columns" loading="lazy">
+            <button class="shot-trigger" type="button">
+              <img src="assets/screenshots/data-editor.png" alt="ChakataStat's data editor showing a loaded health-study dataset with numeric and categorical columns" loading="lazy">
+              <span class="visually-hidden"> — enlarge</span>
+            </button>
             <figcaption>Data editor — a fast, spreadsheet-style view of your dataset</figcaption>
           </figure>
 
           <figure class="screenshot-card">
-            <img src="assets/screenshots/variable-view.png" alt="ChakataStat's Variable View showing column metadata: type, width, label, values, missing and measure" loading="lazy">
+            <button class="shot-trigger" type="button">
+              <img src="assets/screenshots/variable-view.png" alt="ChakataStat's Variable View showing column metadata: type, width, label, values, missing and measure" loading="lazy">
+              <span class="visually-hidden"> — enlarge</span>
+            </button>
             <figcaption>Variable View — metadata for every column in one place</figcaption>
           </figure>
 
           <figure class="screenshot-card">
-            <img src="assets/screenshots/analyze-dialog.png" alt="The Frequencies dialog in ChakataStat with three variables selected, ready to run" loading="lazy">
+            <button class="shot-trigger" type="button">
+              <img src="assets/screenshots/analyze-dialog.png" alt="The Frequencies dialog in ChakataStat with three variables selected, ready to run" loading="lazy">
+              <span class="visually-hidden"> — enlarge</span>
+            </button>
             <figcaption>Every Analyze dialog is a couple of clicks away</figcaption>
           </figure>
 
           <figure class="screenshot-card">
-            <img src="assets/screenshots/output-view.png" alt="ChakataStat's output view showing frequency tables for Smoking Status and Hypertensive" loading="lazy">
+            <button class="shot-trigger" type="button">
+              <img src="assets/screenshots/output-view.png" alt="ChakataStat's output view showing frequency tables for Smoking Status and Hypertensive" loading="lazy">
+              <span class="visually-hidden"> — enlarge</span>
+            </button>
             <figcaption>Results render straight into the output log</figcaption>
           </figure>
 
           <figure class="screenshot-card">
-            <img src="assets/screenshots/forest-plot.png" alt="A meta-analysis forest plot in ChakataStat: eight studies with confidence intervals and the pooled fixed- and random-effects diamonds" loading="lazy">
+            <button class="shot-trigger" type="button">
+              <img src="assets/screenshots/forest-plot.png" alt="A meta-analysis forest plot in ChakataStat: eight studies with confidence intervals and the pooled fixed- and random-effects diamonds" loading="lazy">
+              <span class="visually-hidden"> — enlarge</span>
+            </button>
             <figcaption>Meta-analysis — forest and funnel plots, pooled and ready to read</figcaption>
           </figure>
 
           <figure class="screenshot-card">
-            <img src="assets/screenshots/histogram-dark.png" alt="ChakataStat's output view in dark theme showing a histogram of systolic blood pressure" loading="lazy">
+            <button class="shot-trigger" type="button">
+              <img src="assets/screenshots/histogram-dark.png" alt="ChakataStat's output view in dark theme showing a histogram of systolic blood pressure" loading="lazy">
+              <span class="visually-hidden"> — enlarge</span>
+            </button>
             <figcaption>Every view, charts included, in light and dark themes</figcaption>
           </figure>
         </div>
