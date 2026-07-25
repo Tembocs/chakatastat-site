@@ -13,8 +13,19 @@ assets/
   logo-mark.svg       the ChakataStat brand mark
   favicon-256.png     favicon fallback
   og-image.jpg        1200x630 social-preview card (og:image / twitter:image)
+  fonts/              Inter (Latin subset, variable) — self-hosted, see below
   screenshots/        real app screenshots (captured from an actual release build)
 ```
+
+## Fonts
+
+`assets/fonts/inter-latin-var.woff2` is the Latin subset of the Inter
+variable font (48 KB, the whole 100–900 weight range in one file). It is
+**self-hosted on purpose**: the site makes no third-party requests at all, and
+pulling the font from a CDN would quietly break that. It is preloaded in the
+`<head>` of every page and declared once in `css/styles.css`, with the
+`unicode-range` that matches the subset so anything outside Latin falls back
+to the system stack rather than rendering as tofu.
 
 ## Previewing locally
 

@@ -26,6 +26,9 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://chakatastat.app/assets/og-image.jpg">
 
+  <!-- Self-hosted, so the page still makes no third-party requests. Preloaded
+       because it is the only font and it renders the headline. -->
+  <link rel="preload" href="assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -43,6 +46,7 @@
       </button>
 
       <nav id="nav-links" class="nav-links">
+        <a href="#validated">Validation</a>
         <a href="#features">Features</a>
         <a href="quick-start/">Quick Start</a>
         <a href="#screenshots">Screenshots</a>
@@ -71,11 +75,70 @@
             <a class="btn btn-primary btn-lg" href="#download">Download ChakataStat</a>
             <a class="btn btn-ghost btn-lg" href="#features">See what it does</a>
           </div>
-          <p class="hero-platforms">Windows · Linux</p>
+          <p class="hero-platforms">Windows · Linux · Free to use</p>
         </div>
-        <div class="hero-visual" aria-hidden="true">
-          <img src="assets/logo-mark.svg" alt="">
+        <div class="hero-shot">
+          <figure class="app-frame">
+            <div class="app-frame-bar">
+              <span class="app-frame-title">ChakataStat — health_study.ckd</span>
+              <span class="app-frame-controls" aria-hidden="true">
+                <span></span><span></span><span></span>
+              </span>
+            </div>
+            <img src="assets/screenshots/data-editor.png" width="1920" height="1080"
+                 alt="The ChakataStat data editor showing a health-study dataset of 21 variables and 600 cases, with participant, age, sex, study zone and clinical measurement columns"
+                 fetchpriority="high" decoding="async">
+          </figure>
         </div>
+      </div>
+    </section>
+
+    <section class="trust" id="validated">
+      <div class="container">
+        <p class="eyebrow">Numbers you can defend</p>
+        <h2>Every statistic checked against a reference implementation.</h2>
+        <p class="section-lede">
+          A statistics package is only worth as much as its numbers. Every
+          release is checked, end to end through the real engine, against
+          values computed independently by established reference packages —
+          and against certified values published by a national metrology
+          institute.
+        </p>
+
+        <ul class="stat-row">
+          <li class="stat-item">
+            <p class="stat-figure">191</p>
+            <p class="stat-label">
+              statistics pinned to independently computed reference values,
+              across 47 procedure families — each with its own recorded
+              tolerance.
+            </p>
+          </li>
+          <li class="stat-item">
+            <p class="stat-figure">45</p>
+            <p class="stat-label">
+              <a href="https://www.itl.nist.gov/div898/strd/">NIST Statistical
+              Reference Datasets</a> run end to end and scored by digits of
+              agreement against their certified values.
+            </p>
+          </li>
+          <li class="stat-item">
+            <p class="stat-figure">1,575</p>
+            <p class="stat-label">
+              automated tests across the engine and the application, run green
+              on Windows, macOS and Linux before a release ships.
+            </p>
+          </li>
+        </ul>
+
+        <p class="trust-note">
+          Reference values are computed with SciPy, statsmodels, scikit-learn,
+          lifelines and pingouin, and stored with the tolerance and provenance
+          of each one. Where a statistic has more than one valid definition —
+          a quantile method, a continuity correction, a contrast type — the
+          engine's convention is documented rather than hidden behind a loose
+          tolerance.
+        </p>
       </div>
     </section>
 
