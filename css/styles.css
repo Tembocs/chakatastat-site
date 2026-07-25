@@ -279,6 +279,21 @@ a {
   white-space: nowrap;
 }
 
+/* Documentation header: one link back to the site, so it reads as a return
+   rather than as a menu item competing with the guide's own sidebar. */
+.nav-links--single a {
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+@media (max-width: 620px) {
+  /* Slightly smaller at phone widths so brand, link and toggle still fit on
+     one row without the label wrapping. */
+  .nav-links--single a {
+    font-size: 0.85rem;
+  }
+}
+
 /* Brand on the left, links taking the slack, then the actions cluster. The
    theme toggle lives here rather than inside .nav-links so it survives the
    mobile collapse — a control you cannot reach without first opening a menu
@@ -1083,17 +1098,22 @@ section h2 {
    link there are seven of them, and together with the brand and the Download
    CTA they overflowed the header between roughly 700 and 900px. This is a
    wider breakpoint than the rest of the layout uses on purpose — the nav runs
-   out of room before the content columns do. Measured, not guessed: the full
-   nav needs ~894px at the tightened gap, so it collapses below 940 and the
-   tightened gap covers the band up to 1040. */
-@media (max-width: 1040px) {
+   out of room before the content columns do. Measured, not guessed: with the
+   Download item removed from the menu (the button beside it already does that
+   job) the full nav needs ~864px at the tightened gap, so it collapses below
+   890 and the tightened gap covers the band up to 980. Re-measure these two
+   numbers if a menu item is ever added back. */
+@media (max-width: 980px) {
   .nav-links {
     gap: 18px;
   }
 }
 
-@media (max-width: 940px) {
-  .nav-links,
+@media (max-width: 890px) {
+  /* The documentation pages' single back-link is exempt: there is nothing to
+     collapse, no hamburger to collapse it into, and hiding it would strand a
+     reader on a phone with no way back to the site. */
+  .nav-links:not(.nav-links--single),
   .nav-cta {
     display: none;
   }

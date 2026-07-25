@@ -66,20 +66,26 @@ if (themeToggle) {
   });
 }
 
+// The mobile menu exists only where there is a menu to collapse. Documentation
+// pages carry a single back-link instead, and have no toggle — so this is
+// guarded rather than assumed. Without the guard, a null here would throw and
+// take every later feature on the page down with it: theme, tabs, lightbox.
 const header = document.querySelector(".site-header");
 const navToggle = document.querySelector(".nav-toggle");
 
-navToggle.addEventListener("click", () => {
-  const isOpen = header.classList.toggle("nav-open");
-  navToggle.setAttribute("aria-expanded", String(isOpen));
-});
-
-document.querySelectorAll(".nav-links a").forEach((link) => {
-  link.addEventListener("click", () => {
-    header.classList.remove("nav-open");
-    navToggle.setAttribute("aria-expanded", "false");
+if (navToggle) {
+  navToggle.addEventListener("click", () => {
+    const isOpen = header.classList.toggle("nav-open");
+    navToggle.setAttribute("aria-expanded", String(isOpen));
   });
-});
+
+  document.querySelectorAll(".nav-links a").forEach((link) => {
+    link.addEventListener("click", () => {
+      header.classList.remove("nav-open");
+      navToggle.setAttribute("aria-expanded", "false");
+    });
+  });
+}
 
 // Screenshot lightbox: click a screenshot to enlarge it, click anywhere
 // outside the enlarged image (or the close button, or Esc) to dismiss.

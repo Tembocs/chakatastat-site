@@ -37,12 +37,14 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <nav id="nav-links" class="nav-links">
-        <a href="../../docs/">User Guide</a>
-        <a href="../../index.html#validated">Validation</a>
-        <a href="../../index.html#features">Features</a>
-        <a href="../../index.html#screenshots">Screenshots</a>
-        <a href="../../index.html#download">Download</a>
+      <!-- One link, not a copy of the site menu. While someone is reading the
+           guide, the sidebar is the navigation that matters; marketing anchors
+           (Features, Screenshots, …) only compete with it and push the reader
+           out of what they came for. All that is owed is a way back. Single
+           link means no mobile collapse either, so there is no hamburger on
+           these pages — main.js guards for its absence. -->
+      <nav id="nav-links" class="nav-links nav-links--single">
+        <a href="../../index.html">← Back to chakatastat.app</a>
       </nav>
 
       <div class="nav-actions">
@@ -56,9 +58,6 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../index.html#download">Download</a>
-        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
-          <span></span><span></span><span></span>
-        </button>
       </div>
     </div>
   </header>
