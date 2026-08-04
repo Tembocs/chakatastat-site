@@ -147,6 +147,20 @@ groups bars side by side (one color per cluster level, with a legend), or —
 with <strong>Stacked bars</strong> ticked — stacks those segments into one bar per level
 (part-to-whole). Value labels drive the category axis, so a <code>1/2</code> coded
 variable labelled <code>Male/Female</code> charts by its labels.</p>
+<p>With <strong>Stacked bars</strong> on, <strong>Show</strong> chooses what the stack means. <strong>Absolute
+values</strong> stacks the numbers themselves, so a taller bar is a bigger total.
+<strong>100% (composition)</strong> normalises every bar to fill the axis, so the totals are
+deliberately thrown away and only the <em>mix</em> is compared — the right choice when
+the categories are very different sizes and you want to ask &quot;what proportion&quot;,
+not &quot;how many&quot;. A clinic with 10 patients and one with 400 then sit side by
+side on equal terms.</p>
+<p>100% stacking needs every value to be zero or more, because a share of a total
+means nothing once the parts cancel. If the chart contains a negative it stacks
+absolute values instead and says so in its note.</p>
+<p><strong>Bar spacing</strong> sets how much of each category's width is left empty — drag it
+left for fatter bars that touch, right for thin ones. Leave it alone and the
+chart keeps its standard proportions; the setting is only recorded in the
+command once you move it.</p>
 <p><strong>Example.</strong> The mean <em>SystolicBP</em> by <em>SmokingStatus</em>, clustered by <em>Sex</em>.</p>
 <h3 id="error-bar">Error Bar</h3>
 <p><strong>Graphs → Error Bar…</strong>. The mean of a <strong>scale</strong> variable per level of a
@@ -182,12 +196,45 @@ re-runs even if the underlying palette rotation ever changes.</p>
 <p><strong>Graphs → Chart Builder…</strong> (<code>Ctrl+Shift+G</code>) is the general dialog: choose the
 chart type and assign variables to its roles. Use it when you want more control
 than the three quick dialogs give.</p>
+<p>The Builder also offers the one chart with no quick dialog of its own:</p>
+<h3 id="violin-plot">Violin Plot</h3>
+<p>A <strong>scale</strong> variable's distribution drawn as a mirrored density silhouette,
+optionally one violin per level of a <strong>category</strong> — with a quartile bar and a
+median dot inside each. Use it where a boxplot is not enough: a boxplot
+reduces a distribution to five numbers, so <strong>a two-humped (bimodal) group and
+an ordinary one can produce identical boxes</strong> — the violin's outline shows the
+humps.</p>
+<p>Two things worth knowing about how it is drawn:</p>
+<ul>
+<li>The smooth outline is a <strong>kernel density estimate</strong> (Gaussian kernel,
+Silverman's bandwidth — computed on the weighted case count when Weight
+Cases is on), validated against the reference implementation like every
+other statistic.</li>
+<li>Violin <strong>widths share one scale</strong>: the most concentrated group is the widest
+violin, and a group twice as concentrated is twice as wide. Some tools
+stretch every violin to the same width; ChakataStat deliberately does not,
+because that hides exactly the concentration differences the chart is for.</li>
+</ul>
+<p>A group with fewer than two distinct values has no density to draw; it keeps
+its quartile mark and the chart's note names it.</p>
+<p><strong>Example.</strong> <em>ReactionTime</em> by <em>Condition</em> — do the conditions differ in
+shape, not just in centre?</p>
 <h2 id="charts-attached-to-analyses">Charts attached to analyses</h2>
 <p>Some analyses can draw a chart built directly from their own result — look for a
 <strong>Plot…</strong> checkbox in the dialog. These include:</p>
 <ul>
 <li>the <strong>Kaplan-Meier</strong> survival curve (and cumulative-hazard curve), with an
 optional <strong>Show point markers</strong> checkbox at each step;</li>
+<li>the <strong>correlation heatmap</strong> from
+<a href="../analyze/correlation-and-regression/#bivariate">Correlate</a> (tick
+<strong>Plot heatmap</strong>): the coefficient matrix drawn as coloured cells, so the
+structure of a large matrix — a block of variables that move together, a
+lone unrelated one, a sign flip — is visible before you read a single
+number. The scale is <strong>diverging</strong>: one hue for negative, one for positive,
+and a neutral middle, so no relationship looks like nothing rather than
+like a middling one. It is pinned at −1…+1 rather than stretched to the
+strongest correlation present, so a weak matrix looks weak and two matrices
+can be compared;</li>
 <li>the <strong>ACF/PACF correlogram</strong> from Autocorrelation;</li>
 <li>the <strong>ARIMA forecast</strong> plot (observed, forecast and prediction band);</li>
 <li>the <strong>canonical discriminant</strong> scatter (optionally with a territorial map);</li>
@@ -203,6 +250,23 @@ last merges, with collapsed clusters sized in parentheses and a note saying
 so).</li>
 </ul>
 <p>See the relevant <a href="../analyze/">analysis pages</a> for each.</p>
+<h2 id="colors">Colors</h2>
+<p>A chart with <strong>one</strong> series is drawn in your theme's accent color, so it
+follows the appearance you picked in <a href="../settings/">Settings</a>.</p>
+<p>A chart with <strong>several</strong> series uses a fixed palette instead, and this is worth
+knowing about: the first group always gets the first color, the second group
+the second, and so on, <strong>whatever the chart is</strong>. Add a group, remove one, or
+filter your cases, and the groups that were already there keep the colors they
+had — so you can carry an identity from one chart to the next. The palette is
+chosen for readability rather than decoration: adjacent colors stay
+distinguishable with red-green color blindness, and they stay distinguishable
+in a black-and-white print, which matters if the chart is going into a paper.
+Light and dark themes use their own version of it.</p>
+<p>Past <strong>eight</strong> groups colors have to repeat, and the chart says so in its note
+line. When you see that, colour has stopped identifying a group on its own —
+group the categories, or split the chart, rather than trusting the legend.</p>
+<p>To override any of it, set the colors explicitly on the chart's command (the
+<code>colors</code> argument) — see <a href="../advanced/reproducibility/">Reproducibility</a>.</p>
 <h2 id="working-with-chart-output">Working with chart output</h2>
 <ul>
 <li>Charts appear as cards in the <strong>Output View</strong>, interleaved with tables in the

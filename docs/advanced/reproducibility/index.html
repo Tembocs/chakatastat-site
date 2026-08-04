@@ -139,10 +139,15 @@ geometry. For a single result, right-click its card and choose <strong>Export as
 CSV…</strong> to drop it straight into a spreadsheet (or use copy-to-clipboard).</p>
 <h2 id="exporting-a-session-as-python">Exporting a session as Python</h2>
 <p><strong>Export as Python…</strong> (from the syntax console) renders your recorded session as a
-runnable <strong>Python script</strong> for the ChakataStat Python client. The client (the
-<code>ChakataStat</code> Python package) drives a headless engine over MCP and exposes
-every analysis as a method:</p>
-<pre><code class="language-python">import ChakataStat as ig
+runnable <strong>Python script</strong> for the ChakataStat Python client — installable from
+PyPI:</p>
+<pre><code class="language-sh">pip install chakatastat
+</code></pre>
+<p>The client drives a headless engine over MCP and exposes every analysis as a
+method; it needs the ChakataStat app installed (it contains no statistics of
+its own), and its version tracks the app's, so install the client version
+matching your app:</p>
+<pre><code class="language-python">import chakatastat as ig
 
 ds = ig.open(&quot;health_study.ckd&quot;)     # spawns the headless engine
 ds.descriptives([&quot;Age&quot;, &quot;BMI&quot;, &quot;SystolicBP&quot;])

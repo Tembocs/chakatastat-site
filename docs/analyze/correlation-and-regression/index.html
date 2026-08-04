@@ -99,10 +99,18 @@ variables and modelling an outcome from predictors.</p>
 ordinal) variables.</p>
 <p><strong>Dialog.</strong> Move two or more variables into <strong>Variables</strong>; choose the
 coefficient(s): <strong>Pearson</strong> (linear), <strong>Spearman</strong> or <strong>Kendall's tau-b</strong> (rank).
-The Options section sets <strong>one- vs two-tailed</strong> significance and the
-<strong>missing-data policy</strong> (pairwise default, or listwise).</p>
+The Options section sets <strong>one- vs two-tailed</strong> significance, the
+<strong>missing-data policy</strong> (pairwise default, or listwise) and whether to
+<strong>Plot heatmap</strong>.</p>
 <p><strong>Output.</strong> A correlation matrix of coefficients with significance and the N
 behind each cell.</p>
+<p>With <strong>Plot heatmap</strong> ticked, the coefficient matrix is also drawn as coloured
+cells on a diverging scale — one hue for negative, one for positive, neutral at
+zero — which is how you see the <em>shape</em> of a matrix too big to read cell by
+cell: a block of variables that move together, one that relates to nothing, a
+sign that flips. The scale is fixed at −1…+1, not stretched to the strongest
+correlation present, so a matrix of weak associations looks weak and two
+matrices can be compared. See <a href="../../graphs/">Graphs</a>.</p>
 <p><strong>Example.</strong> <em>BMI</em>, <em>SystolicBP</em>, <em>FastingGlucose_mmolL</em> — do they move together?</p>
 <h3 id="partial">Partial</h3>
 <p><strong>When.</strong> Measure the association between two variables <strong>controlling for</strong> one or
@@ -154,9 +162,13 @@ variables. Options include:</p>
 <li><strong>Robust standard errors</strong> (HC0/HC1/HC3 sandwich estimators);</li>
 <li><strong>Forward / backward stepwise</strong> variable selection;</li>
 <li><strong>casewise influence diagnostics</strong> — Cook's distance and leverage;</li>
-<li><strong>diagnostic plots</strong> — a Residuals vs Fitted scatter and a Normal Q-Q plot of
-the standardized residuals, the two pictures a linearity/homoscedasticity
-and normality check calls for;</li>
+<li><strong>diagnostic plots</strong> — the classic three-plot assumption panel: a
+<strong>Residuals vs Fitted</strong> scatter (a random band around zero supports
+linearity; a curve says the linear form is wrong), a <strong>Scale-Location</strong> plot
+(√|standardized residual| against fitted — a flat band supports constant
+error variance, a rising wedge is the variance-grows-with-the-mean
+signature), and a <strong>Normal Q-Q</strong> of the standardized residuals (points on
+the reference line support the normality behind the significance tests);</li>
 <li><strong>save</strong> predicted values and residuals back as new variables.</li>
 </ul>
 <p><strong>Output.</strong> The model summary (R², adjusted R², standard error), the ANOVA of the
