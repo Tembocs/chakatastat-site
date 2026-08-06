@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Propensity Score — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/analyze/propensity/">
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Propensity Score — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/analyze/propensity/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../index.html">
+        <img class="brand-mark" src="../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <!-- One link, not a copy of the site menu. While someone is reading the
+           guide, the sidebar is the navigation that matters; marketing anchors
+           (Features, Screenshots, …) only compete with it and push the reader
+           out of what they came for. All that is owed is a way back. Single
+           link means no mobile collapse either, so there is no hamburger on
+           these pages — main.js guards for its absence. -->
+      <nav id="nav-links" class="nav-links nav-links--single">
+        <a href="../../../index.html">← Back to chakatastat.app</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../../">Contents</a></li>
+        <li><a href="../../quick-start/">Quick Start</a></li>
+        <li><a href="../../overview/">Overview</a></li>
+        <li><a href="../../getting-started/">Getting Started</a></li>
+        <li><a href="../../tutorial/">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../../working-with-data/">Working with Data</a></li>
+        <li><a href="../../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../">Analyzing Data</a></li>
+        <li><a href="../../graphs/">Graphs</a></li>
+        <li><a href="../../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
+        <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
+        <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="propensity-score">Propensity Score</h1>
+<p><strong>Analyze → Propensity Score.</strong> For observational data, where treatment was
+<strong>not</strong> randomized: the treated and untreated groups differ in ways that also
+drive the outcome, so comparing them directly confounds the treatment's effect
+with who happened to receive it. The propensity score is each case's
+probability of treatment given its covariates; matching or weighting on it
+builds a comparison where the groups look alike on those covariates — closer
+to what a randomized design would have produced.</p>
+<p>The workflow is three steps in one procedure: <strong>estimate</strong> the score,
+<strong>adjust</strong> (match or weight), and <strong>check balance</strong>. The adjusted sample is
+then handed back to you as an ordinary variable, so <em>any</em> analysis in the
+application can run on it.</p>
+<h2 id="the-data-layout">The data layout</h2>
+<ul>
+<li><strong>Treatment</strong> — a numeric variable coded <strong>0/1</strong>, with 1 = treated. Any
+other value stops the analysis with a message (recode first if your groups
+are labelled differently).</li>
+<li><strong>Covariates</strong> — numeric pre-treatment characteristics that may drive both
+treatment and outcome. Choose them for what they <em>are</em>, not for
+significance: the score model is a means to balance, not a model to
+interpret.</li>
+</ul>
+<blockquote>
+<p><strong>Weighting.</strong> The Weight Cases setting does <strong>not</strong> apply here — pairing
+weighted cases is not well defined, and layering the IPTW weight this
+procedure <em>produces</em> on top of another weight would compound two case
+multiplicities. An active weight variable only selects cases, and the
+output says so.</p>
+</blockquote>
+<h2 id="the-dialog">The dialog</h2>
+<p>Pick the <strong>Treatment</strong> and tick the <strong>Covariates</strong>. Then choose the
+<strong>Method</strong>:</p>
+<ul>
+<li><strong>Match nearest controls (ATT)</strong> — each treated case takes its nearest
+control(s) by propensity score, greedily, without replacement (a control is
+used once), hardest-to-match first. The estimand is the average effect
+<strong>on the treated</strong>: the matched sample resembles the treated group by
+construction.
+<ul>
+<li><strong>Controls per treated (k)</strong> — 1:k matching (default 1). A treated case
+keeps a partial set if the control pool runs out.</li>
+<li><strong>Caliper</strong> — the widest acceptable match distance, in standard
+deviations of the <strong>logit</strong> of the score (0.2 is the common
+recommendation). A treated case with no control inside the caliper is
+left <strong>unmatched and counted</strong> in the summary — better an honest smaller
+sample than a forced bad pair. Blank means no caliper.</li>
+</ul>
+</li>
+<li><strong>Weight by inverse probability (IPTW)</strong> — every case is kept and weighted:
+under the default <strong>ATE</strong> estimand, treated cases by 1/e and controls by
+1/(1−e), where e is the score; under <strong>ATT</strong>, treated cases keep weight 1
+and controls get e/(1−e). Check the summary's <strong>maximum weight</strong>: a huge
+weight means one case with a score near 0 or 1 dominates the weighted
+sample.</li>
+</ul>
+<p><strong>Save</strong> options: the matched-sample <strong>filter</strong> (<code>propensity_matched</code>, a 1/0
+variable — on by default for matching), the IPTW <strong>weight</strong>
+(<code>propensity_weight</code> — on by default for weighting), and optionally the
+<strong>score</strong> itself (<code>propensity_score</code>).</p>
+<h2 id="reading-the-output">Reading the output</h2>
+<ul>
+<li><strong>Propensity Score Model</strong> — the logistic model behind the score
+(coefficients, Wald tests, odds ratios). It is diagnostics, not findings:
+a &quot;significant&quot; covariate here is not a treatment effect.</li>
+<li><strong>Propensity Match Summary</strong> / <strong>Propensity Weight Summary</strong> — how many
+cases matched (and how many treated found no in-caliper control), or the
+weight distribution per group.</li>
+<li><strong>Propensity Balance</strong> — the point of the exercise: each covariate's
+<strong>standardized mean difference</strong> (treated − control, over the unadjusted
+pooled SD) <strong>before</strong> and <strong>after</strong> adjustment, on one shared scale.
+|SMD| ≤ 0.1 is the common adequate-balance benchmark. A covariate still
+imbalanced after adjustment is a warning to revisit the score model
+(interactions, transformations) — not to proceed regardless.</li>
+<li><strong>Balance Plot</strong> (the <strong>Plot balance</strong> checkbox, on by default) — the same
+numbers as paired points per covariate, with zero (perfect balance) always
+in view. Before → After collapsing toward the zero line is the picture of
+a successful adjustment.</li>
+</ul>
+<h2 id="using-the-adjusted-sample">Using the adjusted sample</h2>
+<p>This procedure estimates no treatment effect itself — deliberately. The saved
+column feeds the analysis you actually want, with the design question and the
+outcome question kept separate (decide the adjustment <em>before</em> looking at
+outcomes):</p>
+<ul>
+<li><strong>After matching:</strong> Data → <strong>Select Cases</strong>, condition
+<code>propensity_matched = 1</code>, then run the outcome analysis (a t test, a
+regression, …) on the matched sample.</li>
+<li><strong>After weighting:</strong> Data → <strong>Weight Cases</strong> by <code>propensity_weight</code>, then
+run the outcome analysis on the weighted sample.</li>
+</ul>
+<blockquote>
+<p><strong>Scope (v1).</strong> Greedy nearest-neighbour and IPTW only — no optimal,
+genetic or full matching, and no doubly-robust estimators. And no causal
+magic: matching and weighting adjust only for the covariates you supplied.
+An unmeasured confounder passes straight through.</p>
+</blockquote>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../index.html">Home</a> ·
+        <a href="../../../quick-start/">Quick Start</a> ·
+        <a href="../../../privacy-policy/">Privacy Policy</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../js/main.js"></script>
+</body>
+</html>

@@ -191,7 +191,7 @@ journaled command rather than a post-hoc chart editor, they show up in the
 <pre><code>line_chart y=[SystolicBP], x=Age, legend=bottom, colors=[&quot;#1f77b4&quot;], line_width=2.5
 </code></pre>
 <p><strong>Example.</strong> <em>colors=[&quot;#1f77b4&quot;]</em> keeps the first series' color fixed across
-re-runs even if the underlying palette rotation ever changes.</p>
+re-runs even if the palette itself ever changes.</p>
 <h2 id="the-chart-builder">The Chart Builder</h2>
 <p><strong>Graphs → Chart Builder…</strong> (<code>Ctrl+Shift+G</code>) is the general dialog: choose the
 chart type and assign variables to its roles. Use it when you want more control
@@ -244,6 +244,10 @@ Kaiser criterion line at 1 — on by default);</li>
 <a href="../analyze/meta-analysis/">Meta-Analysis</a> (per-study effects with the
 pooled diamond; effect against precision with the pseudo-CI funnel — both
 on by default);</li>
+<li>the <strong>balance plot</strong> from <a href="../analyze/propensity/">Propensity Score</a> (tick
+<strong>Plot balance</strong>, on by default): each covariate's standardized mean
+difference before and after matching/weighting as paired points, with zero
+— perfect balance — always in view;</li>
 <li>the <strong>dendrogram</strong> from Hierarchical Cluster (the merge tree from the
 agglomeration schedule — on by default; a very wide tree is rendered as its
 last merges, with collapsed clusters sized in parentheses and a note saying

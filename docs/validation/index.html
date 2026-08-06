@@ -168,6 +168,11 @@ never drift the committed inputs out from under the committed references.</p>
 <td>Kaplan-Meier (+ log-rank), Cox regression</td>
 </tr>
 <tr>
+<td><code>psm.csv</code></td>
+<td>80×3: <code>treat x1 x2</code></td>
+<td>Propensity score (logistic score model, matching, IPTW, balance)</td>
+</tr>
+<tr>
 <td><code>ts.csv</code></td>
 <td>120×1: <code>value</code> (AR(1))</td>
 <td>ACF / PACF / Box-Ljung, ARIMA</td>
@@ -175,7 +180,7 @@ never drift the committed inputs out from under the committed references.</p>
 </tbody>
 </table></div>
 <h2 id="coverage">Coverage</h2>
-<p>195 statistics across 48 procedure families — essentially the full analytic
+<p>203 statistics across 49 procedure families — essentially the full analytic
 catalog. (These two numbers are <strong>asserted</strong>, not transcribed: a guard in
 <code>numerical_validation_test.dart</code>
 parses this very sentence and fails if it disagrees with
@@ -1030,23 +1035,34 @@ defensible definition, the reference is computed in the engine's convention and
 the choice is recorded here — these are <strong>agreements about definitions, not
 discrepancies</strong>:</p>
 <ul>
-<li><strong>Quantiles</strong> (Explore percentiles) — the engine uses the <strong>Hazen</strong> definition
+<li>
+<p><strong>Quantiles</strong> (Explore percentiles) — the engine uses the <strong>Hazen</strong> definition
 (plotting position <code>(k − ½)/n</code>); the reference uses
 <code>numpy.percentile(method=&quot;hazen&quot;)</code>. (NumPy's default <code>&quot;linear&quot;</code> is a different,
-equally valid convention.)</li>
-<li><strong>Mann-Whitney</strong> — the engine reports the asymptotic test from a <strong>tie-corrected
+equally valid convention.)</p>
+</li>
+<li>
+<p><strong>Mann-Whitney</strong> — the engine reports the asymptotic test from a <strong>tie-corrected
 z with no continuity correction</strong>; the reference derives both <em>z</em> and <em>p</em> from
-that same z, rather than SciPy's continuity-corrected <em>p</em>.</li>
-<li><strong>Type III SS</strong> (factorial GLM) — only well-defined under <strong>sum-to-zero
+that same z, rather than SciPy's continuity-corrected <em>p</em>.</p>
+</li>
+<li>
+<p><strong>Type III SS</strong> (factorial GLM) — only well-defined under <strong>sum-to-zero
 contrasts</strong>; the reference fits <code>C(group, Sum)*C(sex, Sum)</code> so statsmodels'
 <code>anova_lm(typ=3)</code> reproduces the engine's main-effect SS in the presence of an
-interaction.</li>
-<li><strong>ARIMA</strong> — the engine fits AR by <strong>conditional least squares</strong>; the AR(1)
+interaction.</p>
+</li>
+<li>
+<p><strong>ARIMA</strong> — the engine fits AR by <strong>conditional least squares</strong>; the AR(1)
 reference is the OLS lag-1 regression (the exact CLS estimator), not
-statsmodels' unconditional ML, which would differ slightly.</li>
-<li><strong>Negative binomial</strong> — the dispersion <code>α</code> is ML-estimated, with a looser <code>5e-2</code>
-tolerance on the dispersion alone (the mean-model coefficients match tightly).</li>
-<li><strong>CFA</strong> — five recorded conventions, each pinned against the references.
+statsmodels' unconditional ML, which would differ slightly.</p>
+</li>
+<li>
+<p><strong>Negative binomial</strong> — the dispersion <code>α</code> is ML-estimated, with a looser <code>5e-2</code>
+tolerance on the dispersion alone (the mean-model coefficients match tightly).</p>
+</li>
+<li>
+<p><strong>CFA</strong> — five recorded conventions, each pinned against the references.
 (1) <strong>Scale setting</strong>: each factor's first indicator is the reference,
 its loading fixed at 1; factor variances are free. (2) <strong>χ² = N·F</strong> with
 divisor <strong>N</strong> (not N−1) — pinned by reproducing lavaan's published
@@ -1059,8 +1075,10 @@ exactly where the model misfits, so it is deliberately not used.
 a saturated (df = 0) model reports CFI = TLI = 1 and no χ² p-value by
 convention. (5) The RMSEA CI is <strong>90%</strong> by convention (not the analysis
 CI level), from inverting the noncentral χ². The sample covariance uses
-divisor N (weighted: Σw), matching the estimates the references produce.</li>
-<li><strong>Meta-analysis</strong> — three recorded conventions. (1) The between-study
+divisor N (weighted: Σw), matching the estimates the references produce.</p>
+</li>
+<li>
+<p><strong>Meta-analysis</strong> — three recorded conventions. (1) The between-study
 variance is the <strong>DerSimonian–Laird moment estimate, truncated at zero</strong>
 (as is I²) — the metafor/textbook convention; statsmodels'
 <code>combine_effects</code> reports the <em>raw</em> (possibly negative) τ² and pools with
@@ -1075,8 +1093,10 @@ to WLS of effect on SE under 1/SE² weights). The dataset's Weight Cases
 setting is <strong>meaningless by design</strong> for meta-analysis — rows are studies
 and the inverse-variance weights are the statistic's own — so, like time
 series, it carries the standard unweighted note and has no weighted
-reference.</li>
-<li><strong>Case weighting</strong> — the engine treats Weight Cases as a <strong>frequency weight</strong>:
+reference.</p>
+</li>
+<li>
+<p><strong>Case weighting</strong> — the engine treats Weight Cases as a <strong>frequency weight</strong>:
 a weight-<code>w</code> case behaves exactly like <code>w</code> coincident copies (the procedures
 weighted on 2026-06-18 — clustering, discriminant, RM-ANOVA/MANOVA, survival —
 are tested against that <em>weight ≡ replication</em> identity). One sub-case carries a
@@ -1091,8 +1111,10 @@ fixed-point iteration on the restricted likelihood — metafor's default
 estimator — bounded at zero, iteration-capped with a hit cap reported in
 the output note; Q, its p and I² stay defined from the fixed-effect fit
 and are estimator-independent, so only τ², the random-effects pooling and
-the per-study random weights change with the <code>tau_method</code> choice.</li>
-<li><strong>Violin plot (kernel density)</strong> — four recorded conventions (0.12.0).
+the per-study random weights change with the <code>tau_method</code> choice.</p>
+</li>
+<li>
+<p><strong>Violin plot (kernel density)</strong> — four recorded conventions (0.12.0).
 (1) The bandwidth is <strong>Silverman's scaling rule as scipy implements it</strong>,
 <code>h = (3W/4)^(−1/5)·σ</code> with σ the ddof-1 standard deviation — deliberately
 <em>not</em> R <code>bw.nrd0</code>'s <code>0.9·min(σ, IQR/1.34)·n^(−1/5)</code> rule of thumb, so the
@@ -1111,7 +1133,33 @@ evaluated on a fixed <strong>96-point grid over [min − 3h, max + 3h]</strong> 
 rows</em>, not quantiles, so no quantile convention can drift between the
 sides. (4) A group with fewer than two distinct values (or W ≤ 1) has
 <strong>no density by design</strong> — its statistics row keeps null bandwidth and the
-table note names the group; the run never fails for it.</li>
+table note names the group; the run never fails for it.</p>
+</li>
+<li>
+<p><strong>Propensity score</strong> — five recorded conventions (0.13.0). (1) The score
+model is the same binomial IRLS fit logistic regression uses, pinned
+against statsmodels' independent <code>Logit</code> MLE at 1e-6. (2) <strong>Matching
+distance and the caliper live on the logit of the score</strong>; the caliper
+option is a multiple of the SD of the logit over the analyzed sample —
+the scale Austin (2011)'s 0.2 recommendation is stated on. (3) Matching
+is <strong>greedy 1:k nearest-neighbour without replacement, estimand ATT</strong>,
+treated processed in descending score order with <em>every</em> tie (processing
+order and equidistant candidates) broken by dataset order, so the result
+is deterministic; the gate-4 matching ids are pinned against an
+<strong>independent NumPy implementation of exactly these conventions</strong>, not
+against a package — MatchIt's nearest-neighbour defaults differ
+(distance scale, processing order), so exact parity with its documented
+examples is not expected and a transcribed number would corroborate
+nothing. (4) <strong>Balance is the standardized mean difference over the
+unadjusted pooled SD</strong> √((s²T+s²C)/2), the same denominator before and
+after adjustment; IPTW weights are 1/e vs 1/(1−e) for <code>ate</code> (default)
+and 1 vs e/(1−e) for <code>att</code>. (5) The whole procedure is <strong>computed
+unweighted by design</strong>: weight ≡ replication is not well defined for
+pairing, and IPTW layered on a frequency weight would compound two case
+multiplicities — a pre-existing Weight Cases variable only selects
+cases (<code>mark_unweighted</code>), and the weight the procedure <em>emits</em> is the
+product.</p>
+</li>
 </ul>
 <h2 id="regenerating">Regenerating</h2>
 <p>The reference toolchain is needed only to <em>author</em> the values — CI just reads the

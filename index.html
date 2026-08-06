@@ -36,9 +36,9 @@
   "applicationCategory": "https://schema.org/BusinessApplication",
   "applicationSubCategory": "Statistical analysis",
   "operatingSystem": "Windows 10, Windows 11, Linux",
-  "softwareVersion": "0.12.0",
+  "softwareVersion": "0.13.0",
   "url": "https://chakatastat.app/",
-  "description": "A desktop application for statistical data analysis: a spreadsheet-style data editor backed by a native Rust engine, with 96 analysis tools, an AI assistant, an MCP server, a headless batch runner and full reproducibility.",
+  "description": "A desktop application for statistical data analysis: a spreadsheet-style data editor backed by a native Rust engine, with 97 analysis tools, an AI assistant, an MCP server, a headless batch runner and full reproducibility.",
   "image": "https://chakatastat.app/assets/og-image.jpg",
   "screenshot": [
     "https://chakatastat.app/assets/screenshots/data-editor.png",
@@ -57,8 +57,9 @@
   "downloadUrl": "https://apps.microsoft.com/detail/9MZNTHP2LF4S",
   "featureList": [
     "Spreadsheet-style data editor with a Variable View",
-    "96 analysis tools: regression, GLM, mixed models, survival, time series, Bayesian and nonparametric methods",
+    "97 analysis tools: regression, GLM, mixed models, survival, time series, Bayesian and nonparametric methods",
     "Confirmatory factor analysis and meta-analysis with forest and funnel plots",
+    "Propensity-score matching and inverse-probability weighting with balance diagnostics",
     "Charts: histogram, scatterplot, boxplot, violin, line, bar, error bar, Q-Q and correlation heatmap, on a colour-vision-validated palette",
     "Provider-neutral AI assistant",
     "MCP server and headless batch runner",
@@ -227,7 +228,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
             </span>
             <h3>A broad Analyze program</h3>
-            <p>Descriptives, regression, GLM and mixed models, survival and time series, multivariate methods, confirmatory factor analysis, meta-analysis and Bayesian tests &mdash; 96 analysis tools in one catalog, each reporting the conventional effect sizes beside the test they describe.</p>
+            <p>Descriptives, regression, GLM and mixed models, survival and time series, multivariate methods, confirmatory factor analysis, meta-analysis, propensity-score analysis and Bayesian tests &mdash; 97 analysis tools in one catalog, each reporting the conventional effect sizes beside the test they describe.</p>
           </article>
           <article class="feature-card" data-reveal>
             <span class="feature-icon" aria-hidden="true">
@@ -241,7 +242,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-6 4 3 5-8M3 21h18"/></svg>
             </span>
             <h3>Graphs</h3>
-            <p>Histograms, scatterplots, boxplots, violin plots, line, bar (clustered, stacked or 100%-stacked), error-bar and Q-Q charts in a unified Chart Builder &mdash; plus a correlation heatmap, regression diagnostics, scree plots, dendrograms, forest and funnel plots beside their analyses. Every multi-series chart uses a fixed palette validated for colour-vision safety, in light and dark.</p>
+            <p>Histograms, scatterplots, boxplots, violin plots, line, bar (clustered, stacked or 100%-stacked), error-bar and Q-Q charts in a unified Chart Builder &mdash; plus a correlation heatmap, regression diagnostics, scree plots, dendrograms, forest, funnel and propensity balance plots beside their analyses. Every multi-series chart uses a fixed palette validated for colour-vision safety, in light and dark.</p>
           </article>
           <article class="feature-card feature-card--wide" data-reveal>
             <span class="feature-icon" aria-hidden="true">
@@ -345,7 +346,7 @@ ChakataStat --mcp health_study.csv</code></pre>
             <button role="tab" id="shot-tab-dialog" aria-controls="shot-panel-dialog" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Analyze</button>
             <button role="tab" id="shot-tab-output" aria-controls="shot-panel-output" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Output</button>
             <button role="tab" id="shot-tab-meta" aria-controls="shot-panel-meta" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Meta-analysis</button>
-            <button role="tab" id="shot-tab-dark" aria-controls="shot-panel-dark" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Dark theme</button>
+            <button role="tab" id="shot-tab-dark" aria-controls="shot-panel-dark" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Propensity</button>
           </div>
 
           <div class="shot-panel" role="tabpanel" id="shot-panel-data" aria-labelledby="shot-tab-data" tabindex="0">
@@ -401,10 +402,10 @@ ChakataStat --mcp health_study.csv</code></pre>
           <div class="shot-panel" role="tabpanel" id="shot-panel-dark" aria-labelledby="shot-tab-dark" tabindex="0" hidden>
             <figure class="screenshot-card">
               <button class="shot-trigger" type="button">
-                <img src="assets/screenshots/violin-plot.png" alt="A violin plot in ChakataStat: systolic blood pressure by study zone, four mirrored density silhouettes with quartile bars, each zone in its own palette colour" loading="lazy">
+                <img src="assets/screenshots/balance-plot.png" alt="A propensity balance plot in ChakataStat: standardized mean differences for five covariates, before and after matching, with the after line pulled toward zero" loading="lazy">
                 <span class="visually-hidden"> &mdash; enlarge</span>
               </button>
-              <figcaption>New in 0.12.0: violin plots on a colour-vision-validated palette &mdash; the distribution shape a boxplot's five numbers can hide.</figcaption>
+              <figcaption>New in 0.13.0: propensity-score matching and weighting &mdash; the balance plot shows each covariate's standardized mean difference before and after adjustment.</figcaption>
             </figure>
           </div>
         </div>
@@ -414,7 +415,7 @@ ChakataStat --mcp health_study.csv</code></pre>
     <section class="analyze" id="analyze">
       <div class="container analyze-inner">
         <div class="analyze-figure">
-          <p class="analyze-number">96</p>
+          <p class="analyze-number">97</p>
           <p class="analyze-caption">analysis tools, one catalog</p>
         </div>
         <div class="analyze-copy">
@@ -454,7 +455,7 @@ ChakataStat --mcp health_study.csv</code></pre>
           <a class="btn btn-primary btn-lg" href="https://snapcraft.io/chakatastat" data-platform="linux">Get it from the Snap Store</a>
           <span class="btn btn-disabled btn-lg" aria-disabled="true">macOS — coming soon</span>
         </div>
-        <p class="download-meta">Version 0.12.0 · free to use · no account needed</p>
+        <p class="download-meta">Version 0.13.0 · free to use · no account needed</p>
         <p class="download-note">
           Store installs are signed and update automatically. On Linux you
           can also grab the Debian/Ubuntu .deb from the
@@ -472,7 +473,7 @@ ChakataStat --mcp health_study.csv</code></pre>
         proprietary software — free to use, not open source.
       </p>
       <p class="footer-cite">
-        Cite: Amani, E. (2026). <em>ChakataStat</em> (Version 0.12.0)
+        Cite: Amani, E. (2026). <em>ChakataStat</em> (Version 0.13.0)
         [Computer software].
       </p>
       <p class="footer-legal">
