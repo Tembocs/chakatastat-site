@@ -103,24 +103,120 @@ the scenes a variable holds one of just two storage types:</p>
 measurement level, missing rules) — that lives in the Variable View and travels
 with the data inside an <code>.ckd</code> file.</p>
 <h2 id="importing-data">Importing data</h2>
-<p><strong>File → Import Data…</strong> reads:</p>
+<p><strong>File → Import Data…</strong> reads the formats below. The <strong>Carries metadata</strong>
+column is the one to notice: those formats bring variable labels, value
+labels and more across with the data, so you do not re-type in the Variable
+View what the file already knew.</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Extensions</th>
+<th>Column types</th>
+<th>Carries metadata</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Delimited text</td>
+<td><code>.csv</code> <code>.tsv</code> <code>.txt</code> (also gzipped: <code>.csv.gz</code>, …)</td>
+<td>inferred</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Excel</td>
+<td><code>.xlsx</code></td>
+<td>inferred</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Legacy spreadsheets</td>
+<td><code>.xls</code> <code>.ods</code></td>
+<td>inferred</td>
+<td>—</td>
+</tr>
+<tr>
+<td>JSON</td>
+<td><code>.json</code>, and <code>.ndjson</code>/<code>.jsonl</code> (one object per line)</td>
+<td>inferred</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Parquet</td>
+<td><code>.parquet</code></td>
+<td><strong>typed</strong></td>
+<td>—</td>
+</tr>
+<tr>
+<td>Arrow / Feather</td>
+<td><code>.arrow</code> <code>.feather</code></td>
+<td><strong>typed</strong></td>
+<td>—</td>
+</tr>
+<tr>
+<td>SPSS</td>
+<td><code>.sav</code> <code>.zsav</code></td>
+<td><strong>typed</strong></td>
+<td><strong>labels, value labels, measure, missing values</strong></td>
+</tr>
+<tr>
+<td>Stata</td>
+<td><code>.dta</code></td>
+<td><strong>typed</strong></td>
+<td><strong>labels, value labels</strong></td>
+</tr>
+<tr>
+<td>SAS transport</td>
+<td><code>.xpt</code></td>
+<td><strong>typed</strong></td>
+<td><strong>variable labels</strong></td>
+</tr>
+</tbody>
+</table></div>
 <ul>
 <li><strong>CSV / TSV</strong> — the delimiter and header row are detected; each column's type
 is <strong>inferred</strong> (all-numeric → numeric, otherwise string). An import-options
-dialog lets you confirm before loading.</li>
-<li><strong>Excel (<code>.xlsx</code>)</strong> — the first worksheet, read in pure Dart.</li>
-<li><strong>Parquet</strong> — typed columns read directly by the native engine.</li>
+dialog lets you confirm before loading. A gzipped text file (<code>.csv.gz</code>,
+<code>.tsv.gz</code>, <code>.json.gz</code>, …) is decompressed and read the same way. Text files
+are read as <strong>UTF-8</strong> (a byte-order mark is handled); a file saved as
+UTF-16 or Latin-1 reports a decode error rather than importing garbled
+text — re-save it as UTF-8 and it opens.</li>
+<li><strong>Excel (<code>.xlsx</code>)</strong> — the first worksheet, read in pure Dart. Legacy
+<strong><code>.xls</code></strong> and OpenDocument <strong><code>.ods</code></strong> read the first sheet through the
+native engine, with the same header prompt and type inference.</li>
+<li><strong>Parquet / Arrow</strong> — typed columns read directly by the native engine.</li>
 <li><strong>JSON</strong> — either an array of records (<code>[{&quot;age&quot;: 30, …}, …]</code>, one object per
-case) or a columnar object (<code>{&quot;age&quot;: [30, 31, …], …}</code>). The column names come
-from the JSON, so there is no header prompt; each column's type is inferred
-like CSV.</li>
+case) or a columnar object (<code>{&quot;age&quot;: [30, 31, …], …}</code>); newline-delimited
+<strong><code>.ndjson</code>/<code>.jsonl</code></strong> has one object per line. The column names come from
+the JSON, so there is no header prompt; each column's type is inferred like
+CSV.</li>
+<li><strong>SPSS (<code>.sav</code>, <code>.zsav</code>)</strong> — typed columns <strong>plus the file's metadata</strong>:
+variable labels, value labels (<code>1 → Male</code> arrives as a ChakataStat value
+label), measurement levels, and discrete user-missing values. SPSS
+<em>ranges</em> of missing values have no equivalent here; the import says so
+in its summary rather than dropping them silently. Legacy portable
+<code>.por</code> files are not read — save them as <code>.sav</code> from SPSS first.</li>
+<li><strong>Stata (<code>.dta</code>)</strong> — typed columns plus variable labels and value labels
+(every <code>.dta</code> release is read). Daily dates (<code>%td</code>) and datetimes
+(<code>%tc</code>) arrive as readable dates; the rarer week/month/quarter display
+formats arrive as their stored numbers, and the import summary notes it.
+Stata's <strong>long strings (strL)</strong> are not carried yet: those cells import
+blank, and the summary says so rather than leaving you to notice.</li>
+<li><strong>SAS transport (<code>.xpt</code>)</strong> — the open format SAS writes for exchange
+(<code>PROC CPORT</code>/<code>COPY</code>), typed columns plus variable labels. SAS date, datetime
+and time formats arrive as readable dates and times. Two limits, both noted
+in the import summary: <strong>value labels are not in the file at all</strong> — SAS
+keeps them in a separate <code>.sas7bcat</code> catalog — and if the file holds more
+than one dataset, the first is imported. SAS's own <code>.sas7bdat</code> files are not
+read; export one as <code>.xpt</code> from SAS and open that.</li>
 </ul>
 <p>A progress dialog shows while large files load, and the import runs without
 freezing the window.</p>
 <blockquote>
 <p><strong>Tip.</strong> After importing a CSV, visit the Variable View and set measurement
 levels and labels. Type inference gets storage right but cannot know that a
-numeric <code>1/2</code> column means <em>Male/Female</em> — that is a value-label job (below).</p>
+numeric <code>1/2</code> column means <em>Male/Female</em> — that is a value-label job (below).
+An SPSS or Stata import does this for you: the labels arrive with the data.</p>
 </blockquote>
 <h2 id="exporting-data">Exporting data</h2>
 <p><strong>File → Export Data…</strong> writes the current dataset (honouring any active case
@@ -230,9 +326,15 @@ the values actually present.</li>
 <li><strong>Bulk Rename Variables…</strong> — rename many variables with a <strong>regular
 expression</strong> (with <code>$1</code> group references), a live preview and collision-safe
 de-duplication. Ideal for stripping a common prefix or renaming <code>q1, q2, …</code>.</li>
-<li><strong>Define Variable Sets…</strong> — group related variables under a name; the Variable
-View's set filter then focuses on just that group. Sets are a view convenience
-— they never change the data — and persist with the session.</li>
+<li><strong>Define Variable Sets…</strong> — group related variables under a name, then pick
+the set in the Variable View's filter bar to focus on just that group.
+Since 0.14.0 the active set reaches everywhere you pick variables: the
+<strong>Data View shows only the set's columns</strong>, and <strong>analysis dialogs offer
+only the set's variables</strong> in their source lists — the way to keep a
+400-column survey workable. Sets are a view convenience — they never
+change the data, a hidden column stays in every analysis, and a variable
+you already selected in a dialog stays listed even if the set excludes
+it. Sets persist with the session.</li>
 </ul>
 <h3 id="the-data-dictionary-ckdict">The data dictionary (<code>.ckdict</code>)</h3>
 <p><strong>File → Export Data Dictionary…</strong> writes all variable metadata to a standalone,

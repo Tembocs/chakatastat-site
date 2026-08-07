@@ -1028,6 +1028,128 @@ packages of the era at similar or lower LREs on the same files (several
 failed Filip outright, and low single digits on SmLs07-09 were common). A
 current run always prints this table (the suite's <code>tearDownAll</code>), so the
 recorded numbers can be refreshed by pasting from any watched run.</p>
+<h2 id="statistics-package-file-formats">Statistics-package file formats</h2>
+<p><em>Added 2026-08-06 (release 0.14.0 item 2). Not a numerical gate — no statistic
+is computed here — but the same discipline applied to a different kind of
+correctness: does a <code>.sav</code>, <code>.dta</code> or <code>.xpt</code> arrive as the file actually says?</em></p>
+<p>The readers (<code>rust/src/foreign.rs</code>) are
+<code>ambers</code> (SPSS), <code>dta</code> (Stata) and <code>sas_xport</code> (SAS transport) — young,
+single-author, pure-Rust crates. That is a deliberate trade against vendoring
+the mature ReadStat C library, and the evidence below is what makes it
+defensible.</p>
+<p><strong>Two artifacts, the same shape as the numerical suite:</strong></p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Artifact</th>
+<th>Produced by</th>
+<th>Holds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test/fixtures/foreign/demo.{sav,dta,xpt}</code></td>
+<td><code>generate_foreign_fixtures.py</code></td>
+<td>small files <strong>written by pyreadstat</strong>, one of each metadata kind the <code>Variable</code> model carries</td>
+</tr>
+<tr>
+<td><code>test/fixtures/foreign/corpus/expected.json</code></td>
+<td><code>generate_foreign_corpus.py</code></td>
+<td>every cell and metadata item of 11 real-world files, as pyreadstat reads them</td>
+</tr>
+</tbody>
+</table></div>
+<p>Both generators <strong>corroborate before committing</strong>: the fixture writer reads
+its own output back and asserts the writer stored what was intended, and the
+corpus generator refuses to write ground truth it cannot verify (see the
+<code>.xpt</code> note below). Fixtures are create-if-absent, so a regeneration cannot
+silently churn committed bytes.</p>
+<h3 id="why-pyreadstat-is-a-valid-oracle-here--and-was-not-going-to-be">Why pyreadstat is a valid oracle here — and was not going to be</h3>
+<p>This is the one piece of reasoning worth preserving, because it <strong>inverted</strong>
+when the implementation route changed:</p>
+<ul>
+<li><strong>Under the original plan</strong> (vendor ReadStat), pyreadstat, R's <code>haven</code> and
+<code>pandas.read_spss</code> would all have been <em>the same implementation as the thing
+under test</em> — they are ReadStat wrappers. Comparing against them would have
+proven only that the library was called correctly, and could not have caught
+a ReadStat bug. The plan therefore specified GNU <strong>PSPP</strong> and <strong>IBM's SPSS
+Statistics Data File Driver</strong> as the oracles carrying independent evidence.</li>
+<li><strong>Under the shipped route</strong> (pure-Rust readers), pyreadstat shares <em>no code</em>
+with the readers under test. It is now a genuinely independent second
+implementation, and every corpus row is the cross-implementation check the
+plan wanted PSPP for.</li>
+</ul>
+<p>So PSPP and the IBM driver are <strong>optional corroboration, not a gate</strong>. Standing
+them up would add a third opinion rather than the first independent one. What
+would change this: adopting a ReadStat-based reader after all, at which point
+the original argument returns in full and an independent oracle becomes
+mandatory again.</p>
+<p><code>.xpt</code> goes one step further. Its corpus entry is cross-checked against
+<strong><code>pandas.read_sas</code></strong> — a native Python implementation independent of both
+ReadStat and our reader — and the generator <em>fails</em> rather than writing ground
+truth the two oracles disagree on. <code>pandas.read_sas</code> does not interpret SAS
+display formats, so date/datetime/time columns are excluded from that check and
+pinned against our own reader instead.</p>
+<h3 id="recorded-divergences">Recorded divergences</h3>
+<p>Where our reader and pyreadstat legitimately disagree, the app's behaviour is
+<strong>pinned</strong> in <code>test/foreign_corpus_test.dart</code>
+with its reason, exactly as a convention choice is recorded above — never
+loosened away:</p>
+<ul>
+<li><strong>Truncated multibyte strings</strong> (<code>tegulu.sav</code>): the file's Telugu text is cut
+mid-codepoint at the SPSS string width. pyreadstat drops the partial
+character; we surface U+FFFD. Neither invents data; ours shows something was
+cut.</li>
+<li><strong>SPSS QYR/MOYR/WKYR display formats</strong> (<code>simple_alltypes.sav</code>): pyreadstat
+leaves raw epoch seconds, we render real dates. Ours is the more useful
+behaviour, so it is kept and asserted date-<em>shaped</em> rather than exact-pinned
+(the exact rendering is upstream-formatting territory).</li>
+</ul>
+<h3 id="known-limits-surfaced-not-silent">Known limits, surfaced not silent</h3>
+<p>Each of these is reported in the import's warnings — to stderr headless, to the
+import summary in the GUI — so a user never has to infer them
+(production_readness.md gate 1):</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Limit</th>
+<th>Format</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>User-missing <strong>ranges</strong> (<code>lo..hi</code>)</td>
+<td>SPSS</td>
+<td>No host equivalent; dropped with a warning naming the variable</td>
+</tr>
+<tr>
+<td><strong>strL</strong> long strings</td>
+<td>Stata</td>
+<td>Not yet carried; import blank with a warning</td>
+</tr>
+<tr>
+<td>Week/month/quarter/half-year display formats</td>
+<td>Stata</td>
+<td>Import as the stored number, with a warning</td>
+</tr>
+<tr>
+<td>Partial-date formats (<code>MONYY</code>, <code>YYQ</code>, <code>YEAR</code>, …)</td>
+<td>SAS</td>
+<td>Import as the stored number, with a warning</td>
+</tr>
+<tr>
+<td><strong>Value labels</strong></td>
+<td>SAS</td>
+<td>Not in the file at all — SAS keeps them in a separate <code>.sas7bcat</code> catalog; a variable with a user-defined format is named in a warning</td>
+</tr>
+<tr>
+<td>Second and later datasets in a container</td>
+<td>SAS</td>
+<td>Only the first is imported; the rest are named in a warning</td>
+</tr>
+</tbody>
+</table></div>
 <h2 id="tolerances-and-recorded-conventions">Tolerances and recorded conventions</h2>
 <p>Most statistics agree to <code>1e-4</code>–<code>1e-6</code>. A looser tolerance always names a
 <em>reason</em> in the reference's <code>source</code> string. Where a statistic has more than one
@@ -1174,6 +1296,17 @@ dart run tool/cstool.dart test test/numerical_validation_test.dart
 <p>The package versions used for the committed values are recorded in the JSON
 header (<code>_versions</code>) — at the time of writing SciPy 1.18, statsmodels 0.14,
 scikit-learn 1.9, lifelines 0.30, pingouin 0.6, NumPy 2.5.</p>
+<p>The <strong>statistics-package format</strong> artifacts have their own, smaller toolchain
+(<code>pyreadstat</code> + <code>pandas</code>, and <code>xlwt</code>/<code>odfpy</code> for the spreadsheet fixtures):</p>
+<pre><code class="language-sh">python3 -m venv /tmp/fmtenv
+/tmp/fmtenv/bin/pip install pyreadstat pandas
+/tmp/fmtenv/bin/python tool/validation/generate_foreign_fixtures.py   # create-if-absent
+/tmp/fmtenv/bin/python tool/validation/generate_foreign_corpus.py     # rewrites expected.json
+dart run tool/cstool.dart test test/io_test.dart test/foreign_corpus_test.dart
+</code></pre>
+<p>The fixture writer is deliberately <strong>create-if-absent</strong>: <code>.sav</code> files embed a
+creation timestamp, so an unconditional rewrite would churn committed bytes on
+every run. Delete a fixture to genuinely regenerate it.</p>
 <h3 id="adding-a-procedure">Adding a procedure</h3>
 <ol>
 <li>In the generator, add a <code>add(&quot;&lt;family&gt;/&lt;stat&gt;&quot;, value, tol, &quot;&lt;source&gt;&quot;)</code> line

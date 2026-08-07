@@ -36,9 +36,9 @@
   "applicationCategory": "https://schema.org/BusinessApplication",
   "applicationSubCategory": "Statistical analysis",
   "operatingSystem": "Windows 10, Windows 11, Linux",
-  "softwareVersion": "0.13.0",
+  "softwareVersion": "0.14.0",
   "url": "https://chakatastat.app/",
-  "description": "A desktop application for statistical data analysis: a spreadsheet-style data editor backed by a native Rust engine, with 97 analysis tools, an AI assistant, an MCP server, a headless batch runner and full reproducibility.",
+  "description": "A desktop application for statistical data analysis: a spreadsheet-style data editor backed by a native Rust engine, with 97 analysis tools, native SPSS, Stata and SAS transport import, an AI assistant, an MCP server, a headless batch runner and full reproducibility.",
   "image": "https://chakatastat.app/assets/og-image.jpg",
   "screenshot": [
     "https://chakatastat.app/assets/screenshots/data-editor.png",
@@ -57,6 +57,7 @@
   "downloadUrl": "https://apps.microsoft.com/detail/9MZNTHP2LF4S",
   "featureList": [
     "Spreadsheet-style data editor with a Variable View",
+    "Native SPSS (.sav), Stata (.dta) and SAS transport (.xpt) import that carries variable labels, value labels and missing-value rules across, plus CSV, Excel, Parquet, Arrow/Feather, JSON and NDJSON",
     "97 analysis tools: regression, GLM, mixed models, survival, time series, Bayesian and nonparametric methods",
     "Confirmatory factor analysis and meta-analysis with forest and funnel plots",
     "Propensity-score matching and inverse-probability weighting with balance diagnostics",
@@ -149,12 +150,14 @@
               </span>
             </div>
             <picture>
-              <!-- The dark capture is 1036px tall rather than 1080: it comes
-                   from a Windows run of the capture harness, whose client area
-                   is shorter than the Linux one. Each source carries its own
-                   dimensions so neither theme shifts layout while loading. -->
+              <!-- Both captures are 1920x1080 Linux runs of the snap listing
+                   harness. Each source still carries its own dimensions so
+                   neither theme shifts layout while loading; keep them in step
+                   with the actual files when the scenes are recaptured — a
+                   declared height that does not match reserves a box of the
+                   wrong shape. -->
               <source srcset="assets/screenshots/data-editor-dark.png"
-                      media="(prefers-color-scheme: dark)" width="1920" height="1036">
+                      media="(prefers-color-scheme: dark)" width="1920" height="1080">
               <img src="assets/screenshots/data-editor.png" width="1920" height="1080"
                    alt="The ChakataStat data editor showing a health-study dataset of 21 variables and 600 cases, with participant, age, sex, study zone and clinical measurement columns"
                    fetchpriority="high" decoding="async">
@@ -236,6 +239,13 @@
             </span>
             <h3>Data editor</h3>
             <p>A fast, Excel-like sheet with a Variable View for metadata, value labels, missing-value handling, and self-documenting column tooltips.</p>
+          </article>
+          <article class="feature-card feature-card--wide" data-reveal>
+            <span class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8zM14 3v5h5M12 18v-7M9 14l3-3 3 3"/></svg>
+            </span>
+            <h3>Your files open directly</h3>
+            <p>SPSS (<code>.sav</code>), Stata (<code>.dta</code>) and SAS transport (<code>.xpt</code>) files import natively &mdash; no detour through CSV &mdash; and bring their metadata with them: variable labels from all three, value labels from SPSS and Stata, and SPSS measure levels and missing-value rules. Plus CSV/TSV (plain or gzipped), Excel (<code>.xlsx</code>, <code>.xls</code>, <code>.ods</code>), Parquet, Arrow/Feather, JSON and NDJSON. Where a detail cannot be carried across, the import says so rather than staying silent.</p>
           </article>
           <article class="feature-card" data-reveal>
             <span class="feature-icon" aria-hidden="true">
@@ -405,7 +415,7 @@ ChakataStat --mcp health_study.csv</code></pre>
                 <img src="assets/screenshots/balance-plot.png" alt="A propensity balance plot in ChakataStat: standardized mean differences for five covariates, before and after matching, with the after line pulled toward zero" loading="lazy">
                 <span class="visually-hidden"> &mdash; enlarge</span>
               </button>
-              <figcaption>New in 0.13.0: propensity-score matching and weighting &mdash; the balance plot shows each covariate's standardized mean difference before and after adjustment.</figcaption>
+              <figcaption>Propensity-score matching and weighting &mdash; the balance plot shows each covariate's standardized mean difference before and after adjustment.</figcaption>
             </figure>
           </div>
         </div>
@@ -455,7 +465,7 @@ ChakataStat --mcp health_study.csv</code></pre>
           <a class="btn btn-primary btn-lg" href="https://snapcraft.io/chakatastat" data-platform="linux">Get it from the Snap Store</a>
           <span class="btn btn-disabled btn-lg" aria-disabled="true">macOS — coming soon</span>
         </div>
-        <p class="download-meta">Version 0.13.0 · free to use · no account needed</p>
+        <p class="download-meta">Version 0.14.0 · free to use · no account needed</p>
         <p class="download-note">
           Store installs are signed and update automatically. On Linux you
           can also grab the Debian/Ubuntu .deb from the
@@ -473,7 +483,7 @@ ChakataStat --mcp health_study.csv</code></pre>
         proprietary software — free to use, not open source.
       </p>
       <p class="footer-cite">
-        Cite: Amani, E. (2026). <em>ChakataStat</em> (Version 0.13.0)
+        Cite: Amani, E. (2026). <em>ChakataStat</em> (Version 0.14.0)
         [Computer software].
       </p>
       <p class="footer-legal">
