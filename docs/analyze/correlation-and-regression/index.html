@@ -214,8 +214,45 @@ comes from a <strong>nonparametric bootstrap</strong> — Percentile or <strong>
 excludes zero is the evidence of mediation.</em> The bootstrap is unweighted (a
 Weight Cases variable is noted, not applied); Select Cases and Split File are
 honored.</p>
-<p><em>Scope (v1):</em> a continuous outcome, single or parallel mediators. Moderated
-mediation (a moderator and simple slopes) and serial mediators are not in this
+<h4 id="moderated-mediation">Moderated mediation</h4>
+<p>Mediation answers &quot;does X affect Y <em>through</em> M?&quot;; the question that follows in
+practice is &quot;<strong>for whom?</strong>&quot; — does the indirect effect differ by group, by
+severity, by dose. Pick an optional <strong>Moderator (W)</strong> and the analysis becomes
+moderated mediation, following the PROCESS (Hayes) model shapes. The
+<strong>Moderated path</strong> choice decides where W acts:</p>
+<ul>
+<li><strong>a: X → M</strong> (PROCESS model 7) — W changes how strongly X moves the
+mediator. The mediator model gains <code>W</code> and <code>X×W</code>.</li>
+<li><strong>b: M → Y</strong> (model 14) — W changes how strongly the mediator moves the
+outcome. The outcome model gains <code>W</code> and <code>M×W</code>.</li>
+<li><strong>Both paths</strong> (model 58) — both of the above.</li>
+</ul>
+<p>The output changes accordingly:</p>
+<ul>
+<li><strong>Path coefficients</strong> now include the moderated model's <code>W</code> and interaction
+terms (<code>a1/a2/a3</code>, <code>b1/b2/b3</code>), and the <strong>total-effect row disappears</strong> —
+with a moderator, <code>c = c′ + a·b</code> no longer holds unconditionally, so a
+&quot;total&quot; row would misreport.</li>
+<li><strong>Conditional Effects</strong> — the moderated path's <strong>simple slope</strong> at each
+probe value of W, with normal-theory inference. A moderator with at most
+five distinct values is treated as categorical and probed <strong>at each
+value</strong>; otherwise at its <strong>mean − 1 SD, mean, and mean + 1 SD</strong>.</li>
+<li><strong>Conditional Indirect Effects</strong> — the indirect effect at each probe value,
+each with a bootstrap interval. <em>A conditional indirect interval that
+excludes zero is evidence of mediation at that level of W.</em></li>
+<li><strong>Index of Moderated Mediation</strong> — the slope of the indirect effect as a
+linear function of W (<code>a3·b</code> or <code>a·b3</code>), with a bootstrap interval: <em>an
+index interval that excludes zero is evidence the mediation itself is
+moderated.</em> With <strong>both</strong> paths moderated the indirect effect is quadratic
+in W, no single index exists, and the output says so instead.</li>
+<li><strong>Interaction Plot</strong> (the <strong>Interaction plot</strong> checkbox, on by default) —
+the moderated path's fitted simple-slope lines, one per probe level of W,
+every other predictor held at its mean. Lines that fan apart <em>are</em> the
+moderation; parallel lines mean W changes nothing.</li>
+</ul>
+<p><em>Scope:</em> a continuous outcome, single or parallel mediators; one moderator on
+the a-path, b-path or both. Serial (causally ordered) mediators, three-way
+interactions and Johnson–Neyman regions of significance are not in this
 version.</p>
 <h2 id="general-linear-model">General Linear Model</h2>
 <p><strong>Analyze → General Linear Model.</strong> A <strong>factorial between-subjects ANOVA /

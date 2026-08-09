@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Panel Regression — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/analyze/panel/">
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Panel Regression — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/analyze/panel/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../index.html">
+        <img class="brand-mark" src="../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <!-- One link, not a copy of the site menu. While someone is reading the
+           guide, the sidebar is the navigation that matters; marketing anchors
+           (Features, Screenshots, …) only compete with it and push the reader
+           out of what they came for. All that is owed is a way back. Single
+           link means no mobile collapse either, so there is no hamburger on
+           these pages — main.js guards for its absence. -->
+      <nav id="nav-links" class="nav-links nav-links--single">
+        <a href="../../../index.html">← Back to chakatastat.app</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../../">Contents</a></li>
+        <li><a href="../../quick-start/">Quick Start</a></li>
+        <li><a href="../../overview/">Overview</a></li>
+        <li><a href="../../getting-started/">Getting Started</a></li>
+        <li><a href="../../tutorial/">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../../working-with-data/">Working with Data</a></li>
+        <li><a href="../../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../">Analyzing Data</a></li>
+        <li><a href="../../graphs/">Graphs</a></li>
+        <li><a href="../../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
+        <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
+        <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="panel-regression">Panel Regression</h1>
+<p><strong>Analyze → Regression → Panel Regression.</strong> For <strong>panel (longitudinal) data</strong>
+— the same entities (firms, patients, countries, stores) observed repeatedly
+over time. Repeated observations are an opportunity, not just a nuisance: each
+entity can serve as its own control, so effects can be estimated from
+<strong>within-entity variation</strong> alone, sweeping out everything about an entity
+that never changes — measured or not.</p>
+<p>That identification strategy is what distinguishes this procedure from adding
+entity dummies to an ordinary regression by hand, and from the
+<a href="../correlation-and-regression/#linear-mixed-model">Linear Mixed Model</a>, which
+overlaps statistically but frames its output around variance components rather
+than the fixed-/random-effects choice econometrics expects.</p>
+<h2 id="the-data-layout">The data layout</h2>
+<p>Panel data is entered in <strong>long format</strong> — one row per entity-period, with the
+identifiers as ordinary columns:</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>firm</th>
+<th>year</th>
+<th>invest</th>
+<th>value</th>
+<th>capital</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GM</td>
+<td>1935</td>
+<td>317.6</td>
+<td>3078.5</td>
+<td>2.8</td>
+</tr>
+<tr>
+<td>GM</td>
+<td>1936</td>
+<td>391.8</td>
+<td>4661.7</td>
+<td>52.6</td>
+</tr>
+<tr>
+<td>US Steel</td>
+<td>1935</td>
+<td>209.9</td>
+<td>1362.4</td>
+<td>53.8</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>Entity</strong> — which unit the row belongs to. Numeric or string; every row
+needs one.</li>
+<li><strong>Time</strong> (optional) — the period. When given, a duplicate entity-time pair
+stops the analysis with a message (it almost always means a data problem).
+Without it, rows are taken in dataset order within each entity.</li>
+<li><strong>Dependent</strong> and <strong>Regressors</strong> — ordinary numeric variables.</li>
+</ul>
+<p>Unbalanced panels (entities with different numbers of periods) are supported;
+the output's entity and period counts show what was actually estimated —
+dropped rows change the counts, never silently shrink the estimate.</p>
+<h2 id="choosing-an-estimator">Choosing an estimator</h2>
+<ul>
+<li><strong>Fixed effects (within)</strong> — the default. Each variable is demeaned by its
+entity mean and OLS runs on the deviations, which is equivalent to giving
+every entity its own intercept. Anything constant within an entity —
+industry, sex, an unmeasured &quot;management quality&quot; — is swept out, so FE is
+robust to time-invariant confounding, but it also <strong>cannot estimate</strong> the
+effect of a time-invariant regressor (the procedure stops with a message
+naming it).</li>
+<li><strong>Random effects (GLS)</strong> — treats the entity effect as a random draw
+uncorrelated with the regressors. More efficient than FE when that
+assumption holds, and it <em>can</em> estimate time-invariant regressors — but if
+the entity effect is correlated with a regressor, RE is biased. The
+reported <strong>θ</strong> shows how far toward FE the GLS transformation sat
+(θ = 0 is pooled OLS, θ → 1 is FE).</li>
+<li><strong>Pooled OLS</strong> — ignores the panel structure entirely; the baseline the
+other two are compared against.</li>
+</ul>
+<p><strong>Standard errors</strong>: <strong>Conventional</strong>, or <strong>Clustered by entity</strong> — robust to
+arbitrary within-entity correlation over time, the usual default in applied
+panel work whenever T is more than a couple of periods.</p>
+<h2 id="the-hausman-test--what-it-does-and-does-not-tell-you">The Hausman test — what it does and does not tell you</h2>
+<p>Whenever both FE and RE can be fitted, a <strong>Hausman Test</strong> table compares their
+slope estimates. Under the null hypothesis the entity effect is uncorrelated
+with the regressors, so FE and RE both estimate the same thing and RE is the
+efficient choice; a <strong>small p-value</strong> says their estimates differ by more than
+sampling noise — evidence the RE assumption fails, so use fixed effects.</p>
+<p>What it does <strong>not</strong> tell you: a large p-value does not <em>prove</em> RE is valid
+(it may simply lack power), and the test says nothing about time-varying
+confounding, which neither estimator fixes. In finite samples the statistic
+can come out <strong>negative</strong> — a failure of the test's conditions, reported as
+computed with a note rather than hidden — and a negative H does not reject
+random effects.</p>
+<h2 id="reading-the-output">Reading the output</h2>
+<ul>
+<li><strong>Fixed Effects / Random Effects / Pooled OLS Coefficients</strong> — the chosen
+estimator's slopes with SEs, t, p and confidence intervals. The table note
+names the SE type and the degrees of freedom.</li>
+<li><strong>Model Summary</strong> — the econometrics vocabulary: <strong>N</strong> (observations),
+<strong>n</strong> (entities), <strong>T min / mean / max</strong>, and the three R²s. For RE it adds
+<strong>σ_u</strong> (entity-effect SD), <strong>σ_e</strong> (idiosyncratic SD), <strong>ρ</strong> (the share of
+variance due to entities) and <strong>θ</strong>.</li>
+<li><strong>Estimator Comparison</strong> — all three estimators side by side with
+conventional SEs, so a coefficient's sensitivity to the choice is visible
+at a glance. An estimator that could not be fitted is named in the note.</li>
+<li><strong>Hausman Test</strong> — see above.</li>
+</ul>
+<h3 id="within-between-and-overall-r">Within, between and overall R²</h3>
+<p>The most common misreading of panel output is treating the three R²s as one
+number:</p>
+<ul>
+<li><strong>R² within</strong> — how well the model explains variation <strong>inside</strong> entities
+over time (on the demeaned data). This is the number FE actually maximizes,
+and the one to quote for a within identification strategy.</li>
+<li><strong>R² between</strong> — how well it explains differences <strong>across</strong> entity means.</li>
+<li><strong>R² overall</strong> — on the raw data, mixing the two.</li>
+</ul>
+<p>A model can have a high within R² and a near-zero between R² (or vice versa);
+which one matters depends on which variation answers your question.</p>
+<h2 id="the-conventions-behind-the-numbers">The conventions behind the numbers</h2>
+<p>Panel estimators differ across packages in ways that change every standard
+error, so the choices are stated here (and pinned against the reference
+package in the validation suite):</p>
+<ul>
+<li><strong>RE variance components: Swamy–Arora</strong>, the common default (<code>xtreg, re</code>,
+<code>plm</code>, <code>linearmodels</code>), with the harmonic mean T̄ on unbalanced panels.</li>
+<li><strong>FE degrees of freedom</strong>: the n − 1 absorbed entity effects <strong>are</strong>
+charged against the residual df (df = N − n − K), matching Stata's
+<code>xtreg, fe</code>. The intercept is the grand-mean constant, Stata-style.</li>
+<li><strong>Cluster-robust small-sample factor</strong>: <code>xtreg</code>'s
+G/(G−1) · (N−1)/(N−K), which does <strong>not</strong> charge the absorbed entity
+effects — Stata's <code>areg</code> does, and reports larger SEs for the same model.</li>
+<li><strong>Hausman</strong>: the classic form on conventional covariances, slopes only.</li>
+<li>Inference is <strong>t on the residual df</strong> for all three estimators, and the
+R²s are the 1 − SSR/TSS family (Stata defines between/overall R² as
+squared correlations, which differ).</li>
+</ul>
+<p>If your numbers disagree with another package, check its conventions on these
+points before suspecting the data.</p>
+<blockquote>
+<p><strong>Weighting.</strong> Computed <strong>unweighted by design</strong>: a frequency weight
+replicates cases, and no reference package defines the within/GLS
+transformations under that reading — an active Weight Cases variable only
+selects cases, and the output says so. Select Cases and Split File are
+honored.</p>
+</blockquote>
+<blockquote>
+<p><strong>Scope (v1).</strong> One-way (entity) effects, balanced or unbalanced panels.
+No two-way effects, no dynamic panels (Arellano–Bond), no Driscoll–Kraay
+or two-way clustered SEs, no between estimator or first differences.</p>
+</blockquote>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../index.html">Home</a> ·
+        <a href="../../../quick-start/">Quick Start</a> ·
+        <a href="../../../privacy-policy/">Privacy Policy</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../js/main.js"></script>
+</body>
+</html>

@@ -122,6 +122,25 @@ The session also remembers the script between launches.</p>
 start typing the name of any analysis, chart, transform, file or view command and
 run it without hunting through menus. It is built from the same tool catalog the
 menus, the AI and MCP use, so it can never drift out of sync.</p>
+<h3 id="direct-dispatch">Direct dispatch</h3>
+<p>The palette also speaks <code>.cks</code>. Type a <strong>fully-specified command</strong> — the same
+one-line grammar as the syntax console:</p>
+<pre><code>frequencies variables=[Age, BMI]
+</code></pre>
+<p>and a <strong>Run</strong> row appears at the top. Enter dispatches the call straight
+through the engine, bypassing the dialog, and journals <strong>exactly the line the
+dialog would have journaled</strong> — so a palette-run analysis replays like any
+other. This is for the moment you already know the call you want: the same
+user who edits the console should not have to re-enter it through a form.</p>
+<ul>
+<li>A <strong>partially-specified</strong> call (required arguments missing) does not error:
+the row offers to <strong>open the tool's dialog</strong> instead, and names what is
+missing.</li>
+<li>A call that fails (a mistyped variable, a bad argument value) shows the
+engine's message <strong>in the palette</strong>, with your text still editable.</li>
+<li>A plain word never triggers any of this — the fuzzy search only yields to
+the parser once the query contains an <code>=</code>.</li>
+</ul>
 <h2 id="headless-batch-mode---run">Headless batch mode (<code>--run</code>)</h2>
 <p>For pipelines, CI and reproducible research, run a script against a dataset with
 no window:</p>

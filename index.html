@@ -36,9 +36,9 @@
   "applicationCategory": "https://schema.org/BusinessApplication",
   "applicationSubCategory": "Statistical analysis",
   "operatingSystem": "Windows 10, Windows 11, Linux",
-  "softwareVersion": "0.14.0",
+  "softwareVersion": "0.15.0",
   "url": "https://chakatastat.app/",
-  "description": "A desktop application for statistical data analysis: a spreadsheet-style data editor backed by a native Rust engine, with 97 analysis tools, native SPSS, Stata and SAS transport import, an AI assistant, an MCP server, a headless batch runner and full reproducibility.",
+  "description": "A desktop application for statistical data analysis: a spreadsheet-style data editor backed by a native Rust engine, with 98 analysis tools, native SPSS, Stata and SAS transport import, an AI assistant, an MCP server, a headless batch runner and full reproducibility.",
   "image": "https://chakatastat.app/assets/og-image.jpg",
   "screenshot": [
     "https://chakatastat.app/assets/screenshots/data-editor.png",
@@ -58,9 +58,11 @@
   "featureList": [
     "Spreadsheet-style data editor with a Variable View",
     "Native SPSS (.sav), Stata (.dta) and SAS transport (.xpt) import that carries variable labels, value labels and missing-value rules across, plus CSV, Excel, Parquet, Arrow/Feather, JSON and NDJSON",
-    "97 analysis tools: regression, GLM, mixed models, survival, time series, Bayesian and nonparametric methods",
+    "98 analysis tools: regression, GLM, mixed models, survival, time series, Bayesian and nonparametric methods",
     "Confirmatory factor analysis and meta-analysis with forest and funnel plots",
     "Propensity-score matching and inverse-probability weighting with balance diagnostics",
+    "Panel regression: fixed effects, random effects and pooled OLS with the Hausman test and entity-clustered standard errors",
+    "Moderated mediation with conditional indirect effects, the index of moderated mediation and an interaction plot",
     "Charts: histogram, scatterplot, boxplot, violin, line, bar, error bar, Q-Q and correlation heatmap, on a colour-vision-validated palette",
     "Provider-neutral AI assistant",
     "MCP server and headless batch runner",
@@ -231,7 +233,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
             </span>
             <h3>A broad Analyze program</h3>
-            <p>Descriptives, regression, GLM and mixed models, survival and time series, multivariate methods, confirmatory factor analysis, meta-analysis, propensity-score analysis and Bayesian tests &mdash; 97 analysis tools in one catalog, each reporting the conventional effect sizes beside the test they describe.</p>
+            <p>Descriptives, regression, GLM and mixed models, survival and time series, multivariate methods, confirmatory factor analysis, meta-analysis, propensity-score analysis and Bayesian tests &mdash; 98 analysis tools in one catalog, each reporting the conventional effect sizes beside the test they describe.</p>
           </article>
           <article class="feature-card" data-reveal>
             <span class="feature-icon" aria-hidden="true">
@@ -357,6 +359,7 @@ ChakataStat --mcp health_study.csv</code></pre>
             <button role="tab" id="shot-tab-output" aria-controls="shot-panel-output" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Output</button>
             <button role="tab" id="shot-tab-meta" aria-controls="shot-panel-meta" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Meta-analysis</button>
             <button role="tab" id="shot-tab-dark" aria-controls="shot-panel-dark" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Propensity</button>
+            <button role="tab" id="shot-tab-moderation" aria-controls="shot-panel-moderation" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Moderation</button>
           </div>
 
           <div class="shot-panel" role="tabpanel" id="shot-panel-data" aria-labelledby="shot-tab-data" tabindex="0">
@@ -418,6 +421,16 @@ ChakataStat --mcp health_study.csv</code></pre>
               <figcaption>Propensity-score matching and weighting &mdash; the balance plot shows each covariate's standardized mean difference before and after adjustment.</figcaption>
             </figure>
           </div>
+
+          <div class="shot-panel" role="tabpanel" id="shot-panel-moderation" aria-labelledby="shot-tab-moderation" tabindex="0" hidden>
+            <figure class="screenshot-card">
+              <button class="shot-trigger" type="button">
+                <img src="assets/screenshots/interaction-plot.png" alt="A moderated-mediation interaction plot in ChakataStat: three fitted simple-slope lines for the moderator at its mean and one standard deviation either side, fanning apart as the predictor increases" loading="lazy">
+                <span class="visually-hidden"> &mdash; enlarge</span>
+              </button>
+              <figcaption>Moderated mediation &mdash; the interaction plot draws the simple slopes at each probe value of the moderator, so &ldquo;for whom?&rdquo; is a picture rather than a coefficient.</figcaption>
+            </figure>
+          </div>
         </div>
       </div>
     </section>
@@ -425,7 +438,7 @@ ChakataStat --mcp health_study.csv</code></pre>
     <section class="analyze" id="analyze">
       <div class="container analyze-inner">
         <div class="analyze-figure">
-          <p class="analyze-number">97</p>
+          <p class="analyze-number">98</p>
           <p class="analyze-caption">analysis tools, one catalog</p>
         </div>
         <div class="analyze-copy">
@@ -433,7 +446,8 @@ ChakataStat --mcp health_study.csv</code></pre>
           <p>
             Descriptive Statistics, Compare Means and Correlate; Regression
             (linear, logistic, Poisson, regularized, robust, nonlinear,
-            instrumental variables, mediation); General Linear Model, Linear Mixed
+            instrumental variables, panel data with fixed and random effects,
+            moderated mediation); General Linear Model, Linear Mixed
             Models and GLMM; Factor / PCA and confirmatory factor analysis,
             Cluster and Discriminant
             analysis; Survival (Kaplan-Meier, Cox, parametric); Time Series
@@ -465,7 +479,7 @@ ChakataStat --mcp health_study.csv</code></pre>
           <a class="btn btn-primary btn-lg" href="https://snapcraft.io/chakatastat" data-platform="linux">Get it from the Snap Store</a>
           <span class="btn btn-disabled btn-lg" aria-disabled="true">macOS — coming soon</span>
         </div>
-        <p class="download-meta">Version 0.14.0 · free to use · no account needed</p>
+        <p class="download-meta">Version 0.15.0 · free to use · no account needed</p>
         <p class="download-note">
           Store installs are signed and update automatically. On Linux you
           can also grab the Debian/Ubuntu .deb from the
@@ -483,7 +497,7 @@ ChakataStat --mcp health_study.csv</code></pre>
         proprietary software — free to use, not open source.
       </p>
       <p class="footer-cite">
-        Cite: Amani, E. (2026). <em>ChakataStat</em> (Version 0.14.0)
+        Cite: Amani, E. (2026). <em>ChakataStat</em> (Version 0.15.0)
         [Computer software].
       </p>
       <p class="footer-legal">
