@@ -17,6 +17,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://chakatastat.app/license/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://chakatastat.app/docs/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
