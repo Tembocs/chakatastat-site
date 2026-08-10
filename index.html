@@ -43,7 +43,8 @@
   "screenshot": [
     "https://chakatastat.app/assets/screenshots/data-editor.png",
     "https://chakatastat.app/assets/screenshots/output-view.png",
-    "https://chakatastat.app/assets/screenshots/forest-plot.png"
+    "https://chakatastat.app/assets/screenshots/forest-plot.png",
+    "https://chakatastat.app/assets/screenshots/scatterplot-matrix.png"
   ],
   "author": {
     "@type": "Person",
@@ -361,6 +362,7 @@ ChakataStat --mcp health_study.csv</code></pre>
             <button role="tab" id="shot-tab-meta" aria-controls="shot-panel-meta" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Meta-analysis</button>
             <button role="tab" id="shot-tab-dark" aria-controls="shot-panel-dark" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Propensity</button>
             <button role="tab" id="shot-tab-moderation" aria-controls="shot-panel-moderation" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Moderation</button>
+            <button role="tab" id="shot-tab-matrix" aria-controls="shot-panel-matrix" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Scatterplot matrix</button>
           </div>
 
           <div class="shot-panel" role="tabpanel" id="shot-panel-data" aria-labelledby="shot-tab-data" tabindex="0">
@@ -430,6 +432,16 @@ ChakataStat --mcp health_study.csv</code></pre>
                 <span class="visually-hidden"> &mdash; enlarge</span>
               </button>
               <figcaption>Moderated mediation &mdash; the interaction plot draws the simple slopes at each probe value of the moderator, so &ldquo;for whom?&rdquo; is a picture rather than a coefficient.</figcaption>
+            </figure>
+          </div>
+
+          <div class="shot-panel" role="tabpanel" id="shot-panel-matrix" aria-labelledby="shot-tab-matrix" tabindex="0" hidden>
+            <figure class="screenshot-card">
+              <button class="shot-trigger" type="button">
+                <img src="assets/screenshots/scatterplot-matrix.png" alt="A scatterplot matrix in ChakataStat: a grid of square panels, one scatterplot for every pair of numeric variables, variable names on the diagonal" loading="lazy">
+                <span class="visually-hidden"> &mdash; enlarge</span>
+              </button>
+              <figcaption>The scatterplot matrix &mdash; every numeric pair in one grid of square panels, the first look at a multivariate dataset.</figcaption>
             </figure>
           </div>
         </div>
