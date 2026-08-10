@@ -196,7 +196,7 @@ re-runs even if the palette itself ever changes.</p>
 <p><strong>Graphs → Chart Builder…</strong> (<code>Ctrl+Shift+G</code>) is the general dialog: choose the
 chart type and assign variables to its roles. Use it when you want more control
 than the three quick dialogs give.</p>
-<p>The Builder also offers the one chart with no quick dialog of its own:</p>
+<p>The Builder also offers the charts with no quick dialog of their own:</p>
 <h3 id="violin-plot">Violin Plot</h3>
 <p>A <strong>scale</strong> variable's distribution drawn as a mirrored density silhouette,
 optionally one violin per level of a <strong>category</strong> — with a quartile bar and a
@@ -219,6 +219,95 @@ because that hides exactly the concentration differences the chart is for.</li>
 its quartile mark and the chart's note names it.</p>
 <p><strong>Example.</strong> <em>ReactionTime</em> by <em>Condition</em> — do the conditions differ in
 shape, not just in centre?</p>
+<h3 id="scatterplot-matrix">Scatterplot Matrix</h3>
+<p>Every pair of the numeric variables you tick, drawn as one grid of small
+scatterplots — the standard <strong>first look</strong> at a dataset with several
+measurements, because it answers &quot;which of these move together?&quot; for all of
+them at once instead of one pair at a time.</p>
+<p>Reading it: the diagonal names the variable, so the panel in row <em>A</em> and
+column <em>B</em> plots <em>A</em> up the side against <em>B</em> along the bottom. Each pair
+appears <strong>twice</strong>, once either way up; that is deliberate, since a
+relationship can be easier to see in one orientation than the other.</p>
+<p>Three things worth knowing:</p>
+<ul>
+<li><strong>Every panel is square and shares its scales</strong> down its column and across
+its row. That is what lets you compare panels against each other — a
+stretched panel would flatten its cloud and make the same relationship look
+weaker than the one beside it.</li>
+<li><strong>Cases are dropped listwise</strong>: a case missing on <em>any</em> chosen variable
+leaves <em>every</em> panel, not just the ones involving that variable. The whole
+matrix is therefore drawn on one set of cases and its panels stay
+comparable; the chart's note says how many were dropped.</li>
+<li><strong>The variable count is capped at 8</strong> by default, because the panel count
+grows with the square — twelve variables is 144 panels, none of them big
+enough to read. If the cap bites, the note tells you which variables were
+kept and how to raise it (<strong>Maximum variables</strong>; set it to <code>0</code> to remove the
+limit entirely).</li>
+</ul>
+<p><strong>Example.</strong> <em>Age</em>, <em>BMI</em>, <em>SystolicBP</em> and <em>Cholesterol</em> together — before
+fitting anything, which pairs are related and which are not?</p>
+<h3 id="ecdf">ECDF</h3>
+<p>The <strong>empirical cumulative distribution</strong>: for each value on the x axis, the
+proportion of cases at or below it, drawn as a step that climbs from 0 to 1.</p>
+<p><strong>Use it instead of a histogram</strong> when the answer might depend on the bin
+width. A histogram's shape changes with its bin count — the same data can look
+bimodal or smooth depending on a choice you made, not on the data. An ECDF has
+no such choice to make: it plots every observation exactly where it falls. It
+is also the easiest way to read a <strong>percentile</strong> straight off a chart (find the
+proportion on the left axis, read across), and to compare two groups, since
+two curves that separate are two distributions that differ, and the biggest
+vertical gap between them is exactly the Kolmogorov-Smirnov statistic.</p>
+<p>The curve is a <strong>step</strong>, not a sloping line: the distribution genuinely does
+not change between one observed value and the next, and a sloped line would
+claim it does. Where several cases share a value the curve steps once, by
+their combined weight.</p>
+<p><strong>Example.</strong> <em>Salary</em> grouped by <em>Department</em> — do the departments differ
+across the whole range, or only at the top?</p>
+<h3 id="dot-plot-cleveland">Dot Plot (Cleveland)</h3>
+<p>One dot per category, placed at its value — a count, or the mean, sum or
+median of a scale variable.</p>
+<p><strong>Use it instead of a bar chart whenever your values do not start at zero.</strong> A
+bar says something with its <em>length</em>, so it is only honest when it grows from
+zero; if the axis starts at 60, a bar twice as long does not mean twice as
+much. A dot says something with its <em>position</em>, which stays true wherever the
+axis starts. That makes the dot plot the right choice for the very common case
+of comparing values in a narrow range — test scores between 70 and 85, prices
+between £40 and £55 — where a zero-based bar chart wastes the whole plot and a
+truncated one misleads.</p>
+<p>Two conventions:</p>
+<ul>
+<li>Categories are <strong>sorted by value, descending</strong>, by default. Sorting is half
+of what makes a dot plot readable — without a baseline to run along, the eye
+needs the order to do the work. Switch to <strong>Category order</strong> if the levels
+have a natural sequence (months, dose levels) that matters more.</li>
+<li>The faint line behind each dot runs the <strong>full width</strong> of the plot. It is a
+guide from the label across to the dot, not a bar — it deliberately does not
+stop at the value, because a line from the axis to the dot would be a bar
+from a non-zero baseline, the exact thing this chart exists to avoid.</li>
+</ul>
+<p>Long category names are welcome here: they sit along the left edge with room
+to breathe, where a bar chart would have to turn them on their side.</p>
+<p><strong>Example.</strong> Mean <em>SatisfactionScore</em> by <em>Region</em>, where every region scores
+between 6.8 and 7.9.</p>
+<h3 id="bubble-chart">Bubble Chart</h3>
+<p>A scatterplot whose marks carry a third numeric variable as their <strong>size</strong> —
+useful when two variables relate and a third explains some of the scatter
+(population behind a country's figures, sample size behind a site's result).</p>
+<p><strong>Area, never radius.</strong> The bubble's <em>area</em> is proportional to the value: a
+value twice as large is drawn with twice the ink, not twice the width. This is
+the single most common mistake in bubble charts — mapping the value to the
+radius makes a doubled value look four times bigger — and it is worth knowing
+that ChakataStat does not make it, if you are comparing against a chart drawn
+elsewhere.</p>
+<p>Bubbles are drawn largest first with a translucent fill and a solid outline, so
+a small bubble is never hidden under a big one. Cases with a <strong>zero or
+negative</strong> size have no area to draw and are dropped; the note says how many,
+rather than letting them vanish silently.</p>
+<p>Use it sparingly: area is read far less accurately than position, so a bubble
+chart answers &quot;roughly how big&quot; and not &quot;exactly how much&quot;. If the third
+variable is the point of the chart, put it on an axis instead.</p>
+<p><strong>Example.</strong> <em>LifeExpectancy</em> against <em>GDPPerCapita</em>, bubbles sized by
+<em>Population</em>.</p>
 <h2 id="charts-attached-to-analyses">Charts attached to analyses</h2>
 <p>Some analyses can draw a chart built directly from their own result — look for a
 <strong>Plot…</strong> checkbox in the dialog. These include:</p>
@@ -259,6 +348,14 @@ last merges, with collapsed clusters sized in parentheses and a note saying
 so).</li>
 </ul>
 <p>See the relevant <a href="../analyze/">analysis pages</a> for each.</p>
+<p><strong>These plots are part of the recorded command.</strong> Whether you asked for the
+survival curve, the hazard curve or the markers is journaled along with the
+analysis, so re-running the recorded command reproduces the <em>chart</em>, not just
+the tables. The survival curves and the canonical discriminant scatter also
+accept the same presentation arguments the Line Chart does — <code>legend</code>,
+<code>colors</code>, and (for the curves) <code>line_width</code> — so a styled plot survives a
+re-run unchanged. See
+<a href="../advanced/reproducibility/">Reproducibility</a>.</p>
 <h2 id="colors">Colors</h2>
 <p>A chart with <strong>one</strong> series is drawn in your theme's accent color, so it
 follows the appearance you picked in <a href="../settings/">Settings</a>.</p>
@@ -274,8 +371,40 @@ Light and dark themes use their own version of it.</p>
 <p>Past <strong>eight</strong> groups colors have to repeat, and the chart says so in its note
 line. When you see that, colour has stopped identifying a group on its own —
 group the categories, or split the chart, rather than trusting the legend.</p>
-<p>To override any of it, set the colors explicitly on the chart's command (the
-<code>colors</code> argument) — see <a href="../advanced/reproducibility/">Reproducibility</a>.</p>
+<h3 id="choosing-a-palette">Choosing a palette</h3>
+<p><strong>Settings → Chart colours</strong> offers a short list of palettes:</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Palette</th>
+<th>When to choose it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Standard</strong></td>
+<td>The default. Eight hues stepped to carry an even visual weight across a chart, so no one series shouts louder than the rest.</td>
+</tr>
+<tr>
+<td><strong>Colour-blind safe (Okabe–Ito)</strong></td>
+<td>Okabe &amp; Ito's published scheme, the de-facto standard in scientific publishing. Its colours separate considerably further under red-green colour blindness than the standard palette's — at the cost of a less even look, since it varies lightness as well as hue (that variation is part of how it works). Choose it if you know a reader is colour-blind, or if the chart is going into a publication that asks for an accessible palette.</td>
+</tr>
+</tbody>
+</table></div>
+<p>The list is deliberately short and closed — there is no free colour picker.
+Every palette offered here is checked, in both light and dark mode, for
+separation under simulated protanopia and deuteranopia, for separation under
+ordinary vision, and for no two slots collapsing into the same colour; a
+palette that fails is not offered. A hand-picked set of eight colours will
+almost always fail one of those checks without its author noticing, which is
+the defect a fixed palette exists to prevent.</p>
+<p>Changing the palette recolours every chart in the Output log immediately, and
+the choice is remembered between sessions.</p>
+<p>To override the palette for <strong>one</strong> chart, set the colors explicitly on that
+chart's command (the <code>colors</code> argument) — see
+<a href="../advanced/reproducibility/">Reproducibility</a>. That is the escape hatch for a
+one-off (matching a house style in a report, say) without changing what every
+other chart looks like.</p>
 <h2 id="working-with-chart-output">Working with chart output</h2>
 <ul>
 <li>Charts appear as cards in the <strong>Output View</strong>, interleaved with tables in the
@@ -298,7 +427,8 @@ order you ran them.</li>
       <p class="footer-legal">
         <a href="../../index.html">Home</a> ·
         <a href="../../quick-start/">Quick Start</a> ·
-        <a href="../../privacy-policy/">Privacy Policy</a>
+        <a href="../../privacy-policy/">Privacy Policy</a> ·
+        <a href="../../license/">License</a>
       </p>
       <p class="footer-docs-licence">
         The text of this documentation is licensed

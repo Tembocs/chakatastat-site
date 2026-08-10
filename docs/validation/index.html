@@ -190,7 +190,7 @@ never drift the committed inputs out from under the committed references.</p>
 </tbody>
 </table></div>
 <h2 id="coverage">Coverage</h2>
-<p>244 statistics across 51 procedure families — essentially the full analytic
+<p>261 statistics across 52 procedure families — essentially the full analytic
 catalog. (These two numbers are <strong>asserted</strong>, not transcribed: a guard in
 <code>numerical_validation_test.dart</code>
 parses this very sentence and fails if it disagrees with
@@ -1165,6 +1165,179 @@ import summary in the GUI — so a user never has to infer them
 </tr>
 </tbody>
 </table></div>
+<h2 id="glm-quantile-residuals--the-per-family-definitions">GLM quantile residuals — the per-family definitions</h2>
+<p><em>Decided 2026-08-09, before any code, as step 1a of
+<code>docs/releases/release_0.16.0.md</code> item 1 (kept private). The diagnostic panel
+for <strong>linear</strong> regression shipped in 0.12.0; extending it to the GLM families is
+new statistics, not plumbing, because &quot;residual of what?&quot; has a different answer
+per family. These are those answers.</em></p>
+<h3 id="the-residual-randomized-quantile-residuals-every-family">The residual: randomized quantile residuals, every family</h3>
+<p>For an observation <code>y</code> with fitted distribution <code>F(· ; θ̂)</code>, the <strong>quantile
+residual</strong> (Dunn &amp; Smyth 1996) is</p>
+<pre><code>r = Φ⁻¹(u),    u ~ Uniform( F(y⁻ ; θ̂), F(y ; θ̂) ]
+</code></pre>
+<p>where <code>F(y⁻)</code> is the left limit — <code>F(y−1)</code> for an integer-valued outcome, and
+<code>F(y)</code> itself for a continuous one, which collapses the interval to a point and
+makes the residual <strong>exact and non-random</strong>.</p>
+<p><strong>Why not deviance or Pearson.</strong> For a discrete outcome they are misleading <em>by
+construction</em>: the raw, deviance and Pearson residuals of a Bernoulli fit each
+take one value per outcome level at a given fitted mean, so the scatter forms
+<strong>arcs — one per level</strong> — and a user who recognises the Residuals-vs-Fitted
+layout reads structure that is an artefact of the outcome being binary, not
+evidence about the model. Poisson fits at small <code>μ</code> band the same way. Quantile
+residuals have no such artefact and are <strong>exactly N(0, 1)</strong> under a correctly
+specified model (treating θ̂ as known), for <em>every</em> family — so one reading of
+the panel applies across the whole catalog.</p>
+<p><strong>Gamma is the deliberate uniformity choice, and it departs from R.</strong> The
+outcome is continuous, so deviance residuals do <em>not</em> band and R's <code>plot.glm</code>
+would draw them. We use the exact (non-randomized) quantile residual anyway, so
+that one residual concept, one reference line and one sentence in the User Guide
+cover all six families. The panel already departs from R's default for the
+discrete families — that departure is the entire reason the panel exists — and
+being internally consistent is worth more than matching a default we have
+already, correctly, left behind. The User Guide states which residual is drawn
+so a user cross-checking against R is never surprised.</p>
+<h3 id="the-cdf-bracket-per-family">The CDF bracket per family</h3>
+<p><code>μ</code> is the fitted mean, <code>α</code> the NB2 dispersion, <code>φ</code> the gamma dispersion
+(the engine's Pearson statistic per residual df), <code>π</code> the structural-zero
+probability and <code>θ</code> the hurdle-crossing probability.</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Family</th>
+<th><code>F(y⁻)</code></th>
+<th><code>F(y)</code></th>
+<th>Randomized</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Binomial — logit / probit / cloglog</td>
+<td><code>y=0</code>: 0 · <code>y=1</code>: 1−μ</td>
+<td><code>y=0</code>: 1−μ · <code>y=1</code>: 1</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Poisson</td>
+<td><code>F_P(y−1; μ)</code></td>
+<td><code>F_P(y; μ)</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Negative binomial (NB2)</td>
+<td><code>F_NB(y−1; μ, α)</code></td>
+<td><code>F_NB(y; μ, α)</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Gamma</td>
+<td><code>F_Γ(y; ν=1/φ, rate=ν/μ)</code></td>
+<td>identical</td>
+<td><strong>no</strong></td>
+</tr>
+<tr>
+<td>Zero-inflated Poisson / NB</td>
+<td><code>F_ZI(y−1)</code></td>
+<td><code>F_ZI(y)</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Hurdle Poisson / NB</td>
+<td><code>F_H(y−1)</code></td>
+<td><code>F_H(y)</code></td>
+<td>yes</td>
+</tr>
+</tbody>
+</table></div>
+<p>with the two mixture CDFs written in terms of the count CDF <code>F_c</code> and its
+mass at zero <code>f_c(0)</code>:</p>
+<pre><code>F_ZI(k) = π + (1−π)·F_c(k)                            k ≥ 0,  F_ZI(−1) = 0
+F_H(0)  = 1−θ
+F_H(k)  = (1−θ) + θ·(F_c(k) − f_c(0)) / (1 − f_c(0))  k ≥ 1,  F_H(−1)  = 0
+</code></pre>
+<p>The three CDFs are <code>stats.rs</code>'s <code>poisson_cdf</code>, <code>negbin_cdf</code> and <code>gamma_cdf</code>,
+each built on the regularized incomplete gamma / beta functions the engine
+already carries, and each pinned against SciPy in <code>stats.rs</code>'s own tests.</p>
+<h3 id="the-seed-policy">The seed policy</h3>
+<p>Randomization collides with the reproducibility contract — the same journaled
+command must produce the same output — so the draw is <strong>seeded, from the
+engine's existing convention</strong>: the integer <code>seed</code> option, default <strong>1</strong>
+(<code>DEFAULT_SEED</code> in resample.rs), through
+the same SplitMix64 generator the bootstrap uses, drawn <strong>once per case in
+listwise order</strong>. Same command + same data ⇒ the same plot, always. The seed is
+named in the table note exactly as the bootstrap names its own.</p>
+<p>Two rejected alternatives, recorded so they are not re-litigated. A <strong>clock or
+entropy seed</strong> breaks the contract outright. A <strong>data-derived seed</strong> (hashing
+the response column, say) looks attractive but is worse than a constant: it
+changes when any case changes, so two runs on nearly-identical data get
+unrelated realizations and cannot be compared — the opposite of what a
+diagnostic is for.</p>
+<p>The seed is deliberately <strong>user-settable</strong>, because Dunn &amp; Smyth's own advice is
+to inspect several realizations: any single one carries randomization noise, and
+a feature that appears under one seed and not another is noise, not misfit.
+Varying <code>seed</code> is how that check is made, and because it is journaled a report
+can say which realization it shows.</p>
+<h3 id="the-reference-lines--where-the-linear-panels-convention-does-not-transfer">The reference lines — where the linear panel's convention does not transfer</h3>
+<ul>
+<li><strong>Quantile Residuals vs Linear Predictor</strong> — a horizontal line at <strong>zero</strong>.
+Quantile residuals have mean zero under a correct model, so this transfers
+unchanged from the OLS panel.</li>
+<li><strong>Q-Q Plot of Quantile Residual</strong> — the <strong>identity line (slope 1, intercept
+0)</strong>, <em>not</em> the first/third-quartile fit the linear panel draws (the R
+<code>qqline</code> convention <code>qq_plot</code> uses). Quantile residuals are standard normal
+<strong>by construction</strong> under a correct model, so the theoretical line is known a
+priori; fitting a line through the sample quartiles would absorb exactly the
+location and scale misfit the plot exists to reveal. This is the one place in
+the panel where the OLS convention is deliberately not carried over, and the
+reference-line table records <code>slope = 1, intercept = 0</code> as constants rather
+than as a fit.</li>
+</ul>
+<h3 id="the-x-axis-the-linear-predictor-not-the-fitted-mean">The x axis: the linear predictor, not the fitted mean</h3>
+<p>Both scatters are drawn against the <strong>linear predictor η</strong> (the link scale).
+This is R's <code>plot.glm</code> convention — <code>stats:::plot.lm</code> takes <code>predict(x)</code>, which
+for a <code>glm</code> object is the link-scale prediction, and carries the source comment
+<code>## != fitted() for glm</code>. On the response scale the fitted values of a binomial
+or count fit compress against their boundary and the plot loses its resolution.
+For the zero-inflated and hurdle models it is the <strong>count component's</strong> linear
+predictor, since that is the component the count CDF describes.</p>
+<h3 id="the-panel-names">The panel names</h3>
+<p>The OLS titles are never reused: &quot;Residuals vs Fitted&quot;, &quot;Scale-Location&quot; and
+&quot;Q-Q Plot of Std. Residual&quot; name different quantities, and a returning user must
+not be told they are looking at the three plots they already know.</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Emitted table</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Quantile Residuals vs Linear Predictor</code></td>
+<td>η against the quantile residual</td>
+</tr>
+<tr>
+<td><code>Q-Q Plot of Quantile Residual</code></td>
+<td>Blom rankits against the sorted residuals</td>
+</tr>
+<tr>
+<td><code>Q-Q Reference Line</code></td>
+<td>the identity line, as constants</td>
+</tr>
+</tbody>
+</table></div>
+<p>Each note names the family, says whether the residual is randomized, and gives
+the seed when it is.</p>
+<h3 id="undefined-residuals-are-skipped-not-nulled">Undefined residuals are skipped, not nulled</h3>
+<p>The 0.12.0 item-2d convention. A fitted probability at the boundary — perfect
+separation in a logistic fit — puts <code>u</code> at 0 or 1, so <code>Φ⁻¹(u)</code> is ±∞; that case
+is <strong>dropped from the table</strong> rather than emitted as a null. With no finite
+residual anywhere the table is empty and the chart layer's empty-check
+suppresses the plot, which is the honest outcome for a degenerate fit.</p>
+<h3 id="out-of-scope-for-v1">Out of scope for v1</h3>
+<p>No influence diagnostics for the GLM families (Cook's distance, leverage,
+DFBETA), no half-normal plots with simulated envelopes, and no binned-residual
+plot. Each is a defensible follow-up and each is its own validation problem.</p>
 <h2 id="tolerances-and-recorded-conventions">Tolerances and recorded conventions</h2>
 <p>Most statistics agree to <code>1e-4</code>–<code>1e-6</code>. A looser tolerance always names a
 <em>reason</em> in the reference's <code>source</code> string. Where a statistic has more than one
@@ -1300,7 +1473,7 @@ product.</p>
 <li>
 <p><strong>Panel regression</strong> — six recorded conventions (0.15.0), each decided
 <em>before</em> the core was written (the release plan's risk shape —
-<code>docs/release_0.15.0.md</code>, kept private — demanded exactly this) and each
+<code>docs/releases/release_0.15.0.md</code>, kept private — demanded exactly this) and each
 verified against the published Stata results for the classic 10-firm
 Grunfeld data before being pinned. The reference package is
 <strong><code>linearmodels</code></strong> (pinned in the JSON header), whose defaults reproduce
@@ -1389,6 +1562,58 @@ the <code>moderator</code> option is absent the output is <strong>byte-identical
 (the branch is taken before any moderated code runs), so every existing
 journaled <code>mediation</code> command replays unchanged.</p>
 </li>
+<li>
+<p><strong>The 0.16.0 chart repertoire</strong> — four chart kinds that add <strong>no new
+statistic</strong>, so none is pinned here; what they add is <em>reading</em> conventions,
+and those are recorded because a user comparing against another package will
+ask about them. (1) <strong>Scatterplot matrix</strong>: cases are dropped <strong>listwise</strong>,
+not pairwise — a matrix is read by comparing panels, and panels drawn on
+different case subsets are not comparable — with the dropped count in the
+note; the diagonal carries the <strong>variable name</strong> (base R <code>pairs</code>' default,
+not a density), both triangles are drawn, and the variable count is capped at
+<strong>8</strong> by the <code>max_cases</code> convention (<code>max_variables</code>, 0 removes it). Panels
+are laid in the largest centred <strong>square</strong> of the plot, because a stretched
+scatter flattens its cloud and would make one relationship look different in
+different cells. A density on the diagonal and correlations in the upper
+triangle are deliberate v1 exclusions — the second would put a statistic in a
+chart tool. (2) <strong>ECDF</strong>: ties step <strong>once</strong>, by their combined weight, so
+the curve is right-continuous; drawing one point per case would ramp through
+a tie, which is a distribution the data does not have. Weights are frequency
+weights on the engine-wide <em>weight ≡ replication</em> identity, asserted in
+<code>graphs.rs</code>'s <code>repertoire_tests</code>. Each group's curve is normalized <strong>within
+group</strong>, so every curve reaches 1. (3) <strong>Cleveland dot plot</strong>: categories are
+sorted <strong>by value, descending, by default</strong> (<code>sort</code> = <code>value</code> | <code>category</code>) —
+sorting is half of what makes a dot plot readable, and unlike a bar chart no
+baseline anchors the eye. The value axis deliberately <strong>does not start at
+zero</strong> (that is the whole argument for the form), which is why the leader
+line spans the full plot width rather than running from the axis to the dot:
+a partial leader draws a bar from the axis minimum, the exact lie the chart
+exists to avoid. (4) <strong>Bubble chart</strong>: <strong>area</strong> is proportional to the value,
+<code>r ∝ √size</code> — mapping the value to the radius inflates it by the square, and
+the rule lives in one exported <code>bubbleRadius</code> with a numeric test on it
+rather than inline in a paint loop. Non-positive sizes have no area and are
+dropped, with the count in the note rather than silently.</p>
+</li>
+<li>
+<p><strong>GLM quantile residuals</strong> — the per-family residual definitions, the seed
+policy, the reference lines and the panel names are decided and recorded in
+their own section above,
+<a href="#glm-quantile-residuals--the-per-family-definitions">GLM quantile residuals</a>
+(0.16.0). The two pinning conventions that belong in <em>this</em> list:
+(1) <strong>Gamma is pinned end to end at <code>1e-9</code></strong> — its residual is
+non-randomized, so <code>Φ⁻¹(F_Γ(y))</code> is a deterministic function of the fit and
+SciPy reproduces it exactly. (2) The <strong>discrete families are pinned as
+containment, not as point parity</strong>: the residual depends on a PRNG draw no
+reference package can reproduce, so each <code>glm_resid/*</code> id pins the <strong>midpoint
+of the case's CDF bracket</strong> as <code>value</code> with <strong>half the bracket width</strong> as
+<code>tol</code>, and the Dart probe returns <code>Φ(r)</code> — the existing <code>value ± tol</code>
+machinery then expresses exactly the assertion that matters, that the
+residual's probability integral transform falls inside the bracket SciPy
+computes. This checks the CDF <em>and</em> the randomization range per case, which a
+single transcribed number could not. Reproducibility itself is asserted
+separately, by running the same command twice and requiring the tables to
+agree exactly.</p>
+</li>
 </ul>
 <h2 id="regenerating">Regenerating</h2>
 <p>The reference toolchain is needed only to <em>author</em> the values — CI just reads the
@@ -1441,7 +1666,8 @@ tolerance to make a genuine discrepancy pass.</p>
       <p class="footer-legal">
         <a href="../../index.html">Home</a> ·
         <a href="../../quick-start/">Quick Start</a> ·
-        <a href="../../privacy-policy/">Privacy Policy</a>
+        <a href="../../privacy-policy/">Privacy Policy</a> ·
+        <a href="../../license/">License</a>
       </p>
       <p class="footer-docs-licence">
         The text of this documentation is licensed

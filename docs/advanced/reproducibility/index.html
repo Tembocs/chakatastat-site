@@ -114,6 +114,29 @@ line never crashes the run.</li>
 <li>The console and the GUI are <strong>two views of one stream</strong>: edit the text and
 re-run, or keep clicking menus and watch the script grow.</li>
 </ul>
+<h3 id="options-a-dialog-does-not-expose">Options a dialog does not expose</h3>
+<p>Every command is a tool name plus named arguments, and the console accepts
+arguments the dialog has no control for. Two groups are worth knowing about:</p>
+<p><strong>Chart presentation.</strong> <code>legend</code> (<code>auto</code> / <code>right</code> / <code>bottom</code> / <code>none</code>),
+<code>colors</code> (a list of hex strings, one per series, in series order) and
+<code>line_width</code> are accepted by the charts that draw a legend or a line — the line
+chart, bar chart, error bar, the Kaplan-Meier curves and the canonical
+discriminant plot. They are journaled, so a styled chart re-runs styled:</p>
+<pre><code>kaplan_meier time=Months, status=Event, factor=Treatment, plot=true,
+             legend=bottom, colors=[&quot;#1f77b4&quot;, &quot;#d62728&quot;], line_width=2.5
+</code></pre>
+<p>This is also the per-chart override for the palette chosen in
+<a href="../../settings/">Settings</a> — use it for a one-off (matching a house style in a
+report) without changing every other chart.</p>
+<p><strong>Randomisation seeds.</strong> Anything that draws random numbers takes a <code>seed</code>, and
+defaults to <code>1</code> so that a command is reproducible unless you say otherwise —
+the bootstrap, multiple imputation, and the
+<a href="../../analyze/correlation-and-regression/#diagnostic-plots-for-the-other-families">quantile residuals</a>
+behind a logistic or count model's diagnostic plots. Change it to check that a
+result is not an artefact of one particular draw:</p>
+<pre><code>logistic_regression dependent=Hypertensive, predictors=[Age, BMI],
+                    diagnostics=true, seed=7
+</code></pre>
 <h3 id="saving-and-opening-scripts">Saving and opening scripts</h3>
 <p>Save the script as an <code>.cks</code> file and open it later (or hand it to a colleague).
 The session also remembers the script between launches.</p>
@@ -203,7 +226,8 @@ command palette, user-defined tools and the Python export all build on.</p>
       <p class="footer-legal">
         <a href="../../../index.html">Home</a> ·
         <a href="../../../quick-start/">Quick Start</a> ·
-        <a href="../../../privacy-policy/">Privacy Policy</a>
+        <a href="../../../privacy-policy/">Privacy Policy</a> ·
+        <a href="../../../license/">License</a>
       </p>
       <p class="footer-docs-licence">
         The text of this documentation is licensed

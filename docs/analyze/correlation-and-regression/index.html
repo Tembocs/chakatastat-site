@@ -182,17 +182,90 @@ log-odds and report <strong>Exp(B) odds ratios</strong> with confidence interval
 (a normal latent variable) or <strong>Complementary log-log</strong> (an asymmetric link
 suited to rare events). Logit reports odds ratios; probit and cloglog report
 coefficients on the link scale with a Wald interval. Optional robust standard
-errors and forward/backward selection.</p>
+errors and forward/backward selection. <strong>Diagnostic plots</strong> are available and
+work differently from the Linear ones — see
+<a href="#diagnostic-plots-for-the-other-families">Diagnostic plots for the other families</a>.</p>
 <h3 id="poisson--negative-binomial">Poisson / Negative Binomial</h3>
 <p>For counts (e.g. a count of events). Negative Binomial adds an estimated
-dispersion parameter for over-dispersed counts. Both report rate ratios.</p>
+dispersion parameter for over-dispersed counts. Both report rate ratios. Both
+offer <a href="#diagnostic-plots-for-the-other-families">diagnostic plots</a>, as do the
+zero-inflated and hurdle count models.</p>
 <h3 id="gamma">Gamma</h3>
 <p>For a <strong>strictly positive, right-skewed continuous</strong> outcome — costs, durations,
 concentrations — where the spread grows with the mean. A <strong>Link</strong> option offers
 the <strong>Log</strong> link (the default — a multiplicative model whose <strong>Exp(B)</strong> is the
 factor change in the mean per unit predictor) or the canonical <strong>Inverse</strong> link.
 Reports the coefficients, an estimated dispersion φ (so the standard errors
-account for the scale), and a deviance / Pearson goodness-of-fit table.</p>
+account for the scale), and a deviance / Pearson goodness-of-fit table.
+<a href="#diagnostic-plots-for-the-other-families">Diagnostic plots</a> are available; as
+the outcome is continuous, Gamma's are exact rather than randomised.</p>
+<h3 id="diagnostic-plots-for-the-other-families">Diagnostic plots for the other families</h3>
+<p>The <strong>Diagnostic plots</strong> checkbox is offered on Binary Logistic, Poisson,
+Negative Binomial, Gamma and the zero-inflated / hurdle count models too — but
+what it draws is <em>not</em> the Linear panel above, and the difference is worth
+understanding before you compare a plot against one from another package.</p>
+<p><strong>Why not the same three plots.</strong> A residual is &quot;observed minus expected&quot;, and
+for a yes/no outcome the observed value is only ever 0 or 1. So at any given
+fitted probability there are just two possible residuals, and a
+Residuals-vs-Fitted scatter of a logistic model collapses into <strong>two curved
+bands</strong> — one for the yeses, one for the noes. Those bands are a property of
+the outcome being binary; they say nothing about whether the model fits. Read
+as though they were the OLS panel, they invite you to see structure that is not
+there. Count models band the same way when the counts are small.</p>
+<p><strong>What is drawn instead: quantile residuals.</strong> Each case is put through its own
+fitted distribution and back through the normal curve. The result is a residual
+that, if the model is right, behaves like a <strong>standard normal</strong> value —
+whatever the family. That gives you two plots that read the same way for every
+model on this page:</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Plot</th>
+<th>What supports the fit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Quantile Residuals vs Linear Predictor</strong></td>
+<td>A level band around the zero line, with no curve and no funnel.</td>
+</tr>
+<tr>
+<td><strong>Q-Q Plot of Quantile Residual</strong></td>
+<td>Points along the reference line.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Two details that matter if you are checking someone else's numbers:</p>
+<ul>
+<li><strong>The x axis is the linear predictor</strong>, not the fitted mean — the same
+convention R's <code>plot.glm</code> uses. On the response scale the fitted values of a
+logistic or count model bunch up against 0 or 1 and the plot loses its
+resolution.</li>
+<li><strong>The Q-Q reference is the 45° identity line, not a fitted line.</strong> Quantile
+residuals are standard normal <em>by construction</em> when the model is right, so
+the line you are comparing against is known in advance. (The Linear panel's
+Q-Q fits its line through the quartiles, because standardized residuals have
+no such guarantee.) A fitted line here would quietly absorb the very misfit
+the plot exists to show.</li>
+</ul>
+<p><strong>Randomised, but reproducible.</strong> For a <strong>discrete</strong> outcome — yes/no, or a
+count — there is a range of residual values consistent with each observation
+rather than a single one, so ChakataStat draws one at random from that range.
+This is the standard method (Dunn &amp; Smyth) and it is what removes the banding.
+It means two things for you:</p>
+<ul>
+<li>The plot is <strong>reproducible</strong>: the draw is seeded, so the same command always
+produces the same picture, and a re-run of a recorded analysis reproduces the
+plot in your report exactly.</li>
+<li>You can <strong>vary the draw</strong> to sanity-check what you are seeing. Set the
+<code>seed</code> argument (see <a href="../../advanced/reproducibility/">Reproducibility</a>) to a
+different number and re-run: a pattern that survives several seeds is the
+model, and one that comes and goes is the randomisation. Inspecting a few
+realisations is the recommended practice.</li>
+</ul>
+<p><strong>Gamma is the exception</strong>: its outcome is continuous, so there is no range to
+draw from and the residual is exact. Its plots carry no seed and never change
+between runs.</p>
 <h3 id="multinomial--ordinal">Multinomial / Ordinal</h3>
 <p>For categorical outcomes with three or more levels — unordered (Multinomial,
 baseline-category logit) or ordered (Ordinal, proportional-odds). Both report the
@@ -305,7 +378,8 @@ unsure whether you want association or prediction.</p>
       <p class="footer-legal">
         <a href="../../../index.html">Home</a> ·
         <a href="../../../quick-start/">Quick Start</a> ·
-        <a href="../../../privacy-policy/">Privacy Policy</a>
+        <a href="../../../privacy-policy/">Privacy Policy</a> ·
+        <a href="../../../license/">License</a>
       </p>
       <p class="footer-docs-licence">
         The text of this documentation is licensed
