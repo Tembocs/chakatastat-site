@@ -77,6 +77,7 @@
         <li><a href="../../cases-and-transforms/">Cases &amp; Transforms</a></li>
         <li><a href="../../analyze/">Analyzing Data</a></li>
         <li><a href="../../graphs/">Graphs</a></li>
+        <li><a href="../../chart-editor/">Editing a chart</a></li>
         <li><a href="../../settings/">Settings</a></li>
         <li class="docs-nav-section">Advanced</li>
         <li><a href="../ai-assistant/">AI Assistant</a></li>
@@ -105,6 +106,21 @@ histogram variable=BMI
 </code></pre>
 <p>The grammar is small and readable: <code>toolname arg=value, arg=[a, b], arg=&quot;text&quot;</code>,
 with <code>#</code> for comments.</p>
+<h3 id="one-command-per-line">One command per line</h3>
+<p>A command occupies <strong>exactly one line</strong>, however long it gets. There is no
+line-continuation character, and this is deliberate rather than unfinished:
+the journal's contract is one line per output, which is what lets the
+<a href="../../chart-editor/">chart editor</a> amend the line that produced a chart
+instead of appending a new one.</p>
+<p>So if you paste a command that has been wrapped across two lines — out of a
+document, an email, or this guide before it was corrected — the second line
+is read as a new command and you get errors like <code>Trailing &quot;,&quot; with no argument</code> and <code>Unknown tool &quot;colors&quot;</code>. Both say the same thing: join the
+lines. The console names that cause when it can see it, and offers a
+<strong>Join wrapped lines</strong> button beside the errors that does it for you. The
+button appears only when joining actually makes the script parse, so it is
+never a guess — if it is not there, the problem is something else.</p>
+<p>Long lines are normal here. The console wraps them for display; the stored
+script keeps them as one line.</p>
 <h3 id="running-and-editing">Running and editing</h3>
 <ul>
 <li><strong>Run all</strong> / <strong>Run selection</strong> parse the script and dispatch each command into
@@ -117,26 +133,38 @@ re-run, or keep clicking menus and watch the script grow.</li>
 <h3 id="options-a-dialog-does-not-expose">Options a dialog does not expose</h3>
 <p>Every command is a tool name plus named arguments, and the console accepts
 arguments the dialog has no control for. Two groups are worth knowing about:</p>
-<p><strong>Chart presentation.</strong> <code>legend</code> (<code>auto</code> / <code>right</code> / <code>bottom</code> / <code>none</code>),
-<code>colors</code> (a list of hex strings, one per series, in series order) and
-<code>line_width</code> are accepted by the charts that draw a legend or a line — the line
-chart, bar chart, error bar, the Kaplan-Meier curves and the canonical
-discriminant plot. They are journaled, so a styled chart re-runs styled:</p>
-<pre><code>kaplan_meier time=Months, status=Event, factor=Treatment, plot=true,
-             legend=bottom, colors=[&quot;#1f77b4&quot;, &quot;#d62728&quot;], line_width=2.5
+<p><strong>Chart presentation.</strong> <code>title</code> and <code>colors</code> (a list of hex strings, one per
+series, in series order) are accepted by every chart tool; <code>legend</code> (<code>auto</code> /
+<code>right</code> / <code>bottom</code> / <code>none</code>) by the charts that draw one; <code>line_width</code> by the
+charts that draw lines; and <code>stacked</code> / <code>stack_mode</code> / <code>bar_gap</code> by the bar
+chart. They are journaled, so a styled chart re-runs styled:</p>
+<pre><code>kaplan_meier time=Months, status=Event, factor=Treatment, plot=true, legend=bottom, colors=[&quot;#1f77b4&quot;, &quot;#d62728&quot;], line_width=2.5
 </code></pre>
 <p>This is also the per-chart override for the palette chosen in
 <a href="../../settings/">Settings</a> — use it for a one-off (matching a house style in a
 report) without changing every other chart.</p>
+<p>You rarely have to type any of it: the <a href="../../chart-editor/">chart editor</a> sets
+the same arguments from a preview, and writes them back into this same line.</p>
 <p><strong>Randomisation seeds.</strong> Anything that draws random numbers takes a <code>seed</code>, and
 defaults to <code>1</code> so that a command is reproducible unless you say otherwise —
 the bootstrap, multiple imputation, and the
 <a href="../../analyze/correlation-and-regression/#diagnostic-plots-for-the-other-families">quantile residuals</a>
 behind a logistic or count model's diagnostic plots. Change it to check that a
 result is not an artefact of one particular draw:</p>
-<pre><code>logistic_regression dependent=Hypertensive, predictors=[Age, BMI],
-                    diagnostics=true, seed=7
+<pre><code>logistic_regression dependent=Hypertensive, predictors=[Age, BMI], diagnostics=true, seed=7
 </code></pre>
+<h3 id="when-editing-a-chart-amends-the-script">When editing a chart amends the script</h3>
+<p>The <a href="../../chart-editor/">chart editor</a> is the one thing that writes <em>into</em> the
+middle of your script rather than appending to it. Applying an edit finds the
+line that produced the chart, replaces it with the same command carrying the
+style you chose, and swaps the restyled chart into the same place in the Output
+log — same position, same timestamp. If you ran the same command twice, each
+chart tracks its own line, so editing the second one leaves the first alone.</p>
+<p>If that line is not there any more — you rewrote or deleted it, or the chart
+came from the AI assistant, which runs tools without recording them — the
+styled command is <strong>appended</strong> instead, and the chart's note says so. Nothing
+is guessed at, and either way the script still reproduces the output you are
+looking at, styled as you see it.</p>
 <h3 id="saving-and-opening-scripts">Saving and opening scripts</h3>
 <p>Save the script as an <code>.cks</code> file and open it later (or hand it to a colleague).
 The session also remembers the script between launches.</p>

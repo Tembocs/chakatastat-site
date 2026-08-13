@@ -77,6 +77,7 @@
         <li><a href="../cases-and-transforms/">Cases &amp; Transforms</a></li>
         <li><a href="../analyze/">Analyzing Data</a></li>
         <li><a href="./" aria-current="page">Graphs</a></li>
+        <li><a href="../chart-editor/">Editing a chart</a></li>
         <li><a href="../settings/">Settings</a></li>
         <li class="docs-nav-section">Advanced</li>
         <li><a href="../advanced/ai-assistant/">AI Assistant</a></li>
@@ -92,6 +93,8 @@
 <p><strong>Graphs</strong> menu. ChakataStat draws charts straight into the Output log, next to
 your tables. There are seven quick chart dialogs plus a free-form <strong>Chart
 Builder</strong>, and several analyses can attach their own plots.</p>
+<p>Once a chart is in the log you can restyle it in place — see
+<a href="../chart-editor/">Editing a chart</a>.</p>
 <h2 id="the-quick-charts">The quick charts</h2>
 <h3 id="histogram">Histogram</h3>
 <p><strong>Graphs → Histogram…</strong> (<code>Ctrl+Shift+H</code>). Pick one <strong>scale</strong> variable to see the
@@ -185,13 +188,18 @@ Mann-Whitney.</p>
 <p>The Line Chart dialog's collapsed <strong>Style</strong> section controls presentation
 without touching the data: <strong>Legend</strong> placement (Auto/Right/Bottom/Hidden), a
 <strong>Line width</strong> stepper, and, when there is no split (so the series are known
-up front), a color swatch per series. Because these are options on the
-journaled command rather than a post-hoc chart editor, they show up in the
-<code>.cks</code> syntax too and reproduce exactly on re-run:</p>
+up front), a color swatch per series. These are options <strong>on the journaled
+command</strong>, so they show up in the <code>.cks</code> syntax too and reproduce exactly on
+re-run:</p>
 <pre><code>line_chart y=[SystolicBP], x=Age, legend=bottom, colors=[&quot;#1f77b4&quot;], line_width=2.5
 </code></pre>
 <p><strong>Example.</strong> <em>colors=[&quot;#1f77b4&quot;]</em> keeps the first series' color fixed across
 re-runs even if the palette itself ever changes.</p>
+<p>You do not have to decide any of this up front, and you do not have to re-open
+the dialog to change your mind: <strong><a href="../chart-editor/">edit the finished chart directly</a></strong>
+from its card in the Output log. Because the editor writes the same journaled
+options back into the same command, a chart styled after the fact is exactly as
+reproducible as one styled in the dialog.</p>
 <h2 id="the-chart-builder">The Chart Builder</h2>
 <p><strong>Graphs → Chart Builder…</strong> (<code>Ctrl+Shift+G</code>) is the general dialog: choose the
 chart type and assign variables to its roles. Use it when you want more control
@@ -354,8 +362,12 @@ analysis, so re-running the recorded command reproduces the <em>chart</em>, not 
 the tables. The survival curves and the canonical discriminant scatter also
 accept the same presentation arguments the Line Chart does — <code>legend</code>,
 <code>colors</code>, and (for the curves) <code>line_width</code> — so a styled plot survives a
-re-run unchanged. See
+re-run unchanged, and both can be
+<a href="../chart-editor/">edited from the Output log</a> like any other chart. See
 <a href="../advanced/reproducibility/">Reproducibility</a>.</p>
+<p>The plots that come attached to a statistical procedure — a regression's
+diagnostic panels, the scree plot, the dendrogram — are the exception: they
+carry no presentation arguments and have no Edit button.</p>
 <h2 id="colors">Colors</h2>
 <p>A chart with <strong>one</strong> series is drawn in your theme's accent color, so it
 follows the appearance you picked in <a href="../settings/">Settings</a>.</p>
@@ -400,11 +412,12 @@ almost always fail one of those checks without its author noticing, which is
 the defect a fixed palette exists to prevent.</p>
 <p>Changing the palette recolours every chart in the Output log immediately, and
 the choice is remembered between sessions.</p>
-<p>To override the palette for <strong>one</strong> chart, set the colors explicitly on that
-chart's command (the <code>colors</code> argument) — see
-<a href="../advanced/reproducibility/">Reproducibility</a>. That is the escape hatch for a
-one-off (matching a house style in a report, say) without changing what every
-other chart looks like.</p>
+<p>To override the palette for <strong>one</strong> chart, pick its colours in the
+<a href="../chart-editor/">chart editor</a>, or set them explicitly on that chart's command
+(the <code>colors</code> argument) — see
+<a href="../advanced/reproducibility/">Reproducibility</a>. Either way it is the same
+escape hatch, recorded the same way: a one-off (matching a house style in a
+report, say) without changing what every other chart looks like.</p>
 <h2 id="working-with-chart-output">Working with chart output</h2>
 <ul>
 <li>Charts appear as cards in the <strong>Output View</strong>, interleaved with tables in the

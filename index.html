@@ -36,7 +36,7 @@
   "applicationCategory": "https://schema.org/BusinessApplication",
   "applicationSubCategory": "Statistical analysis",
   "operatingSystem": "Windows 10, Windows 11, Linux",
-  "softwareVersion": "0.16.0",
+  "softwareVersion": "0.17.0",
   "url": "https://chakatastat.app/",
   "description": "A desktop application for statistical data analysis: a spreadsheet-style data editor backed by a native Rust engine, with 102 analysis tools, native SPSS, Stata and SAS transport import, an AI assistant, an MCP server, a headless batch runner and full reproducibility.",
   "image": "https://chakatastat.app/assets/og-image.jpg",
@@ -44,7 +44,8 @@
     "https://chakatastat.app/assets/screenshots/data-editor.png",
     "https://chakatastat.app/assets/screenshots/output-view.png",
     "https://chakatastat.app/assets/screenshots/forest-plot.png",
-    "https://chakatastat.app/assets/screenshots/scatterplot-matrix.png"
+    "https://chakatastat.app/assets/screenshots/scatterplot-matrix.png",
+    "https://chakatastat.app/assets/screenshots/chart-editor.png"
   ],
   "author": {
     "@type": "Person",
@@ -66,6 +67,7 @@
     "Moderated mediation with conditional indirect effects, the index of moderated mediation and an interaction plot",
     "Regression diagnostic panels for the GLM families — logistic, Poisson, negative binomial, gamma, zero-inflated and hurdle — on seeded randomized quantile residuals",
     "Charts: histogram, scatterplot and scatterplot matrix, boxplot, violin, line, bar, error bar, Q-Q, ECDF, dot, bubble and correlation heatmap, on a colour-vision-validated palette with a colour-blind-safe alternative",
+    "Interactive chart editor: restyle a finished chart in place, every edit written back to its syntax command so styled charts re-run styled",
     "Provider-neutral AI assistant",
     "MCP server and headless batch runner",
     "Reproducible syntax, plus HTML, Markdown, LaTeX and Python export (pip install chakatastat)"
@@ -256,7 +258,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-6 4 3 5-8M3 21h18"/></svg>
             </span>
             <h3>Graphs</h3>
-            <p>Histograms, scatterplots and scatterplot matrices, boxplots, violin plots, ECDF, Cleveland dot, bubble, line, bar (clustered, stacked or 100%-stacked), error-bar and Q-Q charts in a unified Chart Builder &mdash; plus a correlation heatmap, regression diagnostics for linear and GLM models alike, scree plots, dendrograms, forest, funnel and propensity balance plots beside their analyses. Every multi-series chart uses a fixed palette validated for colour-vision safety, in light and dark &mdash; with a colour-blind-safe Okabe&ndash;Ito alternative in Settings.</p>
+            <p>Histograms, scatterplots and scatterplot matrices, boxplots, violin plots, ECDF, Cleveland dot, bubble, line, bar (clustered, stacked or 100%-stacked), error-bar and Q-Q charts in a unified Chart Builder &mdash; plus a correlation heatmap, regression diagnostics for linear and GLM models alike, scree plots, dendrograms, forest, funnel and propensity balance plots beside their analyses. Every multi-series chart uses a fixed palette validated for colour-vision safety, in light and dark &mdash; with a colour-blind-safe Okabe&ndash;Ito alternative in Settings. A finished chart can be restyled in place &mdash; title, legend, colours, line width, stacking &mdash; and every edit is written back into the chart&rsquo;s own syntax command, so a styled chart re-runs styled.</p>
           </article>
           <article class="feature-card feature-card--wide" data-reveal>
             <span class="feature-icon" aria-hidden="true">
@@ -363,6 +365,7 @@ ChakataStat --mcp health_study.csv</code></pre>
             <button role="tab" id="shot-tab-dark" aria-controls="shot-panel-dark" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Propensity</button>
             <button role="tab" id="shot-tab-moderation" aria-controls="shot-panel-moderation" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Moderation</button>
             <button role="tab" id="shot-tab-matrix" aria-controls="shot-panel-matrix" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Scatterplot matrix</button>
+            <button role="tab" id="shot-tab-editor" aria-controls="shot-panel-editor" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Chart editor</button>
           </div>
 
           <div class="shot-panel" role="tabpanel" id="shot-panel-data" aria-labelledby="shot-tab-data" tabindex="0">
@@ -444,6 +447,16 @@ ChakataStat --mcp health_study.csv</code></pre>
               <figcaption>The scatterplot matrix &mdash; every numeric pair in one grid of square panels, the first look at a multivariate dataset.</figcaption>
             </figure>
           </div>
+
+          <div class="shot-panel" role="tabpanel" id="shot-panel-editor" aria-labelledby="shot-tab-editor" tabindex="0" hidden>
+            <figure class="screenshot-card">
+              <button class="shot-trigger" type="button">
+                <img src="assets/screenshots/chart-editor.png" alt="ChakataStat's chart editor open over a clustered bar chart: a live preview with a retitled chart and a recoloured series, above title, legend, stacking and colour controls" loading="lazy">
+                <span class="visually-hidden"> &mdash; enlarge</span>
+              </button>
+              <figcaption>The chart editor &mdash; restyle a finished chart on a live preview; every edit is written back into the chart&rsquo;s own syntax command, so a styled chart re-runs styled.</figcaption>
+            </figure>
+          </div>
         </div>
       </div>
     </section>
@@ -492,7 +505,7 @@ ChakataStat --mcp health_study.csv</code></pre>
           <a class="btn btn-primary btn-lg" href="https://snapcraft.io/chakatastat" data-platform="linux">Get it from the Snap Store</a>
           <span class="btn btn-disabled btn-lg" aria-disabled="true">macOS — coming soon</span>
         </div>
-        <p class="download-meta">Version 0.16.0 · free to use · no account needed</p>
+        <p class="download-meta">Version 0.17.0 · free to use · no account needed</p>
         <p class="download-note">
           Store installs are signed and update automatically. On Linux you
           can also grab the Debian/Ubuntu .deb from the
@@ -510,7 +523,7 @@ ChakataStat --mcp health_study.csv</code></pre>
         proprietary software — free to use, not open source.
       </p>
       <p class="footer-cite">
-        Cite: Amani, E. (2026). <em>ChakataStat</em> (Version 0.16.0)
+        Cite: Amani, E. (2026). <em>ChakataStat</em> (Version 0.17.0)
         [Computer software].
       </p>
       <p class="footer-legal">

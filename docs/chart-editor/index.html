@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Editing a chart — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/chart-editor/">
+  <link rel="icon" type="image/svg+xml" href="../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Editing a chart — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/chart-editor/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../index.html">
+        <img class="brand-mark" src="../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <!-- One link, not a copy of the site menu. While someone is reading the
+           guide, the sidebar is the navigation that matters; marketing anchors
+           (Features, Screenshots, …) only compete with it and push the reader
+           out of what they came for. All that is owed is a way back. Single
+           link means no mobile collapse either, so there is no hamburger on
+           these pages — main.js guards for its absence. -->
+      <nav id="nav-links" class="nav-links nav-links--single">
+        <a href="../../index.html">← Back to chakatastat.app</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../index.html#download">Download</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../">Contents</a></li>
+        <li><a href="../quick-start/">Quick Start</a></li>
+        <li><a href="../overview/">Overview</a></li>
+        <li><a href="../getting-started/">Getting Started</a></li>
+        <li><a href="../tutorial/">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../working-with-data/">Working with Data</a></li>
+        <li><a href="../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../analyze/">Analyzing Data</a></li>
+        <li><a href="../graphs/">Graphs</a></li>
+        <li><a href="./" aria-current="page">Editing a chart</a></li>
+        <li><a href="../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../advanced/ai-assistant/">AI Assistant</a></li>
+        <li><a href="../advanced/reproducibility/">Reproducibility</a></li>
+        <li><a href="../advanced/engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="editing-a-chart">Editing a chart</h1>
+<p>Every chart in the Output log has an <strong>Edit chart…</strong> button in its card header.
+It opens the chart editor: a live preview with the presentation controls that
+chart actually supports — legend placement, series colours, line width, bar
+stacking and spacing, and the title.</p>
+<p>The editor changes how a chart <em>looks</em>. It never changes what it <em>measures</em>: no
+control in it can alter a variable, a filter, a bin count or a statistic. To
+change the analysis, re-run the command.</p>
+<h2 id="the-one-thing-worth-understanding">The one thing worth understanding</h2>
+<p><strong>An edit is a command, not a decoration.</strong></p>
+<p>When you press Apply, ChakataStat does not store your colours somewhere beside
+the chart. It rewrites the chart's own line in the
+<a href="../advanced/reproducibility/">command journal</a> to include what you chose, and
+swaps the restyled chart into the same slot in the Output log:</p>
+<pre><code>bar_chart category=Region, cluster=Treatment
+</code></pre>
+<p>becomes, after you stack the bars, move the legend and pick two colours:</p>
+<pre><code>bar_chart category=Region, cluster=Treatment, stacked=true, legend=bottom, colors=[&quot;#1f77b4&quot;, &quot;#d62728&quot;]
+</code></pre>
+<p>(One command per line, however long — see
+<a href="../advanced/reproducibility/#one-command-per-line">Reproducibility</a>.)</p>
+<p>That is the whole design. Re-run the script tomorrow, hand it to a colleague,
+or replay it on next year's data, and the chart comes back <strong>styled exactly as
+you left it</strong> — because the styling is part of the analysis you recorded, not a
+layer on top of it. Nothing you can do in the editor is unreproducible.</p>
+<p>It also means the editor and the console are two views of one thing: anything
+the editor can set, you can type; anything you type, the editor picks up when
+you open it.</p>
+<h2 id="what-you-can-edit">What you can edit</h2>
+<p>The editor asks the chart's own command what arguments it takes and offers
+exactly those controls — so it never shows you a control that would do nothing.
+A bar chart has no <strong>Line width</strong>; a histogram has one colour rather than a
+series list; a violin plot has no <strong>Legend</strong>, because it labels its groups on
+the axis instead.</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Control</th>
+<th>What it does</th>
+<th>Charts that offer it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Title</strong></td>
+<td>Renames the chart. Clear the field to get the analysis's own title back.</td>
+<td>Every chart tool except Kaplan-Meier (see below)</td>
+</tr>
+<tr>
+<td><strong>Legend</strong></td>
+<td>Auto (top-right, inside the plot), Right, Bottom, or hidden</td>
+<td>The charts that draw a legend</td>
+</tr>
+<tr>
+<td><strong>Series colours</strong></td>
+<td>One swatch per series, overriding the palette</td>
+<td>Every chart; single-colour charts show one swatch</td>
+</tr>
+<tr>
+<td><strong>Line width</strong></td>
+<td>Stroke width of the plotted lines</td>
+<td>Line chart, ECDF, survival curves</td>
+</tr>
+<tr>
+<td><strong>Stacked</strong> / <strong>Stacking</strong></td>
+<td>Clustered bars stacked part-to-whole, as values or normalised to 100%</td>
+<td>Bar chart</td>
+</tr>
+<tr>
+<td><strong>Bar gap</strong></td>
+<td>How much of each category's slot is left empty</td>
+<td>Bar chart</td>
+</tr>
+</tbody>
+</table></div>
+<p>Two deliberate gaps, both for the same reason — an option that cannot be stated
+honestly is not offered:</p>
+<ul>
+<li><strong>Kaplan-Meier plots take no title.</strong> One <code>kaplan_meier</code> command can draw two
+different charts (the survival curve and the cumulative hazard), and a single
+title argument cannot name both. Their other controls all work.</li>
+<li><strong>Charts embedded in an analysis's output</strong> — a regression's diagnostic
+panels, a scree plot, a dendrogram — have no Edit button. They are byproducts
+of an analysis command rather than charts you asked for, and styling them
+would mean putting presentation arguments on statistical procedures.</li>
+</ul>
+<h2 id="direct-manipulation">Direct manipulation</h2>
+<p>Two things on the preview respond to the mouse:</p>
+<ul>
+<li><strong>Drag the legend.</strong> It snaps to the nearest of its allowed positions when you
+drop it. There is no free placement by design: the legend's position is a
+named setting in the command, and a legend pinned to a pixel would not
+survive a window resize honestly. Use <strong>Legend → Hidden</strong> to remove it.</li>
+<li><strong>Click a legend row</strong> to select that series; its row lights up in the colour
+list, so you can recolour the series you pointed at rather than counting rows.</li>
+</ul>
+<p>Charts without a legend — the violin plot, the single-colour charts — are edited
+entirely from the panel, which always works.</p>
+<h2 id="split-file-one-edit-the-whole-set">Split File: one edit, the whole set</h2>
+<p>Under <a href="../cases-and-transforms/">Split File</a>, one command produces one chart per
+group. They share a command, so they share a style: editing any one of them
+restyles <strong>all</strong> of them, and the editor says so before you apply. Per-group
+styling is not something the command can express, so it is not something the
+editor pretends to do.</p>
+<p>Titles are the exception that proves the rule. Rename a split chart &quot;Blood
+pressure&quot; and each group keeps its own qualifier —
+<code>Blood pressure [region = North]</code>, <code>Blood pressure [region = South]</code> — because
+otherwise a renamed set would be several identical-looking charts with nothing
+to tell them apart.</p>
+<h2 id="when-the-journal-gains-a-line-instead">When the journal gains a line instead</h2>
+<p>Applying an edit normally <em>replaces</em> the chart's existing line. Two cases
+append a new line instead, and the chart's note says so when it happens:</p>
+<ul>
+<li><strong>A chart the AI assistant made.</strong> The assistant runs tools directly and does
+not record them, so there is no line to amend — styling one of its charts is
+what finally gives it a command in the journal. That is the journal doing its
+job, not an error.</li>
+<li><strong>A line you edited away.</strong> If you have since rewritten or deleted the
+command the chart came from, ChakataStat will not guess which line you meant.
+It appends the styled command and tells you, so the script still reproduces
+what you are looking at.</li>
+</ul>
+<p>Either way the journal keeps its meaning: <strong>the script that reproduces the
+current output, styled as seen</strong>.</p>
+<h2 id="what-the-editor-does-not-do">What the editor does not do</h2>
+<p>By design, and recorded rather than merely missing: no axis-range or tick
+overrides, no annotations or free-standing text, no free-pixel legend placement,
+no per-group styling of a split set, and no editing of data or of what is
+plotted. The editor edits what the recorded command can express — exactly that,
+so that everything it can do survives a re-run.</p>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="../graphs/">Graphs</a> — the chart dialogs and what each chart is for.</li>
+<li><a href="../advanced/reproducibility/">Reproducibility</a> — the command journal the
+editor writes into, and the presentation arguments you can type directly.</li>
+<li><a href="../settings/">Settings</a> — the palette every chart starts from.</li>
+</ul>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../index.html">Home</a> ·
+        <a href="../../quick-start/">Quick Start</a> ·
+        <a href="../../privacy-policy/">Privacy Policy</a> ·
+        <a href="../../license/">License</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../js/main.js"></script>
+</body>
+</html>
