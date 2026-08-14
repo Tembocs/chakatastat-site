@@ -125,6 +125,12 @@ View what the file already knew.</p>
 <td>—</td>
 </tr>
 <tr>
+<td>Fixed-width text</td>
+<td><code>.fwf</code> <code>.prn</code></td>
+<td>inferred</td>
+<td>—</td>
+</tr>
+<tr>
 <td>Excel</td>
 <td><code>.xlsx</code></td>
 <td>inferred</td>
@@ -175,13 +181,24 @@ View what the file already knew.</p>
 </tbody>
 </table></div>
 <ul>
-<li><strong>CSV / TSV</strong> — the delimiter and header row are detected; each column's type
-is <strong>inferred</strong> (all-numeric → numeric, otherwise string). An import-options
-dialog lets you confirm before loading. A gzipped text file (<code>.csv.gz</code>,
-<code>.tsv.gz</code>, <code>.json.gz</code>, …) is decompressed and read the same way. Text files
-are read as <strong>UTF-8</strong> (a byte-order mark is handled); a file saved as
-UTF-16 or Latin-1 reports a decode error rather than importing garbled
-text — re-save it as UTF-8 and it opens.</li>
+<li><strong>CSV / TSV</strong> — the delimiter is sniffed from the <strong>content</strong>: comma,
+semicolon, tab or pipe, with quoted fields respected (so a <code>;</code>-file full of
+quoted commas still reads correctly; <code>.tsv</code> always reads as tab). The header
+row is detected, and each column's type is <strong>inferred</strong> (all-numeric →
+numeric, otherwise string). An import-options dialog lets you confirm before
+loading. A gzipped text file (<code>.csv.gz</code>, <code>.tsv.gz</code>, <code>.json.gz</code>, …) is
+decompressed and read the same way.</li>
+<li><strong>Fixed-width text (<code>.fwf</code>, <code>.prn</code>)</strong> — column-aligned text with no
+delimiter (mainframe extracts, printed reports). The one thing no sniffer
+can know is where the columns break, so a small dialog asks you: the first
+lines of the file are shown in a monospaced preview under a clickable
+ruler — <strong>click to place or remove a column break</strong> (▼), with initial
+breaks suggested from the runs of spaces every sampled line shares. The
+same spec is editable as text beside the preview (<code>start-end</code> ranges,
+1-based and inclusive, e.g. <code>1-8,9-12,13-20</code>), and the two stay in step;
+ranges may skip over junk columns. Once split, columns type-infer exactly
+as CSV's do. Headless (batch or MCP) passes the same spec with
+<code>--fwf-spec</code>.</li>
 <li><strong>Excel (<code>.xlsx</code>)</strong> — the first worksheet, read in pure Dart. Legacy
 <strong><code>.xls</code></strong> and OpenDocument <strong><code>.ods</code></strong> read the first sheet through the
 native engine, with the same header prompt and type inference.</li>
@@ -201,8 +218,10 @@ in its summary rather than dropping them silently. Legacy portable
 (every <code>.dta</code> release is read). Daily dates (<code>%td</code>) and datetimes
 (<code>%tc</code>) arrive as readable dates; the rarer week/month/quarter display
 formats arrive as their stored numbers, and the import summary notes it.
-Stata's <strong>long strings (strL)</strong> are not carried yet: those cells import
-blank, and the summary says so rather than leaving you to notice.</li>
+Stata's <strong>long strings (strL)</strong> are carried like any other text —
+including files written by third-party tools whose strL layout differs
+from Stata's own. A rare <em>binary</em> strL payload is decoded as text and the
+import summary names the variable.</li>
 <li><strong>SAS transport (<code>.xpt</code>)</strong> — the open format SAS writes for exchange
 (<code>PROC CPORT</code>/<code>COPY</code>), typed columns plus variable labels. SAS date, datetime
 and time formats arrive as readable dates and times. Two limits, both noted
@@ -211,6 +230,18 @@ keeps them in a separate <code>.sas7bcat</code> catalog — and if the file hold
 than one dataset, the first is imported. SAS's own <code>.sas7bdat</code> files are not
 read; export one as <code>.xpt</code> from SAS and open that.</li>
 </ul>
+<h3 id="text-encodings">Text encodings</h3>
+<p>Every text import (delimited, fixed-width, JSON — gzipped included) detects
+its <strong>encoding</strong> rather than assuming UTF-8: a byte-order mark wins when
+present (UTF-8, UTF-16LE, UTF-16BE); without one, UTF-16 is recognised
+heuristically, then strict UTF-8 is tried, and <strong>Windows-1252</strong> — what
+&quot;Latin-1&quot; files in the wild almost always are — is the final fallback, so
+the decode itself never fails. UTF-8 files open silently (that is the norm,
+not news); anything else imports <strong>and says so</strong>: the import summary carries
+a note such as <em>decoded as UTF-16LE</em>, telling you a conversion happened and
+which encoding was assumed. If text still looks wrong despite the note, the
+file is in some other single-byte code page — re-save it as UTF-8 and it
+opens exactly. Exported files are always UTF-8.</p>
 <p>A progress dialog shows while large files load, and the import runs without
 freezing the window.</p>
 <blockquote>
