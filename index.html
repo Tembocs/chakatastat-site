@@ -145,7 +145,7 @@
             <a class="btn btn-primary btn-lg" href="#download">Download ChakataStat</a>
             <a class="btn btn-ghost btn-lg" href="#features">See what it does</a>
           </div>
-          <p class="hero-platforms">Windows · Linux · Free to use</p>
+          <p class="hero-platforms">v0.18.0 · Windows · Linux · Free to use</p>
         </div>
         <div class="hero-shot">
           <figure class="app-frame">
@@ -246,14 +246,14 @@
             <h3>Data editor</h3>
             <p>A fast, Excel-like sheet with a Variable View for metadata, value labels, missing-value handling, and self-documenting column tooltips.</p>
           </article>
-          <article class="feature-card feature-card--wide" data-reveal>
+          <article class="feature-card" data-reveal>
             <span class="feature-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8zM14 3v5h5M12 18v-7M9 14l3-3 3 3"/></svg>
             </span>
             <h3>Your files open directly</h3>
             <p>SPSS (<code>.sav</code>), Stata (<code>.dta</code>) and SAS transport (<code>.xpt</code>) files import natively &mdash; no detour through CSV &mdash; and bring their metadata with them: variable labels from all three, value labels from SPSS and Stata, and SPSS measure levels and missing-value rules. Plus CSV/TSV (plain or gzipped), Excel (<code>.xlsx</code>, <code>.xls</code>, <code>.ods</code>), Parquet, Arrow/Feather, JSON and NDJSON. Where a detail cannot be carried across, the import says so rather than staying silent.</p>
           </article>
-          <article class="feature-card" data-reveal>
+          <article class="feature-card feature-card--wide" data-reveal>
             <span class="feature-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-6 4 3 5-8M3 21h18"/></svg>
             </span>
@@ -327,7 +327,7 @@ and non-hypertensive groups, and show me the effect size.</code></pre>
 
           <div class="code-panel" role="tabpanel" id="panel-py" aria-labelledby="tab-py" tabindex="0" hidden>
 <pre><code><span class="c"># The dataset stays in the native engine; nothing runs in Python.</span>
-import ChakataStat as ig
+import chakatastat as ig
 
 with ig.open("health_study.ckd") as ds:
     print(ds.descriptives(variables=["Age", "BMI", "SystolicBP"]))
