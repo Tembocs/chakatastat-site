@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Nonparametric Tests — ChakataStat User Guide</title>
-  <link rel="canonical" href="https://chakatastat.app/docs/analyze/nonparametric/">
+  <title>Latent Class Analysis — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/analyze/latent-class/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Nonparametric Tests — ChakataStat User Guide">
-  <meta property="og:url" content="https://chakatastat.app/docs/analyze/nonparametric/">
+  <meta property="og:title" content="Latent Class Analysis — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/analyze/latent-class/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
@@ -89,116 +89,89 @@
       </ul>
       </aside>
       <article class="docs-content">
-<h1 id="nonparametric-tests">Nonparametric Tests</h1>
-<p><strong>Analyze → Nonparametric Tests.</strong> Use these when the assumptions behind a t-test
-or ANOVA (normality, equal variances) do not hold, or when your data are ordinal
-ranks rather than true scale values. They test distributions and medians using
-ranks, not means. (To drop the assumptions while still testing the <em>mean
-difference</em> itself, the two-group alternative is the t-test dialog's
-<a href="../compare-means/#permutation-test">permutation test</a>.)</p>
-<h2 id="the-tests-at-a-glance">The tests at a glance</h2>
-<div class="docs-table-wrap"><table>
-<thead>
-<tr>
-<th>Test</th>
-<th>Parametric analogue</th>
-<th>Use when</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Mann-Whitney U</strong></td>
-<td>Independent-samples t</td>
-<td>Two independent groups</td>
-</tr>
-<tr>
-<td><strong>Wilcoxon Signed-Rank</strong></td>
-<td>Paired t</td>
-<td>Two related measurements</td>
-</tr>
-<tr>
-<td><strong>Sign test</strong></td>
-<td>Paired t</td>
-<td>Two related measurements (direction only)</td>
-</tr>
-<tr>
-<td><strong>Kruskal-Wallis</strong></td>
-<td>One-way ANOVA</td>
-<td>Three+ independent groups</td>
-</tr>
-<tr>
-<td><strong>Friedman</strong></td>
-<td>Repeated-measures ANOVA</td>
-<td>Three+ related measurements</td>
-</tr>
-<tr>
-<td><strong>Kendall's W</strong></td>
-<td>Repeated-measures ANOVA</td>
-<td>Agreement among several rankers</td>
-</tr>
-<tr>
-<td><strong>Runs test</strong></td>
-<td>—</td>
-<td>Randomness of a sequence</td>
-</tr>
-<tr>
-<td><strong>Binomial test</strong></td>
-<td>—</td>
-<td>A proportion vs an expected value</td>
-</tr>
-<tr>
-<td><strong>Tests of Normality</strong></td>
-<td>—</td>
-<td>Whether a variable is normally distributed</td>
-</tr>
-</tbody>
-</table></div>
-<h2 id="how-to-fill-the-dialogs">How to fill the dialogs</h2>
-<p>Each test takes the variable(s) it needs and, for the group-comparison tests, a
-<strong>grouping variable</strong>:</p>
+<h1 id="latent-class-analysis">Latent Class Analysis</h1>
+<p><strong>Analyze → Classify → Latent Class.</strong> For a set of <strong>categorical</strong>
+indicators — survey items, symptoms, yes/no behaviours, diagnostic ratings —
+the question &quot;are there unobserved subgroups here, and how many?&quot; is a
+mixture-modeling question: a latent class analysis assumes the population is
+a blend of a few hidden <strong>classes</strong>, each with its own probability of every
+indicator response, and estimates the blend by maximum likelihood. Unlike
+the distance-based <a href="../scale-reduction-classify/#classify">cluster procedures</a>
+(which need continuous-ish variables and give no fit statistics), LCA is a
+proper statistical model for categorical data: it reports <strong>fit indices</strong>
+for choosing the number of classes, <strong>class profiles</strong> in probability terms,
+and each case's <strong>membership probabilities</strong> rather than a hard assignment.</p>
+<h2 id="the-data-layout">The data layout</h2>
+<p>One row per case, one column per indicator — numeric or string, each with
+<strong>2–15 distinct values</strong> (a column with more looks like a scale variable and
+is refused; recode or bin it first). Cases incomplete on any indicator are
+dropped, and the output's note counts what remained.</p>
+<h2 id="the-dialog">The dialog</h2>
+<p>Tick the <strong>Indicators</strong>, set the number of <strong>Classes</strong> (default 2), and
+optionally <strong>Compare counts up to</strong> <em>M</em> — the enumeration workflow in one
+run: every count from 1 to <em>M</em> is fitted with the same settings and a
+comparison table opens the output. <strong>Save modal class membership</strong> /
+<strong>Save posterior probabilities</strong> write the results back as new variables.</p>
+<p>Estimation uses EM with <strong>20 random starts</strong> (keeping the best likelihood)
+behind a fixed seed, so the same run always reproduces the same tables; the
+<code>starts</code> and <code>seed</code> arguments of the <code>latent_class</code> command explore further.</p>
+<h2 id="choosing-the-number-of-classes">Choosing the number of classes</h2>
+<p>Fit is compared across counts, never judged absolutely:</p>
 <ul>
-<li><strong>Mann-Whitney / Kruskal-Wallis</strong> — a <strong>test variable</strong> and a <strong>grouping
-variable</strong> (two groups for Mann-Whitney, three+ for Kruskal-Wallis).</li>
-<li><strong>Wilcoxon / Sign</strong> — a <strong>pair</strong> of related variables.</li>
-<li><strong>Friedman</strong> — three or more <strong>related variables</strong>.</li>
-<li><strong>Kendall's W</strong> — two or more <strong>related variables</strong> (the items each case
-ranks); reports the <strong>coefficient of concordance</strong> (0..1 agreement) and its
-equivalent Friedman chi-square. It is the same statistic as Friedman, rescaled
-to read as an agreement measure — use it when the question is &quot;how much do the
-rankers agree?&quot; rather than &quot;do the conditions differ?&quot;.</li>
-<li><strong>Runs test</strong> — one variable; tests whether values fall in a random order
-around a cut point, with an optional <strong>exact</strong> small-sample significance.</li>
-<li><strong>Binomial test</strong> — one variable and an <strong>expected proportion</strong>; reports an
-exact or asymptotic significance.</li>
-<li><strong>Tests of Normality</strong> — one or more variables; reports <strong>Shapiro-Wilk</strong> and
-<strong>Kolmogorov-Smirnov</strong> (Lilliefors) with a reject/retain <strong>Decision</strong> at your
-chosen α (set in Options).</li>
+<li><strong>Latent Class Enumeration</strong> — one row per class count: log-likelihood,
+parameters, <strong>AIC / BIC / aBIC</strong> (lower is better; BIC is the
+conventional default, aBIC weights small samples more gently) and
+<strong>entropy</strong>. The information criteria usually stop disagreeing one or
+two counts apart — prefer the smaller model when in doubt, and always ask
+whether the extra class <em>means</em> something: a class you cannot name is a
+class you cannot use.</li>
+<li><strong>Entropy</strong> (0–1) is not a fit index — it measures how <strong>crisply</strong> cases
+classify (near 1 = classes well separated). A well-fitting model can
+still have low entropy; then the classes exist but individuals cannot be
+confidently assigned.</li>
+<li>A model can also be <strong>not identified</strong> (more parameters than the data can
+support); the analysis refuses it with a message rather than printing
+arbitrary numbers, and the enumeration table skips such counts and says
+so.</li>
 </ul>
 <h2 id="reading-the-output">Reading the output</h2>
-<p>The rank-based tests report <strong>mean ranks</strong> per group, the test statistic
-(U, W, H, χ²…), and the significance. A small significance means the groups'
-distributions (or the paired differences) differ more than chance would explain.</p>
-<h3 id="exact-small-sample-significance">Exact small-sample significance</h3>
-<p><strong>Mann-Whitney</strong>, <strong>Wilcoxon</strong> and <strong>Kruskal-Wallis</strong> each offer an <strong>Exact
-small-sample significance</strong> option (and <strong>Runs</strong> and <strong>Binomial</strong> have their own
-exact paths). The asymptotic (normal / χ²) p-value these tests report is only
-reliable for reasonably large samples; for small ones, tick <strong>Exact</strong> to add an
-<strong>Exact Sig.</strong> column computed from the statistic's true null distribution by
-enumeration. An exact value is shown only when it applies — <strong>tied data</strong> breaks
-it (the rank arrangements are no longer equally likely) and very large samples
-are not enumerated — and the output falls back to the asymptotic value with a
-note when it cannot.</p>
-<h2 id="example">Example</h2>
-<p>Earlier, <a href="../descriptive-statistics/#explore">Explore</a> suggested <em>FastingGlucose</em>
-is not normally distributed within groups. Rather than an independent-samples
-t-test of glucose by <em>Diabetic</em>, run <strong>Mann-Whitney U</strong> with <em>FastingGlucose</em> as
-the test variable and <em>Diabetic</em> as the grouping variable — a valid comparison
-that does not assume normality.</p>
-<h2 id="see-also">See also</h2>
 <ul>
-<li><a href="../compare-means/">Compare Means</a> — the parametric counterparts.</li>
-<li><a href="../descriptive-statistics/#explore">Tests of Normality</a> also appear in Explore.</li>
+<li><strong>Latent Class Model Summary</strong> — N (complete cases), classes, parameters,
+residual df, the log-likelihood, AIC/BIC/aBIC, entropy, and the G² /
+chi-square tests of the fitted response-pattern table. The note names the
+starts, the seed and the convergence of the winning start.</li>
+<li><strong>Latent Class Sizes</strong> — the estimated share of each class (classes are
+always numbered in <strong>descending size</strong> order), its expected N, and the
+modal N (cases assigned to it by highest posterior). A class no case is
+modally assigned to is flagged — fewer classes likely fit better.</li>
+<li><strong>Class-Conditional Item Probabilities</strong> — the heart of the output: for
+each indicator category, the probability of that response <strong>within each
+class</strong>. Read the columns as profiles and name the classes from them
+(e.g. &quot;high-symptomatic&quot;, &quot;abstainers&quot;). Probabilities of exactly 0 or 1
+are legitimate boundary estimates, not errors.</li>
+<li><strong>Average Posterior Probabilities by Assigned Class</strong> — classification
+quality: for the cases assigned to each class, their average posterior
+probability of belonging to every class. Diagonal values ≥ 0.8 are the
+usual &quot;adequately separated&quot; benchmark; low diagonals mean assignments
+are uncertain even if the model fits.</li>
 </ul>
+<h2 id="using-the-saved-columns">Using the saved columns</h2>
+<ul>
+<li><strong>Modal class</strong> (<code>lca_class</code>, 1 = largest class) — a categorical variable
+ready for Crosstabs, group comparisons or plots. Remember it hardens a
+probabilistic classification: with low entropy, treating it as known
+overstates certainty.</li>
+<li><strong>Posteriors</strong> (<code>lca_p1</code> … <code>lca_pC</code>) — the full membership probabilities,
+for weighting or sensitivity checks.</li>
+</ul>
+<blockquote>
+<p><strong>Scope (v1).</strong> Unconditional LCA only: no covariates predicting class
+membership, no ordinal/constrained item models, no retention of partially
+missing responses, and no bootstrap likelihood-ratio test — the
+enumeration table's information criteria are the class-count decision
+aids. A frequency weight (Weight Cases) is honored as case replication; a
+declared survey design is not covered and the output says so.</p>
+</blockquote>
       </article>
     </div>
   </main>

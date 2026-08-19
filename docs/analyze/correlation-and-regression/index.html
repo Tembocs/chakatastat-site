@@ -97,7 +97,10 @@ variables and modelling an outcome from predictors.</p>
 <p><strong>Analyze → Correlate.</strong></p>
 <h3 id="bivariate">Bivariate</h3>
 <p><strong>When.</strong> Measure the strength and direction of association between scale (or
-ordinal) variables.</p>
+ordinal) variables. Pearson's r summarises a <em>linear</em> relationship — when in
+doubt, look first with a
+<a href="../../graphs/#loess-smoother">scatterplot and its LOESS smoother</a>: a curved
+trend says a single linear coefficient will under-describe the association.</p>
 <p><strong>Dialog.</strong> Move two or more variables into <strong>Variables</strong>; choose the
 coefficient(s): <strong>Pearson</strong> (linear), <strong>Spearman</strong> or <strong>Kendall's tau-b</strong> (rank).
 The Options section sets <strong>one- vs two-tailed</strong> significance, the
@@ -113,6 +116,20 @@ sign that flips. The scale is fixed at −1…+1, not stretched to the strongest
 correlation present, so a matrix of weak associations looks weak and two
 matrices can be compared. See <a href="../../graphs/">Graphs</a>.</p>
 <p><strong>Example.</strong> <em>BMI</em>, <em>SystolicBP</em>, <em>FastingGlucose_mmolL</em> — do they move together?</p>
+<h4 id="permutation-test">Permutation test</h4>
+<p>With <strong>exactly two variables</strong> selected (Pearson or Spearman), tick
+<strong>Permutation test</strong> in the Options section to also test the coefficient by
+randomization: one variable's values are reshuffled against the other's, and
+the permutation p is the share of arrangements with a coefficient at least
+as extreme as the observed one — no normality assumption behind the p. Small
+samples (n ≤ 9, where every arrangement can be enumerated) report an
+<strong>Exact</strong> p; larger ones report a <strong>Monte Carlo</strong> estimate at the dialog's
+replicate count with a 99% interval for its <em>simulation</em> uncertainty, made
+exactly <a href="../../advanced/reproducibility/">reproducible</a> by the <strong>Seed</strong>
+field. The asymptotic matrix above it is unchanged — the permutation row is
+an addition, not a replacement — and the option follows the dialog's tails
+setting. It is not available under Weight Cases, for Kendall's tau-b, or
+for a matrix of three or more variables (those stay asymptotic).</p>
 <h3 id="partial">Partial</h3>
 <p><strong>When.</strong> Measure the association between two variables <strong>controlling for</strong> one or
 more others.</p>

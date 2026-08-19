@@ -131,12 +131,12 @@ every run is recorded in the <a href="../advanced/reproducibility/">Syntax conso
 <tr>
 <td><strong><a href="compare-means/">Compare Means</a></strong></td>
 <td>Compare Means, Bayesian</td>
-<td>Means, the three T tests, One-Way ANOVA, and the Bayesian <a href="compare-means/#bayesian-t-test">t test</a> / <a href="compare-means/#bayesian-correlation">correlation</a> / <a href="compare-means/#bayesian-anova">ANOVA</a> / <a href="compare-means/#bayesian-linear-regression">linear regression</a> (Bayes factors + posteriors)</td>
+<td>Means, the three T tests (independent with an exact/Monte-Carlo <a href="compare-means/#permutation-test">permutation test</a>), the <a href="compare-means/#equivalence-t-test-tost">Equivalence T Test (TOST)</a>, One-Way ANOVA, and the Bayesian <a href="compare-means/#bayesian-t-test">t test</a> / <a href="compare-means/#bayesian-correlation">correlation</a> / <a href="compare-means/#bayesian-anova">ANOVA</a> / <a href="compare-means/#bayesian-linear-regression">linear regression</a> (Bayes factors + posteriors)</td>
 </tr>
 <tr>
 <td><strong><a href="correlation-and-regression/">Correlation &amp; Regression</a></strong></td>
 <td>Correlate, Regression, GLM, Mixed</td>
-<td>Bivariate/partial correlation; linear, logistic, Poisson, negative-binomial, multinomial and ordinal regression; mediation analysis (with moderated mediation and the interaction plot); factorial GLM/ANCOVA; mixed models; repeated measures &amp; MANOVA</td>
+<td>Bivariate/partial correlation (bivariate with a <a href="correlation-and-regression/#permutation-test">permutation test</a>); linear, logistic, Poisson, negative-binomial, multinomial and ordinal regression; mediation analysis (with moderated mediation and the interaction plot); factorial GLM/ANCOVA; mixed models; repeated measures &amp; MANOVA</td>
 </tr>
 <tr>
 <td><strong><a href="panel/">Panel Regression</a></strong></td>
@@ -164,14 +164,39 @@ every run is recorded in the <a href="../advanced/reproducibility/">Syntax conso
 <td>Reliability; intraclass correlation; factor analysis; k-means, hierarchical &amp; two-step cluster; discriminant analysis; ROC curve / AUC</td>
 </tr>
 <tr>
+<td><strong><a href="method-comparison/">Method Comparison (Bland-Altman)</a></strong></td>
+<td>Scale</td>
+<td>Agreement between two measurement methods: bias, SD of the differences and the 1.96 limits of agreement with t-based CIs; the proportional-bias regression; the mean-vs-difference plot</td>
+</tr>
+<tr>
+<td><strong><a href="latent-class/">Latent Class Analysis</a></strong></td>
+<td>Classify</td>
+<td>Unobserved subgroups from categorical indicators: EM mixture model with class-enumeration fit indices (AIC/BIC/aBIC, entropy), class profiles, classification diagnostics, saved class/posterior columns</td>
+</tr>
+<tr>
+<td><strong><a href="irt/">Item Response Theory</a></strong></td>
+<td>Scale</td>
+<td>Rasch / 2PL item parameters (discrimination, difficulty with SEs) for binary items by marginal maximum likelihood; item and test information curves showing where the test measures well</td>
+</tr>
+<tr>
 <td><strong><a href="cfa/">Confirmatory Factor Analysis</a></strong></td>
 <td>Dimension Reduction</td>
 <td>Testing a hypothesized measurement structure: ML loadings with standard errors, factor correlations, and the conventional fit block (χ², CFI, TLI, RMSEA, SRMR)</td>
 </tr>
 <tr>
+<td><strong><a href="complex-samples/">Complex Samples (Survey Designs)</a></strong></td>
+<td>Data → Survey Design</td>
+<td>Declaring strata/PSU/sampling-weight designs; design-based (Taylor-linearized) estimates, CIs on the design df and design effects in Explore, Frequencies, Crosstabs (Rao–Scott), Means and linear/logistic regression; domain estimation for subgroups</td>
+</tr>
+<tr>
 <td><strong><a href="survival-and-time-series/">Survival &amp; Time Series</a></strong></td>
 <td>Survival, Time Series</td>
 <td>Kaplan-Meier, Cox regression; autocorrelation, ARIMA/SARIMA with forecasting</td>
+</tr>
+<tr>
+<td><strong><a href="var-granger/">VAR &amp; Granger Causality</a></strong></td>
+<td>Time Series</td>
+<td>Vector autoregression of two or more series: per-equation OLS with lag-order selection (AIC/HQ/BIC/FPE), residual covariance, and pairwise Granger causality F tests</td>
 </tr>
 <tr>
 <td><strong><a href="tables/">Custom Tables</a></strong></td>

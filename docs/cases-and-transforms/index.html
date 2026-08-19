@@ -105,8 +105,19 @@ the selection. You can choose to filter (hide) or to mark unselected cases.</p>
 <h3 id="weight-cases">Weight Cases</h3>
 <p><strong>Data → Weight Cases…</strong> (<code>Ctrl+Alt+W</code>). Give each case a <strong>frequency weight</strong>
 from a variable, so a case with weight 3 counts as three observations. Used for
-data stored as a frequency table, or to apply survey weights. Counts, means and
-tests all honour the weight.</p>
+data stored as a frequency table. Counts, means and tests all honour the
+weight. For <strong>survey (sampling) weights</strong> use
+<a href="../analyze/complex-samples/">Survey Design</a> instead — a frequency weight
+reproduces cases, which is the wrong model for a sampling weight and
+understates survey standard errors; the two settings are mutually exclusive.</p>
+<h3 id="survey-design">Survey Design</h3>
+<p><strong>Data → Survey Design…</strong> Declare the dataset's complex-survey structure —
+strata, clusters (PSUs) and sampling weights — so the covered procedures
+report design-based estimates with correct standard errors, and every other
+analysis says plainly that it ignored the design. The full story is on its
+own page: <a href="../analyze/complex-samples/">Complex Samples (Survey Designs)</a>.
+Under a declared design, Select Cases and Split File become <strong>domain
+estimation</strong> automatically (the design-correct way to analyze subgroups).</p>
 <h3 id="split-file">Split File</h3>
 <p><strong>Data → Split File…</strong> (<code>Ctrl+Alt+T</code>). Repeat every analysis <strong>separately for
 each group</strong> of a categorical variable — e.g. run all your descriptives once per

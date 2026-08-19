@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Complex Samples (Survey Designs) — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/analyze/complex-samples/">
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Complex Samples (Survey Designs) — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/analyze/complex-samples/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../index.html">
+        <img class="brand-mark" src="../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <!-- One link, not a copy of the site menu. While someone is reading the
+           guide, the sidebar is the navigation that matters; marketing anchors
+           (Features, Screenshots, …) only compete with it and push the reader
+           out of what they came for. All that is owed is a way back. Single
+           link means no mobile collapse either, so there is no hamburger on
+           these pages — main.js guards for its absence. -->
+      <nav id="nav-links" class="nav-links nav-links--single">
+        <a href="../../../index.html">← Back to chakatastat.app</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../../">Contents</a></li>
+        <li><a href="../../quick-start/">Quick Start</a></li>
+        <li><a href="../../overview/">Overview</a></li>
+        <li><a href="../../getting-started/">Getting Started</a></li>
+        <li><a href="../../tutorial/">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../../working-with-data/">Working with Data</a></li>
+        <li><a href="../../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../">Analyzing Data</a></li>
+        <li><a href="../../graphs/">Graphs</a></li>
+        <li><a href="../../chart-editor/">Editing a chart</a></li>
+        <li><a href="../../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
+        <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
+        <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="complex-samples-survey-designs">Complex Samples (Survey Designs)</h1>
+<p><strong>Data → Survey Design…</strong> Real survey datasets — DHS, ESS, NHANES and their
+kin — are not simple random samples: cases are drawn in <strong>clusters</strong> (primary
+sampling units, PSUs) within <strong>strata</strong>, with unequal <strong>sampling weights</strong>.
+Analyzing such data as if every case were an independent draw produces wrong
+standard errors, silently — usually too small, because cases in the same
+cluster resemble each other. Declaring the survey design fixes that: the
+covered procedures then report <strong>design-based</strong> estimates with
+Taylor-linearized standard errors, the way R's <code>survey</code> package and the major
+packages' complex-samples modules do.</p>
+<h2 id="declaring-a-design">Declaring a design</h2>
+<p>Open <strong>Data → Survey Design…</strong>, choose <strong>Declare a design</strong>, and pick:</p>
+<ul>
+<li><strong>Sampling weight</strong> (required) — the numeric variable holding each case's
+sampling weight. Every case must have a positive weight; a missing, zero or
+negative value stops the declaration with a message naming the case, because
+a sampling weight is part of the design, not a filter.</li>
+<li><strong>PSU / cluster</strong> (optional) — the primary-sampling-unit identifier. PSU
+values are read <strong>within</strong> strata, so reusing PSU numbers 1–n in every
+stratum works (the common survey-file convention). Leave it out for a
+design without clustering (each case its own PSU).</li>
+<li><strong>Strata</strong> (optional) — the stratum identifier. Leave it out for an
+unstratified design.</li>
+</ul>
+<p>On <strong>OK</strong> the declaration is validated and a <strong>Survey Design</strong> summary is
+written to the output: the number of strata and PSUs, the <strong>design degrees of
+freedom</strong> (PSUs − strata — the df every design-based confidence interval
+uses), the case count and the sum of weights. The status bar shows <strong>Survey
+Design On</strong> while a design is active, and the declaration is journaled as a
+<code>survey_design</code> command, so a saved syntax file reproduces it:</p>
+<pre><code>survey_design weight=wtmec2yr, psu=sdmvpsu, strata=sdmvstra
+survey_design clear=true
+</code></pre>
+<p>Two rules to know up front:</p>
+<ul>
+<li><strong>Every stratum needs at least two PSUs.</strong> With a single PSU the variance
+estimator is undefined (the &quot;lonely PSU&quot; problem); the declaration fails
+with a message naming the stratum, matching R's default behaviour.</li>
+<li><strong>Survey Design and Weight Cases are mutually exclusive.</strong> The design's
+sampling weight already weights every estimate; layering a frequency weight
+on top would count cases twice. Declaring one clears the other.</li>
+</ul>
+<h2 id="what-is-design-aware-and-what-is-not">What is design-aware (and what is not)</h2>
+<p>With a design declared, exactly these procedures estimate design-based —
+<strong>Explore, Frequencies, Crosstabs (two-way), Means, Linear Regression and
+Logistic Regression</strong>:</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Procedure</th>
+<th>What you get</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Explore</strong></td>
+<td>Design-based mean, its standard error, the confidence interval on the design df, the design effect (deff), and the estimated population total with its SE. The full descriptive battery (quantiles, skewness) is not design-based and is not shown here.</td>
+</tr>
+<tr>
+<td><strong>Frequencies</strong></td>
+<td>Per category: the unweighted count, the estimated population count, the design-based proportion with its SE, a <strong>logit-scale</strong> confidence interval (never outside 0–1), and the deff.</td>
+</tr>
+<tr>
+<td><strong>Crosstabs</strong></td>
+<td>Estimated population counts, and — with the chi-square option — the <strong>Rao–Scott second-order corrected test</strong> with an F reference distribution (the <code>svychisq</code> default) instead of the classic Pearson block.</td>
+</tr>
+<tr>
+<td><strong>Means</strong></td>
+<td>Each group's design-based mean, SE and CI, estimated as a <strong>domain</strong> (see below).</td>
+</tr>
+<tr>
+<td><strong>Linear / Logistic Regression</strong></td>
+<td>The sampling-weighted fit with Taylor-linearized (sandwich) standard errors; t tests and CIs on (design df) − p + 1. The logistic table keeps Exp(B) with its interval. The classic ANOVA table, standardized betas and collinearity diagnostics are simple-random-sample constructs and are not produced; stepwise selection, robust SEs, casewise diagnostics and the Hosmer–Lemeshow test are unavailable under a design.</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Every other analysis states, in its output note, that it ran ignoring the
+design.</strong> Nothing is wrong silently: a procedure either estimates
+design-based or says plainly that it did not. (Descriptives is in this second
+group — use Explore for design-based summaries.)</p>
+<h2 id="domains-subgroup-analysis-done-right">Domains: subgroup analysis done right</h2>
+<p>Estimating a subgroup of a survey — one sex, one region, the cases passing a
+filter — is <strong>not</strong> the same as deleting the other cases and re-analyzing.
+The subgroup's sample size is itself random, and dropping cases can drop
+whole PSUs, which changes the variance structure. The correct method,
+<strong>domain estimation</strong>, keeps every case's stratum/PSU membership and zeroes
+the out-of-domain contributions.</p>
+<p>ChakataStat applies domain estimation automatically wherever a subgroup
+arises under a declared design:</p>
+<ul>
+<li><strong>Select Cases</strong> — the filter defines a domain, never a row subset;</li>
+<li><strong>Split File</strong> — each group is a domain;</li>
+<li>the <strong>Means</strong> factor — each level is a domain;</li>
+<li><strong>missing values</strong> on an analysis variable — the complete cases form a
+domain.</li>
+</ul>
+<p>You do not have to do anything; the point of this section is that you can
+trust Select Cases and Split File under a design, where naive subsetting
+would misstate the standard errors.</p>
+<h2 id="reading-the-output">Reading the output</h2>
+<ul>
+<li><strong>Std. Error</strong> — Taylor-linearized over the stratum/PSU structure (with
+replacement; no finite-population correction in this version).</li>
+<li><strong>Confidence intervals</strong> — t on the <strong>design df</strong> (PSUs − strata), the
+SPSS/Stata convention. Proportions use a logit-scale interval
+(<code>svyciprop</code>'s &quot;logit&quot; method), so bounds stay inside 0–1; a proportion of
+exactly 0 or 1 has no interval rather than a fabricated one.</li>
+<li><strong>Deff</strong> — the design effect: the ratio of the design-based variance to
+the variance a simple random sample of the same size would have had
+(with-replacement baseline, R's <code>deff = &quot;replace&quot;</code>). Deff ≈ 2 means the
+clustering/weighting doubled the variance — the effective sample size is
+about half the nominal one.</li>
+<li><strong>Population Size / Weighted N</strong> — the sum of the sampling weights: the
+population the sample stands for, which is what a survey estimate is
+about.</li>
+</ul>
+<p>Every design-based table names the design (variables, strata, PSUs, df) in
+its note, so output stays self-describing when exported.</p>
+<h2 id="scope-precisely">Scope, precisely</h2>
+<p>This version estimates by <strong>Taylor linearization</strong> only — no
+BRR/jackknife/bootstrap replicate weights, no finite population correction,
+no multistage variance (first-stage PSUs carry the variance, the standard
+with-replacement approximation), and no design-based quantiles. Every number
+the design-aware procedures print is validated end to end against R's
+<code>survey</code> package — see the project's validation methodology.</p>
+<hr />
+<p>Related: <a href="../../cases-and-transforms/">Case Semantics &amp; Transforms</a> (Select /
+Weight / Split), <a href="../descriptive-statistics/">Descriptive Statistics</a>,
+<a href="../correlation-and-regression/">Correlation &amp; Regression</a>.</p>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../index.html">Home</a> ·
+        <a href="../../../quick-start/">Quick Start</a> ·
+        <a href="../../../privacy-policy/">Privacy Policy</a> ·
+        <a href="../../../license/">License</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../js/main.js"></script>
+</body>
+</html>

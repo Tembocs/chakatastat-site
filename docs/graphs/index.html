@@ -130,6 +130,37 @@ variable to see how two variables relate — the visual companion to a
 <a href="../analyze/correlation-and-regression/#correlate">correlation</a>.</p>
 <p><strong>Example.</strong> <em>BMI</em> (X) against <em>SystolicBP</em> (Y) — does blood pressure rise with
 BMI?</p>
+<h4 id="loess-smoother">LOESS smoother</h4>
+<p>Tick <strong>LOESS smoother</strong> to draw a trend curve over the points — a
+local-linear fit that follows the data wherever it goes, instead of forcing
+a straight line through it. It answers the question a correlation
+coefficient cannot: <em>is this relationship even linear?</em> A straight smoother
+says a linear summary (Pearson's r, a linear regression) is telling the
+whole story; a bend, plateau or U-shape says it is not, before you commit
+to a model that assumes it is.</p>
+<p><strong>Span</strong> controls how much of the data each part of the curve looks at, as
+a fraction between 0 (exclusive) and 1: the default <strong>0.75</strong> gives the
+standard gently-smoothed trend, smaller spans follow local wiggles more
+closely (and eventually chase noise), larger spans iron them out. If you
+are unsure, leave the default — it is the convention most statistical
+software shares.</p>
+<p>Reading the curve:</p>
+<ul>
+<li>The curve is drawn in its own accent color over the points — recoloring
+the points in the <a href="../chart-editor/">chart editor</a> never recolors the
+curve that explains them.</li>
+<li>The smoother needs at least <strong>6 complete pairs</strong> (and two distinct X
+values). With fewer, the scatterplot still draws and its note says why
+the curve is absent.</li>
+<li>The curve describes the plotted points; it is an exploratory reading
+aid, not a fitted model with coefficients or intervals. When the shape
+it shows is genuinely non-linear, that is the cue to model the curvature
+(a transformation, or a non-linear term in
+<a href="../analyze/correlation-and-regression/">regression</a>).</li>
+</ul>
+<p><strong>Example.</strong> <em>Age</em> (X) against reaction time (Y): the smoother dips through
+the 20s–40s and climbs after 60 — a U-shape a single correlation
+coefficient would average away to &quot;no association&quot;.</p>
 <h3 id="boxplot">Boxplot</h3>
 <p><strong>Graphs → Boxplot…</strong> (<code>Ctrl+Shift+B</code>). Summarise a scale variable's median,
 quartiles and outliers, optionally <strong>split by a categorical variable</strong> to compare
@@ -345,6 +376,16 @@ on by default);</li>
 <strong>Plot balance</strong>, on by default): each covariate's standardized mean
 difference before and after matching/weighting as paired points, with zero
 — perfect balance — always in view;</li>
+<li>the <strong>Bland-Altman plot</strong> from
+<a href="../analyze/method-comparison/">Method Comparison</a> (tick <strong>Plot mean vs
+difference</strong>, on by default): each subject's between-method difference
+against the pair mean, with a solid line at the bias and dashed lines at
+both limits of agreement, each labelled with its value;</li>
+<li>the <strong>item and test information curves</strong> from
+<a href="../analyze/irt/">Item Response Theory</a> (tick <strong>Plot information
+curves</strong>, on by default): each item's Fisher information over the latent
+trait — one curve per item, legend and palette as on any line chart —
+and the whole test's information profile;</li>
 <li>the <strong>interaction plot</strong> from
 <a href="../analyze/correlation-and-regression/#moderated-mediation">moderated mediation</a>
 (tick <strong>Interaction plot</strong>, on by default): the moderated path's fitted

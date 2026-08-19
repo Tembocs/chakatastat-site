@@ -170,7 +170,7 @@ to know</strong>. Find the row that matches and follow the link.</p>
 <tr>
 <td>Two independent groups</td>
 <td>no (non-normal)</td>
-<td><a href="../../analyze/nonparametric/">Mann-Whitney U</a></td>
+<td><a href="../../analyze/nonparametric/">Mann-Whitney U</a> (a rank shift), or the t-test dialog's <a href="../../analyze/compare-means/#permutation-test">permutation test</a> (still the mean, no assumptions)</td>
 </tr>
 <tr>
 <td>Two related measurements</td>
@@ -210,7 +210,10 @@ association measures), or <a href="../../analyze/tables/">Custom Tables</a> for 
 pivot.</p>
 <h2 id="i-want-to-measure-association-between-scale-variables">I want to measure association between scale variables</h2>
 <p>→ <a href="../../analyze/correlation-and-regression/#correlate">Correlate</a> (Pearson,
-Spearman, Kendall; partial to control for other variables).</p>
+Spearman, Kendall; partial to control for other variables). Not sure the
+relationship is even linear? Look first: a
+<a href="../../graphs/#loess-smoother">scatterplot with a LOESS smoother</a> shows the
+shape before you pick a coefficient.</p>
 <h2 id="i-want-to-predict-an-outcome-from-predictors">I want to predict an outcome from predictors</h2>
 <div class="docs-table-wrap"><table>
 <thead>
@@ -272,6 +275,10 @@ Spearman, Kendall; partial to control for other variables).</p>
 <td><a href="../../analyze/scale-reduction-classify/#scale--reliability-analysis">Reliability</a></td>
 </tr>
 <tr>
+<td>How do the <strong>items themselves</strong> measure — difficulty, discrimination, where the test is precise?</td>
+<td><a href="../../analyze/irt/">Item Response Theory</a></td>
+</tr>
+<tr>
 <td>Reduce many variables to a few factors</td>
 <td><a href="../../analyze/scale-reduction-classify/#dimension-reduction--factor">Factor</a></td>
 </tr>
@@ -290,6 +297,10 @@ Spearman, Kendall; partial to control for other variables).</p>
 <tr>
 <td>Group cases, let the count be chosen</td>
 <td><a href="../../analyze/scale-reduction-classify/#two-step-cluster">Two-Step</a></td>
+</tr>
+<tr>
+<td>Find unobserved subgroups from <strong>categorical</strong> items, with fit indices</td>
+<td><a href="../../analyze/latent-class/">Latent Class Analysis</a></td>
 </tr>
 </tbody>
 </table></div>
@@ -314,6 +325,10 @@ Spearman, Kendall; partial to control for other variables).</p>
 <td>A series ordered in time, want a forecast</td>
 <td><a href="../../analyze/survival-and-time-series/#arima--sarima">ARIMA / SARIMA</a></td>
 </tr>
+<tr>
+<td><strong>Several</strong> series over time — do they predict each other?</td>
+<td><a href="../../analyze/var-granger/">VAR &amp; Granger Causality</a></td>
+</tr>
 </tbody>
 </table></div>
 <h2 id="i-want-to-combine-results-across-studies">I want to combine results across studies</h2>
@@ -321,6 +336,15 @@ Spearman, Kendall; partial to control for other variables).</p>
 size and its standard error — pooled under fixed- and random-effects models,
 with heterogeneity statistics, a forest plot and a funnel plot with Egger's
 test).</p>
+<h2 id="i-want-to-know-whether-two-measurement-methods-agree">I want to know whether two measurement methods agree</h2>
+<p>→ <a href="../../analyze/method-comparison/">Method Comparison (Bland-Altman)</a> (the
+bias and 1.96 limits of agreement of the per-subject differences, with the
+mean-vs-difference plot — agreement in the measurement's own units, which a
+correlation cannot state). For the agreement of <strong>raters</strong> as a single
+relative index, use
+<a href="../../analyze/scale-reduction-classify/#scale--intraclass-correlation">Intraclass Correlation</a>
+instead; for <strong>categorical</strong> ratings, Cohen's kappa in
+<a href="../../analyze/descriptive-statistics/#crosstabs">Crosstabs</a>.</p>
 <h2 id="i-want-to-compare-treated-and-untreated-cases-that-were-not-randomized">I want to compare treated and untreated cases that were not randomized</h2>
 <p>→ <a href="../../analyze/propensity/">Propensity Score</a> (estimate each case's
 probability of treatment from covariates, then match treated cases to

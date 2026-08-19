@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Method Comparison (Bland-Altman) — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/analyze/method-comparison/">
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Method Comparison (Bland-Altman) — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/analyze/method-comparison/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../index.html">
+        <img class="brand-mark" src="../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <!-- One link, not a copy of the site menu. While someone is reading the
+           guide, the sidebar is the navigation that matters; marketing anchors
+           (Features, Screenshots, …) only compete with it and push the reader
+           out of what they came for. All that is owed is a way back. Single
+           link means no mobile collapse either, so there is no hamburger on
+           these pages — main.js guards for its absence. -->
+      <nav id="nav-links" class="nav-links nav-links--single">
+        <a href="../../../index.html">← Back to chakatastat.app</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../../">Contents</a></li>
+        <li><a href="../../quick-start/">Quick Start</a></li>
+        <li><a href="../../overview/">Overview</a></li>
+        <li><a href="../../getting-started/">Getting Started</a></li>
+        <li><a href="../../tutorial/">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../../working-with-data/">Working with Data</a></li>
+        <li><a href="../../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../">Analyzing Data</a></li>
+        <li><a href="../../graphs/">Graphs</a></li>
+        <li><a href="../../chart-editor/">Editing a chart</a></li>
+        <li><a href="../../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
+        <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
+        <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../../reference/glossary/">Glossary</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="method-comparison-bland-altman">Method Comparison (Bland-Altman)</h1>
+<p><strong>Analyze → Scale → Bland-Altman.</strong> For two methods that measure the <strong>same
+quantity</strong> — a new blood-pressure device against the reference
+sphygmomanometer, a portable meter against the laboratory assay — the question
+is not whether the methods <em>correlate</em> but whether they <strong>agree</strong>: can one
+replace the other without changing the clinical or scientific conclusion? A
+correlation near 1 cannot answer that — two methods can correlate almost
+perfectly while one reads consistently 20 units higher, or drifts apart at
+high values. The Bland-Altman analysis answers the agreement question
+directly: <strong>how far apart are the two methods on the same subject, and how
+far apart can they be expected to get?</strong></p>
+<p>The analysis works on the per-subject <strong>differences</strong> (method 1 − method 2):</p>
+<ul>
+<li>the <strong>bias</strong> — the mean difference, the systematic offset between methods;</li>
+<li>the <strong>limits of agreement</strong> — bias ± 1.96 × SD of the differences, the
+interval expected to cover about 95% of individual differences;</li>
+<li>the <strong>mean-vs-difference plot</strong> — each subject's difference against the
+pair mean, with the bias and limit lines drawn on it.</li>
+</ul>
+<p>Whether the limits are <em>acceptable</em> is a subject-matter judgment, made in the
+measurement's own units and ideally declared before looking: a ±74 l/min
+disagreement between peak-flow meters means something to a respiratory
+clinician, not to the statistics.</p>
+<h2 id="the-data-layout">The data layout</h2>
+<p>One row per subject, one numeric column per method — the same wide layout as
+a paired t test. Only rows complete on <strong>both</strong> methods enter; the output's
+note counts the complete pairs. (Repeated measurements per subject are a
+different design — see the scope note below.)</p>
+<h2 id="the-dialog">The dialog</h2>
+<p>Pick <strong>Method 1</strong> and <strong>Method 2</strong> — the differences are method 1 −
+method 2, and every table names that direction, so choose the order you want
+to read (convention: the new or test method first, the reference second; a
+<em>positive</em> bias then means the new method reads higher). The <strong>confidence
+interval</strong> dropdown (90/95/99%) sets the level of the confidence intervals
+only — the limits of agreement themselves always use 1.96. <strong>Plot mean vs
+difference</strong> (on by default) draws the plot.</p>
+<h2 id="reading-the-output">Reading the output</h2>
+<ul>
+<li><strong>Bland-Altman Statistics</strong> — one row per quantity, each with its
+confidence interval:
+<ul>
+<li><strong>Bias (Mean Difference)</strong> — the systematic offset. Its CI answers &quot;is
+the bias distinguishable from zero?&quot; — but a tiny, certain bias can
+matter less than wide limits, so read on.</li>
+<li><strong>Std. Deviation of Differences</strong> — the spread the limits are built
+from.</li>
+<li><strong>Lower / Upper Limit of Agreement</strong> — bias ± 1.96 × SD: roughly 95% of
+individual differences are expected to fall between them. <strong>These, not
+the bias, are the agreement verdict</strong> — compare them against the
+difference you could tolerate clinically or scientifically. Their CIs
+(t-based, using Bland &amp; Altman's 1999 exact variance) show how precisely
+the limits themselves are estimated — with few subjects the limits are
+themselves uncertain, and the CI says by how much.</li>
+<li>The note carries the complete-pair count and the exact conventions.</li>
+</ul>
+</li>
+<li><strong>Proportional Bias</strong> — a regression of the differences on the pair means.
+A <strong>slope</strong> distinguishable from zero means the disagreement <em>changes with
+the size of the measurement</em> (e.g. the methods agree at low values and
+drift apart at high ones); the level bias line and limits then average
+over a trend, so read the plot and consider whether a single pair of
+limits is a fair summary. With a near-zero slope, the intercept simply
+restates the bias.</li>
+<li><strong>Bland-Altman Points</strong> — the plot's own (mean, difference) coordinates,
+printed so the figure's data exports like any table.</li>
+<li><strong>The plot</strong> — the points with a solid line at the bias and dashed lines
+at both limits, each labelled with its value. What to look for: points
+scattered evenly in a level band (good — the limits summarize fairly); a
+fan or slope (proportional bias — see the table above); isolated far
+points (subjects the methods genuinely disagree on — investigate them,
+don't delete them).</li>
+</ul>
+<h2 id="worked-reading-the-1986-peak-flow-data">Worked reading (the 1986 peak-flow data)</h2>
+<p>On Bland &amp; Altman's own peak-flow data (a Wright meter against the Mini
+Wright, 17 subjects), the bias is −2.1 l/min — essentially no systematic
+offset — but the limits of agreement run from <strong>−78 to +74 l/min</strong>: for an
+individual patient the two meters can disagree by over 70 l/min in either
+direction, far more than a clinician would accept, and the near-zero bias
+(and a correlation of 0.94) would never have revealed it. That is the
+method's whole point.</p>
+<h2 id="relation-to-the-other-agreement-tools">Relation to the other agreement tools</h2>
+<ul>
+<li><strong><a href="../scale-reduction-classify/#scale--intraclass-correlation">Intraclass Correlation</a></strong>
+— agreement of two or more <strong>raters</strong> as a single relative index (0–1),
+scale-free. Bland-Altman instead states agreement between <strong>two methods</strong>
+in the measurement's own units — preferred when &quot;how many l/min apart?&quot;
+is the question that matters.</li>
+<li><strong>Cohen's kappa</strong> (in
+<a href="../descriptive-statistics/#crosstabs">Crosstabs</a>) — agreement on
+<strong>categorical</strong> ratings.</li>
+</ul>
+<blockquote>
+<p><strong>Scope (v1).</strong> The classic single-measurement design: the limits use the
+literal 1.96, differences are raw (no percentage or ratio variant), and
+<strong>repeated measurements per subject are not covered</strong> — the
+repeated-measures Bland-Altman (within-subject variance components) is a
+recorded follow-up. A frequency weight (Weight Cases) is honored as case
+replication; a declared survey design is not covered and the output says
+so.</p>
+</blockquote>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../index.html">Home</a> ·
+        <a href="../../../quick-start/">Quick Start</a> ·
+        <a href="../../../privacy-policy/">Privacy Policy</a> ·
+        <a href="../../../license/">License</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../js/main.js"></script>
+</body>
+</html>

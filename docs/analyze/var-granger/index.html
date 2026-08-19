@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Nonparametric Tests — ChakataStat User Guide</title>
-  <link rel="canonical" href="https://chakatastat.app/docs/analyze/nonparametric/">
+  <title>VAR &amp; Granger Causality — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/analyze/var-granger/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Nonparametric Tests — ChakataStat User Guide">
-  <meta property="og:url" content="https://chakatastat.app/docs/analyze/nonparametric/">
+  <meta property="og:title" content="VAR &amp; Granger Causality — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/analyze/var-granger/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
@@ -89,116 +89,83 @@
       </ul>
       </aside>
       <article class="docs-content">
-<h1 id="nonparametric-tests">Nonparametric Tests</h1>
-<p><strong>Analyze → Nonparametric Tests.</strong> Use these when the assumptions behind a t-test
-or ANOVA (normality, equal variances) do not hold, or when your data are ordinal
-ranks rather than true scale values. They test distributions and medians using
-ranks, not means. (To drop the assumptions while still testing the <em>mean
-difference</em> itself, the two-group alternative is the t-test dialog's
-<a href="../compare-means/#permutation-test">permutation test</a>.)</p>
-<h2 id="the-tests-at-a-glance">The tests at a glance</h2>
-<div class="docs-table-wrap"><table>
-<thead>
-<tr>
-<th>Test</th>
-<th>Parametric analogue</th>
-<th>Use when</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Mann-Whitney U</strong></td>
-<td>Independent-samples t</td>
-<td>Two independent groups</td>
-</tr>
-<tr>
-<td><strong>Wilcoxon Signed-Rank</strong></td>
-<td>Paired t</td>
-<td>Two related measurements</td>
-</tr>
-<tr>
-<td><strong>Sign test</strong></td>
-<td>Paired t</td>
-<td>Two related measurements (direction only)</td>
-</tr>
-<tr>
-<td><strong>Kruskal-Wallis</strong></td>
-<td>One-way ANOVA</td>
-<td>Three+ independent groups</td>
-</tr>
-<tr>
-<td><strong>Friedman</strong></td>
-<td>Repeated-measures ANOVA</td>
-<td>Three+ related measurements</td>
-</tr>
-<tr>
-<td><strong>Kendall's W</strong></td>
-<td>Repeated-measures ANOVA</td>
-<td>Agreement among several rankers</td>
-</tr>
-<tr>
-<td><strong>Runs test</strong></td>
-<td>—</td>
-<td>Randomness of a sequence</td>
-</tr>
-<tr>
-<td><strong>Binomial test</strong></td>
-<td>—</td>
-<td>A proportion vs an expected value</td>
-</tr>
-<tr>
-<td><strong>Tests of Normality</strong></td>
-<td>—</td>
-<td>Whether a variable is normally distributed</td>
-</tr>
-</tbody>
-</table></div>
-<h2 id="how-to-fill-the-dialogs">How to fill the dialogs</h2>
-<p>Each test takes the variable(s) it needs and, for the group-comparison tests, a
-<strong>grouping variable</strong>:</p>
+<h1 id="var--granger-causality">VAR &amp; Granger Causality</h1>
+<p><strong>Analyze → Time Series → Vector Autoregression.</strong> The single-series tools
+model one series at a time; a <strong>vector autoregression (VAR)</strong> models two or
+more series <em>together</em>, regressing each one on <strong>p lags of all of them</strong>.
+That answers the standard multi-series questions in one fit: how the series
+move together over time, which lag order the data support, and — the
+headline — whether one series's history <strong>improves the prediction</strong> of
+another (<strong>Granger causality</strong>).</p>
+<h2 id="the-data-layout">The data layout</h2>
+<p>One column per series, cases in <strong>time order</strong>. The analyzed sample is the
+rows where <strong>all</strong> selected series are non-missing (a row missing any one is
+dropped, and the output names the aligned count). Like every time-series
+tool the estimate is <strong>unweighted by design</strong> — a frequency weight has no
+defined meaning for an ordered series; an active weight only selects cases,
+and the output says so.</p>
+<h2 id="the-dialog">The dialog</h2>
+<p>Tick two or more <strong>Series</strong>, then choose how the lag order is set:</p>
 <ul>
-<li><strong>Mann-Whitney / Kruskal-Wallis</strong> — a <strong>test variable</strong> and a <strong>grouping
-variable</strong> (two groups for Mann-Whitney, three+ for Kruskal-Wallis).</li>
-<li><strong>Wilcoxon / Sign</strong> — a <strong>pair</strong> of related variables.</li>
-<li><strong>Friedman</strong> — three or more <strong>related variables</strong>.</li>
-<li><strong>Kendall's W</strong> — two or more <strong>related variables</strong> (the items each case
-ranks); reports the <strong>coefficient of concordance</strong> (0..1 agreement) and its
-equivalent Friedman chi-square. It is the same statistic as Friedman, rescaled
-to read as an agreement measure — use it when the question is &quot;how much do the
-rankers agree?&quot; rather than &quot;do the conditions differ?&quot;.</li>
-<li><strong>Runs test</strong> — one variable; tests whether values fall in a random order
-around a cut point, with an optional <strong>exact</strong> small-sample significance.</li>
-<li><strong>Binomial test</strong> — one variable and an <strong>expected proportion</strong>; reports an
-exact or asymptotic significance.</li>
-<li><strong>Tests of Normality</strong> — one or more variables; reports <strong>Shapiro-Wilk</strong> and
-<strong>Kolmogorov-Smirnov</strong> (Lilliefors) with a reject/retain <strong>Decision</strong> at your
-chosen α (set in Options).</li>
+<li><strong>Lag order (p)</strong> — a fixed order (default 1). Each equation regresses its
+series on lags 1..p of every series.</li>
+<li><strong>Choose the lag order automatically</strong> — compares orders 1..<strong>maximum</strong>
+with the four standard information criteria and fits the one your chosen
+<strong>criterion</strong> picks. Every candidate is scored on the <em>same</em> trimmed
+sample, so the criteria are comparable across orders.</li>
+<li><strong>Deterministic terms</strong> — a <strong>constant</strong> (default), a <strong>linear trend</strong>,
+<strong>both</strong>, or <strong>none</strong>.</li>
 </ul>
 <h2 id="reading-the-output">Reading the output</h2>
-<p>The rank-based tests report <strong>mean ranks</strong> per group, the test statistic
-(U, W, H, χ²…), and the significance. A small significance means the groups'
-distributions (or the paired differences) differ more than chance would explain.</p>
-<h3 id="exact-small-sample-significance">Exact small-sample significance</h3>
-<p><strong>Mann-Whitney</strong>, <strong>Wilcoxon</strong> and <strong>Kruskal-Wallis</strong> each offer an <strong>Exact
-small-sample significance</strong> option (and <strong>Runs</strong> and <strong>Binomial</strong> have their own
-exact paths). The asymptotic (normal / χ²) p-value these tests report is only
-reliable for reasonably large samples; for small ones, tick <strong>Exact</strong> to add an
-<strong>Exact Sig.</strong> column computed from the statistic's true null distribution by
-enumeration. An exact value is shown only when it applies — <strong>tied data</strong> breaks
-it (the rank arrangements are no longer equally likely) and very large samples
-are not enumerated — and the output falls back to the asymptotic value with a
-note when it cannot.</p>
-<h2 id="example">Example</h2>
-<p>Earlier, <a href="../descriptive-statistics/#explore">Explore</a> suggested <em>FastingGlucose</em>
-is not normally distributed within groups. Rather than an independent-samples
-t-test of glucose by <em>Diabetic</em>, run <strong>Mann-Whitney U</strong> with <em>FastingGlucose</em> as
-the test variable and <em>Diabetic</em> as the grouping variable — a valid comparison
-that does not assume normality.</p>
-<h2 id="see-also">See also</h2>
 <ul>
-<li><a href="../compare-means/">Compare Means</a> — the parametric counterparts.</li>
-<li><a href="../descriptive-statistics/#explore">Tests of Normality</a> also appear in Explore.</li>
+<li><strong>VAR Model Summary</strong> — the aligned and effective observation counts, the
+fitted order and how it was chosen, parameters per equation, the
+log-likelihood, and AIC / HQ / BIC / FPE for the fitted model. (BIC is
+Lütkepohl's SC; under automatic selection these values use the model's own
+sample and so can differ from the selection table's row.)</li>
+<li><strong>Lag Order Selection</strong> (automatic mode) — one row per candidate order
+with all four criteria; the note names each criterion's minimum and the
+order actually fitted. Criteria often disagree (BIC is the most
+parsimonious) — that disagreement is information, not a malfunction.</li>
+<li><strong>VAR Coefficients</strong> — one table per series: each lag term (<code>x.l1</code> is
+series x at lag 1), the deterministic terms, with standard errors, t and
+Sig.; the note carries the equation's residual SE and R². Individual lag
+coefficients are hard to read in isolation — the Granger table below tests
+them in meaningful blocks.</li>
+<li><strong>Residual Covariance / Correlation Matrix</strong> — how the equations'
+<em>surprises</em> co-move at the same time point. A large residual correlation
+means shocks hit the series together (contemporaneously) — something the
+lag structure deliberately does not model.</li>
+<li><strong>Granger Causality Tests</strong> — for every ordered pair, an F test that
+<strong>all p lag coefficients of the Cause are zero in the Effect's equation</strong>.
+A small Sig. means the cause's history improves the prediction of the
+effect beyond the effect's own history (and the other series' lags).
+<strong>&quot;Causality&quot; here is predictive, not mechanistic</strong> — the note on the
+table says the same.</li>
 </ul>
+<h2 id="practical-notes">Practical notes</h2>
+<ul>
+<li><strong>Stationarity matters.</strong> A VAR assumes the series are stationary; run
+<a href="../survival-and-time-series/#stationarity-tests">Stationarity Tests</a>
+first and difference trending series (Data → Compute, or model the trend
+with the <strong>trend</strong> deterministic term when it is deterministic rather
+than stochastic).</li>
+<li><strong>Lags are expensive.</strong> Each extra lag adds one coefficient per series to
+<em>every</em> equation; with K series and order p each equation carries p·K
+slopes. Automatic selection with BIC is a sensible default when the
+series are short.</li>
+<li><strong>Two series only?</strong> The pairwise Granger test in a bivariate VAR is
+exactly the classical Granger test (R's <code>lmtest::grangertest</code>).</li>
+</ul>
+<blockquote>
+<p><strong>Scope (v1).</strong> Estimation, lag-order selection and pairwise Granger
+tests: no impulse-response functions or forecast-error variance
+decompositions, no forecasting from the fitted VAR, no seasonal dummies
+or exogenous regressors, no joint (&quot;cause → all others&quot;) or instantaneous
+causality, no stability (companion-root) table, and no SVAR / VECM —
+cointegration analysis is a different tool. A declared survey design is
+not covered and the output says so.</p>
+</blockquote>
       </article>
     </div>
   </main>

@@ -1339,6 +1339,877 @@ suppresses the plot, which is the honest outcome for a degenerate fit.</p>
 <p>No influence diagnostics for the GLM families (Cook's distance, leverage,
 DFBETA), no half-normal plots with simulated envelopes, and no binned-residual
 plot. Each is a defensible follow-up and each is its own validation problem.</p>
+<h2 id="complex-survey-designs--the-v1-conventions">Complex survey designs — the v1 conventions</h2>
+<p><em>Decided 2026-08-18, before any code, as sub-task 1a of
+<code>docs/releases/release_0.19.0.md</code> item 1 (kept private). ChakataStat's Weight
+Cases weight is a frequency weight; a survey dataset carries a <strong>design</strong> —
+strata, PSUs (clusters), sampling weights — and needs design-based standard
+errors. Every convention below was verified against R <code>survey</code> (4.5, R 4.5.3)
+on a hand-computed toy design before being recorded; the reference scripts and
+pinned values live in <code>tool/validation/generate_survey_references.R</code> and
+<code>test/validation/survey_reference_values.json</code> (sub-task 1b).</em></p>
+<h3 id="the-declaration">The declaration</h3>
+<p>A <strong>dataset-level design</strong>, declared once (Data ▸ Survey Design… / the
+<code>survey_design</code> tool) and carried in the request JSON as a <code>design</code> field
+beside <code>filter</code>/<code>weight</code>/<code>split</code>:</p>
+<ul>
+<li><strong><code>weight</code></strong> (required): the sampling-weight variable. Every case must have
+a positive, finite weight — a missing, zero or negative value is a
+declaration <strong>error</strong>, not an exclusion (a sampling weight is part of the
+design; silently dropping a case would misestimate every total).</li>
+<li><strong><code>psu</code></strong> (optional): the primary-sampling-unit (cluster) variable. Absent
+means element sampling — each case is its own PSU (R <code>ids = ~1</code>).</li>
+<li><strong><code>strata</code></strong> (optional): the stratum variable. Absent means one stratum.</li>
+<li>Missing values in <code>psu</code>/<code>strata</code> are declaration <strong>errors</strong>.</li>
+<li>PSU identifiers are read <strong>nested within strata</strong> (R <code>nest = TRUE</code>): the
+same PSU value in two strata is two distinct PSUs.</li>
+<li><strong>Weight Cases and a survey design are mutually exclusive.</strong> A request
+carrying both errors (&quot;choose one&quot;): layering a frequency weight over a
+sampling weight would compound two case multiplicities (the propensity
+precedent). The Survey Design dialog clears Weight Cases on apply and
+vice versa.</li>
+</ul>
+<h3 id="the-covered-procedures-the-v1-list-quoted-verbatim-by-later-sub-tasks">The covered procedures (the v1 list, quoted verbatim by later sub-tasks)</h3>
+<p>Design-aware behaviour ships for exactly these engine kinds:
+<strong><code>explore</code>, <code>frequencies</code>, <code>crosstabs</code> (two-way), <code>means</code>,
+<code>regression_linear</code>, <code>regression_logistic</code></strong>. With a design declared, every
+analysis kind <strong>not</strong> on this list appends a plain note that it ran ignoring
+the design (the whole point of the item: nothing is wrong <em>silently</em>); the
+<code>descriptives</code> tool (the light <code>describe</code> endpoint) gets the same note on the
+Dart side. Power analysis takes no dataset and carries no note.</p>
+<h3 id="the-five-estimation-conventions">The five estimation conventions</h3>
+<ol>
+<li><strong>Variance estimation is Taylor linearization over stratum/PSU totals</strong>
+(with replacement): for per-case linearized scores <code>uᵢ</code>, with PSU totals
+<code>z_hi = Σ_{i∈PSU} uᵢ</code> in stratum <code>h</code> holding <code>n_h</code> PSUs,
+<code>V̂ = Σ_h n_h/(n_h−1) Σ_i (z_hi − z̄_h)²</code> — verified to reproduce
+<code>svymean</code>/<code>svytotal</code>/<code>svyby</code> standard errors exactly. Scores: total
+<code>uᵢ = wᵢyᵢ</code>; mean/proportion <code>uᵢ = wᵢ(yᵢ−μ̂)/N̂</code>; ratio
+<code>uᵢ = wᵢ(yᵢ−R̂xᵢ)/X̂</code>. <strong>Design df = (number of PSUs) − (number of
+strata)</strong> (<code>degf.svydesign</code>), and <strong>all confidence intervals use t on the
+design df</strong> — the SPSS Complex Samples / Stata convention, deliberately
+<em>not</em> R's <code>confint(svymean(…))</code> normal default; references are therefore
+pinned as SEs from R plus intervals recomputed in this convention
+(an agreement about definitions, recorded here). <strong>Deff uses the
+with-replacement SRS baseline</strong> (R <code>deff = &quot;replace&quot;</code>, consistent with
+no-FPC v1): <code>deff = V̂_design / (s²/n)</code> for a mean (for a total,
+<code>V̂_design / (N̂²·s²/n)</code>) with <code>s² = (n/(n−1))·Σwᵢ(yᵢ−ȳ_w)²/N̂</code> — the
+<code>svyvar</code> estimate, verified numerically.</li>
+<li><strong>Lonely PSUs error.</strong> A stratum with a single PSU makes the variance
+estimator undefined; the R default (<code>survey.lonely.psu = &quot;fail&quot;</code>) is
+kept: declaring (or analyzing under) a design whose analyzed structure
+has a single-PSU stratum returns the errors-as-data message
+<code>stratum &quot;&lt;value&gt;&quot; has only one PSU; design-based variance needs at least two PSUs per stratum (lonely PSU)</code>. Because subsetting is domain
+estimation (below), the PSU structure never shrinks after declaration,
+so the check at declaration is authoritative (the estimator re-checks
+defensively).</li>
+<li><strong>Subpopulations are domains, never row subsets.</strong> Select Cases, Split
+File groups, and missing values on analysis variables all become
+<strong>domain estimation</strong>: out-of-domain cases keep their stratum/PSU
+membership with their score zeroed, and the variance runs over the full
+design structure (the classic subset-vs-domain SE trap). Verified to
+reproduce <code>svyby</code>/domain-<code>svymean</code> exactly; this is also what
+<code>svymean(na.rm = TRUE)</code> does with missing values.</li>
+<li><strong>Proportion CIs are logit-scale</strong> (the <code>svyciprop(method = &quot;logit&quot;)</code>
+default, named &quot;logit&quot; in the output note):
+<code>expit( logit(p̂) ± t_df · SE(p̂)/(p̂(1−p̂)) )</code> with <code>SE(p̂)</code> the Taylor SE
+of the mean of the indicator — verified to reproduce <code>svyciprop</code>
+end-to-end. Degenerate <code>p̂ ∈ {0, 1}</code> leaves the CI blank (the logit is
+undefined), never fabricated.</li>
+<li><strong>The crosstab test is the Rao–Scott second-order (Satterthwaite)
+correction with the F reference</strong> — <code>svychisq</code>'s default
+(<code>statistic = &quot;F&quot;</code>), implemented exactly as <code>survey</code> does: Pearson X² on
+the estimated proportions scaled to the unweighted n; Δ =
+<code>(CᵀD̂⁻¹C/n)⁻¹ (CᵀD̂⁻¹V̂D̂⁻¹C)</code> with <code>C</code> the interaction contrasts
+residualized on the main effects and <code>V̂</code> the full Taylor covariance of
+the cell proportions; <code>F = X²/tr(Δ)</code> on <code>(d₀, d₀·ν)</code> df, where
+<code>d₀ = tr(Δ)²/tr(Δ²)</code> and <code>ν</code> is the design df. The first-order
+correction is deliberately not offered in v1.</li>
+</ol>
+<h3 id="regression-under-a-design">Regression under a design</h3>
+<p><code>svyglm</code>'s conventions, verified: point estimates are the
+sampling-weighted fit (WLS for linear; weighted IRLS for the binary
+links), and the coefficient covariance is the Taylor sandwich
+<code>A⁻¹BA⁻¹</code> — <code>A</code> the weighted information (<code>XᵀWX</code>), <code>B</code> the stratified
+PSU-total variance of the per-case score <code>uᵢ = wᵢ(yᵢ−μᵢ)xᵢ·(dμ/dη)/V(μ)</code>
+(for identity and logit links this is <code>wᵢeᵢxᵢ</code>). Inference is <strong>t on
+<code>(design df) − p + 1</code></strong> (<code>p</code> = number of coefficients, intercept included)
+— <code>summary.svyglm</code>'s df, verified — for the coefficient tests <strong>and</strong> the
+CIs (<code>confint.svyglm</code>'s Wald form). The logistic table keeps Exp(B) with
+the CI as <code>exp(B ± t·SE)</code>. Under a design the linear model's classic ANOVA
+table, Durbin-Watson, standardized betas, partial/part correlations and
+tolerance/VIF are <strong>not produced</strong> (they are SRS constructs); the model
+summary reports the weighted R² and names the design. Options that would
+silently mean something else under a design <strong>error as data</strong> in v1:
+stepwise <code>method</code> selection, <code>robust</code> (the design SEs are already a
+sandwich), <code>casewise</code>, <code>diagnostics</code>, <code>save</code>, and the logistic
+<code>hosmer_lemeshow</code>.</p>
+<h3 id="out-of-scope-for-v1-recorded-cuts">Out of scope for v1 (recorded cuts)</h3>
+<ul>
+<li><strong>No finite population correction</strong> — NHANES-class with-replacement
+designs do not use it; the <code>design</code> JSON leaves room for an <code>fpc</code> field.</li>
+<li><strong>No BRR/jackknife replicate weights</strong> — Taylor linearization only;
+replicate methods are a recorded follow-up (the bucket pointer).</li>
+<li><strong>No multistage variance</strong> — first-stage (ultimate-cluster) PSUs only,
+which is exactly what the with-replacement approximation uses.</li>
+<li><strong>No design-based quantiles</strong> (<code>svyquantile</code> is its own methodological
+area): the design-aware Explore table reports estimate/SE/CI/deff for
+means and totals only, and is labelled design-based.</li>
+<li>The layered (three-way) crosstab and its CMH block are <strong>not</strong>
+design-aware: under a design the layered path runs as today and carries
+the ignores-design note.</li>
+</ul>
+<h2 id="equivalence-tests-tost--the-v1-conventions">Equivalence tests (TOST) — the v1 conventions</h2>
+<p><em>Decided 2026-08-18, before any code, as sub-task 2a of
+<code>docs/releases/release_0.19.0.md</code> item 2 (kept private). &quot;Not significantly
+different&quot; is not &quot;equivalent&quot;; the two-one-sided-tests procedure tests
+whether a mean difference lies <strong>inside</strong> declared equivalence bounds. Every
+convention below was verified against R <code>TOSTER</code> 0.8.6 (the reference
+package, R 4.5.3) by running its <code>t_TOST</code> on hand-checkable data and
+reproducing its output from the hand formulas — not recorded from memory.
+The pinned values live in <code>tool/validation/generate_tost_references.R</code> and
+<code>test/validation/tost_reference_values.json</code> (sub-task 2f).</em></p>
+<h3 id="the-shape-the-2a-decision">The shape (the 2a decision)</h3>
+<p>A <strong>dedicated <code>equivalence_ttest</code> tool</strong> — not a <code>tost</code> mode on the three
+t-test tools — modeled on the <code>bayesian_ttest</code> precedent: one tool, a
+<code>test</code> argument (<code>one_sample</code> / <code>paired</code> / <code>independent</code>), sharing the
+t-test machinery engine-side (<code>compare_means.rs</code>) under one new
+<code>equivalence_ttest</code> analyze kind. Reasons, recorded: the presentation
+(bounds, two one-sided tests, TOST p, 1−2α CI, decision) shares almost no
+columns with the classic t tables, so a mode would triple-touch three
+dialogs and three table layouts for no reuse; the in-catalog precedent for
+&quot;alternative inference over the t-test machinery&quot; (<code>bayesian_ttest</code>) is a
+dedicated tool; and a named tool is what an assistant/MCP caller can find
+(&quot;equivalence test&quot; → <code>equivalence_ttest</code>). Catalog moves 103 → 104, which
+settles the 0.19.0 expected final count at <strong>108</strong>.</p>
+<h3 id="the-test">The test</h3>
+<ol>
+<li><strong>TOST is two one-sided t tests of the observed difference against the
+declared bounds, on the same standard error and df as the corresponding
+classical t test</strong> — verified to reproduce <code>t_TOST</code> exactly from the
+hand formulas: <code>t_lower = (diff − L)/SE</code> with the <strong>upper-tail</strong> p
+(H₀: diff ≤ L), and <code>t_upper = (diff − U)/SE</code> with the <strong>lower-tail</strong> p
+(H₀: diff ≥ U). The designs: one-sample (<code>diff = mean − test_value</code>,
+df = n−1), paired (<code>diff = mean of case differences</code>, df = n−1), and
+independent with <strong>both rows, pooled and Welch</strong> (df = n₁+n₂−2 and
+Welch–Satterthwaite respectively — the shipped Independent-Samples
+Test's two-row presentation; <code>t_TOST</code>'s default is the Welch row,
+<code>var.equal = FALSE</code>).</li>
+<li><strong>The TOST p is the larger of the two one-sided p's</strong>, and the
+<strong>decision is &quot;equivalent&quot; when TOST p &lt; α</strong> (α from the <code>alpha</code>
+option, default 0.05) — <code>TOSTER</code>'s decision rule verbatim, printed as a
+per-row decision cell, never only implied by the p.</li>
+<li><strong>The interval shown is the 1−2α t confidence interval of the raw
+difference</strong> (90% at the default α, the classical TOST presentation;
+<code>t_TOST</code> reports <code>conf.level = 1 − 2·alpha</code>, verified at α = 0.05 and
+0.01). Equivalence at level α coincides with this CI lying inside the
+bounds.</li>
+<li><strong>Bounds are declared as an explicit pair</strong> (<code>bound_lower</code> &lt;
+<code>bound_upper</code>), in <strong>raw units by default or Cohen's-d units</strong>
+(<code>bound_unit = &quot;cohen_d&quot;</code>). d-unit bounds convert to raw bounds by
+multiplying by the <strong>uncorrected</strong> standardizer of that design —
+verified against <code>eqbound_type = &quot;SMD&quot;</code>: the sample SD (one-sample),
+the SD of the case differences (paired, d_z), the pooled SD
+(independent, pooled row), and <code>√((s₁²+s₂²)/2)</code> (Welch row, d_av).
+With d-unit bounds the independent table's two rows therefore carry
+two (slightly) different raw bounds, each printed. <code>TOSTER</code> itself
+warns that SMD bounds &quot;produce biased results&quot; (the bound becomes
+sample-dependent); the output note carries the same caution.</li>
+<li><strong>One-sample bounds are centered on the test value</strong>: the TOST is on
+<code>mean − test_value</code> with raw bounds meaning <code>test_value + L</code> …
+<code>test_value + U</code>. <strong>Recorded divergence</strong>: <code>TOSTER</code> 0.8.6's one-sample
+<code>t_TOST</code> does <em>not</em> center its bounds on <code>mu</code> (its TOST rows test the
+raw mean against ±bound about zero while its t-test row subtracts
+<code>mu</code> — internally inconsistent, verified by comparing <code>mu = 100</code>
+against the shifted <code>x − 100, mu = 0</code> run). The pins therefore use the
+shifted form, where <code>TOSTER</code> is self-consistent and agrees with our
+convention exactly.</li>
+<li><strong>Degenerate bounds error as data</strong>: <code>bound_lower ≥ bound_upper</code> is an
+error (<code>TOSTER</code> silently sorts reversed bounds and accepts zero-width
+bounds; deliberately not copied — a silently reordered hypothesis is
+the kind of quiet wrongness the suite exists to prevent). Bounds whose
+interval does not include zero are <strong>allowed</strong> with a plain note (the
+<code>t_TOST</code> behaviour) — they state an unusual but coherent hypothesis.</li>
+</ol>
+<h3 id="out-of-scope-for-v1-recorded-cuts-2">Out of scope for v1 (recorded cuts)</h3>
+<ul>
+<li><strong>No minimal-effects test</strong> (<code>TOSTER</code>'s <code>hypothesis = &quot;MET&quot;</code>) and no
+single-bound non-inferiority presentation — asymmetric bounds cover the
+practical need; both are recorded follow-ups in the feature bucket only
+if asked for.</li>
+<li><strong>No TOST effect-size table</strong> — the classic t-test tools already report
+Cohen's d / Hedges' g with noncentral-t CIs; duplicating them under a
+1−2α level would invite misreading (and <code>TOSTER</code>'s SMD CIs are
+themselves approximations, per its own vignette).</li>
+<li><strong>Frequency weights</strong> flow through the shared <code>moments</code> machinery like
+the classic t tests; a declared <strong>survey design is not covered</strong> — the
+tool carries the standard ignores-design note (the item-1 list is
+unchanged).</li>
+</ul>
+<h2 id="blandaltman-method-comparison--the-v1-conventions">Bland–Altman method comparison — the v1 conventions</h2>
+<p><em>Decided 2026-08-18, before any code, as sub-task 3a of
+<code>docs/releases/release_0.19.0.md</code> item 3 (kept private). The Bland–Altman
+analysis quantifies <strong>agreement between two measurement methods</strong> — bias,
+limits of agreement and the mean-vs-difference plot — which correlation
+deliberately cannot (two methods can correlate near 1 while disagreeing by a
+constant or proportional amount). Every convention below was verified against
+<strong>both</strong> reference packages, R <code>blandr</code> 0.6.0 and R <code>BlandAltmanLeh</code> 0.3.1
+(R 4.5.3), by reading their sources and reproducing their output from the
+hand formulas on the original Bland &amp; Altman (1986) PEFR data — not recorded
+from memory. The pinned values live in
+<code>tool/validation/generate_bland_altman_references.R</code> and
+<code>test/validation/bland_altman_reference_values.json</code> (sub-task 3f).</em></p>
+<h3 id="the-shape">The shape</h3>
+<p>A dedicated <strong><code>bland_altman</code> tool</strong> — two numeric method variables, the
+statistics tables plus the mean-vs-difference plot (<code>plot</code> argument, default
+<strong>true</strong>: the figure is what the method exists for) — one <code>bland_altman</code>
+analyze kind with the numeric core in the descriptive family
+(<code>rust/src/analyze/descriptive.rs</code>). Catalog moves 104 → 105. The plot is
+built Dart-side from the result tables (the ROC-curve precedent), <strong>not</strong> as
+a separate <code>graphs.rs</code> chart kind: one engine call produces tables and
+figure together, so the journaled command reproduces both.</p>
+<h3 id="the-statistics">The statistics</h3>
+<ol>
+<li><strong>Differences are method 1 − method 2</strong> (the first variable minus the
+second) and the abscissa is the pair mean, <code>(m₁ + m₂)/2</code> — both
+packages' default (<code>blandr.statistics(method1, method2)</code>;
+<code>bland.altman.stats(group1, group2, mode = 1)</code>). The table title and the
+plot's y-axis name the direction (<code>A − B</code>), so the sign is never
+ambiguous. Only <strong>complete pairs</strong> enter (both packages <code>na.omit</code>); n is
+the number of complete pairs, and fewer than 2 errors as data.</li>
+<li><strong>The limits of agreement are bias ± 1.96 × SD of the differences</strong>,
+with the multiplier <strong>fixed at the literal 1.96</strong> in v1 — the universal
+reporting convention and both packages' default (<code>BlandAltmanLeh</code>'s
+<code>two = 1.96</code>; <code>blandr</code>'s <code>LoA.mode = 1</code>). SD uses the n−1 divisor
+(both). Verified on the 1986 PEFR first-measurement pair (n = 17):
+bias −2.117647, SD 38.76513, LoA −78.0973 / 73.86201 — both packages
+agree to machine precision. No multiplier option (recorded cut).</li>
+<li><strong>Every CI is t-based on n − 1 df</strong> at the <code>confidence</code> level (percent,
+default 95 — the ICC precedent, <code>ci_level</code> engine option). The bias CI
+uses <strong>SE = s/√n</strong> — both packages agree exactly (verified: t(16) CI
+−22.04884 / 17.81354 on the PEFR pair). The LoA CIs use the <strong>Bland &amp;
+Altman (1999) exact variance</strong>, <code>Var(LoA) = s²·(1/n + z²/(2(n−1)))</code>
+with <strong>z the same literal 1.96 as the multiplier</strong> — self-consistency:
+z enters the variance only because the limit is bias ± z·s.</li>
+<li><strong>Two recorded reference divergences on the LoA CI</strong>, one per package:
+<code>blandr</code> uses the same 1999 form but with z = Φ⁻¹(0.975) ≈ 1.959964
+while drawing its lines at the literal 1.96 (internally inconsistent —
+the TOSTER-mu precedent; ~1.2e-5 relative in the SE, so the blandr LoA
+CI pins carry a loosened tolerance naming this); <code>BlandAltmanLeh</code> uses
+the Bland &amp; Altman (1986) approximation <code>√(3s²/n)</code> (≈ 0.7% larger SE —
+1986's own &quot;about&quot; rounding of 1 + z²/2 = 2.92 up to 3; its values are
+pinned in the generator as the recorded alternative, and are not what
+we print). The <code>confidence</code> option moves <strong>only the t quantile</strong>, never
+the 1.96 (verified: exactly <code>BlandAltmanLeh</code>'s <code>conf.int</code> behaviour;
+<code>blandr</code>'s <code>sig.level</code> also moves its variance z — deliberately not
+copied).</li>
+<li><strong>Proportional bias is reported as a table</strong>: the OLS regression of the
+differences on the means — intercept and slope with SE, t and p on
+n − 2 df. <code>blandr</code> fits exactly this regression (it reports only a
+rounded equation string; the pins are against R <code>lm</code> on the same
+pairs). Undefined (n &lt; 3, or no variance in the means) omits the table
+and says so in the statistics-table note rather than printing
+fabricated cells. The fitted line is <strong>not drawn on the plot</strong> in v1
+(the plot keeps the three canonical reference lines); drawing it is a
+recorded follow-up.</li>
+<li><strong>s = 0 (identical measurements) is not an error</strong>: the limits coincide
+with the bias and every interval is zero-width — the correct degenerate
+values, printed as-is.</li>
+<li><strong>Frequency weights</strong> flow through the shared <code>moments</code> machinery
+(weighted bias and SD, n = Σw in the CIs and df; the proportional-bias
+regression is the correspondingly weighted least squares), keeping the
+engine-wide <em>weight ≡ replication</em> identity, asserted by a Rust unit
+test. The plotted points do not move with weights (the scatterplot
+precedent). A declared <strong>survey design is not covered</strong> — the tool
+carries the standard ignores-design note (the item-1 list is
+unchanged).</li>
+</ol>
+<h3 id="the-tables-and-the-plot">The tables and the plot</h3>
+<ul>
+<li><strong>&quot;Bland-Altman Statistics: A − B&quot;</strong> — Measure / Value / Lower / Upper;
+rows Bias (Mean Difference) with CI, Std. Deviation of Differences,
+Lower Limit of Agreement with CI, Upper Limit of Agreement with CI. The
+note carries N (the complete-pair count — a count does not belong in a
+real-formatted Value column), the 1.96 multiplier, the t(n−1) CI forms
+and the direction of the differences.</li>
+<li><strong>&quot;Proportional Bias: A − B on Mean&quot;</strong> — Term / Coefficient /
+Std. Error / t / Sig.; rows Intercept and Slope (Mean).</li>
+<li><strong>&quot;Bland-Altman Points: A vs B&quot;</strong> — Mean / Difference, one row per
+complete pair: the plot's own geometry, printed and exportable like the
+ROC coordinates and the GLM residual panels.</li>
+<li><strong>The plot</strong> draws the points, a solid reference line at the bias and
+dashed lines at both limits, each labelled with its value at the right
+edge; the CI bands are <strong>not shaded</strong> in v1 (recorded follow-up). It is
+a single-color chart: <code>colors</code> (one slot) and <code>title</code> are its journaled
+style arguments, which is what lights up the chart editor.</li>
+</ul>
+<h3 id="out-of-scope-for-v1-recorded-cuts-3">Out of scope for v1 (recorded cuts)</h3>
+<ul>
+<li><strong>No repeated-measures Bland–Altman</strong> (replicate measurements per
+subject, within-subject variance components) — the release plan records
+this cut up front; it stays in the feature bucket.</li>
+<li><strong>No percentage-difference / ratio variant</strong> (Giavarina-style percent
+plots, <code>blandr</code>'s <code>proportion</code>) and <strong>no non-default multiplier</strong> — raw
+differences at 1.96 are the 1986 presentation the audience cites.</li>
+<li><strong>No CI shading on the plot</strong> and <strong>no fitted proportional-bias line</strong>
+(the table carries the test) — both recorded follow-ups if asked for.</li>
+</ul>
+<h2 id="latent-class-analysis--the-v1-conventions">Latent class analysis — the v1 conventions</h2>
+<p><em>Decided 2026-08-18, before any code, as sub-task 4a of
+<code>docs/releases/release_0.19.0.md</code> item 4 (kept private). LCA answers &quot;how
+many unobserved subgroups?&quot; for <strong>categorical</strong> indicators — mixture
+modeling the clustering tools cannot do (no fit indices, no membership
+probabilities, continuous-only distance). This is an <strong>estimation-risk</strong>
+item (EM over a latent structure): it opens with a spike against the
+reference and holds until parity passes. Every convention below was
+verified against <strong>R <code>poLCA</code> 1.6.0.2</strong> (R 4.5.3) by reading its source and
+running its documented examples — not recorded from memory. The pinned
+values live in <code>tool/validation/generate_lca_references.R</code> and
+<code>test/validation/lca_reference_values.json</code> (sub-task 4i).</em></p>
+<h3 id="the-reference-and-its-documented-examples">The reference and its documented examples</h3>
+<p><code>poLCA</code> is the reference implementation; the pinned datasets are its own
+documented examples, shipped with the package: <strong><code>values</code></strong> (Goodman's 1974
+universalistic/particularistic-values data — 4 dichotomous items, n = 216;
+the <code>?poLCA</code> worked example, fit with 2 classes) and <strong><code>carcinoma</code></strong>
+(Agresti's seven-pathologist carcinoma ratings — 7 dichotomous items,
+n = 118; the <code>?carcinoma</code> example, fit with 3 classes, plus 2- and 4-class
+fits for the enumeration table). Verified global-optimum log-likelihoods
+(high-<code>nrep</code> runs): values 2-class <strong>−504.467670</strong>, carcinoma 2/3/4-class
+<strong>−317.256837 / −293.704979 / −289.285849</strong>. The carcinoma fit reaches
+<strong>exact 0/1 boundary estimates</strong> — deliberately kept as a pinned example,
+since boundary handling is where an EM implementation breaks.</p>
+<h3 id="the-model-and-the-estimator">The model and the estimator</h3>
+<ol>
+<li><strong>The model</strong>: C latent classes over J categorical indicators; class
+shares π_c and class-conditional item-category probabilities
+ρ_{cjk}; cell probability <code>Σ_c π_c ∏_j ρ_{c,j,y_j}</code>. Indicator
+categories are the <strong>distinct observed values</strong> of each indicator over
+the analyzed cases (sorted; string or numeric both fine). An indicator
+with a single observed level errors as data, and one with more than
+<strong>15</strong> levels errors as data as well (&quot;looks continuous&quot;) — LCA over a
+mistakenly-passed scale variable would silently explode the cell space.</li>
+<li><strong>Estimation is plain EM</strong> (E-step posteriors, M-step weighted
+proportions), converged when the log-likelihood improves by less than
+<code>tol</code> (<strong>1e-10</strong>, poLCA's default) or at <code>max_iterations</code> (<strong>1000</strong>,
+poLCA's default). <strong>Listwise deletion</strong> of cases incomplete on any
+indicator (poLCA's <code>na.rm = TRUE</code> default); retaining partial responses
+(<code>na.rm = FALSE</code>) is a recorded cut.</li>
+<li><strong>Random starts</strong>: <code>starts</code> (default <strong>20</strong> — deliberately <em>not</em>
+poLCA's <code>nrep = 1</code> default, which on a multimodal likelihood silently
+reports a local optimum; the pins pass because both sides find the
+global optimum) from random normalized π and ρ draws, keeping the
+best-LL converged solution. <strong>Deterministic by default</strong>: a fixed
+built-in base seed, with a <code>seed</code> option to explore other starts —
+running the same command twice must reproduce the tables exactly (the
+bootstrap precedent; asserted by a test). The initialization scheme
+need not match poLCA's — what is pinned is the converged optimum.</li>
+<li><strong>Boundary probabilities are legitimate MLEs</strong> (carcinoma reaches exact
+0 and 1): no smoothing, no clamping of estimates; logs are guarded at
+1e-300 for evaluation only. A class to which <strong>no case is modally
+assigned</strong> is reported with a plain note (fewer classes likely fit
+better), never silently dropped.</li>
+<li><strong>Class order is descending class share π</strong> (ties by first-seen) —
+poLCA's own ordering is start-dependent, so this is also the
+<strong>label-switching alignment rule for every pin</strong>: the reference
+generator sorts poLCA's classes by descending <code>P(class)</code> before writing
+values, and the engine emits classes in the same order.</li>
+</ol>
+<h3 id="the-fit-block-polcas-definitions-verified-from-source">The fit block (poLCA's definitions, verified from source)</h3>
+<ul>
+<li><strong>npar = C·Σ_j(K_j−1) + (C−1)</strong>; <strong>AIC = −2LL + 2·npar</strong>;
+<strong>BIC = −2LL + npar·ln N</strong> with <strong>N the analyzed cases</strong> (not cells);
+<strong>residual df = min(N, ∏K_j − 1) − npar</strong> — all poLCA's formulas
+verbatim. The <strong>identification pre-flight errors as data when residual
+df &lt; 0</strong> (poLCA merely warns): more parameters than identifiable
+information is the exact failure the pre-flight exists to stop.</li>
+<li><strong>aBIC = −2LL + npar·ln((N+2)/24)</strong> (Sclove's sample-size-adjusted BIC —
+the Mplus convention; poLCA does not report it, so its pins are
+R-computed from poLCA's LL and npar).</li>
+<li><strong>Entropy</strong> is the <strong>relative entropy of the posterior classification</strong>,
+<code>1 − Σ_i Σ_c(−p_ic ln p_ic)/(N ln C)</code> (the Mplus convention; near 1 =
+crisp classes). Undefined at C = 1 (null cell). Pinned R-computed from
+poLCA's posterior matrix.</li>
+<li><strong>G² = 2·Σ freq·ln(freq/fit)</strong> over the observed response patterns and
+<strong>X² = Σ(freq − fit)²/fit + (N − Σfit)</strong> (the unobserved-cell tail
+term) — poLCA's exact forms, verified from source.</li>
+<li><strong>Classification quality</strong>: the C×C table of <strong>average posterior
+probabilities by modally assigned class</strong> (the Mplus AvePP diagnostic),
+with the assigned-N column.</li>
+</ul>
+<h3 id="saved-columns-and-the-tool-shape">Saved columns and the tool shape</h3>
+<p>A dedicated <strong><code>latent_class</code> tool</strong> (catalog 105 → 106), engine module
+beside the reduction family. <code>classes</code> is the fitted class count; an
+optional <strong><code>compare_max</code></strong> fits 1…compare_max-class models under the same
+settings and prepends a <strong>Class Enumeration</strong> table (LL, npar, AIC, BIC,
+aBIC, entropy per count) — the enumeration workflow in one journaled
+command. <code>save_class</code> / <code>save_posteriors</code> save the modal class (in the
+descending-π order) and the C posterior columns — the cluster/propensity
+save shape. <strong>Recorded finding (4e)</strong>: the read-only <code>ToolPolicy</code> gates
+per <em>tool</em> (<code>mutatesData</code>), and the actual cluster/propensity precedent
+leaves save-capable analyses ungated — there is no per-call &quot;block only
+the save variant&quot; mechanism to hook into. <code>latent_class</code> follows the
+precedent (an analysis, not <code>mutatesData</code>); the cross-cutting gap (a
+read-only session can still save columns via any save-capable analysis) is
+recorded in the feature bucket as its own deferral rather than patched
+ad-hoc for one tool.</p>
+<h3 id="weights-design-and-scope-cuts">Weights, design, and scope cuts</h3>
+<ul>
+<li><strong>Frequency weights</strong> enter the E/M sums and every count (N = Σw in the
+fit block, df, entropy and the pattern frequencies), keeping the
+<em>weight ≡ replication</em> identity, asserted by a Rust unit test. poLCA has
+no weights, so the pins run unweighted. A declared <strong>survey design is
+not covered</strong> — the standard ignores-design note (item-1 list
+unchanged).</li>
+<li><strong>Out of scope for v1 (recorded cuts)</strong>: covariates on class membership
+(poLCA's regression arm), ordinal/constrained item models, partial
+missing-response retention, and bootstrap LR tests for class enumeration
+(BLRT) — the enumeration table's information criteria are the v1
+decision aids.</li>
+</ul>
+<h2 id="item-response-theory--the-v1-conventions">Item response theory — the v1 conventions</h2>
+<p><em>Decided 2026-08-18, before any code, as sub-task 5a of
+<code>docs/releases/release_0.19.0.md</code> item 5 (kept private). IRT models each
+binary item's probability of a correct/keyed response as a function of a
+latent trait θ — item <strong>difficulty</strong> and <strong>discrimination</strong> rather than a
+single reliability number, plus <strong>information curves</strong> showing <em>where</em> on
+the trait the test measures well. This is the second <strong>estimation-risk</strong>
+item (MML/EM over a latent trait): it opens with a spike against the
+references and holds until parity passes. Every convention below was
+verified against <strong>both</strong> reference packages — R <code>ltm</code> 1.2-0 and <code>mirt</code>
+1.46.1 (R 4.5.3), the CFA dual-reference rule — on the canonical LSAT
+data, not recorded from memory. The pinned values live in
+<code>tool/validation/generate_irt_references.R</code> and
+<code>test/validation/irt_reference_values.json</code> (sub-task 5h).</em></p>
+<h3 id="the-references-and-their-data">The references and their data</h3>
+<p>The pinned datasets are the two canonical LSAT tables both packages ship:
+<strong>LSAT6</strong> (Bock &amp; Lieberman's five-item LSAT section 6, n = 1000 — <code>ltm</code>'s
+<code>LSAT</code>, <code>mirt</code>'s <code>LSAT6</code>; the Rasch example) and <strong>LSAT7</strong> (five items,
+n = 1000 — <code>mirt</code>'s <code>LSAT7</code>; the 2PL example in <code>mirt</code>'s own
+documentation). Verified cross-package agreement on the LSAT7 2PL fit —
+log-likelihood −2658.8052 to 5e-5, parameters to ~8e-4, standard errors to
+~2e-4 — sets the pin tolerances: <strong>each package is pinned separately on
+the same cells</strong> (the dual-pin shape from item 3) at ~2e-3, tighter where
+the evidence allows.</p>
+<h3 id="the-model-and-the-estimator-2">The model and the estimator</h3>
+<ol>
+<li><strong>Models</strong>: the 2PL, <code>P(y=1|θ) = logistic(aθ + d)</code>, and the <strong>Rasch
+model as its common-discrimination constraint</strong> — one shared <code>a</code>, free
+per-item difficulties, <strong>θ ~ N(0,1) fixed</strong> in both (the latent-scale
+identification, named in the output note). This is <code>ltm::rasch()</code>'s
+convention; <code>mirt</code>'s Rasch (a ≡ 1, free latent variance σ²) is the
+same model rescaled — a = σ, b = −d/σ — verified numerically on LSAT6
+(σ̂ = √0.572 = 0.756 vs <code>ltm</code>'s common â = 0.7551) and asserted by
+transform in the generator. <strong>Rasch-as-constrained-2PL is checked
+explicitly</strong> (the 5c row): fixing the 2PL's slopes equal must reproduce
+the Rasch fit.</li>
+<li><strong>Estimation is Bock–Aitkin MML/EM</strong>: E-step posteriors over a fixed
+quadrature — <strong>61 equally spaced nodes on [−6, 6], standard-normal
+weights normalized to sum 1</strong> (<code>mirt</code>'s default fixed-point scheme;
+<code>ltm</code>'s 40-point Gauss–Hermite lands inside the cross-package tolerance
+regardless, per the evidence above) — M-step per-item weighted logistic
+Newton (2PL), or difficulty-wise Newton with a shared-slope outer
+Newton (Rasch). <strong>Deterministic starts</strong> (a = 1, d = 0): the marginal
+likelihood is well-behaved for these models and both references start
+deterministically — no seed, no random starts. Converged when the
+marginal LL improves by &lt; 1e-8, capped at 500 EM cycles; iterations
+and convergence reported in the note.</li>
+<li><strong>Parameterization</strong>: estimated in slope–intercept <code>(a, d)</code> (the
+numerically stable form, <code>mirt</code>'s internal one); <strong>reported in the
+classical IRT parameterization</strong> — Discrimination <code>a</code>, Difficulty
+<code>b = −d/a</code> — with the parameterization named in the table note (the 5a
+requirement). SEs come from the <strong>observed information</strong> (central-
+difference Hessian of the marginal log-likelihood at the MLE —
+<code>ltm</code>'s approach, and <code>mirt</code>'s Oakes SEs agree to ~2e-4), with the
+difficulty SE by the delta method. Under Rasch the shared
+discrimination's SE appears on each row (one parameter, one SE —
+noted).</li>
+<li><strong>The fit block</strong>: marginal log-likelihood; npar = 2J (2PL) or J + 1
+(Rasch); AIC = −2LL + 2·npar and BIC = −2LL + npar·ln N with N the
+analyzed cases (Σw when weighted).</li>
+<li><strong>Information</strong>: item information <code>I_j(θ) = a_j²·P_j(1−P_j)</code> and test
+information <code>I(θ) = Σ_j I_j(θ)</code>, tabulated on the <strong>θ grid −4 … 4 in
+steps of 0.1</strong> (81 points) with <code>SE(θ) = 1/√I(θ)</code> alongside the test
+curve. The curves are <strong>line-chart geometry</strong>: the engine emits them
+as (series, θ, value) tables and the chart layer renders them as
+<code>LineChartData</code> — the shipped multi-series line painter, palette,
+legend and editor apply from day one with <strong>no new painter</strong> (the 5d
+row's &quot;painter layout-helper tests&quot; become spec-builder tests).</li>
+<li><strong>Data</strong>: binary indicators — each item must show <strong>exactly two
+observed levels</strong> over the analyzed cases (sorted; the <strong>higher level
+is the keyed/correct response</strong>, stated in the note); anything else
+errors as data, naming the item. Listwise deletion of incomplete
+cases. <strong>Frequency weights</strong> enter the pattern frequencies and every
+count (the <em>weight ≡ replication</em> identity, asserted by a Rust unit
+test); the references have no weights, so the pins run unweighted. A
+declared <strong>survey design is not covered</strong> — the standard
+ignores-design note.</li>
+</ol>
+<h3 id="out-of-scope-for-v1-recorded-cuts-4">Out of scope for v1 (recorded cuts)</h3>
+<ul>
+<li><strong>No 3PL</strong> — the plan's own cut (guessing-parameter estimation is
+notoriously fragile); revisit only if asked, with priors.</li>
+<li><strong>No polytomous models</strong> (graded response, partial credit), <strong>no saved
+ability (EAP/MAP) scores</strong>, <strong>no item-fit statistics</strong>, and <strong>no ICC
+trace-line plots</strong> (the information curves are the v1 figures) — each a
+natural follow-up, recorded here.</li>
+</ul>
+<h2 id="loess-smoother-on-the-scatterplot--the-v1-conventions">LOESS smoother on the scatterplot — the v1 conventions</h2>
+<p><em>Decided 2026-08-18, before any code, as sub-task 6a of
+<code>docs/releases/release_0.19.0.md</code> item 6 (kept private). The smoother gives
+&quot;is this relationship non-linear?&quot; a visual answer the linear-only fit line
+cannot. Every convention below was verified against <strong>R <code>loess</code>
+(<code>stats</code>, R 4.5.3)</strong> by reproducing its predictions from the hand formulas
+at machine precision (≤ 6e-14) on the <code>cars</code> data (n = 50, tied x values,
+spans 0.3–1.0), a 6-level × 4-replicate ties set, an n = 8 set, an
+n = 200 uniform set and n = 4…7 straight lines — not recorded from memory.
+The pinned values live in <code>tool/validation/generate_loess_references.R</code>
+and <code>test/validation/loess_reference_values.json</code> (sub-task 6f).</em></p>
+<h3 id="the-shape-2">The shape</h3>
+<p>Two new arguments on the existing <code>scatter</code> tool and analyze kind —
+<strong><code>smoother</code></strong> (boolean, default false) and <strong><code>span</code></strong> (number in
+<strong>(0, 1]</strong>, default <strong>0.75</strong>, R's own default) — catalog +0. A <code>span</code>
+outside (0, 1] errors as data, and so does <code>span</code> given without
+<code>smoother=true</code> (an argument that would be silently ignored is an error,
+not a shrug). The curve is computed engine-side (the numeric core beside
+the chart kinds in <code>rust/src/analyze/graphs.rs</code>) and emitted as its own
+result table — internal chart geometry on the violin-density precedent —
+which the scatter painter draws as a curve over the points. One engine
+call produces points and curve together, so the journaled command
+reproduces both.</p>
+<h3 id="the-estimator-the-verified-reference-algorithm">The estimator (the verified reference algorithm)</h3>
+<p>The reference is <strong>R <code>loess(y ~ x, span = s, degree = 1, family = &quot;gaussian&quot;, surface = &quot;direct&quot;)</code> with the default
+<code>loess.control</code></strong> — an <em>exact</em> local-linear tricube fit, no interpolation
+surface. The hand algorithm that reproduces it at machine precision:</p>
+<ol>
+<li><strong>Neighborhood size</strong> <code>q = ⌊span·n + 10⁻⁷⌋</code>, clamped to <code>[2, n]</code>. The
+<code>10⁻⁷</code> is load-bearing and verified: <code>0.6·50</code> is <code>29.999999…</code> in
+binary, and R rounds it <em>up</em> to 30.</li>
+<li>At each evaluation point <code>x₀</code>: distances <code>dᵢ = |xᵢ − x₀|</code>, bandwidth
+<code>h</code> = the q-th smallest distance, <strong>tricube weights over all n points</strong>
+<code>wᵢ = (1 − uᵢ³)³</code> for <code>uᵢ = dᵢ/h &lt; 1</code>, else 0 — with tied distances
+more than q points can fall inside the bandwidth (all are weighted),
+and the q-th-nearest point itself gets weight 0.</li>
+<li><strong>Weighted local line</strong>: fitted <code>= ȳ_w + β̂ (x₀ − x̄_w)</code> with
+<code>β̂ = Σw(x−x̄_w)(y−ȳ_w) / Σw(x−x̄_w)²</code>.</li>
+</ol>
+<p><strong>Degree 1 is deliberate</strong> (R <code>loess</code> defaults to degree 2): the row's
+recorded purpose is a trend-reading aid, and the local-linear fit is the
+Cleveland lowess convention the exploratory-graphics audience knows.
+<code>family = &quot;gaussian&quot;</code> means <strong>no robustness iterations</strong> (a recorded cut).</p>
+<p>The curve is evaluated on a fixed grid of <strong>101 equally spaced points
+over [min x, max x]</strong> of the plotted (complete-pair, filtered) points —
+endpoints included, each split group over its own range — dense enough
+that the polyline is smooth at chart resolution, and the same grid shape
+the pins use.</p>
+<h3 id="degenerate-windows-recorded-divergence">Degenerate windows (recorded divergence)</h3>
+<p>Where the local fit is singular, R's implementation takes a pseudoinverse
+path that <strong>warns and prints artifacts</strong> — verified: on a 10-fold mass of
+ties at x = 5 (neighborhood mean 25.1) <code>loess</code> predicts <strong>0.0</strong>. That is
+deliberately not copied. ChakataStat's recorded behaviour: <strong>h = 0</strong> (the
+q-th nearest distance is zero) fits the unweighted mean of the points at
+distance zero; a <strong>singular window</strong> (weighted x-variance 0, e.g. every
+in-bandwidth point at one x) fits the tricube-weighted local mean. Both
+are well-defined limits of the estimator; the pins avoid singular
+windows, and the parity sweeps above all ran on non-degenerate data.</p>
+<h3 id="the-other-r-smoother-lowess--recorded">The other R smoother (<code>lowess</code>) — recorded</h3>
+<p><code>stats::lowess</code> with <code>iter = 0, delta = 0</code> coincides with the pinned
+algorithm <strong>exactly</strong> (verified: 1.7e-13 on <code>cars</code>) — the two share
+Cleveland's estimator. Its <em>defaults</em> differ twice and are the recorded
+alternative, not what we draw: <code>iter = 3</code> robustness iterations (up to
+4.5 y-units apart on <code>cars</code>) and <code>delta</code> interpolation between anchor
+points. One more reference quirk, recorded so nobody trips on it when
+regenerating: <code>loess.control(statistics = &quot;exact&quot;)</code> changes R's own
+<em>predictions</em> (up to ~1.0 on <code>cars</code>) — the pins are against the
+documented <strong>default</strong> control only.</p>
+<h3 id="small-n-and-the-omission-note">Small n and the omission note</h3>
+<p>The smoother is drawn only when the plotted points have <strong>at least 6
+complete pairs and at least 2 distinct x values</strong>. Below six, R's own
+reference implementation distrusts its fits (it refuses n = 3 — &quot;span too
+small&quot; — and takes the warning pseudoinverse path at n = 4–5, even on a
+straight line); a &quot;curve&quot; through fewer points is decoration. The scatter
+itself still draws: the points table gains a note naming what was
+omitted and why (&quot;LOESS smoother not drawn: …&quot;), the omitted-not-failed
+convention. This is a <strong>data</strong> condition; a bad <code>span</code> <em>argument</em> stays
+an error as data.</p>
+<h3 id="presentation">Presentation</h3>
+<ul>
+<li><strong>The smoother table</strong> — <code>&quot;LOESS Smoother: &lt;points-table title&gt;&quot;</code>,
+columns the x variable's name and <code>Fitted</code>, 101 rows; its note names
+the estimator, the span and the pair count (&quot;Local-linear LOESS
+(tricube), span 0.75, over N complete pairs.&quot;). Like the violin density
+tables it is chart geometry: consumed by the chart layer, not shown as
+an output table.</li>
+<li><strong>The curve keeps the theme accent</strong> and the single-color <code>colors</code>
+override recolors <strong>the points only</strong> — the Bland–Altman rule: the
+annotation keeps its own accent so it stays readable over recolored
+data. The curve participates in the y-axis domain (a local line can
+overshoot the data range slightly; it is never clipped away).</li>
+<li><strong>The chart editor's scatter surface stays <code>{colors, title}</code></strong> —
+<code>smoother</code>/<code>span</code> are data arguments, not style, and the editor's
+re-journaled call preserves them untouched (asserted by test).</li>
+<li><strong>Weights are not applied</strong> — scatter's recorded semantics is that
+weights do not move points, and the smoother summarizes the plotted
+points; a declared <strong>survey design is not covered</strong> (the standard
+ignores-design note; the item-1 list is unchanged).</li>
+</ul>
+<h3 id="out-of-scope-for-v1-recorded-cuts-5">Out of scope for v1 (recorded cuts)</h3>
+<ul>
+<li><strong>No robustness iterations</strong> (<code>lowess</code>'s <code>iter</code>) and <strong>no degree
+option</strong> (degree 1 only) — both would change every number; revisit only
+if asked.</li>
+<li><strong>No confidence/error band</strong> around the curve.</li>
+<li><strong>Scatter only</strong>: no smoother on the scatterplot matrix or the bubble
+chart in v1.</li>
+<li><strong>The <code>gam</code> tool (stage b of the bucket entry) stays in the bucket</strong> —
+the release plan's own cut, recorded up front.</li>
+</ul>
+<h2 id="permutation-tests--the-v1-conventions">Permutation tests — the v1 conventions</h2>
+<p><em>Decided 2026-08-18, before any code, as sub-task 7a of
+<code>docs/releases/release_0.19.0.md</code> item 7 (kept private). The permutation
+(randomization) test answers &quot;how unusual is this statistic under random
+relabeling?&quot; without distributional assumptions — the methods-course and
+small-sample companion to the t test and the correlation. Every convention
+below was verified against <strong>R <code>coin</code> 1.4-5 and <code>perm</code> 1.0.0.4</strong> (installed
+into the item-1 R env: <code>coin</code> from conda-forge, <code>perm</code> from CRAN) by
+reproducing their p-values from hand enumeration in R — not recorded from
+memory. The pinned values live in
+<code>tool/validation/generate_permutation_references.R</code> and
+<code>test/validation/permutation_reference_values.json</code> (sub-task 7f).</em></p>
+<h3 id="the-shape-3">The shape</h3>
+<p>A <strong><code>permutation</code> boolean</strong> (plus <code>replicates</code> and <code>seed</code>) on the two
+existing tools where the convention is settled — <strong><code>independent_ttest</code></strong>
+(the two-sample mean difference) and <strong><code>correlate</code></strong> (the bivariate
+coefficient) — catalog +0. Engine-side the options ride the existing
+<code>ttest_independent</code> and <code>correlate</code> kinds, which append a <strong>&quot;Permutation
+Test&quot; table</strong> after their standard output; the asymptotic tables are
+unchanged. For <code>correlate</code>, permutation requires <strong>exactly two variables</strong>
+and method <strong>pearson or spearman</strong> — a wider matrix or Kendall errors as
+data (the matrix stays asymptotic; recorded cuts below).</p>
+<h3 id="the-test-2">The test</h3>
+<ol>
+<li><strong>The reported statistic</strong> is the mean difference (group 1 − group 2,
+the t-table's direction) or the correlation coefficient. Under
+permutation with fixed group sizes these are monotone-equivalent to the
+t statistic and to Σxy respectively, which is why the counts agree with
+<code>coin</code>'s standardized linear statistic — verified, not assumed.</li>
+<li><strong>Two-sided p counts <code>|T_b| ≥ |T_obs|</code></strong>; with the tools' <code>tails = one</code>
+the count is one-sided <strong>in the observed direction</strong> (the existing
+<code>t_significance</code> convention). Verified exactly on a 4 + 4 example:
+two-sided 6/70 ≡ <code>coin</code> <code>oneway_test(distribution = &quot;exact&quot;)</code> ≡
+<code>perm::permTS(method = &quot;exact.ce&quot;)</code>; one-sided 3/70 ≡ <code>coin</code>
+<code>alternative = &quot;greater&quot;</code>.</li>
+<li><strong>Exact enumeration is automatic</strong> when the number of distinct
+arrangements is at most <strong>1,000,000</strong> — <code>C(n, n₁)</code> for the two-sample
+test (balanced designs up to n = 22), <code>n!</code> for correlation (n ≤ 9).
+The exact p is <strong>b/C with the identity arrangement included</strong> (so
+p ≥ 1/C, never 0), no +1 correction — it is the whole distribution —
+and <strong>no CI</strong> (the p is exact). Verified: Pearson |r| enumeration
+12/5040 on an n = 7 pair (an independent hand implementation — <code>coin</code>'s
+exact algorithms refuse the correlation problem, &quot;not a two-sample
+problem&quot;); the Spearman |ρ| enumeration <strong>coincides exactly with
+<code>cor.test(method = &quot;spearman&quot;)</code>'s exact p</strong> (62/5040) on tie-free data.</li>
+<li><strong>Monte Carlo above the threshold</strong>: default <strong>m = 10,000</strong> resamples
+(<code>coin</code>'s <code>nresample</code> default), clamped at 1,000,000 (the bootstrap
+cap, with the same clamp note), and
+<strong>p̂ = (b + 1)/(m + 1)</strong> — the Davison &amp; Hinkley / Phipson &amp; Smyth
+estimator, and exactly <code>perm</code>'s <code>exact.mc</code> (verified: b = 109,
+m = 999 → 0.11). <strong>Recorded divergence</strong>: <code>coin</code> reports the raw b/m
+(verified: p·m integer, p·(m+1) not); the +1 form is used because a
+Monte-Carlo p of exactly zero misstates the evidence.</li>
+<li><strong>The MC confidence interval is 99% Clopper–Pearson on b of m</strong> —
+exactly <code>coin</code>'s <code>conf.int</code> (verified equal to
+<code>binom.test(b, m, conf.level = 0.99)</code> to machine precision). It
+describes simulation uncertainty about the permutation p, not
+sampling uncertainty about the effect — the note says so.</li>
+<li><strong>Reproducibility</strong>: replicates ride the shared SplitMix64 generator
+(<code>resample.rs</code>'s contract; <code>seed</code> option, default 1). A two-sample
+replicate draws a random n₁-subset by partial Fisher–Yates
+(n₁ <code>below</code> draws); a correlation replicate is a full Fisher–Yates
+shuffle of y (n − 1 draws) — fixed draw counts in fixed replicate
+order, so a pinned seed reproduces the table byte-for-byte on every
+platform. Cancellation is polled at replicate boundaries (the
+resampling loops are what the §4 channel is for), exactly like the
+bootstrap.</li>
+<li><strong>Tie counting under floating point</strong>: an arrangement counts as
+extreme when <code>|T_b| ≥ |T_obs| − 10⁻¹² · max(1, |T_obs|)</code> — the
+regenerated observed arrangement must count itself even when summation
+order perturbs the last bits.</li>
+<li><strong>Spearman permutes the midranks</strong>: ranks are computed once on the
+observed y and permuted (a permutation of y permutes its ranks).
+Ties are allowed — the exact p is then over midrank arrangements,
+where <code>cor.test</code> would fall back to asymptotics (recorded; the pins
+use tie-free data so the cross-check stays exact).</li>
+</ol>
+<h3 id="errors-as-data">Errors as data</h3>
+<ul>
+<li><strong>Weight Cases + permutation errors as data</strong>: rearranging weighted
+cases compounds two case multiplicities (the propensity / survey-design
+precedent); the message says to remove the weight.</li>
+<li><code>permutation</code> with one-sample or paired t tests, with Kendall, or with
+a correlation matrix wider than two variables: errors as data, each
+naming the unsupported combination.</li>
+<li>A <strong>degenerate correlation pair</strong> (fewer than two complete pairs, or no
+variation on either variable) errors as data — there is no coefficient
+to permute. A t-test <em>variable</em> with an empty group keeps its row with
+null cells instead (the asymptotic table's own NaN-row convention),
+since the other variables in the same run may be fine.</li>
+</ul>
+<h3 id="the-table">The table</h3>
+<p><strong>&quot;Permutation Test&quot;</strong> — one row per test variable (t test) or the single
+pair (correlate): the statistic, a Method cell naming what actually ran
+(&quot;Exact, C arrangements&quot; or &quot;Monte Carlo, m resamples&quot;), the permutation
+Sig. under the tails label, and Lower/Upper of the 99% CI of Sig. (Monte
+Carlo rows only; empty for exact). The note names the estimator
+((b+1)/(m+1)), the seed when any row is Monte Carlo, and what the CI
+means. Exact-vs-MC is decided per row (missing data can put one variable
+under the threshold and another over it).</p>
+<h3 id="out-of-scope-for-v1-recorded-cuts-6">Out of scope for v1 (recorded cuts)</h3>
+<ul>
+<li><strong>No sign-flip (paired/one-sample) permutation test</strong> — a different
+convention (2ⁿ sign assignments), recorded for a later item if asked.</li>
+<li><strong>No method-force option</strong>: exact-vs-Monte-Carlo is automatic at the
+recorded threshold and named in the output.</li>
+<li><strong>No Kendall permutation</strong> and <strong>no permutation p's for a correlation
+matrix</strong> — the matrix stays asymptotic.</li>
+</ul>
+<h2 id="var--granger-causality--the-v1-conventions">VAR / Granger causality — the v1 conventions</h2>
+<p><em>Decided 2026-08-19, before any code, as sub-task 8a of
+<code>docs/releases/release_0.19.0.md</code> item 8 (kept private). The vector
+autoregression is the standard multi-series companion to the shipped
+single-series tools: K series regressed on p lags of all of them, the
+lag-order criteria that choose p, and the pairwise Granger tests that ask
+&quot;do the lags of one series improve the prediction of another?&quot;. Every
+convention below was verified against <strong>R <code>vars</code> 1.6-1 and <code>lmtest</code>
+0.9-40</strong> (<code>vars</code> installed into the item-1 R env from conda-forge — the
+CRAN source build needs a C toolchain the env does not carry) — the
+<code>VARselect</code> scalings read from its source and every estimation identity
+reproduced numerically to machine precision, not recorded from memory.
+The pinned values live in <code>tool/validation/generate_var_references.R</code> and
+<code>test/validation/var_reference_values.json</code> (sub-task 8g).</em></p>
+<h3 id="the-shape-4">The shape</h3>
+<p>A new <strong><code>var_model</code></strong> tool (catalog +1): <strong>K ≥ 2 numeric series taken in
+case order</strong>, fitted as a VAR(p) by per-equation OLS, with the lag order
+either <strong>fixed (<code>lags</code>, default 1)</strong> or <strong>selected by an information
+criterion (<code>auto</code>, over <code>1..max_lags</code>, default max 10 — <code>VARselect</code>'s
+<code>lag.max</code> default)</strong> under the <code>ic</code> option (<strong>aic</strong> default, or <code>hq</code>,
+<code>bic</code>, <code>fpe</code>). Deterministic terms ride a <strong><code>trend</code></strong> option with the
+stationarity tool's vocabulary extended to vars' four:
+<strong>constant</strong> (default), <strong>trend</strong>, <strong>both</strong>, <strong>none</strong>.</p>
+<ul>
+<li><strong>Alignment is listwise over the K series</strong>: the analyzed sample is the
+included rows where <em>all</em> K series are non-missing, in case order (the
+CCF's <code>aligned_pair</code> convention widened to K), with the aligned count
+named in the output.</li>
+<li>The <strong>trend regressor is the 1-based time index of the aligned series</strong>,
+running <code>p+1..n</code> over the fitted observations — exactly <code>vars::VAR</code> /
+<code>VARselect</code> (<code>seq(lag.max + 1, length = sample)</code>; verified by
+reproducing the trend-model coefficients).</li>
+<li><strong>Deliberately unweighted</strong> — the standing time-series convention (a
+frequency weight has no defined meaning for an ordered series): the
+weight only selects cases, surfaced by the usual unweighted note. Not
+design-covered (the generic design-ignored note applies).</li>
+</ul>
+<h3 id="estimation-verified-identities">Estimation (verified identities)</h3>
+<ol>
+<li><strong>Per-equation OLS on the common regressor matrix</strong>
+<code>[y₁,ₜ₋₁ … y_K,ₜ₋₁, y₁,ₜ₋₂ …, deterministic]</code> — lag-major,
+variable-minor ordering (<code>x.l1, y.l1, x.l2, y.l2, …</code>, R's <code>embed</code>
+layout), deterministic terms last, over the <strong>T = n − p</strong> effective
+observations. Coefficients and standard errors are the equationwise
+OLS ones — <code>s²ⱼ (X'X)⁻¹</code> with <code>s²ⱼ = RSSⱼ/(T − k)</code> and
+<strong>k = pK + d</strong> regressors per equation (d deterministic columns).
+Verified equal to <code>summary(VAR(...))</code> to machine precision, and t
+tests use the Student t on <code>T − k</code> df.</li>
+<li><strong>The residual covariance matrix is the df-adjusted, column-centered
+one</strong>: <code>Σ̂ᵢⱼ = Σₜ(eᵢₜ − ēᵢ)(eⱼₜ − ēⱼ)/(T − k)</code> — read from
+<code>summary.varest</code>'s source (<code>cov(resids)·(obs−1)/(obs−k)</code>) and verified
+on the <code>type = &quot;none&quot;</code> case, where the centering genuinely differs
+(no constant absorbs the residual means; with a constant the two
+forms coincide). The correlation matrix is its <code>cov2cor</code>. The <strong>ML
+covariance <code>Σ̃ = E'E/T</code></strong> (raw cross-products, denominator T) is used
+<em>only</em> inside the criteria and the log-likelihood.</li>
+<li><strong>Log-likelihood</strong> is the Gaussian one at the ML estimate:
+<code>−(TK/2)·ln 2π − (T/2)·ln det Σ̃ − TK/2</code> — verified equal to
+<code>logLik(varest)</code>.</li>
+</ol>
+<h3 id="lag-order-criteria-varselects-scalings-from-source">Lag-order criteria (<code>VARselect</code>'s scalings, from source)</h3>
+<p>With <code>T</code> the estimation sample and <code>d = detint</code> deterministic columns:</p>
+<ul>
+<li><code>AIC(p) = ln det Σ̃ₚ + (2/T)·(pK² + Kd)</code></li>
+<li><code>HQ(p)  = ln det Σ̃ₚ + (2 ln ln T/T)·(pK² + Kd)</code></li>
+<li><code>BIC(p) = ln det Σ̃ₚ + (ln T/T)·(pK² + Kd)</code> — Lütkepohl's SC;
+labeled BIC in the output (the app's name for it), with the note
+naming the equivalence.</li>
+<li><code>FPE(p) = ((T + k)/(T − k))^K · det Σ̃ₚ</code>, <code>k = pK + d</code>.</li>
+</ul>
+<p>Two sample conventions, both recorded:</p>
+<ul>
+<li><strong>The selection table holds the sample fixed at <code>T = n − max_lags</code></strong>
+for every candidate order (each candidate fits on the same
+observations — <code>VARselect</code>'s loop, read from source), so the criteria
+are comparable; the selected order per criterion is the <strong>first
+minimum</strong> (<code>which.min</code>).</li>
+<li><strong>The fitted model's own criteria</strong> (model-summary table) use the same
+formulas on the model's own sample <code>T = n − p</code> — equal to
+<code>VARselect(lag.max = p)</code>'s column p, and <em>deliberately not</em> equal to
+the selection table's row p when <code>max_lags &gt; p</code> (different sample;
+the note says so).</li>
+</ul>
+<h3 id="granger-tests-the-pairwise-convention">Granger tests (the pairwise convention)</h3>
+<p>For every ordered pair <strong>cause → effect</strong> (K(K−1) rows): the <strong>F test
+that all p lag coefficients of the cause are zero in the effect's
+equation of the full fitted system</strong> — the per-equation Wald
+<code>W = (Rβ)'(R V̂ R')⁻¹(Rβ)</code> with <code>V̂</code> the equation's OLS covariance,
+reported as <code>F = W/p</code> on <code>(p, T − k)</code> df. <strong>Verified: in a bivariate
+system this is exactly <code>lmtest::grangertest</code>'s restricted-vs-unrestricted
+F</strong> (equal to machine precision, same df) — which is why the pins use
+<code>grangertest</code> for the pairwise case. <strong>Recorded divergence</strong>:
+<code>vars::causality</code> tests the <em>joint</em> hypothesis cause → all-others with a
+system-wide covariance — a different (blockwise) test, out of scope.</p>
+<h3 id="errors-as-data-2">Errors as data</h3>
+<ul>
+<li>Fewer than two series, a non-numeric series, <code>lags &lt; 1</code>, or
+<code>max_lags &lt; 1</code> — each named plainly.</li>
+<li><strong>Too few observations</strong>: the fit needs <code>T − k ≥ 1</code> (<code>T &gt; pK + d</code>),
+and under <code>auto</code> the fixed selection sample needs
+<code>n − max_lags &gt; max_lags·K + d</code>; the message names the counts.</li>
+<li><strong>Collinear regressors</strong> (a constant series, duplicated series, n too
+small for the lag matrix) surface as the shared singular-matrix error.</li>
+</ul>
+<h3 id="the-tables">The tables</h3>
+<ol>
+<li><strong>&quot;VAR Model Summary&quot;</strong> — Statistic/Value rows (the ARIMA Model Fit
+shape): aligned observations, effective observations T, lag order p,
+parameters per equation k, log-likelihood, AIC, HQ, BIC, FPE (own
+sample). The note names the series, the deterministic terms, and how
+p was chosen (fixed, or selected by which criterion over what range).</li>
+<li><strong>&quot;Lag Order Selection&quot;</strong> (<code>auto</code> only) — one row per candidate order:
+Lag, AIC, HQ, BIC, FPE, on the fixed <code>n − max_lags</code> sample; the note
+names the per-criterion selections and the order actually fitted.</li>
+<li><strong>&quot;VAR Coefficients: 〈series〉&quot;</strong> per equation — Term, Estimate,
+Std. Error, t, Sig.; terms in the verified <code>x.l1, y.l1, …, const, trend</code> order; the note carries the equation's residual SE and R².</li>
+<li><strong>&quot;Residual Covariance Matrix&quot;</strong> and <strong>&quot;Residual Correlation
+Matrix&quot;</strong> — K×K, df-adjusted denominator named in the note.</li>
+<li><strong>&quot;Granger Causality Tests&quot;</strong> — Cause, Effect, F, df1, df2, Sig.;
+the note states the hypothesis form and the bivariate <code>grangertest</code>
+equivalence.</li>
+</ol>
+<h3 id="out-of-scope-for-v1-recorded-cuts-7">Out of scope for v1 (recorded cuts)</h3>
+<ul>
+<li><strong>No IRFs and no FEVD</strong> — deferred until asked (the bucket pointer
+recorded when the queue item moved into the release).</li>
+<li><strong>No forecasting from the fitted VAR</strong> — the single-series tools
+forecast; a VAR <code>predict</code> is a later ask.</li>
+<li><strong>No seasonal dummies and no exogenous regressors</strong> (<code>VARselect</code>'s
+<code>season</code>/<code>exogen</code> arguments).</li>
+<li><strong>No joint or instantaneous causality</strong> (<code>vars::causality</code>'s two
+tests, including its bootstrap option) — the pairwise matrix is the
+v1 answer.</li>
+<li><strong>No stability (companion-root) table</strong> — the companion matrix is not
+symmetric, and the engine carries no general eigensolver; recorded
+rather than approximated.</li>
+<li><strong>No SVAR, no VECM/Johansen, no coefficient restrictions.</strong></li>
+</ul>
 <h2 id="tolerances-and-recorded-conventions">Tolerances and recorded conventions</h2>
 <p>Most statistics agree to <code>1e-4</code>–<code>1e-6</code>. A looser tolerance always names a
 <em>reason</em> in the reference's <code>source</code> string. Where a statistic has more than one
@@ -1596,6 +2467,123 @@ rather than inline in a paint loop. Non-positive sizes have no area and are
 dropped, with the count in the note rather than silently.</p>
 </li>
 <li>
+<p><strong>Complex survey designs</strong> — the design declaration, the covered-procedure
+list, the five estimation conventions and the v1 scope cuts are decided and
+recorded in their own section above,
+<a href="#complex-survey-designs--the-v1-conventions">Complex survey designs</a>
+(0.19.0 item 1, recorded <em>before</em> any pin — the 0.15.0 rule).</p>
+</li>
+<li>
+<p><strong>Equivalence tests (TOST)</strong> — the tool shape, the test conventions, the
+SMD-bound standardizers, the two recorded <code>TOSTER</code> divergences and the v1
+scope cuts are decided and recorded in their own section above,
+<a href="#equivalence-tests-tost--the-v1-conventions">Equivalence tests (TOST)</a>
+(0.19.0 item 2, recorded <em>before</em> any pin). The pins ride their own
+R-backed suite — <code>tool/validation/generate_tost_references.R</code> →
+<code>test/validation/tost_reference_values.json</code> →
+<code>test/tost_validation_test.dart</code>
+(90 values on the <code>sleep</code> documented-example data plus a synthetic
+unequal-variance block, with the orphan guard) — because the reference
+implementation is R <code>TOSTER</code>, not a package in the pinned Python set.
+Degenerate bounds are error paths, not values, so they are pinned as
+errors-as-data in <code>analysis_test.dart</code> / <code>tool_dispatcher_test.dart</code>.</p>
+</li>
+<li>
+<p><strong>Bland–Altman method comparison</strong> — the difference direction, the fixed
+1.96 multiplier, the t-based CI forms (the 1999 exact LoA variance with
+z = 1.96), the proportional-bias table and the v1 scope cuts are decided
+and recorded in their own section above,
+<a href="#blandaltman-method-comparison--the-v1-conventions">Bland–Altman method comparison</a>
+(0.19.0 item 3, recorded <em>before</em> any pin). The pins ride their own
+R-backed suite — <code>tool/validation/generate_bland_altman_references.R</code> →
+<code>test/validation/bland_altman_reference_values.json</code> →
+<code>test/bland_altman_validation_test.dart</code>
+(54 values: dual references on the original Bland &amp; Altman (1986) PEFR
+data plus a synthetic incomplete pair, with the orphan guard) — because
+the reference implementations are R <code>blandr</code> and <code>BlandAltmanLeh</code>, not
+packages in the pinned Python set. The one
+loosened tolerance: the LoA-CI pins against <code>blandr</code> carry <code>5e-3</code>
+absolute, because <code>blandr</code> computes the 1999 variance with
+z = Φ⁻¹(0.975) where our recorded convention (and its own lines) use the
+literal 1.96 — the divergence is recorded in the section above, and the
+same surfaces are also pinned at <code>1e-9</code> against R values computed in the
+recorded convention (the item-1 &quot;R SEs + our t interval&quot; precedent).</p>
+</li>
+<li>
+<p><strong>Latent class analysis</strong> — the reference (<code>poLCA</code>) and its documented
+examples, the estimator and starts policy, the fit-block formulas, the
+descending-π ordering (also the pin alignment rule) and the v1 scope
+cuts are decided and recorded in their own section above,
+<a href="#latent-class-analysis--the-v1-conventions">Latent class analysis</a>
+(0.19.0 item 4, recorded <em>before</em> any pin; spike-gated). The pins ride
+their own R-backed suite — <code>tool/validation/generate_lca_references.R</code> →
+<code>test/validation/lca_reference_values.json</code> →
+<code>test/lca_validation_test.dart</code>
+on poLCA's own <code>values</code> and <code>carcinoma</code> example data, with the orphan
+guard — because the reference implementation is R <code>poLCA</code>, not a package
+in the pinned Python set. aBIC and entropy are R-computed from poLCA's
+LL/npar/posterior (poLCA does not print them); the EM optimum is what is
+pinned, so tolerances are looser than closed-form suites (LL ~1e-6,
+probabilities ~1e-5).</p>
+</li>
+<li>
+<p><strong>Item response theory</strong> — the dual references (<code>ltm</code> + <code>mirt</code>, the CFA
+rule) on the canonical LSAT6/LSAT7 data, the Bock–Aitkin quadrature, the
+θ ~ N(0,1) identification, the reported parameterization and the v1
+scope cuts are decided and recorded in their own section above,
+<a href="#item-response-theory--the-v1-conventions">Item response theory</a>
+(0.19.0 item 5, recorded <em>before</em> any pin; spike-gated). The pins ride
+their own R-backed suite — <code>tool/validation/generate_irt_references.R</code> →
+<code>test/validation/irt_reference_values.json</code> →
+<code>test/irt_validation_test.dart</code>
+with the orphan guard — because the reference implementations are R
+packages, not the pinned Python set. Both packages are pinned
+<strong>separately on the same cells</strong> at tolerances set from their own
+measured disagreement (~8e-4 on parameters, 5e-5 on the LL): a value
+inside both pins is inside the genuine reference uncertainty.</p>
+</li>
+<li>
+<p><strong>LOESS smoother (scatterplot)</strong> — the exact local-linear tricube
+algorithm (the q rule with its verified <code>10⁻⁷</code> epsilon, tricube over all
+points inside the q-th-nearest bandwidth, the weighted local line), the
+101-point evaluation grid, the degenerate-window fallbacks and the v1
+scope cuts are decided and recorded in their own section above,
+<a href="#loess-smoother-on-the-scatterplot--the-v1-conventions">LOESS smoother on the scatterplot</a>
+(0.19.0 item 6, recorded <em>before</em> any pin). The pins ride their own
+R-backed suite — <code>tool/validation/generate_loess_references.R</code> →
+<code>test/validation/loess_reference_values.json</code> →
+<code>test/loess_validation_test.dart</code>
+(on the base-R <code>cars</code> data plus seeded synthetic fixtures, with the
+orphan guard) — because the reference is R <code>stats::loess</code>
+(<code>degree = 1, surface = &quot;direct&quot;</code>, default control), not a package in
+the pinned Python set. Verified agreement is machine precision, so the
+pins carry the standard <code>1e-9</code>; the three recorded reference quirks
+(<code>lowess</code> defaults, <code>statistics = &quot;exact&quot;</code>, singular-window
+pseudoinverse artifacts) live in the section above.</p>
+</li>
+<li>
+<p><strong>Permutation tests</strong> — the covered tests, the two-sided/observed-
+direction counting, the automatic exact threshold (1,000,000
+arrangements), the (b+1)/(m+1) Monte-Carlo estimator with its 99%
+Clopper–Pearson CI, the Fisher–Yates draw contract and the v1 scope cuts
+are decided and recorded in their own section above,
+<a href="#permutation-tests--the-v1-conventions">Permutation tests</a>
+(0.19.0 item 7, recorded <em>before</em> any pin). The pins ride their own
+R-backed suite — <code>tool/validation/generate_permutation_references.R</code> →
+<code>test/validation/permutation_reference_values.json</code> →
+<code>test/permutation_validation_test.dart</code>
+with the orphan guard — because the references are R <code>coin</code> and <code>perm</code>
+(plus hand enumeration in R where <code>coin</code>'s exact algorithms do not reach
+the correlation problem). Exact p's pin exactly; Monte-Carlo p's pin the
+exact/reference p at a tolerance derived from the binomial simulation
+SE at the pinned seed's m (named in the <code>source</code>); bitwise seed
+reproducibility is asserted engine-side, the bootstrap precedent. Two
+recorded reference divergences: <code>coin</code> reports the raw b/m estimator
+(we use the +1 form, <code>perm</code>'s convention), and <code>cor.test</code>'s exact
+Spearman is tie-free only (our midrank enumeration extends it; pins
+stay on tie-free data).</p>
+</li>
+<li>
 <p><strong>GLM quantile residuals</strong> — the per-family residual definitions, the seed
 policy, the reference lines and the panel names are decided and recorded in
 their own section above,
@@ -1629,6 +2617,46 @@ dart run tool/cstool.dart test test/numerical_validation_test.dart
 <p>The package versions used for the committed values are recorded in the JSON
 header (<code>_versions</code>) — at the time of writing SciPy 1.18, statsmodels 0.14,
 scikit-learn 1.9, lifelines 0.30, pingouin 0.6, NumPy 2.5.</p>
+<p>The <strong>survey-design</strong>, <strong>TOST</strong>, <strong>Bland–Altman</strong>, <strong>LCA</strong>, <strong>IRT</strong>,
+<strong>LOESS</strong> and <strong>permutation</strong> references have their own toolchain — R with the <code>survey</code> package (the
+canonical reference implementation for Taylor-linearized design-based
+estimation; none of the pinned Python packages implements it), the
+<code>TOSTER</code> package (the reference for equivalence testing), the <code>blandr</code> +
+<code>BlandAltmanLeh</code> pair (the dual references for method comparison; <code>blandr</code>
+also ships the original Bland &amp; Altman 1986 PEFR data the fixture is
+written from), the <code>poLCA</code> package (the reference for latent class
+analysis; it ships the <code>values</code> and <code>carcinoma</code> example data the fixtures
+are written from), the <code>ltm</code> + <code>mirt</code> pair (the dual references for
+IRT; they ship the LSAT6/LSAT7 data), the <code>coin</code> + <code>perm</code> pair (the dual
+references for permutation tests, with hand enumeration in R where
+<code>coin</code>'s exact algorithms do not reach), and — for the LOESS smoother —
+base R alone (<code>stats::loess</code> is the reference; the <code>cars</code> fixture is a
+base-R dataset). Like the Python values, CI only
+reads the committed JSON:</p>
+<pre><code class="language-sh"># any R ≥ 4 with survey ≥ 4.4, TOSTER ≥ 0.8, blandr ≥ 0.6,
+# BlandAltmanLeh ≥ 0.3, poLCA ≥ 1.6, ltm ≥ 1.2, mirt ≥ 1.4,
+# coin ≥ 1.4 and perm ≥ 1.0; a user-space conda-forge R works:
+#   micromamba create -p ~/micromamba/envs/r-survey -c conda-forge \
+#     r-base r-survey r-toster r-polca r-coin \
+#     c-compiler cxx-compiler gfortran make
+#   # CRAN source builds need the env's bin on PATH for its compilers:
+#   PATH=~/micromamba/envs/r-survey/bin:$PATH Rscript -e \
+#     'install.packages(c(&quot;blandr&quot;,&quot;BlandAltmanLeh&quot;,&quot;ltm&quot;,&quot;mirt&quot;,&quot;perm&quot;),
+#      repos=&quot;https://cloud.r-project.org&quot;)'
+Rscript tool/validation/generate_survey_references.R
+Rscript tool/validation/generate_tost_references.R
+Rscript tool/validation/generate_bland_altman_references.R
+Rscript tool/validation/generate_lca_references.R
+Rscript tool/validation/generate_irt_references.R
+Rscript tool/validation/generate_loess_references.R
+Rscript tool/validation/generate_permutation_references.R
+dart run tool/cstool.dart test test/survey_validation_test.dart \
+  test/tost_validation_test.dart test/bland_altman_validation_test.dart \
+  test/lca_validation_test.dart test/irt_validation_test.dart \
+  test/loess_validation_test.dart test/permutation_validation_test.dart
+</code></pre>
+<p>The R and package versions used for the committed values are recorded in each
+JSON header (<code>_versions</code>).</p>
 <p>The <strong>statistics-package format</strong> artifacts have their own, smaller toolchain
 (<code>pyreadstat</code> + <code>pandas</code>, and <code>xlwt</code>/<code>odfpy</code> for the spreadsheet fixtures):</p>
 <pre><code class="language-sh">python3 -m venv /tmp/fmtenv

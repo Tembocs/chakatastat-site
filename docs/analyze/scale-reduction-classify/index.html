@@ -121,6 +121,11 @@ average if you will use the mean of all raters.</li>
 <p>ICC reuses the two-way variance decomposition of the repeated-measures ANOVA.
 Values near 1 mean highly reliable ratings; near 0, no better than chance.</p>
 </blockquote>
+<blockquote>
+<p>Comparing two measurement <strong>methods</strong> — where the question is how far apart
+they get in the measurement's own units, not a relative index — is the
+<a href="../method-comparison/">Bland-Altman analysis</a>'s job (Scale → Bland-Altman).</p>
+</blockquote>
 <h2 id="dimension-reduction--factor">Dimension Reduction → Factor</h2>
 <p><strong>When to use it.</strong> To find a small number of latent <strong>factors</strong> behind many
 correlated variables. (Testing a structure you already <em>hypothesize</em> is the
@@ -221,12 +226,19 @@ specificity.</p>
 <ul>
 <li>Are the groups <strong>known</strong>? → <strong>Discriminant</strong> (supervised).</li>
 <li>Groups <strong>unknown</strong>, want a fixed number → <strong>K-Means</strong>.</li>
+<li>Groups unknown and the variables are <strong>categorical items</strong> (want fit
+indices and membership probabilities) →
+<a href="../latent-class/"><strong>Latent Class Analysis</strong></a>.</li>
 <li>Groups unknown, want the <strong>structure / a dendrogram-style schedule</strong> →
 <strong>Hierarchical</strong>.</li>
 <li>Groups unknown, want the count <strong>chosen for you</strong> → <strong>Two-Step</strong>.</li>
 <li>Checking that <strong>items form one scale</strong> → <strong>Reliability</strong>.</li>
+<li>Asking how <strong>binary items measure</strong> (difficulty, discrimination, where
+the test is precise) → <a href="../irt/"><strong>Item Response Theory</strong></a>.</li>
 <li>Measuring <strong>rater / repeated-measurement agreement</strong> → <strong>Intraclass
 Correlation</strong>.</li>
+<li>Comparing <strong>two measurement methods</strong> in their own units →
+<a href="../method-comparison/"><strong>Bland-Altman</strong></a>.</li>
 <li>Reducing <strong>many variables to a few</strong> → <strong>Factor</strong>.</li>
 </ul>
       </article>

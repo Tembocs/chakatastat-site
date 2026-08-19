@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Nonparametric Tests — ChakataStat User Guide</title>
-  <link rel="canonical" href="https://chakatastat.app/docs/analyze/nonparametric/">
+  <title>Item Response Theory — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/analyze/irt/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Nonparametric Tests — ChakataStat User Guide">
-  <meta property="og:url" content="https://chakatastat.app/docs/analyze/nonparametric/">
+  <meta property="og:title" content="Item Response Theory — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/analyze/irt/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
@@ -89,116 +89,85 @@
       </ul>
       </aside>
       <article class="docs-content">
-<h1 id="nonparametric-tests">Nonparametric Tests</h1>
-<p><strong>Analyze → Nonparametric Tests.</strong> Use these when the assumptions behind a t-test
-or ANOVA (normality, equal variances) do not hold, or when your data are ordinal
-ranks rather than true scale values. They test distributions and medians using
-ranks, not means. (To drop the assumptions while still testing the <em>mean
-difference</em> itself, the two-group alternative is the t-test dialog's
-<a href="../compare-means/#permutation-test">permutation test</a>.)</p>
-<h2 id="the-tests-at-a-glance">The tests at a glance</h2>
-<div class="docs-table-wrap"><table>
-<thead>
-<tr>
-<th>Test</th>
-<th>Parametric analogue</th>
-<th>Use when</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Mann-Whitney U</strong></td>
-<td>Independent-samples t</td>
-<td>Two independent groups</td>
-</tr>
-<tr>
-<td><strong>Wilcoxon Signed-Rank</strong></td>
-<td>Paired t</td>
-<td>Two related measurements</td>
-</tr>
-<tr>
-<td><strong>Sign test</strong></td>
-<td>Paired t</td>
-<td>Two related measurements (direction only)</td>
-</tr>
-<tr>
-<td><strong>Kruskal-Wallis</strong></td>
-<td>One-way ANOVA</td>
-<td>Three+ independent groups</td>
-</tr>
-<tr>
-<td><strong>Friedman</strong></td>
-<td>Repeated-measures ANOVA</td>
-<td>Three+ related measurements</td>
-</tr>
-<tr>
-<td><strong>Kendall's W</strong></td>
-<td>Repeated-measures ANOVA</td>
-<td>Agreement among several rankers</td>
-</tr>
-<tr>
-<td><strong>Runs test</strong></td>
-<td>—</td>
-<td>Randomness of a sequence</td>
-</tr>
-<tr>
-<td><strong>Binomial test</strong></td>
-<td>—</td>
-<td>A proportion vs an expected value</td>
-</tr>
-<tr>
-<td><strong>Tests of Normality</strong></td>
-<td>—</td>
-<td>Whether a variable is normally distributed</td>
-</tr>
-</tbody>
-</table></div>
-<h2 id="how-to-fill-the-dialogs">How to fill the dialogs</h2>
-<p>Each test takes the variable(s) it needs and, for the group-comparison tests, a
-<strong>grouping variable</strong>:</p>
+<h1 id="item-response-theory">Item Response Theory</h1>
+<p><strong>Analyze → Scale → Item Response Theory.</strong> Reliability analysis tells you
+how well a set of items hangs together as one score; IRT opens the items
+themselves. Each binary item (right/wrong, yes/no, symptom present/absent)
+is modeled as a function of a latent trait θ — ability, severity, attitude —
+with its own <strong>difficulty</strong> (where on the trait the item starts being
+passed) and, in the 2PL model, its own <strong>discrimination</strong> (how sharply it
+separates people just below from just above that point). The payoff is a
+question no reliability coefficient can answer: <strong>where on the trait does
+this test measure well, and which items do the work?</strong></p>
+<h2 id="the-data-layout">The data layout</h2>
+<p>One row per person, one column per item — each item <strong>binary</strong> (exactly two
+observed values; numeric or string). <strong>The higher observed value is treated
+as the keyed — correct or endorsed — response</strong>, and the output names it per
+item, so a 0/1 coding needs no preparation. Cases incomplete on any item
+are dropped; anything non-binary is refused by name.</p>
+<h2 id="the-dialog">The dialog</h2>
+<p>Tick the <strong>Items</strong>, choose the <strong>Model</strong>, and keep <strong>Plot information
+curves</strong> on for the figures:</p>
 <ul>
-<li><strong>Mann-Whitney / Kruskal-Wallis</strong> — a <strong>test variable</strong> and a <strong>grouping
-variable</strong> (two groups for Mann-Whitney, three+ for Kruskal-Wallis).</li>
-<li><strong>Wilcoxon / Sign</strong> — a <strong>pair</strong> of related variables.</li>
-<li><strong>Friedman</strong> — three or more <strong>related variables</strong>.</li>
-<li><strong>Kendall's W</strong> — two or more <strong>related variables</strong> (the items each case
-ranks); reports the <strong>coefficient of concordance</strong> (0..1 agreement) and its
-equivalent Friedman chi-square. It is the same statistic as Friedman, rescaled
-to read as an agreement measure — use it when the question is &quot;how much do the
-rankers agree?&quot; rather than &quot;do the conditions differ?&quot;.</li>
-<li><strong>Runs test</strong> — one variable; tests whether values fall in a random order
-around a cut point, with an optional <strong>exact</strong> small-sample significance.</li>
-<li><strong>Binomial test</strong> — one variable and an <strong>expected proportion</strong>; reports an
-exact or asymptotic significance.</li>
-<li><strong>Tests of Normality</strong> — one or more variables; reports <strong>Shapiro-Wilk</strong> and
-<strong>Kolmogorov-Smirnov</strong> (Lilliefors) with a reject/retain <strong>Decision</strong> at your
-chosen α (set in Options).</li>
+<li><strong>2PL</strong> (the default) — each item gets its own discrimination and
+difficulty. The general-purpose choice.</li>
+<li><strong>Rasch</strong> — one shared discrimination, per-item difficulties. Fewer
+parameters, item difficulties on one common yardstick, and the model of
+choice when items are meant to differ only in difficulty. (Fit both and
+compare AIC/BIC: if Rasch fits comparably, its simplicity wins.)</li>
 </ul>
+<p>Estimation is marginal maximum likelihood (Bock–Aitkin EM) with the latent
+trait fixed to N(0,1) — deterministic, so the same run always reproduces
+the same tables.</p>
 <h2 id="reading-the-output">Reading the output</h2>
-<p>The rank-based tests report <strong>mean ranks</strong> per group, the test statistic
-(U, W, H, χ²…), and the significance. A small significance means the groups'
-distributions (or the paired differences) differ more than chance would explain.</p>
-<h3 id="exact-small-sample-significance">Exact small-sample significance</h3>
-<p><strong>Mann-Whitney</strong>, <strong>Wilcoxon</strong> and <strong>Kruskal-Wallis</strong> each offer an <strong>Exact
-small-sample significance</strong> option (and <strong>Runs</strong> and <strong>Binomial</strong> have their own
-exact paths). The asymptotic (normal / χ²) p-value these tests report is only
-reliable for reasonably large samples; for small ones, tick <strong>Exact</strong> to add an
-<strong>Exact Sig.</strong> column computed from the statistic's true null distribution by
-enumeration. An exact value is shown only when it applies — <strong>tied data</strong> breaks
-it (the rank arrangements are no longer equally likely) and very large samples
-are not enumerated — and the output falls back to the asymptotic value with a
-note when it cannot.</p>
-<h2 id="example">Example</h2>
-<p>Earlier, <a href="../descriptive-statistics/#explore">Explore</a> suggested <em>FastingGlucose</em>
-is not normally distributed within groups. Rather than an independent-samples
-t-test of glucose by <em>Diabetic</em>, run <strong>Mann-Whitney U</strong> with <em>FastingGlucose</em> as
-the test variable and <em>Diabetic</em> as the grouping variable — a valid comparison
-that does not assume normality.</p>
-<h2 id="see-also">See also</h2>
 <ul>
-<li><a href="../compare-means/">Compare Means</a> — the parametric counterparts.</li>
-<li><a href="../descriptive-statistics/#explore">Tests of Normality</a> also appear in Explore.</li>
+<li><strong>IRT Model Summary</strong> — N, items, parameters, the marginal
+log-likelihood, AIC/BIC (for comparing Rasch vs 2PL on the same items),
+and the EM convergence.</li>
+<li><strong>IRT Item Parameters</strong> — per item, with standard errors:
+<ul>
+<li><strong>Difficulty (b)</strong> — the trait level at which a person has a 50%
+chance of the keyed response. Items spread across a range of b cover
+the trait; a test whose difficulties bunch together measures only one
+narrow band.</li>
+<li><strong>Discrimination (a)</strong> — how steeply the response probability rises at
+b. Higher discriminates better <em>near its difficulty</em>; a very low a
+(say below ~0.5) marks an item barely related to the trait — a
+candidate for revision. The parameterization is the classical
+<code>P(keyed) = logistic(a·(θ − b))</code>.</li>
 </ul>
+</li>
+<li><strong>Item Information Curves</strong> — each item's Fisher information over θ: a
+peak at its difficulty, higher and narrower the more discriminating the
+item. Read it as a map of <strong>which items work where</strong>.</li>
+<li><strong>Test Information Curve</strong> — the sum, with <strong>SE(θ) = 1/√I(θ)</strong>: the
+measurement precision profile of the whole test. A tall curve over the
+range you care about (e.g. around a cut score) is the goal; information
+collapsing at the extremes is why extreme scores are always less
+precise.</li>
+</ul>
+<h2 id="relation-to-the-other-scale-tools">Relation to the other scale tools</h2>
+<ul>
+<li><strong><a href="../scale-reduction-classify/#scale--reliability-analysis">Reliability (alpha)</a></strong>
+— one number for the whole scale, assuming items are interchangeable.
+IRT replaces it with item-level parameters and a precision <em>curve</em>.</li>
+<li><strong><a href="../cfa/">Confirmatory Factor Analysis</a></strong> — tests a hypothesized factor
+structure for continuous-ish indicators; a one-factor CFA of binary
+items is the rough cousin of the 2PL. Use CFA for structure questions
+across many constructs, IRT for measurement questions within one.</li>
+<li><strong><a href="../latent-class/">Latent Class Analysis</a></strong> — also models categorical
+items, but with a <em>categorical</em> latent variable (subgroups) instead of a
+continuous trait.</li>
+</ul>
+<blockquote>
+<p><strong>Scope (v1).</strong> Rasch and 2PL for binary items only: no 3PL (guessing
+parameter — its estimation is notoriously fragile), no polytomous models
+(graded response / partial credit), no saved ability (EAP) scores, no
+item-fit statistics, and no item characteristic (trace-line) plots — the
+information curves are the v1 figures. A frequency weight (Weight Cases)
+is honored as case replication; a declared survey design is not covered
+and the output says so.</p>
+</blockquote>
       </article>
     </div>
   </main>

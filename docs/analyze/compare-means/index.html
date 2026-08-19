@@ -119,12 +119,91 @@ t-test reported both ways (equal and unequal variances assumed) with the CI of
 the difference.</p>
 <p><strong>Example.</strong> Does mean <em>FastingGlucose_mmolL</em> differ between <em>Diabetic</em> = Yes and
 No?</p>
+<h4 id="permutation-test">Permutation test</h4>
+<p>Tick <strong>Permutation test</strong> to also test the mean difference by
+<strong>randomization</strong>: the group labels are reshuffled over and over, and the
+permutation p is simply the share of relabelings whose mean difference is at
+least as extreme as the one observed. Nothing is assumed about
+distributions — no normality, no equal variances — which makes it the
+methods-course answer for small samples and odd-shaped data, while still
+testing the <em>mean difference</em> (unlike <a href="../nonparametric/">Mann–Whitney</a>,
+which tests a rank-based shift).</p>
+<p>How it runs, automatically:</p>
+<ul>
+<li><strong>Small samples are exact</strong>: when every possible group assignment can be
+enumerated (up to a million arrangements — balanced designs up to about
+n = 22), the table says <em>Exact</em> with the arrangement count, and the p is
+the exact share, not an estimate. An exact p can never be 0 — the
+observed assignment is always one of the arrangements.</li>
+<li><strong>Larger samples are Monte Carlo</strong>: the table says <em>Monte Carlo</em> with the
+resample count (default 10,000, adjustable in the dialog), the p is
+estimated as (b+1)/(m+1), and <strong>Lower/Upper</strong> bracket the <em>simulation</em>
+uncertainty of that p at 99% — how much it could move with a different
+seed, not an interval for the effect. A fixed <strong>Seed</strong> makes the run
+exactly <a href="../../advanced/reproducibility/">reproducible</a>; rerunning with
+the same seed gives the same p to the last digit.</li>
+</ul>
+<p>The test direction follows the dialog's tails setting (one-tailed counts
+extremes in the observed direction, like the t test's one-tailed p).
+Permutation is about rearranging the <em>observed cases</em>, so it is not
+available while Weight Cases is on.</p>
 <h3 id="paired-samples-t-test">Paired-Samples T Test</h3>
 <p><strong>When.</strong> Compare <strong>two measurements on the same cases</strong>.</p>
 <p><strong>Dialog.</strong> One or more <strong>variable pairs</strong>.</p>
 <p><strong>Output.</strong> The paired differences' mean, the t statistic, df, significance and
 CI.</p>
 <p><strong>Example.</strong> <em>SystolicBP</em> vs <em>DiastolicBP</em> (illustrative paired comparison).</p>
+<blockquote>
+<p>Comparing two <strong>measurement methods</strong> on the same subjects? The paired t
+answers only whether the <em>average</em> difference is zero — the agreement
+question (how far apart the methods get case by case) is the
+<a href="../method-comparison/">Bland-Altman analysis</a>'s job.</p>
+</blockquote>
+<h2 id="equivalence-t-test-tost">Equivalence T Test (TOST)</h2>
+<p><strong>Analyze → Compare Means → Equivalence T Test (TOST)…</strong></p>
+<p><strong>When to use it.</strong> To show two means are <strong>practically equivalent</strong> — a
+question a t test cannot answer: &quot;not significantly different&quot; is <em>not</em>
+&quot;equivalent&quot;. You declare how big a difference would still be negligible (the
+<strong>equivalence bounds</strong>), and the TOST procedure (<strong>t</strong>wo <strong>o</strong>ne-<strong>s</strong>ided
+<strong>t</strong>ests) tests whether the true difference lies <strong>inside</strong> those bounds.
+Clinical and, increasingly, psychology journals ask for exactly this when a
+study's point is that a difference is absent or ignorable.</p>
+<p><strong>Dialog.</strong> The same three designs as the classical t tests, behind a
+<strong>One-Sample / Paired / Independent</strong> selector, plus:</p>
+<ul>
+<li><strong>Bounds</strong> — the lower and upper equivalence bounds (lower &lt; upper; they
+need not be symmetric). For a one-sample test they are centered on the
+<strong>Test Value</strong> — bounds of −1.5 to 1.5 with test value 100 declare
+&quot;anything between 98.5 and 101.5 is equivalent to 100&quot;.</li>
+<li><strong>Bound units</strong> — <strong>Raw units</strong> (the default: the variable's own scale) or
+<strong>Cohen's d</strong>, converted to raw units per design with the sample
+standardizer. Raw bounds are preferred when the scale is meaningful:
+d-scale bounds move with the sample's own spread, a caution the output
+note repeats.</li>
+<li><strong>Alpha</strong> — the level of each one-sided test (default 0.05). The interval
+shown is the <strong>1 − 2α</strong> confidence interval (90% at the default), the
+standard TOST presentation.</li>
+</ul>
+<p><strong>Output.</strong> Two tables:</p>
+<ul>
+<li><strong>Equivalence Test (TOST)</strong> — per variable (or pair; the independent
+design keeps the familiar two rows, equal variances assumed / not
+assumed): the mean difference, its standard error and df, <strong>both
+one-sided tests</strong> (t and one-sided significance against each bound), the
+<strong>TOST Sig.</strong> — the larger of the two one-sided p's — and a printed
+<strong>Decision</strong>: <em>Equivalent</em> when TOST Sig. &lt; α, else <em>Not equivalent</em>.</li>
+<li><strong>Equivalence Bounds and Confidence Interval</strong> — the bounds in raw units
+(as converted, when declared in Cohen's d) beside the 1 − 2α CI of the
+difference. The two views agree by construction: the difference is
+equivalent at α exactly when the interval lies inside the bounds.</li>
+</ul>
+<p><strong>Example.</strong> A generic drug's mean <em>SystolicBP</em> effect vs the brand
+compound, with equivalence declared as ±3 mmHg: TOST Sig. = 0.02 →
+<em>Equivalent</em> — the 90% CI of the difference sits entirely inside −3…3.</p>
+<p><strong>Reading it with the t test.</strong> The four corners are all possible: a
+difference can be significant yet equivalent (precisely estimated and
+trivially small), or non-significant yet not equivalent (too little data to
+claim anything). Run both when the audience expects both.</p>
 <h2 id="one-way-anova">One-Way ANOVA</h2>
 <p><strong>When to use it.</strong> Compare the means of a scale variable across <strong>three or more
 groups</strong>.</p>
@@ -147,8 +226,10 @@ reject</em> the null, never support it — a Bayesian t test reports a <strong>B
 that grades the evidence in either direction.</p>
 <p><strong>When to use it.</strong> Whenever you would run a one-sample, paired or
 independent-samples t test but want to quantify evidence <strong>for</strong> the null as well
-as against it (e.g. to argue two groups are <em>equivalent</em>), or want a posterior on
-the effect size rather than a confidence interval.</p>
+as against it, or want a posterior on the effect size rather than a confidence
+interval. (To argue equivalence against <em>declared bounds</em> — the frequentist
+route journals usually ask for — see the
+<a href="#equivalence-t-test-tost">Equivalence T Test (TOST)</a> above.)</p>
 <p><strong>Dialog.</strong> A <strong>One-Sample / Paired / Independent</strong> selector (the same three
 designs as the classical t tests), the test variables, and:</p>
 <ul>
@@ -240,14 +321,23 @@ BF₀₁ above 1 is evidence that an intercept-only model suffices.</p>
 <td>Means</td>
 </tr>
 <tr>
+<td>Show a difference is negligible (declared bounds)</td>
+<td>Equivalence T Test (TOST)</td>
+</tr>
+<tr>
 <td>Evidence <em>for</em> a null, or a Bayes factor</td>
 <td>Bayesian t test</td>
+</tr>
+<tr>
+<td>Two groups, no distributional assumptions, testing the mean itself</td>
+<td>Independent-Samples T Test with the <a href="#permutation-test">permutation test</a></td>
 </tr>
 </tbody>
 </table></div>
 <p>If a normality or variance assumption looks shaky (check it in
 <a href="../descriptive-statistics/#explore">Explore</a>), consider the
-<a href="../nonparametric/">nonparametric equivalents</a>.</p>
+<a href="../nonparametric/">nonparametric equivalents</a> — or keep the mean as the
+statistic and add the <a href="#permutation-test">permutation test</a>.</p>
       </article>
     </div>
   </main>
