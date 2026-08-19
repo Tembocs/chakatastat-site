@@ -36,16 +36,17 @@
   "applicationCategory": "https://schema.org/BusinessApplication",
   "applicationSubCategory": "Statistical analysis",
   "operatingSystem": "Windows 10, Windows 11, Linux",
-  "softwareVersion": "0.18.0",
+  "softwareVersion": "0.19.0",
   "url": "https://chakatastat.app/",
-  "description": "A desktop application for statistical data analysis: a spreadsheet-style data editor backed by a native Rust engine, with 102 analysis tools, native SPSS, Stata and SAS transport import, an AI assistant, an MCP server, a headless batch runner and full reproducibility.",
+  "description": "A desktop application for statistical data analysis: a spreadsheet-style data editor backed by a native Rust engine, with 108 analysis tools, native SPSS, Stata and SAS transport import, an AI assistant, an MCP server, a headless batch runner and full reproducibility.",
   "image": "https://chakatastat.app/assets/og-image.jpg",
   "screenshot": [
     "https://chakatastat.app/assets/screenshots/data-editor.png",
     "https://chakatastat.app/assets/screenshots/output-view.png",
     "https://chakatastat.app/assets/screenshots/forest-plot.png",
     "https://chakatastat.app/assets/screenshots/scatterplot-matrix.png",
-    "https://chakatastat.app/assets/screenshots/chart-editor.png"
+    "https://chakatastat.app/assets/screenshots/chart-editor.png",
+    "https://chakatastat.app/assets/screenshots/bland-altman.png"
   ],
   "author": {
     "@type": "Person",
@@ -60,7 +61,7 @@
   "featureList": [
     "Spreadsheet-style data editor with a Variable View",
     "Native SPSS (.sav), Stata (.dta) and SAS transport (.xpt) import that carries variable labels, value labels and missing-value rules across, plus CSV, Excel, Parquet, Arrow/Feather, JSON and NDJSON",
-    "102 analysis tools: regression, GLM, mixed models, survival, time series, Bayesian and nonparametric methods",
+    "108 analysis tools: regression, GLM, mixed models, survival, time series with VAR/Granger, complex survey designs, latent class, IRT, Bayesian, permutation and nonparametric methods",
     "Confirmatory factor analysis and meta-analysis with forest and funnel plots",
     "Propensity-score matching and inverse-probability weighting with balance diagnostics",
     "Panel regression: fixed effects, random effects and pooled OLS with the Hausman test and entity-clustered standard errors",
@@ -145,7 +146,7 @@
             <a class="btn btn-primary btn-lg" href="#download">Download ChakataStat</a>
             <a class="btn btn-ghost btn-lg" href="#features">See what it does</a>
           </div>
-          <p class="hero-platforms">v0.18.0 · Windows · Linux · Free to use</p>
+          <p class="hero-platforms">v0.19.0 · Windows · Linux · Free to use</p>
         </div>
         <div class="hero-shot">
           <figure class="app-frame">
@@ -237,7 +238,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
             </span>
             <h3>A broad Analyze program</h3>
-            <p>Descriptives, regression, GLM and mixed models, survival and time series, multivariate methods, confirmatory factor analysis, meta-analysis, propensity-score analysis and Bayesian tests &mdash; 102 analysis tools in one catalog, each reporting the conventional effect sizes beside the test they describe.</p>
+            <p>Descriptives, regression, GLM and mixed models, survival and time series with VAR and Granger causality, complex survey designs, multivariate methods, latent class analysis and item response theory, confirmatory factor analysis, equivalence tests, Bland-Altman method comparison, meta-analysis, propensity-score analysis, Bayesian and permutation tests &mdash; 108 analysis tools in one catalog, each reporting the conventional effect sizes beside the test they describe.</p>
           </article>
           <article class="feature-card" data-reveal>
             <span class="feature-icon" aria-hidden="true">
@@ -366,6 +367,7 @@ ChakataStat --mcp health_study.csv</code></pre>
             <button role="tab" id="shot-tab-moderation" aria-controls="shot-panel-moderation" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Moderation</button>
             <button role="tab" id="shot-tab-matrix" aria-controls="shot-panel-matrix" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Scatterplot matrix</button>
             <button role="tab" id="shot-tab-editor" aria-controls="shot-panel-editor" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Chart editor</button>
+            <button role="tab" id="shot-tab-blandaltman" aria-controls="shot-panel-blandaltman" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Bland-Altman</button>
           </div>
 
           <div class="shot-panel" role="tabpanel" id="shot-panel-data" aria-labelledby="shot-tab-data" tabindex="0">
@@ -457,6 +459,16 @@ ChakataStat --mcp health_study.csv</code></pre>
               <figcaption>The chart editor &mdash; restyle a finished chart on a live preview; every edit is written back into the chart&rsquo;s own syntax command, so a styled chart re-runs styled.</figcaption>
             </figure>
           </div>
+
+          <div class="shot-panel" role="tabpanel" id="shot-panel-blandaltman" aria-labelledby="shot-tab-blandaltman" tabindex="0" hidden>
+            <figure class="screenshot-card">
+              <button class="shot-trigger" type="button">
+                <img src="assets/screenshots/bland-altman.png" alt="A Bland-Altman method-comparison plot in ChakataStat: mean versus difference of two systolic readings, with the bias line and the 1.96 limits of agreement" loading="lazy">
+                <span class="visually-hidden"> &mdash; enlarge</span>
+              </button>
+              <figcaption>Bland-Altman method comparison, new in 0.19.0 &mdash; bias and limits of agreement drawn over the mean-difference cloud, with the statistics table beside it.</figcaption>
+            </figure>
+          </div>
         </div>
       </div>
     </section>
@@ -464,7 +476,7 @@ ChakataStat --mcp health_study.csv</code></pre>
     <section class="analyze" id="analyze">
       <div class="container analyze-inner">
         <div class="analyze-figure">
-          <p class="analyze-number">102</p>
+          <p class="analyze-number">108</p>
           <p class="analyze-caption">analysis tools, one catalog</p>
         </div>
         <div class="analyze-copy">
@@ -505,7 +517,7 @@ ChakataStat --mcp health_study.csv</code></pre>
           <a class="btn btn-primary btn-lg" href="https://snapcraft.io/chakatastat" data-platform="linux">Get it from the Snap Store</a>
           <span class="btn btn-disabled btn-lg" aria-disabled="true">macOS — coming soon</span>
         </div>
-        <p class="download-meta">Version 0.18.0 · free to use · no account needed</p>
+        <p class="download-meta">Version 0.19.0 · free to use · no account needed</p>
         <p class="download-note">
           Store installs are signed and update automatically. On Linux you
           can also grab the Debian/Ubuntu .deb from the
@@ -523,7 +535,7 @@ ChakataStat --mcp health_study.csv</code></pre>
         proprietary software — free to use, not open source.
       </p>
       <p class="footer-cite">
-        Cite: Amani, E. (2026). <em>ChakataStat</em> (Version 0.18.0)
+        Cite: Amani, E. (2026). <em>ChakataStat</em> (Version 0.19.0)
         [Computer software].
       </p>
       <p class="footer-legal">
