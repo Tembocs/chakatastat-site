@@ -121,12 +121,117 @@ button appears only when joining actually makes the script parse, so it is
 never a guess — if it is not there, the problem is something else.</p>
 <p>Long lines are normal here. The console wraps them for display; the stored
 script keeps them as one line.</p>
+<h3 id="the-editor">The editor</h3>
+<p>The console is a real syntax editor, built so that a researcher who has
+never programmed can read it immediately — and so that editing never
+changes what a script means:</p>
+<ul>
+<li><strong>Line numbers</strong> in a gutter on the left. Long commands soft-wrap for
+display; the wrapped rows are not numbered, because they are still one
+line (and one command).</li>
+<li><strong>Syntax colours</strong>, muted and theme-derived in both light and dark
+themes: comments, tool names, argument names, strings and numbers each
+get a quiet distinction. Colouring is display-only — it never alters
+the text.</li>
+<li><strong>The current line</strong> carries a subtle full-width band, so the caret is
+easy to find in a long script.</li>
+<li><strong>Bracket matching</strong>: place the caret at a <code>[</code> or <code>]</code> and both ends of
+the list light up. A bracket inside a quoted string is text, not a
+bracket, and stays quiet.</li>
+<li><strong>Find &amp; replace</strong> (<code>Ctrl+F</code>, or <code>Ctrl+H</code> with the replace row): a
+compact bar under the editor with a live match count, next/previous
+that wrap around, a match-case toggle (<code>Aa</code>), and highlighted matches
+with the current one emphasised. <strong>Replace</strong> changes the current match
+and moves on; <strong>All</strong> changes every match — and either way one
+<code>Ctrl+Z</code> takes it back in a single step. <code>Esc</code> closes the bar and
+clears the highlights.</li>
+</ul>
+<p>The keyboard, at the editor:</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Keys</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Ctrl+Enter</code></td>
+<td>Run the selected lines — or the caret's line when nothing is selected</td>
+</tr>
+<tr>
+<td><code>Ctrl+Shift+Enter</code></td>
+<td>Run the whole script</td>
+</tr>
+<tr>
+<td><code>Ctrl+/</code></td>
+<td>Comment or uncomment the selected lines</td>
+</tr>
+<tr>
+<td><code>Ctrl+F</code></td>
+<td>Find (seeded from the selection, if any)</td>
+</tr>
+<tr>
+<td><code>Ctrl+H</code></td>
+<td>Find &amp; replace</td>
+</tr>
+<tr>
+<td><code>Ctrl+Space</code></td>
+<td>Open the completion list at the caret</td>
+</tr>
+<tr>
+<td><code>Ctrl+Z</code></td>
+<td>Undo — typing, a comment toggle, a replace-all, an accepted completion or a <strong>Join wrapped lines</strong> repair each undo as one step</td>
+</tr>
+</tbody>
+</table></div>
+<p>(In the find bar, <code>Enter</code> and <code>Shift+Enter</code> step to the next and previous
+match, and <code>Esc</code> closes it. While the completion list is open, <code>↑</code>/<code>↓</code>
+move through it, <code>Enter</code> or <code>Tab</code> accepts, and <code>Esc</code> closes it — <code>Tab</code>
+goes back to moving focus the moment the list is closed. On keyboard
+layouts where <code>/</code> is not a plain key, the <code>Ctrl+/</code> chord may not be
+available.)</p>
+<h3 id="as-you-type-checking-completion-and-hover-help">As you type: checking, completion and hover help</h3>
+<p>The console checks your commands as you type. Shortly after you pause, each
+line is parsed — the same parse that would run it — and a broken line gets a
+wavy underline over its text and a dot in the gutter. Hover either one and
+the tooltip shows exactly what the parser will say if you press Run; for a
+misspelled tool or argument name it adds a suggestion when something in the
+catalog is close (<em>Did you mean &quot;variables&quot;?</em>). Fix the line and the marks
+disappear. Nothing is highlighted mid-word while you are still typing — the
+check waits for your pause, and the status panel under the editor reports
+the same errors when a run is blocked, so the two never disagree.</p>
+<p>Completion offers what the command needs next, and only when it has
+something real to offer:</p>
+<ul>
+<li>at the start of a line — the <strong>tool names</strong>, each with its one-line
+description;</li>
+<li>after a tool — its remaining <strong>argument names</strong>, completed as <code>name=</code>
+(arguments the line already has are not offered again);</li>
+<li>after the <code>=</code> of an argument that takes variables, or inside its
+<code>[...]</code> list — <strong>your dataset's variables</strong>, each with its type,
+measurement level and label;</li>
+<li>for an option with a fixed set of values (like <code>method=</code>) — the
+<strong>allowed values</strong>.</li>
+</ul>
+<p>The list opens as you type a name (or on <code>Ctrl+Space</code> anywhere), narrows
+with every keystroke, and never inserts anything you did not accept:
+<code>Enter</code>, <code>Tab</code> or a click takes the highlighted candidate, <code>Esc</code> (or just
+clicking elsewhere) makes it go away. Accepting replaces the whole
+half-typed word, and one <code>Ctrl+Z</code> undoes it.</p>
+<p>Hover help is the same knowledge at rest: hold the pointer over a tool
+name to see what it does, over an argument name for what it accepts, or
+over a variable in a command to see its type, measurement level and label.
+It reads only what is already known — nothing is computed or analyzed by
+pointing at things.</p>
 <h3 id="running-and-editing">Running and editing</h3>
 <ul>
 <li><strong>Run all</strong> / <strong>Run selection</strong> parse the script and dispatch each command into
 the Output log. Replaying does <strong>not</strong> re-record the commands.</li>
 <li>Parse errors and failed commands are reported in a status panel as data — a bad
-line never crashes the run.</li>
+line never crashes the run. Drag the panel's top edge to make it taller
+(double-click the edge to reset); its text follows the <strong>Content text
+size</strong> setting.</li>
 <li>The console and the GUI are <strong>two views of one stream</strong>: edit the text and
 re-run, or keep clicking menus and watch the script grow.</li>
 </ul>

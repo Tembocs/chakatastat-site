@@ -36,7 +36,7 @@
   "applicationCategory": "https://schema.org/BusinessApplication",
   "applicationSubCategory": "Statistical analysis",
   "operatingSystem": "Windows 10, Windows 11, Linux",
-  "softwareVersion": "0.19.0",
+  "softwareVersion": "0.20.0",
   "url": "https://chakatastat.app/",
   "description": "A desktop application for statistical data analysis: a spreadsheet-style data editor backed by a native Rust engine, with 108 analysis tools, native SPSS, Stata and SAS transport import, an AI assistant, an MCP server, a headless batch runner and full reproducibility.",
   "image": "https://chakatastat.app/assets/og-image.jpg",
@@ -146,7 +146,7 @@
             <a class="btn btn-primary btn-lg" href="#download">Download ChakataStat</a>
             <a class="btn btn-ghost btn-lg" href="#features">See what it does</a>
           </div>
-          <p class="hero-platforms">v0.19.0 · Windows · Linux · Free to use</p>
+          <p class="hero-platforms">v0.20.0 · Windows · Linux · Free to use</p>
         </div>
         <div class="hero-shot">
           <figure class="app-frame">
@@ -368,6 +368,7 @@ ChakataStat --mcp health_study.csv</code></pre>
             <button role="tab" id="shot-tab-matrix" aria-controls="shot-panel-matrix" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Scatterplot matrix</button>
             <button role="tab" id="shot-tab-editor" aria-controls="shot-panel-editor" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Chart editor</button>
             <button role="tab" id="shot-tab-blandaltman" aria-controls="shot-panel-blandaltman" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Bland-Altman</button>
+            <button role="tab" id="shot-tab-syntax" aria-controls="shot-panel-syntax" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Syntax editor</button>
           </div>
 
           <div class="shot-panel" role="tabpanel" id="shot-panel-data" aria-labelledby="shot-tab-data" tabindex="0">
@@ -469,6 +470,15 @@ ChakataStat --mcp health_study.csv</code></pre>
               <figcaption>Bland-Altman method comparison, new in 0.19.0 &mdash; bias and limits of agreement drawn over the mean-difference cloud, with the statistics table beside it.</figcaption>
             </figure>
           </div>
+          <div class="shot-panel" role="tabpanel" id="shot-panel-syntax" aria-labelledby="shot-tab-syntax" tabindex="0" hidden>
+            <figure class="screenshot-card">
+              <button class="shot-trigger" type="button">
+                <img src="assets/screenshots/syntax-editor.png" alt="The ChakataStat syntax editor: a highlighted script with line numbers, run-state dots in the gutter, a wavy underline under a mistyped argument, and the completion overlay listing the dataset's variables" loading="lazy">
+                <span class="visually-hidden"> &mdash; enlarge</span>
+              </button>
+              <figcaption>The syntax editor, new in 0.20.0 &mdash; line numbers, syntax colouring, as-you-type checking with a &ldquo;did you mean&rdquo; hint, completion over the catalog and your variables, and a gutter that shows which commands have run this session.</figcaption>
+            </figure>
+          </div>
         </div>
       </div>
     </section>
@@ -517,7 +527,7 @@ ChakataStat --mcp health_study.csv</code></pre>
           <a class="btn btn-primary btn-lg" href="https://snapcraft.io/chakatastat" data-platform="linux">Get it from the Snap Store</a>
           <span class="btn btn-disabled btn-lg" aria-disabled="true">macOS — coming soon</span>
         </div>
-        <p class="download-meta">Version 0.19.0 · free to use · no account needed</p>
+        <p class="download-meta">Version 0.20.0 · free to use · no account needed</p>
         <p class="download-note">
           Store installs are signed and update automatically. On Linux you
           can also grab the Debian/Ubuntu .deb from the
@@ -535,7 +545,7 @@ ChakataStat --mcp health_study.csv</code></pre>
         proprietary software — free to use, not open source.
       </p>
       <p class="footer-cite">
-        Cite: Amani, E. (2026). <em>ChakataStat</em> (Version 0.19.0)
+        Cite: Amani, E. (2026). <em>ChakataStat</em> (Version 0.20.0)
         [Computer software].
       </p>
       <p class="footer-legal">
