@@ -178,6 +178,12 @@ View what the file already knew.</p>
 <td><strong>typed</strong></td>
 <td><strong>variable labels</strong></td>
 </tr>
+<tr>
+<td>SAS data</td>
+<td><code>.sas7bdat</code> (+ <code>.sas7bcat</code> beside it)</td>
+<td><strong>typed</strong></td>
+<td><strong>variable labels; value labels from the catalog</strong></td>
+</tr>
 </tbody>
 </table></div>
 <ul>
@@ -227,8 +233,21 @@ import summary names the variable.</li>
 and time formats arrive as readable dates and times. Two limits, both noted
 in the import summary: <strong>value labels are not in the file at all</strong> — SAS
 keeps them in a separate <code>.sas7bcat</code> catalog — and if the file holds more
-than one dataset, the first is imported. SAS's own <code>.sas7bdat</code> files are not
-read; export one as <code>.xpt</code> from SAS and open that.</li>
+than one dataset, the first is imported.</li>
+<li><strong>SAS data (<code>.sas7bdat</code>)</strong> — SAS's own data files open directly, typed
+columns plus variable labels and the file label, with dates, datetimes and
+times rendered exactly as from <code>.xpt</code> (fractional seconds are truncated to
+the second; the month-year / quarter / year display formats arrive as their
+stored numbers, noted in the summary). <strong>Value labels live in a separate
+SAS format catalog</strong>, so put the <code>.sas7bcat</code> next to the data file — named
+like it (<code>study.sas7bcat</code> beside <code>study.sas7bdat</code>) or as <code>formats.sas7bcat</code>,
+SAS's default catalog name — and every variable whose format the catalog
+defines gets its value labels. With no catalog beside the file, a variable
+with a user-defined format is named in the import summary, with that
+advice. SAS's missing values (<code>.</code> and the special <code>.A</code>–<code>.Z</code>) arrive blank,
+and a <code>.sas7bcat</code> that cannot be read is reported, not fatal. Both
+compressed (<code>COMPRESS=CHAR</code>/<code>BINARY</code>) and uncompressed files read, in any
+of SAS's session encodings.</li>
 </ul>
 <h3 id="text-encodings">Text encodings</h3>
 <p>Every text import (delimited, fixed-width, JSON — gzipped included) detects
@@ -254,6 +273,13 @@ An SPSS or Stata import does this for you: the labels arrive with the data.</p>
 <p><strong>File → Export Data…</strong> writes the current dataset (honouring any active case
 filter) to <strong>CSV/TSV</strong>, <strong>Excel</strong>, <strong>Parquet</strong> or <strong>JSON</strong> (an array of
 records) — the format is chosen from the file extension you give.</p>
+<p>CSV/TSV exports are <strong>protected against spreadsheet formula injection</strong> by
+default: a text cell that starts with <code>=</code>, <code>+</code>, <code>-</code>, <code>@</code>, a tab or a carriage
+return and is not a number is written with a leading apostrophe (<code>'</code>), which
+Excel and Calc read as &quot;this is text&quot; and hide — so a value that arrived in
+your data can never run as a formula on someone else's machine. Numbers such
+as <code>-5</code> are never touched. If you need a byte-faithful file (for a tool that
+would show the apostrophe), turn the guard off under <strong>Settings → Files</strong>.</p>
 <p>To export <em>results</em> rather than data, see
 <a href="../advanced/reproducibility/#exporting-the-output-log">the output log export</a>.</p>
 <h2 id="the-data-view">The Data View</h2>

@@ -36,9 +36,9 @@
   "applicationCategory": "https://schema.org/BusinessApplication",
   "applicationSubCategory": "Statistical analysis",
   "operatingSystem": "Windows 10, Windows 11, Linux",
-  "softwareVersion": "0.20.0",
+  "softwareVersion": "0.21.0",
   "url": "https://chakatastat.app/",
-  "description": "A desktop application for statistical data analysis: a spreadsheet-style data editor backed by a native Rust engine, with 108 analysis tools, native SPSS, Stata and SAS transport import, an AI assistant, an MCP server, a headless batch runner and full reproducibility.",
+  "description": "A desktop application for statistical data analysis: a spreadsheet-style data editor backed by a native Rust engine, with 108 analysis tools, native SPSS, Stata and SAS import, an AI assistant, an MCP server, a headless batch runner and full reproducibility.",
   "image": "https://chakatastat.app/assets/og-image.jpg",
   "screenshot": [
     "https://chakatastat.app/assets/screenshots/data-editor.png",
@@ -46,7 +46,8 @@
     "https://chakatastat.app/assets/screenshots/forest-plot.png",
     "https://chakatastat.app/assets/screenshots/scatterplot-matrix.png",
     "https://chakatastat.app/assets/screenshots/chart-editor.png",
-    "https://chakatastat.app/assets/screenshots/bland-altman.png"
+    "https://chakatastat.app/assets/screenshots/bland-altman.png",
+    "https://chakatastat.app/assets/screenshots/johnson-neyman.png"
   ],
   "author": {
     "@type": "Person",
@@ -66,12 +67,12 @@
   "downloadUrl": "https://apps.microsoft.com/detail/9MZNTHP2LF4S",
   "featureList": [
     "Spreadsheet-style data editor with a Variable View",
-    "Native SPSS (.sav), Stata (.dta) and SAS transport (.xpt) import that carries variable labels, value labels and missing-value rules across, plus CSV, Excel, Parquet, Arrow/Feather, JSON and NDJSON",
+    "Native SPSS (.sav), Stata (.dta) and SAS (.sas7bdat with its .sas7bcat catalog, and transport .xpt) import that carries variable labels, value labels and missing-value rules across, plus CSV, Excel, Parquet, Arrow/Feather, JSON and NDJSON",
     "108 analysis tools: regression, GLM, mixed models, survival, time series with VAR/Granger, complex survey designs, latent class, IRT, Bayesian, permutation and nonparametric methods",
-    "Confirmatory factor analysis and meta-analysis with forest and funnel plots",
+    "Confirmatory factor analysis — with modification indices, multi-group invariance testing and ordinal (WLSMV) estimation — and meta-analysis with forest and funnel plots",
     "Propensity-score matching and inverse-probability weighting with balance diagnostics",
     "Panel regression: fixed effects, random effects and pooled OLS with the Hausman test and entity-clustered standard errors",
-    "Moderated mediation with conditional indirect effects, the index of moderated mediation and an interaction plot",
+    "Moderated mediation with conditional indirect effects, the index of moderated mediation, an interaction plot and Johnson–Neyman regions of significance, plus a second moderator and serial mediation",
     "Regression diagnostic panels for the GLM families — logistic, Poisson, negative binomial, gamma, zero-inflated and hurdle — on seeded randomized quantile residuals",
     "Charts: histogram, scatterplot and scatterplot matrix, boxplot, violin, line, bar, error bar, Q-Q, ECDF, dot, bubble and correlation heatmap, on a colour-vision-validated palette with a colour-blind-safe alternative",
     "Interactive chart editor: restyle a finished chart in place, every edit written back to its syntax command so styled charts re-run styled",
@@ -152,7 +153,7 @@
             <a class="btn btn-primary btn-lg" href="#download">Download ChakataStat</a>
             <a class="btn btn-ghost btn-lg" href="#features">See what it does</a>
           </div>
-          <p class="hero-platforms">v0.20.0 · Windows · Linux · Free to use</p>
+          <p class="hero-platforms">v0.21.0 · Windows · Linux · Free to use</p>
         </div>
         <div class="hero-shot">
           <figure class="app-frame">
@@ -244,7 +245,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
             </span>
             <h3>A broad Analyze program</h3>
-            <p>Descriptives, regression, GLM and mixed models, survival and time series with VAR and Granger causality, complex survey designs, multivariate methods, latent class analysis and item response theory, confirmatory factor analysis, equivalence tests, Bland-Altman method comparison, meta-analysis, propensity-score analysis, Bayesian and permutation tests &mdash; 108 analysis tools in one catalog, each reporting the conventional effect sizes beside the test they describe.</p>
+            <p>Descriptives, regression, GLM and mixed models, survival and time series with VAR and Granger causality, complex survey designs, multivariate methods, latent class analysis and item response theory, confirmatory factor analysis with multi-group invariance testing, equivalence tests, Bland-Altman method comparison, meta-analysis, propensity-score analysis, Bayesian and permutation tests &mdash; 108 analysis tools in one catalog, each reporting the conventional effect sizes beside the test they describe.</p>
           </article>
           <article class="feature-card" data-reveal>
             <span class="feature-icon" aria-hidden="true">
@@ -258,7 +259,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8zM14 3v5h5M12 18v-7M9 14l3-3 3 3"/></svg>
             </span>
             <h3>Your files open directly</h3>
-            <p>SPSS (<code>.sav</code>), Stata (<code>.dta</code>) and SAS transport (<code>.xpt</code>) files import natively &mdash; no detour through CSV &mdash; and bring their metadata with them: variable labels from all three, value labels from SPSS and Stata, and SPSS measure levels and missing-value rules. Plus CSV/TSV (plain or gzipped), Excel (<code>.xlsx</code>, <code>.xls</code>, <code>.ods</code>), Parquet, Arrow/Feather, JSON and NDJSON. Where a detail cannot be carried across, the import says so rather than staying silent.</p>
+            <p>SPSS (<code>.sav</code>), Stata (<code>.dta</code>) and SAS (<code>.sas7bdat</code>, with value labels from a <code>.sas7bcat</code> catalog beside it, and transport <code>.xpt</code>) files import natively &mdash; no detour through CSV &mdash; and bring their metadata with them: variable labels from all of them, value labels from SPSS, Stata and a SAS catalog, and SPSS measure levels and missing-value rules. Plus CSV/TSV (plain or gzipped), Excel (<code>.xlsx</code>, <code>.xls</code>, <code>.ods</code>), Parquet, Arrow/Feather, JSON and NDJSON. Where a detail cannot be carried across, the import says so rather than staying silent.</p>
           </article>
           <article class="feature-card feature-card--wide" data-reveal>
             <span class="feature-icon" aria-hidden="true">
@@ -375,6 +376,7 @@ ChakataStat --mcp health_study.csv</code></pre>
             <button role="tab" id="shot-tab-editor" aria-controls="shot-panel-editor" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Chart editor</button>
             <button role="tab" id="shot-tab-blandaltman" aria-controls="shot-panel-blandaltman" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Bland-Altman</button>
             <button role="tab" id="shot-tab-syntax" aria-controls="shot-panel-syntax" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Syntax editor</button>
+            <button role="tab" id="shot-tab-jn" aria-controls="shot-panel-jn" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Johnson-Neyman</button>
           </div>
 
           <div class="shot-panel" role="tabpanel" id="shot-panel-data" aria-labelledby="shot-tab-data" tabindex="0">
@@ -485,6 +487,15 @@ ChakataStat --mcp health_study.csv</code></pre>
               <figcaption>The syntax editor, new in 0.20.0 &mdash; line numbers, syntax colouring, as-you-type checking with a &ldquo;did you mean&rdquo; hint, completion over the catalog and your variables, and a gutter that shows which commands have run this session.</figcaption>
             </figure>
           </div>
+          <div class="shot-panel" role="tabpanel" id="shot-panel-jn" aria-labelledby="shot-tab-jn" tabindex="0" hidden>
+            <figure class="screenshot-card">
+              <button class="shot-trigger" type="button">
+                <img src="assets/screenshots/johnson-neyman.png" alt="A Johnson-Neyman plot in ChakataStat: the conditional effect of physical activity on BMI across age, with its confidence band and the region of significance marked" loading="lazy">
+                <span class="visually-hidden"> &mdash; enlarge</span>
+              </button>
+              <figcaption>Johnson&ndash;Neyman regions, new in 0.21.0 &mdash; the conditional effect of a moderated path drawn across the observed moderator range with its confidence band, and the moderator values where it turns significant marked on the plot.</figcaption>
+            </figure>
+          </div>
         </div>
       </div>
     </section>
@@ -533,7 +544,7 @@ ChakataStat --mcp health_study.csv</code></pre>
           <a class="btn btn-primary btn-lg" href="https://snapcraft.io/chakatastat" data-platform="linux">Get it from the Snap Store</a>
           <span class="btn btn-disabled btn-lg" aria-disabled="true">macOS — coming soon</span>
         </div>
-        <p class="download-meta">Version 0.20.0 · free to use · no account needed</p>
+        <p class="download-meta">Version 0.21.0 · free to use · no account needed</p>
         <p class="download-note">
           Store installs are signed and update automatically. On Linux you
           can also grab the Debian/Ubuntu .deb from the
@@ -551,7 +562,7 @@ ChakataStat --mcp health_study.csv</code></pre>
         proprietary software — free to use, not open source.
       </p>
       <p class="footer-cite">
-        Cite: Amani, E. (2026). <em>ChakataStat</em> (Version 0.20.0)
+        Cite: Amani, E. (2026). <em>ChakataStat</em> (Version 0.21.0)
         [Computer software].
         <a href="https://doi.org/10.5281/zenodo.22043444">https://doi.org/10.5281/zenodo.22043444</a>
       </p>

@@ -248,6 +248,38 @@ shape before you pick a coefficient.</p>
 <td><a href="../../analyze/correlation-and-regression/#linear-mixed-model">Mixed model</a></td>
 </tr>
 <tr>
+<td>Binary or count, clustered/repeated data — subject-specific effects</td>
+<td><a href="../../analyze/correlation-and-regression/#generalized-linear-mixed-model">Generalized linear mixed model</a></td>
+</tr>
+<tr>
+<td>Any family, clustered/repeated data — population-averaged effects</td>
+<td><a href="../../analyze/correlation-and-regression/#generalized-estimating-equations">GEE</a></td>
+</tr>
+<tr>
+<td>Continuous, with influential outliers</td>
+<td><a href="../../analyze/correlation-and-regression/#robust-huber--tukey">Robust (Huber / Tukey)</a></td>
+</tr>
+<tr>
+<td>Continuous, many or collinear predictors, prediction / selection</td>
+<td><a href="../../analyze/correlation-and-regression/#regularized-ridge--lasso--elastic-net">Regularized (ridge / lasso)</a></td>
+</tr>
+<tr>
+<td>A conditional quantile (median, 90th percentile) rather than the mean</td>
+<td><a href="../../analyze/correlation-and-regression/#quantile">Quantile</a></td>
+</tr>
+<tr>
+<td>A known curve that is nonlinear in its parameters</td>
+<td><a href="../../analyze/correlation-and-regression/#nonlinear">Nonlinear</a></td>
+</tr>
+<tr>
+<td>An endogenous regressor, with instruments</td>
+<td><a href="../../analyze/correlation-and-regression/#instrumental-variables-2sls">Instrumental variables (2SLS)</a></td>
+</tr>
+<tr>
+<td>The association structure of a multi-way table of categorical variables</td>
+<td><a href="../../analyze/correlation-and-regression/#loglinear">Loglinear</a></td>
+</tr>
+<tr>
 <td>Repeated observations per unit (firms over years, patients over visits), fixed/random effects by name</td>
 <td><a href="../../analyze/panel/">Panel Regression</a></td>
 </tr>
@@ -324,6 +356,14 @@ shape before you pick a coefficient.</p>
 <tr>
 <td>A series ordered in time, want a forecast</td>
 <td><a href="../../analyze/survival-and-time-series/#arima--sarima">ARIMA / SARIMA</a></td>
+</tr>
+<tr>
+<td>A seasonal series — separate trend, season and remainder</td>
+<td><a href="../../analyze/survival-and-time-series/#seasonal-decomposition">Seasonal Decomposition</a></td>
+</tr>
+<tr>
+<td><strong>Two</strong> series — does one lead the other, and by how much?</td>
+<td><a href="../../analyze/survival-and-time-series/#cross-correlation">Cross-Correlation</a></td>
 </tr>
 <tr>
 <td><strong>Several</strong> series over time — do they predict each other?</td>

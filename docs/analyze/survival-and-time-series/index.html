@@ -180,6 +180,37 @@ a <strong>period</strong>), and the number of <strong>forecast steps</strong>.</
 fit summary (SSE, residual variance, RMSE) and — with a forecast — the same
 <strong>forecast table</strong> and <strong>Plot…</strong> as ARIMA. The parameters are chosen by
 minimizing the one-step forecast error.</p>
+<h3 id="seasonal-decomposition">Seasonal Decomposition</h3>
+<p><strong>When.</strong> Take a seasonal series apart — how much is long-run <strong>trend</strong>, how
+much repeats every <strong>period</strong>, and what is left over — as a descriptive first
+look, or before choosing between a seasonal ARIMA and Holt-Winters.</p>
+<p><strong>Dialog.</strong> The <strong>series</strong>; the seasonal <strong>period</strong> (e.g. 12 for monthly, 4
+for quarterly; at least 2, and the series needs at least two full periods);
+and the <strong>model</strong> — <strong>additive</strong> (<em>observed = trend + seasonal + remainder</em>)
+or <strong>multiplicative</strong> (<em>trend × seasonal × remainder</em>, for a series whose
+seasonal swing grows with its level; needs strictly positive values).</p>
+<p><strong>Output.</strong> The <strong>Seasonal Indices</strong> table — one row per season position,
+centred to sum 0 (additive) or to mean 1 (multiplicative) — and the
+<strong>Decomposition</strong> table in case order: <em>t</em>, Observed, Trend, Seasonal and
+Remainder. This is the classical method: the trend is a centred moving
+average of the period's length, each seasonal index the average detrended
+value at that position, and the remainder what the two leave; trend and
+remainder are blank where the moving-average window does not reach the ends
+of the series.</p>
+<h3 id="cross-correlation">Cross-Correlation</h3>
+<p><strong>When.</strong> Relate two series — does one <strong>lead</strong> the other, and by how many
+steps? The two-series counterpart of the autocorrelation function, and the
+usual first look before modelling the pair together (see VAR below).</p>
+<p><strong>Dialog.</strong> <strong>Series 1 (x)</strong>, <strong>Series 2 (y)</strong>, and an optional <strong>maximum
+lag</strong> (default 16, capped at <em>n</em> − 1). Both series are taken in case order
+over the cases where both values are present.</p>
+<p><strong>Output.</strong> The <strong>Cross-Correlations</strong> table: for every lag <em>k</em> from −max to
++max, the correlation between <em>x</em> at time <em>t</em> and <em>y</em> at time <em>t + k</em>, with
+its white-noise <strong>standard error</strong> (1/√N — a correlation beyond about ±2 SE
+stands out; the ±1.96·SE band is the one the correlogram draws). Lag 0 is the
+ordinary Pearson correlation. <strong>A positive lag means series 2 leads series
+1.</strong> As with the other time-series tools, a weight variable only selects
+cases; the output notes this when one is active.</p>
 <h3 id="vector-autoregression--granger-causality">Vector Autoregression &amp; Granger Causality</h3>
 <p><strong>When.</strong> Two or more series over time — model them together and test whether
 one's history improves the prediction of another. Its own page:

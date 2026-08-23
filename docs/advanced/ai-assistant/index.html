@@ -146,8 +146,10 @@ never written to disk or into your session</strong>.</p>
 active one live from <strong>Settings → AI Assistant</strong>, and your choice is remembered
 between launches (the choice — never the key). The Settings page also exposes
 optional overrides: the model id, temperature, maximum response tokens, a custom
-base URL and headers, the tool-round cap, a system-prompt override, and a
-read-only toggle.</p>
+base URL and headers, the tool-round cap, a system-prompt override, and the
+read-only toggle (on by default — see below). The custom base URL and headers
+are <strong>stored in plain text</strong> in your session file, so keep API keys in their
+environment variable, never in a header.</p>
 <h2 id="asking-for-an-analysis">Asking for an analysis</h2>
 <p>Type what you want in the panel's input box, for example:</p>
 <ul>
@@ -167,9 +169,17 @@ study, your coding conventions, or what you are trying to find out — which is 
 with each request so the assistant interprets your data correctly.</p>
 <h2 id="what-it-can-and-cannot-do">What it can and cannot do</h2>
 <ul>
-<li>It can run any analysis, chart or transform exposed as a tool.</li>
-<li>Under a <strong>read-only</strong> profile it can run analyses but <strong>cannot change your
-data</strong> — a safe way to let it explore.</li>
+<li>It can run any analysis, chart or transform exposed as a tool — subject to
+the read-only switch.</li>
+<li><strong>Read-only is the default.</strong> Out of the box the assistant can run analyses
+and draw charts but <strong>cannot change your data</strong> — neither the transforms
+(sort, compute, rank, …) nor an analysis's <em>save columns</em> options (saved
+clusters, residuals, scores, …), which are withheld from it and refused if
+it names one anyway — a safe way to let it explore. To let it transform
+your dataset, click the <strong>Read-only</strong> chip in the panel's header (it becomes
+<strong>Full access</strong>; click again to go back) or use the switch under
+Settings → AI Assistant. Every change it then makes is an ordinary command
+— journaled, undoable and visible in the Syntax console.</li>
 </ul>
 <h2 id="reproducibility">Reproducibility</h2>
 <p>The assistant's actions are commands like any other, so they appear in the
@@ -181,7 +191,9 @@ conversation button).</p>
 <p>When you use a hosted backend, your prompts — including the data context you add
 and the result summaries — are sent to that provider. Use a local <strong>Ollama</strong>
 endpoint if the data must not leave your machine. No API key is ever stored by
-ChakataStat.</p>
+ChakataStat — but the custom base URL and headers you set under Settings → AI
+Assistant <strong>are</strong> stored, in plain text, in your session file; never put a key
+in a header, use the environment variable.</p>
       </article>
     </div>
   </main>

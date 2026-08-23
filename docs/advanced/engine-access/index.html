@@ -127,7 +127,9 @@ read the results as data.</li>
 <li>The <strong>dataset itself is an MCP resource</strong>: a client can list the variables and
 read the rows without spending a tool call.</li>
 <li>A <strong>read-only</strong> profile (<code>ChakataStat --mcp --read-only</code>) serves only analyses
-and blocks transforms that would change data.</li>
+and blocks everything that would change data: the transforms, and an
+analysis's <em>save columns</em> options (withheld from <code>tools/list</code> and refused in
+<code>tools/call</code>). The same profile applies to a headless <code>--run --read-only</code>.</li>
 <li><strong>User-defined tools</strong> — a saved <code>.cks</code> script registered as a named tool — are
 advertised to MCP clients (and the AI assistant) too.</li>
 </ul>

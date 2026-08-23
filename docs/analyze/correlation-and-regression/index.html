@@ -179,6 +179,13 @@ variables. Options include:</p>
 <ul>
 <li><strong>Robust standard errors</strong> (HC0/HC1/HC3 sandwich estimators);</li>
 <li><strong>Forward / backward stepwise</strong> variable selection;</li>
+<li><strong>Include the intercept (constant)</strong> — on by default. Off fits <strong>regression
+through the origin</strong> (<code>y = b·x</code>, no constant), for calibration and
+physical-science models where a zero input must give a zero response. R²
+and the ANOVA total are then <em>uncentred</em> (about zero, with <em>n</em> total
+degrees of freedom) — the form NIST, R and statsmodels report for a
+no-intercept fit, and <strong>not comparable</strong> with an intercept model's R² — and
+the standardized Beta, Partial and Part columns are left blank;</li>
 <li><strong>casewise influence diagnostics</strong> — Cook's distance and leverage;</li>
 <li><strong>diagnostic plots</strong> — the classic three-plot assumption panel: a
 <strong>Residuals vs Fitted</strong> scatter (a random band around zero supports
@@ -191,8 +198,100 @@ the reference line support the normality behind the significance tests);</li>
 </ul>
 <p><strong>Output.</strong> The model summary (R², adjusted R², standard error), the ANOVA of the
 regression, and the coefficients table (B, standard error, beta, t,
-significance, and confidence intervals).</p>
+significance, and confidence intervals). Through the origin the coefficients
+table has no constant row and the model summary notes that R² is uncentred.
+If the predictors are severely ill-conditioned (raw polynomial powers of one
+variable, say), the model summary carries an accuracy note — the fit is
+still solved by an orthogonal (QR) decomposition, but centring or rescaling
+the predictors will give you more reliable digits.</p>
 <p><strong>Example.</strong> Predict <em>SystolicBP</em> from <em>Age</em>, <em>BMI</em> and <em>Weight_kg</em>.</p>
+<h3 id="regularized-ridge--lasso--elastic-net">Regularized (Ridge / Lasso / Elastic net)</h3>
+<p><strong>When.</strong> Many or collinear predictors, and the goal is <strong>prediction</strong> rather
+than inference — or you want the model to <strong>choose</strong> its predictors. The
+penalty shrinks coefficients toward zero (ridge), sets some exactly to zero
+(lasso — automatic variable selection), or both (elastic net).</p>
+<p><strong>Dialog.</strong> A <strong>Dependent</strong> and at least two <strong>Predictors</strong> (each is
+standardized before penalization, so the penalty treats them alike). <strong>Penalty</strong>:
+<em>Lasso (L1, variable selection)</em> — the default — <em>Ridge (L2, shrinkage)</em> or
+<em>Elastic net (½ L1 + ½ L2)</em>. The penalty strength λ is chosen by <strong>10-fold
+cross-validation</strong> (the syntax/AI argument <code>lambda</code> fixes it instead; <code>folds</code>
+and <code>seed</code> control the CV).</p>
+<p><strong>Output.</strong> The <strong>Coefficients</strong> at the selected λ, on the original and the
+standardized scale (a lasso zero means &quot;dropped&quot;); the <strong>Regularization Path</strong>
+— for each λ on the path, how many coefficients are nonzero and the
+cross-validated error with its standard error (the selected λ is the error
+minimum); and a <strong>Model Summary</strong>. Penalized estimates
+carry <strong>no standard errors or p-values</strong> by design — use Linear regression on
+the selected predictors if you need inference, knowing the selection was
+data-driven.</p>
+<p><strong>Example.</strong> <em>SystolicBP</em> on <em>Age</em>, <em>BMI</em>, <em>Weight_kg</em>,
+<em>TotalCholesterol_mmolL</em>, <em>FastingGlucose_mmolL</em>, <em>PhysicalActivity_minWk</em> and
+<em>HeartRate</em> with the lasso: the path shows which predictors survive as the
+penalty relaxes.</p>
+<h3 id="robust-huber--tukey">Robust (Huber / Tukey)</h3>
+<p><strong>When.</strong> A diagnostic plot of the Linear fit shows a few <strong>influential
+outliers</strong> dragging the line. M-estimation down-weights large residuals <em>in the
+fit itself</em>, so the coefficients describe the bulk of the data.</p>
+<p><strong>Dialog.</strong> <strong>Dependent</strong>, <strong>Predictors</strong>, and the <strong>Estimator</strong>: <em>Huber
+(clip)</em> — the default — clips the influence of far residuals; <em>Tukey bisquare
+(redescending)</em> rejects gross outliers entirely. The syntax/AI argument
+<code>tuning</code> sets the constant c (defaults 1.345 and 4.685, each ~95% efficient
+under normality; smaller is more resistant, larger is closer to OLS).</p>
+<p><strong>Output.</strong> The robust <strong>Coefficients</strong> with sandwich (H1) standard errors,
+t tests and confidence intervals; a <strong>Model Summary</strong> with the robust scale
+estimate and iterations; and <strong>Down-Weighted Cases</strong> — the cases the fit
+trusted least, with their weights, which is where to look first.</p>
+<p><strong>Example.</strong> <em>SystolicBP</em> on <em>Age</em> and <em>BMI</em> when a handful of implausible
+blood-pressure entries pull the OLS slope; compare the robust slope with the
+Linear one.</p>
+<h3 id="nonlinear">Nonlinear</h3>
+<p><strong>When.</strong> The relationship has a <strong>known functional form that is not linear in
+its parameters</strong> — a growth or decay curve, a dose–response, a
+Michaelis–Menten saturation, a sum of exponentials. (If the curve is a
+polynomial or a transform makes it linear, Linear regression on computed
+variables is simpler and exact.)</p>
+<p><strong>Dialog.</strong> A <strong>Dependent</strong>, the <strong>Predictors</strong> the model may refer to by name,
+the <strong>Model</strong> expression (for example <code>b0 + b1*exp(b2*x)</code>; operators <code>+ - * / ^</code>, functions <code>exp</code>, <code>ln</code>, <code>log10</code>, <code>sqrt</code>, <code>sin</code>, <code>cos</code>, <code>abs</code>, <code>pow</code>, …; a
+name that matches a predictor is that case's value, every other name is a
+parameter) and the <strong>Start values</strong> as <code>name=value</code> pairs (<code>b0=1, b1=1, b2=0.1</code>). Every parameter in the model must have a start value; their order
+is the order of the output. Good starts matter — a least-squares surface can
+have several valleys, and the fit finds the one your starts lead to. When a fit
+fails to converge, try starts nearer plausible values, or a rescaled predictor.</p>
+<p><strong>Output.</strong> <strong>Parameter Estimates</strong> (estimate, asymptotic Gauss–Newton
+standard error, t, significance, confidence interval) and a <strong>Model Summary</strong>
+(residual sum of squares, residual standard error, a descriptive 1 − SSE/SST
+pseudo-R² that need not lie in [0, 1], iterations, and <strong>Converged</strong> — <em>No</em>
+means the 1000-iteration cap was reached before the fit settled; the
+Levenberg–Marquardt fit is certified against all 27 NIST StRD nonlinear
+datasets, so a <em>No</em> points at the model or the starts, not the optimizer).</p>
+<blockquote>
+<p><strong>Artificial zero-residual data.</strong> If the data lie <em>exactly</em> on the curve
+(generated data, or a model that reproduces every point to rounding), the
+fit reaches the floor of double precision: the parameter estimates are
+right, but the residual sum of squares and hence the standard errors are
+not meaningful beyond a few digits — there is no noise left to estimate. Real
+measurements never do this; textbook or simulated data sometimes do.</p>
+</blockquote>
+<p><strong>Example.</strong> <em>FastingGlucose_mmolL</em> as an exponential in <em>Age</em>, model
+<code>b0 + b1*exp(b2*Age)</code>, start <code>b0=4, b1=0.1, b2=0.03</code>.</p>
+<h3 id="instrumental-variables-2sls">Instrumental Variables (2SLS)</h3>
+<p><strong>When.</strong> A regressor is <strong>endogenous</strong> — correlated with the error through
+simultaneity, an omitted confounder or measurement error — so its OLS
+coefficient is biased, and you have <strong>instruments</strong>: variables that move the
+endogenous regressor but affect the outcome only through it.</p>
+<p><strong>Dialog.</strong> A <strong>Dependent</strong>; the <strong>Endogenous</strong> regressor(s) being
+instrumented; the excluded <strong>Instruments</strong> (at least as many as endogenous
+regressors); and any included <strong>Exogenous</strong> regressors, which enter both the
+equation and the instrument set. Two-stage least squares projects the
+endogenous regressors onto the instruments and regresses the outcome on the
+projection.</p>
+<p><strong>Output.</strong> The <strong>Coefficients</strong> with 2SLS-corrected standard errors, t tests
+and confidence intervals; a <strong>Model Summary</strong>; and <strong>First-Stage
+Diagnostics</strong> — the weak-instrument F for each endogenous regressor (the rule
+of thumb: F below 10 is weak, and weak instruments make 2SLS unreliable).</p>
+<p><strong>Example.</strong> <em>SystolicBP</em> on <em>BMI</em> treated as endogenous, instrumented by
+<em>PhysicalActivity_minWk</em>, with <em>Age</em> exogenous — illustratively; whether an
+instrument is valid is a subject-matter argument, not a statistical test.</p>
 <h3 id="binary-logistic">Binary Logistic</h3>
 <p>For a yes/no outcome (e.g. <em>Hypertensive</em>). A <strong>Link</strong> option chooses how the
 probability relates to the predictors: <strong>Logit</strong> (the default — coefficients are
@@ -288,6 +387,55 @@ between runs.</p>
 <p>For categorical outcomes with three or more levels — unordered (Multinomial,
 baseline-category logit) or ordered (Ordinal, proportional-odds). Both report the
 per-category/threshold coefficients and significance.</p>
+<h3 id="quantile">Quantile</h3>
+<p><strong>When.</strong> The question is about a <strong>conditional quantile</strong> rather than the
+mean — the median as an outlier-resistant centre, or an upper/lower quantile
+because the effect of a predictor differs across the response distribution
+(what raises the 90th percentile of blood pressure may not be what raises its
+median).</p>
+<p><strong>Dialog.</strong> <strong>Dependent</strong>, <strong>Predictors</strong>, and the <strong>quantile τ</strong> between 0
+and 1 (0.5, the median, by default). The fit minimizes the asymmetric check
+loss.</p>
+<p><strong>Output.</strong> One <strong>Quantile Regression</strong> table: the coefficients with asymptotic
+standard errors (iid sparsity estimate), t and significance, and a pseudo-R¹
+goodness of fit in the note. Run it at several τ and compare the slopes to see
+whether an effect is uniform across the distribution.</p>
+<p><strong>Example.</strong> <em>SystolicBP</em> on <em>Age</em> and <em>BMI</em> at τ = 0.9 — what predicts the
+high end.</p>
+<h3 id="generalized-estimating-equations">Generalized Estimating Equations</h3>
+<p><strong>When.</strong> <strong>Correlated or clustered</strong> observations — repeated measures on a
+subject, patients within clinics — and the target is the <strong>population-averaged</strong>
+(marginal) effect of the predictors. (For subject-specific effects with a
+random intercept, see the <a href="#generalized-linear-mixed-model">Generalized Linear Mixed
+Model</a>.)</p>
+<p><strong>Dialog.</strong> <strong>Dependent</strong>, <strong>Predictors</strong>, the <strong>Subject (cluster)</strong> variable
+that groups correlated observations, the <strong>Family</strong> — <em>Gaussian</em> (identity
+link, the default), <em>Binomial</em> (logit) or <em>Poisson</em> (log) — and the
+<strong>working correlation</strong>: <em>Exchangeable</em> (the default), <em>Independence</em> or
+<em>AR(1)</em>.</p>
+<p><strong>Output.</strong> <strong>GEE Parameter Estimates</strong> — B with <strong>robust (sandwich)
+standard errors</strong>, z, significance and confidence intervals — and, in the
+note, the estimated correlation parameter α, the cluster and observation
+counts. The sandwich errors are valid even if the working correlation is
+misspecified; the choice of structure mainly affects efficiency.</p>
+<p><strong>Example.</strong> <em>Hypertensive</em> (binomial) on <em>Age</em> and <em>BMI</em>, subjects clustered
+by <em>StudyZone</em>, exchangeable correlation.</p>
+<h3 id="loglinear">Loglinear</h3>
+<p><strong>When.</strong> Two or more <strong>categorical</strong> variables and the question is about the
+<strong>association structure of their cross-classification</strong> — a multi-way
+contingency table modelled as Poisson counts. The main-effects model is the
+test of mutual independence; the saturated model reproduces the table and
+shows every interaction.</p>
+<p><strong>Dialog.</strong> The <strong>Factors</strong> (two or more categorical variables) and the
+<strong>Model</strong>: <em>Independence (main effects)</em> — the default — or <em>Saturated (all
+interactions)</em>.</p>
+<p><strong>Output.</strong> <strong>Loglinear Parameter Estimates</strong> (B, standard error, Wald, df,
+significance, confidence interval; Exp(B) is the multiplicative effect on the
+cell count) and <strong>Goodness-of-Fit</strong> — the deviance and Pearson χ² with df
+and significance: a small significance rejects the model (for the
+main-effects model, it rejects independence of the factors).</p>
+<p><strong>Example.</strong> <em>SmokingStatus</em> × <em>Sex</em> × <em>Residence</em>: does the independence
+model fit, or do the factors interact?</p>
 <h3 id="mediation">Mediation</h3>
 <p>Asks <strong>how</strong> an independent variable <strong>X</strong> affects an outcome <strong>Y</strong> — how much of
 its effect runs <em>through</em> one or more <strong>mediators M</strong> (the path X → M → Y) versus
@@ -320,31 +468,88 @@ outcome. The outcome model gains <code>W</code> and <code>M×W</code>.</li>
 </ul>
 <p>The output changes accordingly:</p>
 <ul>
-<li><strong>Path coefficients</strong> now include the moderated model's <code>W</code> and interaction
+<li>
+<p><strong>Path coefficients</strong> now include the moderated model's <code>W</code> and interaction
 terms (<code>a1/a2/a3</code>, <code>b1/b2/b3</code>), and the <strong>total-effect row disappears</strong> —
 with a moderator, <code>c = c′ + a·b</code> no longer holds unconditionally, so a
-&quot;total&quot; row would misreport.</li>
-<li><strong>Conditional Effects</strong> — the moderated path's <strong>simple slope</strong> at each
+&quot;total&quot; row would misreport.</p>
+</li>
+<li>
+<p><strong>Conditional Effects</strong> — the moderated path's <strong>simple slope</strong> at each
 probe value of W, with normal-theory inference. A moderator with at most
 five distinct values is treated as categorical and probed <strong>at each
-value</strong>; otherwise at its <strong>mean − 1 SD, mean, and mean + 1 SD</strong>.</li>
-<li><strong>Conditional Indirect Effects</strong> — the indirect effect at each probe value,
+value</strong>; otherwise at its <strong>mean − 1 SD, mean, and mean + 1 SD</strong>.</p>
+</li>
+<li>
+<p><strong>Conditional Indirect Effects</strong> — the indirect effect at each probe value,
 each with a bootstrap interval. <em>A conditional indirect interval that
-excludes zero is evidence of mediation at that level of W.</em></li>
-<li><strong>Index of Moderated Mediation</strong> — the slope of the indirect effect as a
+excludes zero is evidence of mediation at that level of W.</em></p>
+</li>
+<li>
+<p><strong>Index of Moderated Mediation</strong> — the slope of the indirect effect as a
 linear function of W (<code>a3·b</code> or <code>a·b3</code>), with a bootstrap interval: <em>an
 index interval that excludes zero is evidence the mediation itself is
 moderated.</em> With <strong>both</strong> paths moderated the indirect effect is quadratic
-in W, no single index exists, and the output says so instead.</li>
-<li><strong>Interaction Plot</strong> (the <strong>Interaction plot</strong> checkbox, on by default) —
+in W, no single index exists, and the output says so instead.</p>
+</li>
+<li>
+<p><strong>Interaction Plot</strong> (the <strong>Interaction plot</strong> checkbox, on by default) —
 the moderated path's fitted simple-slope lines, one per probe level of W,
 every other predictor held at its mean. Lines that fan apart <em>are</em> the
-moderation; parallel lines mean W changes nothing.</li>
+moderation; parallel lines mean W changes nothing.</p>
+</li>
+<li>
+<p><strong>Johnson–Neyman Regions</strong> (the <strong>Johnson–Neyman regions</strong> checkbox) —
+probing at three values answers &quot;is the effect significant <em>here</em>?&quot;;
+Johnson–Neyman answers &quot;<strong>where</strong> along W is it significant?&quot; For each
+moderated path the table lists the <strong>boundary</strong> values of W at which the
+path's conditional effect crosses significance (at the interval's level,
+on the model's residual df) — the effect there equals ±t·SE, shown beside
+it — with the percent of cases below and above each boundary, and the
+note states the region in words (&quot;significant for W &lt; a and for W &gt; b&quot;,
+&quot;for W &gt; a&quot;, &quot;over the whole observed range&quot;, &quot;nowhere&quot;). Only boundaries
+inside the observed range of W are listed; a non-significant interaction
+usually yields none. The <strong>Johnson–Neyman Plot</strong> draws the conditional
+effect with its confidence band across the observed range, the zero line,
+and the boundaries as vertical markers — where the band clears zero is the
+region. The regions are for the path's conditional effect, not for the
+conditional <em>indirect</em> effect (whose inference is bootstrap-only), the
+same choice PROCESS makes.</p>
+</li>
+<li>
+<p><strong>Moderator 2 (Z) — a three-way interaction.</strong> Sometimes the question is
+&quot;does the moderation itself depend on something else?&quot; — W's effect on the
+mediation differs by group, say. Pick a second moderator and Z joins W in
+the moderated model with every product up to X×W×Z (the coefficients are
+labelled a1…a7 / b1…b7). The conditional effects and conditional indirect
+effects are then probed on the <strong>W × Z grid</strong> (each moderator by its own
+rule — every level of a categorical one, mean ± 1 SD of a continuous one —
+listed Z by Z), the interaction plot is drawn <strong>once per Z level</strong>, and two
+new tables appear when one path is moderated: the <strong>Index of Moderated
+Moderated Mediation</strong> (a7·b or a·b7 — <em>how much W's moderation of the
+indirect effect changes per unit of Z</em>; an interval excluding zero says Z
+moderates the moderation) and the <strong>Conditional Index of Moderated
+Mediation</strong> (the W-moderation index at each Z level). Johnson–Neyman
+regions, if requested, are solved for W at each Z level.</p>
+</li>
 </ul>
-<p><em>Scope:</em> a continuous outcome, single or parallel mediators; one moderator on
-the a-path, b-path or both. Serial (causally ordered) mediators, three-way
-interactions and Johnson–Neyman regions of significance are not in this
-version.</p>
+<h4 id="serial-mediation">Serial mediation</h4>
+<p>Parallel mediators are assumed not to affect each other. When the theory
+says the first mediator causes the second — X raises <em>self-efficacy</em>, which
+raises <em>effort</em>, which raises <em>performance</em> — tick <strong>Serial mediation
+(M1 → M2)</strong> with exactly two mediators; the first in variable order is M1.
+The models become <code>M1 ~ X</code>, <code>M2 ~ X + M1</code> and <code>Y ~ X + M1 + M2</code>, the path
+table gains <strong>d21</strong> (M1 → M2), and the indirect table reports three
+<strong>specific</strong> indirect effects — through M1 alone (a1·b1), through M2 alone
+(a2·b2) and <strong>through both in sequence</strong> (a1·d21·b2) — plus their total,
+each with a bootstrap interval; <code>c = c′ + total indirect</code> still holds
+exactly. A moderator W may enter both a-paths, both b-paths or both (d21
+itself is not moderated); each specific indirect effect, the serial one
+included, is then conditional on W with its own index of moderated
+mediation. A second moderator is not offered with serial mediation.</p>
+<p><em>Scope:</em> a continuous outcome; single, parallel or two serial mediators; one
+or two moderators (one with serial) on the a-path, b-path or both, with
+Johnson–Neyman regions on request.</p>
 <h2 id="general-linear-model">General Linear Model</h2>
 <p><strong>Analyze → General Linear Model.</strong> A <strong>factorial between-subjects ANOVA /
 ANCOVA</strong> with <strong>Type III sums of squares</strong>: several factors, their interactions,
@@ -357,6 +562,25 @@ adjusting for <em>Age</em> as a covariate.</p>
 with a <strong>random intercept</strong> and optional <strong>random slopes</strong>, using
 variance-components or unstructured covariance, estimated by <strong>ML or REML</strong>.
 Reports fixed effects and the estimated variance components.</p>
+<h2 id="generalized-linear-mixed-model">Generalized Linear Mixed Model</h2>
+<p><strong>Analyze → Generalized Linear Mixed Model.</strong> The mixed-model idea for a
+<strong>binary or count outcome</strong>: a random-intercept logistic (0/1) or Poisson
+(count) regression for clustered or repeated data — patients within clinics,
+repeated yes/no measures — estimated by adaptive Gauss–Hermite quadrature.
+The effects are <strong>subject-specific</strong> (conditional on the cluster); for
+population-averaged effects use <a href="#generalized-estimating-equations">GEE</a>.</p>
+<p><strong>Dialog.</strong> The <strong>Outcome</strong> (0/1 for binomial, a non-negative count for
+Poisson), the <strong>Predictors</strong> (fixed effects), the <strong>Grouping</strong> variable that
+gets the random intercept, and the <strong>Family</strong> — <em>Binomial — logistic (0/1)</em> or
+<em>Poisson — counts (log)</em>.</p>
+<p><strong>Output.</strong> <strong>Fixed Effects</strong> (B, S.E., Wald, df, significance, <strong>Exp(B)</strong> —
+the conditional odds or rate ratio — with its Wald interval), <strong>Random
+Effects</strong> (the intercept variance between groups, its SD and the SD's
+standard error) and <strong>Model Fit</strong> (−2 log-likelihood, AIC, BIC; the note gives
+the group and observation counts).</p>
+<p><strong>Example.</strong> <em>Hypertensive</em> on <em>Age</em> and <em>BMI</em> with a random intercept for
+<em>StudyZone</em> — how much does the odds of hypertension vary between zones
+after the individual predictors?</p>
 <h2 id="the-within-subjects--multivariate-family">The within-subjects / multivariate family</h2>
 <p>Also under the modelling menus:</p>
 <ul>

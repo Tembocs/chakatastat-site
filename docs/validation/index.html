@@ -191,7 +191,7 @@ never drift the committed inputs out from under the committed references.</p>
 </tbody>
 </table></div>
 <h2 id="coverage">Coverage</h2>
-<p>261 statistics across 52 procedure families — essentially the full analytic
+<p>267 statistics across 52 procedure families — essentially the full analytic
 catalog. (These two numbers are <strong>asserted</strong>, not transcribed: a guard in
 <code>numerical_validation_test.dart</code>
 parses this very sentence and fails if it disagrees with
@@ -554,7 +554,8 @@ minimum-LRE floor keyed on the suite and on NIST's published difficulty
 grade; the suite prints the per-dataset achieved LREs, recorded below.</li>
 </ul>
 <h3 id="coverage-2">Coverage</h3>
-<p>All four StRD suites, 45 datasets:</p>
+<p>All four StRD suites, <strong>all 58 of NIST's datasets</strong> (the per-dataset roster
+is below, guarded):</p>
 <div class="docs-table-wrap"><table>
 <thead>
 <tr>
@@ -579,13 +580,13 @@ grade; the suite prints the per-dataset achieved LREs, recorded below.</li>
 </tr>
 <tr>
 <td>Linear least squares</td>
-<td>9 of 11 (Norris … Wampler5)</td>
+<td>all 11 (Norris … Wampler5; NoInt1/NoInt2 through the origin, <code>intercept: false</code>)</td>
 <td><code>regression_linear</code></td>
 <td>every coefficient and its SE, R², residual SD, F</td>
 </tr>
 <tr>
 <td>Nonlinear least squares</td>
-<td>16 across all difficulty grades</td>
+<td>all 27, across all difficulty grades (Nelson on the loader's <code>ln(y)</code>)</td>
 <td><code>nonlinear_regression</code></td>
 <td>every parameter and its SE, residual SS, residual SD</td>
 </tr>
@@ -593,24 +594,467 @@ grade; the suite prints the per-dataset achieved LREs, recorded below.</li>
 </table></div>
 <p>The polynomial linear datasets (Pontius, Filip, Wampler) publish only <code>y</code> and
 <code>x</code>; the higher powers their certified models include are synthesized as
-columns by the loader. Nonlinear fits start from NIST's <strong>Start 2</strong>; Start-1
-robustness is an optimizer property, not a numerical-correctness one.</p>
+columns by the loader — and so is Nelson's response: its certified model is
+<code>log[y] = b1 − b2·x1·exp(−b3·x2)</code>, so the loader's <code>logResponse</code> flag fits
+the NLS tool to a synthesized <code>ln(y)</code> column (the decision block below).
+Nonlinear fits start from NIST's <strong>Start 2</strong>; Start-1 robustness is an
+optimizer property, not a numerical-correctness one.</p>
+<h3 id="coverage-roster-all-58">Coverage roster (all 58)</h3>
+<p>Every StRD dataset NIST publishes, suite by suite — covered ✅ with the engine
+path, or ❌ with the reason — so &quot;all 58&quot; can be checked at a glance rather
+than by counting files (and a future exclusion would have to say why, here). <strong>Guarded</strong>: an engine-free test in
+<code>nist_strd_parser_test.dart</code> parses
+this table and asserts that its ✅ set equals the committed files under
+<code>test/validation/data/nist/</code> <em>and</em> the per-suite lists in
+<code>nist_strd_test.dart</code>, that each ✅ row's
+suite and difficulty match the file's header, and that every ❌ row carries a
+reason — so the roster cannot drift from the suite. (Added 2026-08-21, 0.21.0
+item 11, with the ten nonlinear datasets that had been left unselected when
+the suite was built.)</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>Suite</th>
+<th>Difficulty</th>
+<th>Covered</th>
+<th>Engine path / reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PiDigits</td>
+<td>univariate</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>explore</code>, <code>autocorrelation</code></td>
+</tr>
+<tr>
+<td>Lottery</td>
+<td>univariate</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>explore</code>, <code>autocorrelation</code></td>
+</tr>
+<tr>
+<td>Lew</td>
+<td>univariate</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>explore</code>, <code>autocorrelation</code></td>
+</tr>
+<tr>
+<td>Mavro</td>
+<td>univariate</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>explore</code>, <code>autocorrelation</code></td>
+</tr>
+<tr>
+<td>Michelso</td>
+<td>univariate</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>explore</code>, <code>autocorrelation</code></td>
+</tr>
+<tr>
+<td>NumAcc1</td>
+<td>univariate</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>explore</code>, <code>autocorrelation</code></td>
+</tr>
+<tr>
+<td>NumAcc2</td>
+<td>univariate</td>
+<td>average</td>
+<td>✅</td>
+<td><code>explore</code>, <code>autocorrelation</code></td>
+</tr>
+<tr>
+<td>NumAcc3</td>
+<td>univariate</td>
+<td>average</td>
+<td>✅</td>
+<td><code>explore</code>, <code>autocorrelation</code></td>
+</tr>
+<tr>
+<td>NumAcc4</td>
+<td>univariate</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>explore</code>, <code>autocorrelation</code></td>
+</tr>
+<tr>
+<td>SiRstv</td>
+<td>anova</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>anova</code></td>
+</tr>
+<tr>
+<td>SmLs01</td>
+<td>anova</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>anova</code></td>
+</tr>
+<tr>
+<td>SmLs02</td>
+<td>anova</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>anova</code></td>
+</tr>
+<tr>
+<td>SmLs03</td>
+<td>anova</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>anova</code></td>
+</tr>
+<tr>
+<td>AtmWtAg</td>
+<td>anova</td>
+<td>average</td>
+<td>✅</td>
+<td><code>anova</code></td>
+</tr>
+<tr>
+<td>SmLs04</td>
+<td>anova</td>
+<td>average</td>
+<td>✅</td>
+<td><code>anova</code></td>
+</tr>
+<tr>
+<td>SmLs05</td>
+<td>anova</td>
+<td>average</td>
+<td>✅</td>
+<td><code>anova</code></td>
+</tr>
+<tr>
+<td>SmLs06</td>
+<td>anova</td>
+<td>average</td>
+<td>✅</td>
+<td><code>anova</code></td>
+</tr>
+<tr>
+<td>SmLs07</td>
+<td>anova</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>anova</code> (floor bounded by data representation)</td>
+</tr>
+<tr>
+<td>SmLs08</td>
+<td>anova</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>anova</code> (floor bounded by data representation)</td>
+</tr>
+<tr>
+<td>SmLs09</td>
+<td>anova</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>anova</code> (floor bounded by data representation)</td>
+</tr>
+<tr>
+<td>Norris</td>
+<td>linear</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>regression_linear</code></td>
+</tr>
+<tr>
+<td>Pontius</td>
+<td>linear</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>regression_linear</code> (powers synthesized)</td>
+</tr>
+<tr>
+<td>NoInt1</td>
+<td>linear</td>
+<td>average</td>
+<td>✅</td>
+<td><code>regression_linear</code>, <code>intercept: false</code> (0.21.0 item 12)</td>
+</tr>
+<tr>
+<td>NoInt2</td>
+<td>linear</td>
+<td>average</td>
+<td>✅</td>
+<td><code>regression_linear</code>, <code>intercept: false</code> (0.21.0 item 12)</td>
+</tr>
+<tr>
+<td>Filip</td>
+<td>linear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>regression_linear</code> (powers synthesized; the QR solver of 0.21.0 item 14 — a known limitation before it)</td>
+</tr>
+<tr>
+<td>Longley</td>
+<td>linear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>regression_linear</code></td>
+</tr>
+<tr>
+<td>Wampler1</td>
+<td>linear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>regression_linear</code> (powers synthesized; no finite F)</td>
+</tr>
+<tr>
+<td>Wampler2</td>
+<td>linear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>regression_linear</code> (powers synthesized; no finite F)</td>
+</tr>
+<tr>
+<td>Wampler3</td>
+<td>linear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>regression_linear</code> (powers synthesized; no finite F)</td>
+</tr>
+<tr>
+<td>Wampler4</td>
+<td>linear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>regression_linear</code> (powers synthesized; no finite F)</td>
+</tr>
+<tr>
+<td>Wampler5</td>
+<td>linear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>regression_linear</code> (powers synthesized; no finite F)</td>
+</tr>
+<tr>
+<td>Misra1a</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>Chwirut2</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>Chwirut1</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>Lanczos3</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>Gauss1</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>Gauss2</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code> (added 0.21.0 item 11)</td>
+</tr>
+<tr>
+<td>DanWood</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>Misra1b</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>Kirby2</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>Hahn1</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>Nelson</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code> on the loader's synthesized <code>ln(y)</code> (<code>logResponse</code>, 0.21.0 item 13)</td>
+</tr>
+<tr>
+<td>MGH17</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code> (added 0.21.0 item 11)</td>
+</tr>
+<tr>
+<td>Lanczos1</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code> (added 0.21.0 item 11) — scored, <strong>known limitation</strong> (problem-bounded SDs)</td>
+</tr>
+<tr>
+<td>Lanczos2</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code> (added 0.21.0 item 11)</td>
+</tr>
+<tr>
+<td>Gauss3</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code> (added 0.21.0 item 11)</td>
+</tr>
+<tr>
+<td>Misra1c</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code> (added 0.21.0 item 11)</td>
+</tr>
+<tr>
+<td>Misra1d</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code> (added 0.21.0 item 11)</td>
+</tr>
+<tr>
+<td>Roszman1</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>ENSO</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>MGH09</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>Thurber</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>BoxBOD</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>Rat42</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>MGH10</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code> (added 0.21.0 item 11 — the iteration-cap finding)</td>
+</tr>
+<tr>
+<td>Eckerle4</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>Rat43</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code> (added 0.21.0 item 11)</td>
+</tr>
+<tr>
+<td>Bennett5</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code> (added 0.21.0 item 11 — the iteration-cap finding)</td>
+</tr>
+</tbody>
+</table></div>
 <p><strong>Deliberate exclusions</strong> (the same standard as the list above — documented,
 not silent):</p>
 <ul>
-<li><strong>NoInt1 / NoInt2</strong> (linear suite) — they certify regression <strong>through the
-origin</strong>, which the engine does not offer (every linear model fits an
-intercept). If a no-intercept option ever ships, these two files are the
-ready-made certification for it.</li>
-<li><strong>Nelson</strong> (nonlinear suite) — its certified fit is to <code>log(y)</code>, a response
-transform the NLS tool does not apply.</li>
 <li><strong>Wampler F statistics</strong> — the exact-fit Wampler datasets certify a zero
 residual sum of squares, so no finite F exists to compare; their
 coefficients, SEs, R² and residual SD are all still checked.</li>
 </ul>
+<p><em>(Two datasets were excluded here until 2026-08-21. <strong>NoInt1 / NoInt2</strong>
+certify regression <strong>through the origin</strong>, which the engine did not offer;
+the <code>intercept</code> option shipped as 0.21.0 item 12 and both now run under
+<code>intercept: false</code> — the conventions are in
+<a href="#regression-through-the-origin--the-0210-conventions">Regression through the origin</a>.
+<strong>Nelson</strong> certifies a fit to <code>log(y)</code>, a response transform the NLS tool does
+not apply; the decision, 0.21.0 item 13: <strong>harness-only</strong> — the StRD loader's
+<code>logResponse</code> flag synthesizes <code>ln(y)</code> exactly as it synthesizes the
+polynomial powers, and the dataset joined the suite under the
+average-difficulty floor (LRE 7.3). A product-side <code>response_transform</code>
+argument on <code>nonlinear_regression</code> is <strong>out of scope, not deferred</strong> — it
+would duplicate Compute Variable (<code>LN(y)</code>) for one case; the gap was in the
+harness, not the estimator.)</em></p>
 <h3 id="what-the-suite-found-and-fixed">What the suite found (and fixed)</h3>
 <p>Building the suite surfaced two numerical-hygiene defects and one genuine
-limitation — exactly the kind of discovery it exists for:</p>
+limitation (since fixed), and widening it to the full nonlinear suite
+(2026-08-21) a third defect and a second limitation — exactly the kind of
+discovery it exists for:</p>
 <ul>
 <li><strong>One-way ANOVA cancellation (fixed, 2026-07-02).</strong> The between-groups sum
 of squares was accumulated on the raw values; on data with many constant
@@ -635,18 +1079,59 @@ Kirby2 <strong>4.5</strong>). The step in
 now relative to the parameter's own scale (floor only at exactly zero),
 lifting Hahn1 to <strong>8.0</strong> and Kirby2 to <strong>7.6</strong> and improving nearly every
 other fit.</li>
-<li><strong>Filip (known limitation, open).</strong> The linear solver cannot fit Filip's
-10th-degree polynomial design: its condition number (~1e15) is squared by
-the normal-equations path, and the returned coefficients are meaningless
-(LRE 0). This is the classic result this dataset was designed to expose —
-historically several major packages failed it too; solving it needs an
-orthogonal-decomposition (QR/SVD) least-squares path. Until then Filip is
-recorded in the test's <code>knownLimits</code> (still scored, and asserted to <em>stay</em>
-failing so an eventual solver improvement forces this record to be
-updated). <strong>Follow-up:</strong> a QR-based <code>regression_linear</code> core would close
-this and likely lift the Wampler family too; worth noting that on such
-designs today the engine also raises no conditioning warning — a gate-1
-style surface worth adding alongside.</li>
+<li><strong>Filip (known limitation 2026-07-02 → fixed 2026-08-21).</strong> The linear
+solver could not fit Filip's 10th-degree polynomial design: the condition
+number of the design is squared by the normal-equations path, and the
+returned coefficients were meaningless (LRE 0) — the classic result this
+dataset was designed to expose; historically several major packages failed
+it too. <strong>The fix (0.21.0 item 14):</strong> <code>regression_linear</code> now solves the
+weighted least-squares problem by <strong>Householder QR of the √W-scaled,
+column-equilibrated design</strong> (<code>wls_qr</code> in
+<code>rust/src/analyze/regression.rs</code>) —
+β by back-substitution on R, the covariance bread <code>(XᵀWX)⁻¹ = R⁻¹R⁻ᵀ</code>
+feeding the model-based SEs, the robust sandwich and the leverage exactly
+as before, so every downstream statistic moved to the new path at once
+(the plain fit, its through-origin variant, the stepwise oracle and the
+survey-design fit all go through it). Filip scores <strong>7.2</strong> (R's <code>lm</code>
+reaches the same class on this file), Longley moved 7.4 → <strong>11.3</strong>, and
+the exact-fit Wampler family 4.8–8.6 → <strong>6.1–12.7</strong>; the
+higher-difficulty linear floor rose from 4.5 to <strong>5.0</strong>. Nothing else
+moved beyond last-digit noise (Norris 13.3 → 12.2 and Pontius 10.8 → 12.2
+are rounding-level at 12+ digits; the cross-package <code>reg_linear/*</code> pins
+are unchanged). Pinned on the Rust side by a test that reads the
+committed <code>Filip.dat</code> verbatim (data and certified values) and asserts
+LRE ≥ 6 for every coefficient and SD, plus the solver's unit tests
+(closed-form weighted fit and bread, exact dependence refused, a degree-9
+design the normal equations get wrong by a factor ~100). The
+<strong>conditioning note</strong> the record asked for came along — see
+<a href="#linear-least-squares-by-qr--the-0210-conventions">Linear least squares by QR</a>.</li>
+<li><strong>NLS iteration cap (fixed, 2026-08-21).</strong> Adding the ten unselected
+nonlinear datasets (0.21.0 item 11) found <strong>MGH10</strong> and <strong>Bennett5</strong>
+(both <em>higher</em> difficulty) stalling unconverged at the Levenberg–Marquardt
+cap of <strong>200</strong> iterations — MGH10 at SSE ≈ 8600 against the certified
+87.9 (LRE 0), Bennett5 at LRE 1.6. From NIST's Start 2 they need ~440 and
+~450 iterations (Bennett5 converges from its distant Start 1 too, in ~490;
+MGH10 from Start 1 does not in 5000 and is not a target — it is the
+textbook case for it). The cap in
+<code>rust/src/analyze/nonlinear.rs</code> is
+now <strong>1000</strong>, which lifts MGH10 to <strong>8.5</strong> and Bennett5 to <strong>7.0</strong>; pinned
+by the <code>mgh10_converges_from_start_2_within_the_iteration_cap</code> Rust test
+(the 16 points embedded, certified values to 1e-7 relative). In the same
+pass the <strong>convergence flag</strong> was made honest: a fit that stalls because
+no damped step can decrease the SSE any further is at its floating-point
+floor (Lanczos2 reaches its certified minimum exactly this way, after 198
+iterations) and now reports <em>Converged: Yes</em>; <em>No</em> means one thing — the
+cap was reached — and the Model Summary note says so.</li>
+<li><strong>Lanczos1 (known limitation, bounded by the problem).</strong> An exact-data
+fit: the certified residual sum of squares is <strong>1.4 × 10⁻²⁵</strong> on data of
+magnitude 1, i.e. residuals of ~8 × 10⁻¹⁴ against a model that double
+precision evaluates to ~5 × 10⁻¹⁶ — each residual is good to two or three
+digits, so the SSE (LRE <strong>2.9</strong>) and the parameter standard deviations
+(∝ √SSE, LRE <strong>3.2</strong>) cannot reach the average-difficulty floor in double
+precision, while the <strong>estimates themselves sit at the 11-digit cap</strong>
+(10.6–11.0). Recorded in the test's <code>knownLimits</code> like Filip (still scored,
+asserted to stay below the floor); the same row is the reason McCullough's
+assessments treat Lanczos1's SDs separately.</li>
 </ul>
 <h3 id="achieved-lres">Achieved LREs</h3>
 <p>From the watched run of <code>flutter test test/nist_strd_test.dart</code> on
@@ -659,12 +1144,21 @@ statistic of that dataset; the cap is 15 (11 nonlinear). The floors sit about
 a digit under the achieved values because the iterative NLS fits amplify
 last-bit codegen/libm differences across builds and platforms (an engine
 rebuild alone was observed to move ENSO's worst statistic between 5.0 and
-5.9); the closed-form suites are bit-stable. Two floors are bounded by the
+5.9); the closed-form suites are bit-stable. One floor is bounded by the
 <em>problem</em>, not the algorithm: <strong>higher-difficulty ANOVA</strong> by data
 representation (nine constant leading digits leave an f64 only ~4 digits of
 the certified SS — NIST's decimal data simply cannot be represented more
-finely), and <strong>higher-difficulty linear</strong> by the exact-fit Wampler datasets,
-whose certified coefficient SDs are exactly 0 and score by absolute LRE.</p>
+finely). The <strong>higher-difficulty linear</strong> floor was 4.5 while the
+normal-equations solver held the exact-fit Wampler datasets (certified SDs of
+exactly 0, scored by absolute LRE) near it; the QR solver of 2026-08-21
+(0.21.0 item 14) lifted the family to 6.1–12.7 and Filip to 7.2, and the
+floor now sits at 5.0, a digit under the new worst. The linear rows below
+are from that run.
+The NoInt1 / NoInt2 rows (regression through the origin, <code>intercept: false</code>)
+and the eleven nonlinear rows after MGH09 (Gauss2 … Nelson) were added from
+the watched runs of 2026-08-21 (Linux x64, the 0.21.0 tree — items 12, 11
+and 13); the NoInt certified values are exact-arithmetic fits of generated integer
+data, and the engine reproduces them to the 15-digit cap less a bit.</p>
 <div class="docs-table-wrap"><table>
 <thead>
 <tr>
@@ -842,7 +1336,7 @@ whose certified coefficient SDs are exactly 0 and score by absolute LRE.</p>
 <td>linear</td>
 <td>lower</td>
 <td>10.0</td>
-<td>13.3</td>
+<td>12.2</td>
 <td>B0_est</td>
 </tr>
 <tr>
@@ -850,63 +1344,79 @@ whose certified coefficient SDs are exactly 0 and score by absolute LRE.</p>
 <td>linear</td>
 <td>lower</td>
 <td>10.0</td>
-<td>10.8</td>
+<td>12.2</td>
 <td>B0_est</td>
+</tr>
+<tr>
+<td>NoInt1</td>
+<td>linear</td>
+<td>average</td>
+<td>8.0</td>
+<td>14.7</td>
+<td>B1_est</td>
+</tr>
+<tr>
+<td>NoInt2</td>
+<td>linear</td>
+<td>average</td>
+<td>8.0</td>
+<td>15.0</td>
+<td>B1_est</td>
 </tr>
 <tr>
 <td>Filip</td>
 <td>linear</td>
 <td>higher</td>
-<td>—</td>
-<td>0.0</td>
-<td><em>known limitation (above)</em></td>
+<td>5.0</td>
+<td>7.2</td>
+<td>B10_est</td>
 </tr>
 <tr>
 <td>Longley</td>
 <td>linear</td>
 <td>higher</td>
-<td>4.5</td>
-<td>7.4</td>
-<td>B5_est</td>
+<td>5.0</td>
+<td>11.3</td>
+<td>B1_est</td>
 </tr>
 <tr>
 <td>Wampler1</td>
 <td>linear</td>
 <td>higher</td>
-<td>4.5</td>
-<td>4.8</td>
-<td>B1_sd</td>
+<td>5.0</td>
+<td>8.9</td>
+<td>B0_est</td>
 </tr>
 <tr>
 <td>Wampler2</td>
 <td>linear</td>
 <td>higher</td>
-<td>4.5</td>
-<td>8.6</td>
+<td>5.0</td>
+<td>12.7</td>
 <td>B3_est</td>
 </tr>
 <tr>
 <td>Wampler3</td>
 <td>linear</td>
 <td>higher</td>
-<td>4.5</td>
-<td>5.7</td>
-<td>B1_est</td>
+<td>5.0</td>
+<td>9.1</td>
+<td>B0_est</td>
 </tr>
 <tr>
 <td>Wampler4</td>
 <td>linear</td>
 <td>higher</td>
-<td>4.5</td>
-<td>5.7</td>
+<td>5.0</td>
+<td>8.1</td>
 <td>B1_est</td>
 </tr>
 <tr>
 <td>Wampler5</td>
 <td>linear</td>
 <td>higher</td>
-<td>4.5</td>
-<td>5.7</td>
+<td>5.0</td>
+<td>6.1</td>
 <td>B1_est</td>
 </tr>
 <tr>
@@ -1037,6 +1547,94 @@ whose certified coefficient SDs are exactly 0 and score by absolute LRE.</p>
 <td>5.9</td>
 <td>b2_est</td>
 </tr>
+<tr>
+<td>Gauss2</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>6.0</td>
+<td>9.7</td>
+<td>b5_sd</td>
+</tr>
+<tr>
+<td>Gauss3</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>4.5</td>
+<td>9.0</td>
+<td>b3_sd</td>
+</tr>
+<tr>
+<td>Lanczos1</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>—</td>
+<td>2.9</td>
+<td><em>known limitation (above)</em></td>
+</tr>
+<tr>
+<td>Lanczos2</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>4.5</td>
+<td>6.8</td>
+<td>b3_sd</td>
+</tr>
+<tr>
+<td>Misra1c</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>4.5</td>
+<td>8.4</td>
+<td>b2_sd</td>
+</tr>
+<tr>
+<td>Misra1d</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>4.5</td>
+<td>10.2</td>
+<td>b2_sd</td>
+</tr>
+<tr>
+<td>MGH10</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>4.5</td>
+<td>8.5</td>
+<td>b2_sd</td>
+</tr>
+<tr>
+<td>MGH17</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>4.5</td>
+<td>6.6</td>
+<td>b2_sd</td>
+</tr>
+<tr>
+<td>Rat43</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>4.5</td>
+<td>7.2</td>
+<td>b4_est</td>
+</tr>
+<tr>
+<td>Bennett5</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>4.5</td>
+<td>7.0</td>
+<td>b1_sd</td>
+</tr>
+<tr>
+<td>Nelson</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>4.5</td>
+<td>7.3</td>
+<td>b2_est</td>
+</tr>
 </tbody>
 </table></div>
 <p>For context, McCullough's published assessments graded major commercial
@@ -1045,14 +1643,25 @@ failed Filip outright, and low single digits on SmLs07-09 were common). A
 current run always prints this table (the suite's <code>tearDownAll</code>), so the
 recorded numbers can be refreshed by pasting from any watched run.</p>
 <h2 id="statistics-package-file-formats">Statistics-package file formats</h2>
-<p><em>Added 2026-08-06 (release 0.14.0 item 2). Not a numerical gate — no statistic
-is computed here — but the same discipline applied to a different kind of
-correctness: does a <code>.sav</code>, <code>.dta</code> or <code>.xpt</code> arrive as the file actually says?</em></p>
+<p><em>Added 2026-08-06 (release 0.14.0 item 2); the <code>.sas7bdat</code> leg 2026-08-21
+(0.21.0 item 7). Not a numerical gate — no statistic is computed here — but
+the same discipline applied to a different kind of correctness: does a
+<code>.sav</code>, <code>.dta</code>, <code>.xpt</code> or <code>.sas7bdat</code> arrive as the file actually says?</em></p>
 <p>The readers (<code>rust/src/foreign.rs</code>) are
-<code>ambers</code> (SPSS), <code>dta</code> (Stata) and <code>sas_xport</code> (SAS transport) — young,
-single-author, pure-Rust crates. That is a deliberate trade against vendoring
-the mature ReadStat C library, and the evidence below is what makes it
-defensible.</p>
+<code>ambers</code> (SPSS), <code>dta</code> (Stata), <code>sas_xport</code> (SAS transport) and <code>sas7bdat</code>
+(SAS data files and <code>.sas7bcat</code> catalogs) — young, single-author, pure-Rust
+crates. That is a deliberate trade against vendoring the mature ReadStat C
+library, and the evidence below is what makes it defensible.</p>
+<p><strong>The corpus rule (standing policy, restated 0.21.0 item 8a).</strong> A
+real-world foreign file that misbehaves in one of these readers <strong>lands in
+<code>test/fixtures/foreign/corpus/</code> with
+its fix</strong>, and <code>expected.json</code> is regenerated
+(<code>generate_foreign_corpus.py</code>),
+so every field quirk becomes a permanent per-cell differential test. Fix the
+reader, grow the corpus, one commit. The rule is also at the top of
+<code>foreign.rs</code> (where the fixer is) and in the corpus README (where the files
+are). Growth so far: the first sweep (0.14.0, 11 files), the strL file
+(0.18.0), and the seven <code>.sas7bdat</code> files with two catalogs (0.21.0 item 7).</p>
 <p><strong>Two artifacts, the same shape as the numerical suite:</strong></p>
 <div class="docs-table-wrap"><table>
 <thead>
@@ -1071,7 +1680,7 @@ defensible.</p>
 <tr>
 <td><code>test/fixtures/foreign/corpus/expected.json</code></td>
 <td><code>generate_foreign_corpus.py</code></td>
-<td>every cell and metadata item of 11 real-world files, as pyreadstat reads them</td>
+<td>every cell and metadata item of 19 real-world files, as pyreadstat reads them (<code>.sas7bdat</code> value labels from the sibling <code>.sas7bcat</code> the reader would attach)</td>
 </tr>
 </tbody>
 </table></div>
@@ -1100,12 +1709,45 @@ them up would add a third opinion rather than the first independent one. What
 would change this: adopting a ReadStat-based reader after all, at which point
 the original argument returns in full and an independent oracle becomes
 mandatory again.</p>
-<p><code>.xpt</code> goes one step further. Its corpus entry is cross-checked against
-<strong><code>pandas.read_sas</code></strong> — a native Python implementation independent of both
-ReadStat and our reader — and the generator <em>fails</em> rather than writing ground
-truth the two oracles disagree on. <code>pandas.read_sas</code> does not interpret SAS
-display formats, so date/datetime/time columns are excluded from that check and
-pinned against our own reader instead.</p>
+<p><code>.xpt</code> and <code>.sas7bdat</code> go one step further. Their corpus entries are
+cross-checked against <strong><code>pandas.read_sas</code></strong> — a native Python implementation
+independent of both ReadStat and our reader — and the generator <em>fails</em>
+rather than writing ground truth the two oracles disagree on.
+<code>pandas.read_sas</code> does not interpret SAS display formats for <code>.xpt</code>, and for
+<code>.sas7bdat</code> interprets a <em>different</em> set of them than ReadStat (it turns the
+partial-date formats into dates too), so any column either oracle rendered
+temporally is excluded from that check and pinned against our own reader
+instead.</p>
+<p><strong><code>.sas7bdat</code> has no open-source writer</strong> (pyreadstat, pandas and haven all
+read it only), so there is no pyreadstat-written <code>demo.sas7bdat</code>: the Rust
+unit tests (<code>ffi.rs</code>) pin the committed corpus files directly, and the
+stress slot reads one committed real file unscaled (recorded in its report
+as such). The <code>.sas7bdat</code> conventions, decided before the pins were written:</p>
+<ul>
+<li><strong>One SAS table for both SAS readers.</strong> <code>.sas7bdat</code> renders dates,
+datetimes and times through the same format-stem table as <code>.xpt</code>
+(<code>sas_render</code> in <code>foreign.rs</code>), <em>not</em> the crate's own classification —
+the crate would type the partial-date families (<code>MMYY</code>, <code>YEAR</code>, <code>MONYY</code>,
+…) as dates, where pyreadstat (and the <code>.xpt</code> leg) leave them as the
+stored number with a warning. The reader overrides every numeric column
+to &quot;stored number&quot; and renders itself, so one value renders identically
+from either file.</li>
+<li><strong>Fractional seconds truncate toward the earlier second</strong> (<code>sas_whole</code>):
+02:16:02.88 is in second 02:16:02, which is how pyreadstat renders it;
+a value within 1e-6 of a whole number snaps to it first (XPORT's IBM
+hexadecimal floats can land a hair off). Shared by both SAS readers.</li>
+<li><strong>Every SAS missing is blank</strong> — <code>.</code> and the tagged <code>.A</code>–<code>.Z</code>, <code>._</code> —
+matching pyreadstat's default read; a catalog label attached to a tagged
+missing is not carried and is named in a warning.</li>
+<li><strong>Value labels come only from a catalog beside the file</strong>:
+<code>name.sas7bcat</code> first, else <code>formats.sas7bcat</code> (SAS's default library
+catalog name, what a folder exported whole from SAS contains). A column
+gains labels when its format names one of the catalog's label sets, keys
+rendered as the cells render. A user-defined format with no label set is
+named in a warning — with the file name to place when there is no catalog,
+or the catalog that does not define it when there is. A catalog that
+fails to parse is a warning, not a failed import.</li>
+</ul>
 <h3 id="recorded-divergences">Recorded divergences</h3>
 <p>Where our reader and pyreadstat legitimately disagree, the app's behaviour is
 <strong>pinned</strong> in <code>test/foreign_corpus_test.dart</code>
@@ -1142,7 +1784,7 @@ import summary in the GUI — so a user never has to infer them
 <tr>
 <td><strong>strL</strong> long strings</td>
 <td>Stata</td>
-<td>Not yet carried; import blank with a warning</td>
+<td>Carried since 0.18.0 (the GSO table after the data records is read and every reference resolved — not a limit any more); the two residual cases are surfaced, not silent: a <strong>binary</strong> payload decodes as UTF-8 with replacement (warned, naming the variable) and a <strong>dangling</strong> reference imports blank (warned per cell)</td>
 </tr>
 <tr>
 <td>Week/month/quarter/half-year display formats</td>
@@ -1150,18 +1792,28 @@ import summary in the GUI — so a user never has to infer them
 <td>Import as the stored number, with a warning</td>
 </tr>
 <tr>
-<td>Partial-date formats (<code>MONYY</code>, <code>YYQ</code>, <code>YEAR</code>, …)</td>
-<td>SAS</td>
+<td>Partial-date formats (<code>MONYY</code>, <code>MMYY</code>, <code>YYQ</code>, <code>YEAR</code>, …)</td>
+<td>SAS (<code>.xpt</code>, <code>.sas7bdat</code>)</td>
 <td>Import as the stored number, with a warning</td>
 </tr>
 <tr>
 <td><strong>Value labels</strong></td>
-<td>SAS</td>
+<td>SAS <code>.xpt</code></td>
 <td>Not in the file at all — SAS keeps them in a separate <code>.sas7bcat</code> catalog; a variable with a user-defined format is named in a warning</td>
 </tr>
 <tr>
+<td><strong>Value labels</strong></td>
+<td>SAS <code>.sas7bdat</code></td>
+<td>Carried from a <code>.sas7bcat</code> beside the file (<code>name.sas7bcat</code> or <code>formats.sas7bcat</code>); without one — or for a format the catalog lacks — the variable is named in a warning that says what to place where</td>
+</tr>
+<tr>
+<td>Labels for tagged missings (<code>.A</code>–<code>.Z</code>)</td>
+<td>SAS <code>.sas7bdat</code></td>
+<td>Not carried (the values import blank); named in a warning</td>
+</tr>
+<tr>
 <td>Second and later datasets in a container</td>
-<td>SAS</td>
+<td>SAS <code>.xpt</code></td>
 <td>Only the first is imported; the rest are named in a warning</td>
 </tr>
 </tbody>
@@ -1751,7 +2403,11 @@ the save variant&quot; mechanism to hook into. <code>latent_class</code> follows
 precedent (an analysis, not <code>mutatesData</code>); the cross-cutting gap (a
 read-only session can still save columns via any save-capable analysis) is
 recorded in the feature bucket as its own deferral rather than patched
-ad-hoc for one tool.</p>
+ad-hoc for one tool. <strong>Closed in 0.21.0 item 1 (2026-08-21)</strong>: the save
+options are declared on the catalog parameter (<code>savesColumns</code>) and the
+read-only policy withholds and refuses them per call — the record is
+<code>docs/design/advanced_features.md</code> §3 and <code>docs/releases/release_0.21.0.md</code>
+item 1 (both kept private).</p>
 <h3 id="weights-design-and-scope-cuts">Weights, design, and scope cuts</h3>
 <ul>
 <li><strong>Frequency weights</strong> enter the E/M sums and every count (N = Σw in the
@@ -2210,6 +2866,476 @@ symmetric, and the engine carries no general eigensolver; recorded
 rather than approximated.</li>
 <li><strong>No SVAR, no VECM/Johansen, no coefficient restrictions.</strong></li>
 </ul>
+<h2 id="cfa-follow-ups--the-0210-conventions">CFA follow-ups — the 0.21.0 conventions</h2>
+<p><em>Recorded 2026-08-21, before any code, for
+<code>docs/releases/release_0.21.0.md</code> item 4 (kept private): the three
+follow-ups the CFA v1 scope line left behind. Each sub-item adds its
+subsection here when its row <strong>a</strong> lands; the pins live in
+<code>test/cfa_followups_validation_test.dart</code>
+against
+<code>cfa_followups_reference_values.json</code>
+from
+<code>generate_cfa_followups_references.R</code>.</em></p>
+<p><strong>The reference is lavaan</strong> (0.7-2 at the time of writing, in the R
+validation env) — the package whose conventions CFA v1 was already pinned
+against (expected information, divisor N), so every follow-up is measured
+against the same yardstick. <strong>The fixture</strong> is the Holzinger–Swineford data
+as lavaan ships it (<code>cfa_followups.csv</code>: <code>x1..x9</code> byte-identical per value
+to the semopy copy in <code>hs1939.csv</code>, plus <code>school</code>, <code>sex</code>, and the ordinal
+recodes <code>o1..o9</code> — each <code>x</code> cut at its own quartiles into four ordered
+categories, deterministically), so the multi-group and ordinal sub-items
+pin against lavaan's own documented example.</p>
+<h3 id="modification-indices-4mi">Modification indices (4·MI)</h3>
+<ul>
+<li><strong>What is computed.</strong> For every <em>fixed</em> parameter of the fitted model —
+each cross-loading (an indicator on a factor it does not belong to), each
+residual covariance between two indicators, and, under <code>orthogonal</code>, each
+factor covariance — the <strong>modification index</strong> is the 1-df Lagrange
+multiplier (score) test of freeing that parameter alone:
+<code>MI = S_k² / V_k</code>, with <code>S_k = −(N/2) ∂F/∂θ_k</code> the score of the fixed
+parameter at the restricted ML solution and
+<code>V_k = I_kk − I_kf I_ff⁻¹ I_fk</code> its expected information <strong>conditional on
+the free parameters</strong> (Sörbom 1989). It approximates the χ² drop a refit
+with that parameter freed would show (the score and likelihood-ratio
+tests coincide to first order; a Rust test asserts the agreement near the
+null). The <strong>EPC</strong> is the expected parameter change <code>S_k / V_k</code>; the
+<strong>Std. EPC</strong> is lavaan's <code>sepc.all</code> — the completely standardized value:
+a loading as <code>EPC·√φ_ff / √σ̂_jj</code> (the standardized-loading metric), a
+residual covariance as <code>EPC / √(θ_i θ_j)</code> (a residual correlation), a
+factor covariance as <code>EPC / √(φ_rr φ_cc)</code> (a factor correlation).</li>
+<li><strong>Information matrix.</strong> Expected (Fisher), divisor N — the same matrix
+the v1 standard errors use, so the MIs, the SEs and lavaan's defaults
+agree by construction. When it is singular (the v1 &quot;empirically
+underidentified&quot; signal) the table is emitted with no rows and a note,
+exactly as the SEs are withheld.</li>
+<li><strong>Non-identified candidates are skipped, not printed.</strong> A candidate whose
+conditional information <code>V_k</code> is (numerically) zero cannot be freed
+identifiably — e.g. a residual covariance <em>within</em> a three-indicator
+factor of an orthogonal model, where that block is just-identified on its
+own. lavaan computes these as <code>NA</code> and drops them by default; the engine
+skips them. The identified candidate sets are the same (54 for the
+correlated HS model: 18 cross-loadings + 36 residual covariances; 48 for
+the orthogonal one: 18 + 27 between-factor residual covariances + 3
+factor covariances — a Rust test asserts both counts).</li>
+<li><strong>Listing floor.</strong> The table lists candidates with <code>MI ≥ mi_minimum</code>,
+largest first; the default floor is <strong>3.84</strong> (χ²(1) at α = .05, lavaan's
+<code>minimum.value</code> idiom rather than a top-N, so an empty table is itself the
+answer &quot;no single freed parameter would be significant&quot;); <code>0</code> lists every
+candidate. A just-identified model reports that there is nothing
+identifiable to free. Each row also carries the 1-df p-value of its MI.</li>
+<li><strong>The note warns.</strong> Indices are one-at-a-time approximations from the
+current solution and data-driven; the table's note says a freed
+parameter needs a substantive reason and that a respecified model is
+exploratory. The guide repeats it.</li>
+<li><strong>Pins.</strong> Ten candidates on HS (the four largest of the correlated model
+plus two mid-table ones; the three factor covariances and a between-factor
+residual covariance of the orthogonal model), each on MI (tol 2e-3),
+EPC and Std. EPC (2e-4), against <code>lavaan::modindices()</code>.</li>
+</ul>
+<h3 id="multi-group-invariance-4mg">Multi-group invariance (4·MG)</h3>
+<ul>
+<li><strong>The model.</strong> The same measurement model in every group of a grouping
+variable, <strong>with a mean structure</strong>: <code>Σ_g = Λ_g Φ_g Λ_gᵀ + Θ_g</code>,
+<code>μ_g = ν_g + Λ_g α_g</code>. Groups are the distinct non-missing values of the
+grouping variable in ascending order; cases with a missing group value
+are excluded (the note counts them); every group needs more complete
+cases than indicators (the error names the group). The grouping variable
+may not also be an indicator.</li>
+<li><strong>The ladder</strong> is lavaan's <code>group.equal</code> sequence with its
+parameterization, fitted configural → requested level and compared
+model-to-model: <strong>configural</strong> (same pattern, all parameters free;
+intercepts free per group, latent means fixed at 0 everywhere — so the
+mean structure is saturated and the χ² equals the covariance-only one),
+<strong>metric</strong> (+ loadings equal), <strong>scalar</strong> (+ intercepts equal; latent
+means free in groups 2…G, the <strong>first group the reference at 0</strong>),
+<strong>strict</strong> (+ residual variances equal). Factor variances and
+covariances are free in every group at every level. The default
+requested level is <strong>scalar</strong> (the level that licenses latent-mean
+comparison). Reference-indicator scaling throughout (the first indicator's
+loading fixed at 1 in every group).</li>
+<li><strong>Fit function and χ².</strong> <code>F = Σ_g (n_g/N)·F_g</code> with the normal-theory
+discrepancy including the mean term, <code>χ² = N·F = Σ_g n_g F_g</code>;
+<code>df = G·(p(p+1)/2 + p) − npar</code>. Each group's covariance part reuses the
+single-group objective on <code>S_g + r rᵀ</code> (the identity
+<code>tr((S + rrᵀ)Σ⁻¹) = tr(SΣ⁻¹) + rᵀΣ⁻¹r</code>); equality constraints are
+parameter sharing in one working vector, so the v1 optimizer,
+parameterization and restart policy carry over (a finite-difference test
+checks the analytic gradient at every level).</li>
+<li><strong>Fit indices, lavaan's multi-group definitions (verified numerically
+against <code>fitMeasures()</code> on HS by school).</strong> Baseline: the per-group
+independence model with saturated means (<code>df_b = G·p(p−1)/2</code>); CFI/TLI
+as in v1 from those; <strong>RMSEA and its 90% CI carry the √G factor</strong>
+(<code>√G·√((χ²−df)/(df·N))</code>); <strong>SRMR is the N-weighted mean of the per-group
+SRMRs with the mean residuals included</strong> — each standardized by the
+observed SD and counted among <code>p(p+1)/2 + p</code> residuals (lavaan's
+<code>srmr</code> = <code>srmr_bentler</code>; its <code>_nomean</code> twin is the covariance-only
+average, recorded but not printed).</li>
+<li><strong>Comparison columns.</strong> Δχ² and Δdf against the model one level up, with
+the χ² p-value of the difference (the likelihood-ratio test of the added
+constraints), ΔCFI and ΔRMSEA. The note states the ΔCFI ≈ .01 rule of
+thumb (Cheung &amp; Rensvold) as guidance, never as a verdict.</li>
+<li><strong>Standard errors.</strong> Expected information summed over groups —
+<code>(n_g/2)·tr(Σ_g⁻¹ D_a Σ_g⁻¹ D_b)</code> for the covariance part plus
+<code>n_g·m_aᵀ Σ_g⁻¹ m_b</code> for the mean part (<code>m_a = ∂μ_g/∂θ_a</code>) — divisor N,
+as v1; a shared parameter's SE is reported identically in every group.
+The standardized loadings are completely standardized <strong>within each
+group</strong>.</li>
+<li><strong>Tables.</strong> &quot;CFA Invariance Tests&quot; (one row per fitted level), then the
+requested level's per-group &quot;CFA Loadings&quot;, &quot;CFA Factor Correlations&quot;,
+&quot;CFA Variances&quot;, &quot;CFA Intercepts&quot; and — from scalar on — &quot;CFA Latent
+Means&quot; (group 1's fixed 0 with no SE). Modification indices are not
+offered for a multi-group model (errors as data).</li>
+<li><strong>Pins.</strong> On HS by <code>school</code> (lavaan <code>group.label</code> set to the ascending
+order the engine uses, so Grant-White is the reference group): per level
+χ², df, CFI, TLI, RMSEA (+ CI), SRMR, the baseline χ²; parameters at
+configural (a free loading per group), metric (the shared loading), scalar
+(a shared intercept, the latent means of group 2 with their SEs) and
+strict (a shared residual variance) — see the generator for the exact
+calls.</li>
+</ul>
+<h3 id="ordinal-indicators--wlsmv-4wlsmv">Ordinal indicators — WLSMV (4·WLSMV)</h3>
+<ul>
+<li><strong>When.</strong> <code>estimator: &quot;wlsmv&quot;</code> treats <strong>every</strong> indicator as ordinal:
+integer-coded, each distinct value an ordered category (2 to 12 of them —
+more reads as continuous and is refused with advice to use ML), listwise
+over the indicators, frequency-weighted counts. Mixed
+continuous/ordinal models, multi-group WLSMV and modification indices
+under WLSMV are not offered (errors as data). lavaan's defaults for
+<code>ordered=</code> are the reference: estimator DWLS, test <code>scaled.shifted</code>,
+<strong>delta parameterization</strong>, reference-indicator scaling.</li>
+<li><strong>Sample statistics.</strong> Thresholds <code>τ_jc = Φ⁻¹(cumulative proportion)</code>
+from the weighted margins; polychoric correlations by the two-step ML
+estimator of the <code>polychoric_correlation</code> tool (thresholds fixed at the
+margins, ρ by golden-section ML, the bivariate normal CDF by Simpson
+quadrature). Both reproduce lavaan's <code>sampstat</code> (thresholds to 1e-6,
+polychorics to 2e-4 — quadrature, not convention).</li>
+<li><strong>The asymptotic covariance Γ (Muthén 1984), from per-case influence
+functions — lavaan's assembly, read from its source.</strong> A threshold's
+influence is <code>(1{y ≤ c} − Φ(τ_c)) / φ(τ_c)</code>; a polychoric's is its
+pairwise-likelihood score <code>(∂π_ab/∂ρ)/π_ab</code> minus the cross term times
+the two items' threshold influences (the two-step plug-in correction),
+divided by the information for ρ — where <strong>both the information and the
+cross term are the outer-product (empirical) forms</strong> lavaan uses
+(<code>A22 = mean(s_ρ²)</code>, <code>A21 = mean(s_ρ · s_τ^biv)</code> with the pairwise
+likelihood's own threshold scores), <em>not</em> the expected information (which
+lands ~10 % off). Γ is the weighted sample covariance of the influences
+(<code>Σw·infl·inflᵀ / N</code>: per-case, the covariance of the statistics being
+Γ/N). Verified entry by entry against <code>lavInspect(fit, &quot;gamma&quot;)</code> — the
+36 polychoric diagonals agree to 1e-7, the threshold diagonals and the
+cross terms to the same order. Only the polychoric
+block enters the fit, the test and the parameter SEs: thresholds are
+free and exactly identified, so they drop out of <code>F</code> and of <code>U</code> — a
+consequence of the block structure, not an approximation — while their
+estimation still reaches Γ through the influence correction.</li>
+<li><strong>Estimation.</strong> DWLS: <code>F = Σ_{j&lt;k} (ρ̂_jk − σ_jk)² / Γ_jk,jk</code>, the
+correlation structure <code>σ = ΛΦΛᵀ</code> off-diagonal; residual variances are
+<code>1 − (ΛΦΛᵀ)_jj</code> (implied, no SE) under the delta parameterization; Φ
+Cholesky-parameterized as in v1, minimized by the shared BFGS with the
+restart policy; a communality above 1 is the Heywood flag. The gradient
+is analytic (finite-difference test). At lavaan's own estimates the
+engine's <code>F</code> equals lavaan's to 1e-8 (the residual correlations agree to
+1e-8), so the estimates are the same minimum.</li>
+<li><strong>Test statistic.</strong> <code>T = (N−1)·F</code> — lavaan's WLS convention (verified:
+<code>Σ r²/Γ_kk</code> at lavaan's own estimates times 300 reproduces its <code>chisq</code>
+51.5368 on the fixture; ML uses N·F), then the <strong>scaled-shifted</strong> statistic
+<code>T* = a·T + b</code>, <code>a = √(df/tr((UΓ)²))</code>, <code>b = df − a·tr(UΓ)</code>,
+<code>U = W − WΔ(ΔᵀWΔ)⁻¹ΔᵀW</code>, <code>W = diag(Γ)⁻¹</code>, <code>Δ = ∂σ/∂θ</code> at the solution —
+reproduced to 1e-6 from lavaan's own <code>gamma</code>/<code>wls.v</code>/<code>delta</code> (lavaan's
+<code>chisq.scaling.factor</code> is <code>1/a</code>). The <strong>baseline</strong> (independence) model
+has no free correlation parameter, so <code>U_b = W</code>, <code>tr(U_bΓ) = #pairs</code>,
+and its <code>T_b = (N−1)·Σ ρ̂²/Γ_kk</code> is scaled the same way. The p-value is
+χ²_df of <code>T*</code>.</li>
+<li><strong>Fit indices — the &quot;scaled&quot; family</strong> (<code>cfi.scaled</code>, <code>tli.scaled</code>,
+<code>rmsea.scaled</code> with its CI), all from <code>T*</code> and <code>T*_b</code>; <strong>RMSEA and its
+90% CI use N − 1</strong> (lavaan's categorical convention, verified to 1e-6:
+N gives 0.08332, N−1 gives lavaan's 0.08346); <strong>SRMR</strong> is the RMS of the
+off-diagonal residual correlations over <strong>p(p+1)/2</strong> (the diagonal
+residuals are zero by construction but counted — lavaan's <code>srmr</code> for
+categorical data, 0.065641; the off-diagonal-only mean would be
+0.073388). The robust variants (<code>cfi.robust</code>, <code>rmsea.robust</code>) are not
+printed — recorded as a possible follow-up.</li>
+<li><strong>Standard errors.</strong> Robust sandwich
+<code>(ΔᵀWΔ)⁻¹ ΔᵀWΓWΔ (ΔᵀWΔ)⁻¹ / (N − 1)</code> for loadings and Φ (lavaan's <code>se</code>
+under WLSMV — pinned at 1e-3), threshold SEs <code>√(Γ_ττ / (N − 1))</code>
+(lavaan 0.07739 for o1|t1, reproduced). The standardized loading is
+<code>λ√φ</code> (unit latent-response variance).</li>
+<li><strong>Tables.</strong> The four ML tables with the same columns (the Model Fit row
+carries <code>T*</code>; the note gives a, b, T, the baseline), plus &quot;CFA
+Thresholds&quot; (indicator, <code>t_c (lower | upper category)</code>, estimate, SE) and
+&quot;CFA Polychoric Correlations&quot; (the matrix the model was fitted to).</li>
+<li><strong>Pins.</strong> On the quartile-cut <code>o1..o9</code> of the fixture against
+<code>lavaan::cfa(..., ordered = o1..o9)</code>: <code>T</code>, <code>T*</code>, df, p, CFI, TLI, RMSEA
+(+ CI), SRMR, the scaled baseline; six loadings with SEs, the six Φ
+entries with SEs, a factor correlation, five thresholds with SEs, four
+polychorics — the unit tests pin them from the embedded digits of the
+same fixture, the gate-4 suite end to end.</li>
+</ul>
+<h2 id="mediation-follow-ups--the-0210-conventions">Mediation follow-ups — the 0.21.0 conventions</h2>
+<p><em>Recorded 2026-08-21, before any code, for
+<code>docs/releases/release_0.21.0.md</code> item 5 (kept private): the three
+follow-ups the 0.15.0 moderated-mediation scope line left behind. Each
+sub-item adds its subsection here when its row <strong>a</strong> lands; the pins live
+in
+<code>test/mediation_followups_validation_test.dart</code>
+against
+<code>mediation_followups_reference_values.json</code>
+from
+<code>generate_mediation_followups_references.R</code>.</em></p>
+<p><strong>The fixture</strong> is a deterministic synthetic dataset
+(<code>mediation_followups.csv</code>, n = 200, fixed seed, create-if-absent) built so
+every follow-up has something to find: a real <code>X·W</code> interaction on the
+a-path and a real <code>M₁·W</code> interaction on the b-path (so the Johnson–Neyman
+quadratics have finite roots inside the observed range — asserted at
+generation), a second moderator <code>Z</code> with a three-way <code>X·W·Z</code> term, and a
+serial chain <code>X → M₁ → M₂ → Y</code>. <strong>The references are R <code>lm</code> for every OLS
+quantity</strong> (the same algebra statsmodels reproduced for 0.15.0) and the
+<code>interactions</code> package for the Johnson–Neyman boundaries.</p>
+<h3 id="johnsonneyman-regions-5jn">Johnson–Neyman regions (5·JN)</h3>
+<ul>
+<li><strong>What is solved.</strong> For each moderated path, the conditional effect
+<code>θ(w) = β₁ + β₃·w</code> with <code>Var θ(w) = V₁₁ + w²V₃₃ + 2wV₁₃</code> (the 0.15.0
+conditional-slope convention); the boundaries are the roots of
+<code>|θ(w)| = t_crit·SE(w)</code>, i.e. of
+<code>(β₃² − t²V₃₃)·w² + 2(β₁β₃ − t²V₁₃)·w + (β₁² − t²V₁₁) = 0</code>, with
+<strong><code>t_crit</code> Student's t on the model's residual df at the interval's α</strong>
+(the <code>confidence</code> argument; two-sided). A vanishing quadratic coefficient
+falls back to the linear root; a negative discriminant means no crossing.
+PROCESS and <code>interactions::johnson_neyman</code> define the boundaries
+identically (same t, same df); the latter is the pin.</li>
+<li><strong>Only boundaries inside the observed range of W are reported</strong> (PROCESS's
+convention; <code>interactions</code> solves the same roots but plots over a widened
+range). The effect at each boundary equals ±t_crit·SE by construction —
+the table prints both so the reader can see the identity — with the
+percent of analyzed cases below and above. Which side of a boundary is
+significant is read from the quadratic's sign at the interval midpoint,
+and the note spells the region out in words (&quot;significant for W &lt; a and
+W &gt; b&quot;, &quot;for W &gt; a&quot;, &quot;over the whole observed range&quot;, &quot;nowhere in the
+observed range&quot;).</li>
+<li><strong>The plot</strong> is the conditional effect and its <code>confidence</code>% band over a
+41-point grid of the observed range (the boundaries inserted), with the
+zero line and the boundaries as vertical reference lines — a band-line
+chart (the forecast chart's geometry with a moderator axis). The grid
+table is emitted beside it so the chart replays from the journal.</li>
+<li><strong>Not for the indirect effect.</strong> Johnson–Neyman is analytic for the OLS
+conditional effect only; the conditional <em>indirect</em> effect's inference is
+bootstrap-only, so no region is drawn for it (PROCESS makes the same
+choice). Recorded as a non-goal.</li>
+<li><strong>Pins.</strong> The a-path (<code>m1 ~ x*w</code>) boundaries (both inside the range) with
+the effect, SE and percent-below at the lower one; the b-path
+(<code>y ~ x + m1*w</code>) boundaries and their count inside the range — against
+<code>interactions::johnson_neyman(…, alpha = .05)$bounds</code> and <code>lm</code>/<code>vcov</code>.</li>
+</ul>
+<h3 id="three-way-interactions-53w">Three-way interactions (5·3W)</h3>
+<ul>
+<li><strong>The model shapes.</strong> A second moderator Z (<code>moderator2</code>, numeric,
+distinct from every other role) joins W in <strong>the moderated model(s)
+only</strong> with every product: a-path <code>M ~ X + W + X·W + Z + X·Z + W·Z + X·W·Z (+ C)</code> (PROCESS model 11's first stage), b-path <code>Y ~ X + M + W + M·W + Z + M·Z + W·Z + M·W·Z (+ C)</code> per mediator (model 18's second
+stage), <code>both</code> both. The coefficients are labelled <code>a1…a7</code> / <code>b1…b7</code> in
+that order (a5 = X·Z, a7 = X·W·Z; b5 = M·Z, b7 = M·W·Z). Without Z the
+output is byte-identical to 0.15.0's.</li>
+<li><strong>Probes and the grid.</strong> Each moderator is probed by the 0.15.0 rule on
+its own (≤ 5 distinct values → each value; else mean ∓/± 1 SD, SD with
+n − 1); the grid is <strong>Z-outer, W-inner</strong>, so a table reads &quot;at Z = z: W
+= …&quot; down the page, and the interaction plot is drawn <strong>once per Z
+probe</strong> (titles &quot;… at Z = label&quot;). Probe values are held fixed across
+bootstrap resamples.</li>
+<li><strong>Conditional effects</strong> at <code>(w, z)</code>: the contrast <code>a1 + a3·w + a5·z + a7·wz</code> (b analogue) with <code>Var = cᵀVc</code> from the coefficient covariance,
+t on the residual df — pinned against <code>lm</code>/<code>vcov</code>.</li>
+<li><strong>Indices (Hayes 2018).</strong> With exactly one path moderated: the <strong>index of
+moderated moderated mediation</strong> <code>a7·b</code> / <code>a·b7</code> (how W's moderation of
+the indirect effect changes with Z) and the <strong>conditional index of
+moderated mediation</strong> by W at each Z probe <code>(a3 + a7·z)·b</code> /
+<code>a·(b3 + b7·z)</code>; both bootstrapped like the conditional indirect effects.
+With both paths moderated neither exists (the indirect effect is
+bilinear in W), and the output says so.</li>
+<li><strong>Johnson–Neyman with Z</strong> solves the regions of W <strong>at each Z probe</strong> on
+the combined coefficients <code>θ(w | z) = (β₁ + β₅z) + (β₃ + β₇z)·w</code> with the
+covariance of those two combinations — tables &quot;… at Z = label&quot;.</li>
+<li><strong>Pins.</strong> <code>lm(m1 ~ x*w*z)</code>: a7 and its SE; the conditional slope and SE at
+(w_hi, z_lo); the conditional indirect effect there (b from
+<code>lm(y ~ x + m1)</code>); a7·b; (a3 + a7·z_lo)·b. <code>lm(y ~ x + m1*w*z)</code>: b7 and
+its SE; the conditional b-slope and SE at (w_lo, z_hi).</li>
+</ul>
+<h3 id="serial-mediation-5ser">Serial mediation (5·SER)</h3>
+<ul>
+<li><strong>The model.</strong> <code>serial</code> with <strong>exactly two</strong> mediators in causal order
+(the listed order: M₁ affects M₂): <code>M₁ ~ X (+C)</code>, <code>M₂ ~ X + M₁ (+C)</code>
+— the <code>d₂₁</code> path — <code>Y ~ X + M₁ + M₂ (+C)</code> and the total model
+<code>Y ~ X (+C)</code>, all OLS (PROCESS model 6). Specific indirect effects
+<code>a₁b₁</code>, <code>a₂b₂</code> and the serial <code>a₁d₂₁b₂</code>, their sum the total indirect;
+<code>c = c′ + Σ</code> holds exactly (asserted). The path rows are labelled
+<code>a1, a2, d21, b1, b2, c′, c</code>; the indirect rows <code>X → M₁ → Y</code>,
+<code>X → M₂ → Y</code>, <code>X → M₁ → M₂ → Y</code>, total. Pairwise contrasts between the
+specific indirects are <strong>not</strong> reported (a recorded cut).</li>
+<li><strong>With one moderator.</strong> W enters the a-paths (<code>X·W</code> in both mediator
+models — M₂'s keeps M₁ after the moderated terms), the b-paths (<code>M₁·W</code>,
+<code>M₂·W</code> in the outcome model) or both; <strong><code>d₂₁</code> is not moderated</strong>
+(recorded; PROCESS model 83 / 87 shapes less the direct-path
+moderation). Each specific indirect effect is conditional on W —
+the serial one <code>a₁(w)·d₂₁·b₂(w)</code> — and, with one path moderated, linear
+in W, so each carries an index of moderated mediation: the serial path's
+is <code>a₁₃·d₂₁·b₂</code> under a-moderation, <code>a₁·d₂₁·b₂₃</code> under b-moderation.
+The serial effect is the third block of the conditional-indirect table
+and the third row of the index table. A second moderator is <strong>not
+combinable</strong> with <code>serial</code> (errors as data). Bootstrap CIs follow the
+v1 contract (not pinned).</li>
+<li><strong>Pins.</strong> <code>lm</code> paths on the fixture: <code>d21</code> and its SE, <code>a2</code>, the three
+specific indirects and their total, the total effect <code>c</code>; the
+a-moderated serial model's <code>d21</code>, the conditional serial indirect at the
+W mean and its index <code>a3·d21·b2</code>.</li>
+</ul>
+<h2 id="regression-through-the-origin--the-0210-conventions">Regression through the origin — the 0.21.0 conventions</h2>
+<p><em>Recorded 2026-08-21, before any code, for
+<code>docs/releases/release_0.21.0.md</code> item 12: the <code>intercept</code> argument on
+<code>linear_regression</code> (default <code>true</code>; <code>false</code> fits the model without a
+constant — regression through the origin, <code>y = b₁x₁ + … + bₖxₖ + e</code>). The
+summary statistics change meaning without a constant and packages have
+differed historically, so the definitions are fixed here first; the pins are
+NIST's NoInt1 / NoInt2 in
+<code>nist_strd_test.dart</code> and a statsmodels
+set (<code>reg_linear/noint_*</code>) in
+<code>numerical_validation_test.dart</code>.</em></p>
+<p><strong>Why the statistics change.</strong> With a constant in the model the residuals
+sum to zero and the total sum of squares about the mean splits exactly into
+regression and residual parts (<code>SST = SSR + SSE</code>); R² = SSR/SST is then the
+share of the <em>variance</em> explained. Without a constant neither holds — the
+residuals need not sum to zero, the centred decomposition fails, and the
+centred R² can come out negative. Every reference that certifies or prints a
+through-origin fit (NIST StRD NoInt1/NoInt2; R's
+<code>summary(lm(y ~ x - 1))</code>; statsmodels <code>OLS</code> without <code>add_constant</code>, which
+switches to <code>uncentered_tss</code> when it detects no constant) therefore uses the
+<strong>uncentred</strong> decomposition about zero, and so does the engine:</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Quantity</th>
+<th>With the constant (unchanged)</th>
+<th>Through the origin (<code>intercept: false</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Design row</td>
+<td><code>[1, x₁ … xₖ]</code>, <code>p = k + 1</code></td>
+<td><code>[x₁ … xₖ]</code>, <code>p = k</code></td>
+</tr>
+<tr>
+<td>Total SS, df</td>
+<td><code>Σ w(y − ȳ)²</code>, <code>n − 1</code></td>
+<td><code>Σ w y²</code>, <code>n</code></td>
+</tr>
+<tr>
+<td>Regression SS, df</td>
+<td><code>SST − SSE</code>, <code>p − 1 = k</code></td>
+<td><code>SST − SSE</code> (= <code>Σ w ŷ²</code>), <code>p = k</code></td>
+</tr>
+<tr>
+<td>R²</td>
+<td><code>1 − SSE/SST</code> (centred)</td>
+<td><code>1 − SSE/Σ w y²</code> (uncentred)</td>
+</tr>
+<tr>
+<td>Adjusted R²</td>
+<td><code>1 − (1 − R²)(n − 1)/(n − p)</code></td>
+<td><code>1 − (1 − R²)·n/(n − p)</code></td>
+</tr>
+<tr>
+<td>F</td>
+<td><code>MSR/MSE</code> on <code>(k, n − k − 1)</code></td>
+<td><code>MSR/MSE</code> on <code>(k, n − k)</code></td>
+</tr>
+<tr>
+<td>Std. error of the estimate</td>
+<td><code>√MSE</code>, <code>MSE = SSE/(n − p)</code></td>
+<td>the same, with <code>p = k</code></td>
+</tr>
+<tr>
+<td>Coefficients table</td>
+<td>constant row first</td>
+<td><strong>no constant row</strong></td>
+</tr>
+<tr>
+<td>Standardized Beta, Partial, Part</td>
+<td>shown</td>
+<td><strong>blank</strong> — they are centred-moment constructs (Beta needs <code>sd(y)</code>; partial/part derive from the centred R² decomposition)</td>
+</tr>
+<tr>
+<td>Tolerance / VIF</td>
+<td>from the predictor correlation matrix</td>
+<td><strong>kept</strong> — predictor-only quantities, independent of the response and the constant</td>
+</tr>
+<tr>
+<td>Durbin–Watson, Residuals Statistics</td>
+<td>on the residuals</td>
+<td>unchanged</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>n</code> is the sum of the case weights throughout, as in the intercept model.</p>
+<p><strong>The sibling paths, decided per path:</strong></p>
+<ul>
+<li><strong>Robust (HC0/HC1/HC3) standard errors</strong> — allowed, unchanged formulas
+over the no-constant design (<code>HC1</code>'s <code>N/(N − p)</code> uses <code>p = k</code>; <code>HC3</code>'s
+leverage is the no-constant hat diagonal).</li>
+<li><strong>Stepwise entry</strong> (forward/backward) — allowed; the selection oracle fits
+each candidate model through the origin too, so the p-values it ranks by
+are the ones the final table prints.</li>
+<li><strong>Casewise diagnostics, diagnostic plots, saved columns</strong> — allowed;
+leverage and Cook's distance come from the no-constant hat matrix with
+<code>p = k</code>.</li>
+<li><strong>Survey design</strong> — refused &quot;(v1)&quot; as errors-as-data, like <code>casewise</code>,
+<code>diagnostics</code> and <code>save</code> under a design (the design-based fit keeps its
+constant).</li>
+<li><strong>Journal</strong> — <code>command_for_request</code> emits <code>intercept: false</code> only when the
+option is off, so every existing <code>.cks</code> script and every default run stays
+byte-identical; the dispatcher passes the option to the engine only when
+false.</li>
+</ul>
+<p><strong>References.</strong> NIST StRD NoInt1 (n = 11) and NoInt2 (n = 3), both
+<em>average</em> difficulty, certify <code>B1</code>, its standard deviation, the residual
+standard deviation, R² and the ANOVA table with F — all in exactly the
+uncentred form above (NoInt1's certified R² = 0.999365… is
+<code>SSR/(SSR + SSE)</code> = 200457.73/(200457.73 + 127.27); a centred R² on the same
+data would be 1.0). statsmodels <code>OLS(bp, [age, chol, bmi]).fit()</code> on
+<code>clinic.csv</code> pins R², adjusted R², F and its p, and the <code>age</code> coefficient and
+SE against the cross-package suite; R's <code>lm(y ~ . - 1)</code> prints the same
+definitions (<code>summary.lm</code> computes <code>r.squared</code> with <code>df.int = 0</code>).</p>
+<h2 id="linear-least-squares-by-qr--the-0210-conventions">Linear least squares by QR — the 0.21.0 conventions</h2>
+<p><em>Recorded 2026-08-21 for <code>docs/releases/release_0.21.0.md</code> item 14, raised
+from the StRD coverage work: the <code>regression_linear</code> solver moved from the
+normal equations to Householder QR, and the output gained a conditioning
+note. No statistic changed definition — the pins are the existing linear
+StRD datasets (Filip joining them) and the <code>reg_linear/*</code> cross-package set,
+all unchanged except that Filip now passes.</em></p>
+<p><strong>The solver.</strong> <code>wls_qr</code> forms <code>A = √W·X</code> (the design row with or without
+the constant), <strong>equilibrates</strong> its columns to unit norm, reduces it by
+Householder reflections to <code>R</code>, and back-substitutes <code>R β = Qᵀ√W·y</code>; the
+covariance bread is <code>(XᵀWX)⁻¹ = D⁻¹ R⁻¹R⁻ᵀ D⁻¹</code> (<code>D</code> the column norms).
+Equilibration leaves the solution unchanged and makes the two checks below
+unit-free. Every downstream statistic reads <code>β</code> and the bread exactly as it
+read the inverted <code>XᵀWX</code> — model-based SEs, HC0/1/3 sandwiches, leverage,
+Cook's distance, the stepwise oracle's p-values, the survey-design Taylor
+sandwich — so there is one linear solver, not two.</p>
+<p><strong>Dependence.</strong> A column whose |R_kk| (on unit-norm columns) falls below
+<strong>1e-13</strong> is declared linearly dependent on those before it and the fit is
+refused with the existing &quot;predictors are collinear&quot; error-as-data — exact
+dependence leaves |R_kk| at rounding level (1e-16 … 1e-14), while NIST's
+Filip, the worst-conditioned design the engine is certified on, stays well
+above (its κ bound is 1.9 × 10⁷). <code>n &lt; p</code> and an identically zero column
+are refused the same way.</p>
+<p><strong>The conditioning note</strong> (the gate-1 surface the Filip record asked for).
+The solver reports a <strong>lower bound on κ₂</strong> of the equilibrated design — the
+ratio of the largest to the smallest |R_kk|, which never overstates the
+conditioning and is exact for an orthogonal design. At or beyond
+<strong>1e8</strong> the Model Summary note adds: <em>&quot;The design is ill-conditioned
+(condition number at least κ; from the QR of the unit-scaled predictors): the
+coefficients carry correspondingly fewer reliable digits — consider centring
+or rescaling the predictors.&quot;</em> The threshold is the point where double
+precision leaves at most ~8 of its 16 digits in the coefficients. It is an
+<strong>accuracy</strong> note, not a collinearity diagnostic — Tolerance/VIF remain the
+statistical ones — and it is deliberately phrased as a bound (&quot;at least&quot;).
+Pinned by an <code>ffi.rs</code> test (present on degree-9 raw powers over [1, 1.2],
+absent on a plain predictor, exact dependence still refused).</p>
 <h2 id="tolerances-and-recorded-conventions">Tolerances and recorded conventions</h2>
 <p>Most statistics agree to <code>1e-4</code>–<code>1e-6</code>. A looser tolerance always names a
 <em>reason</em> in the reference's <code>source</code> string. Where a statistic has more than one
@@ -2258,6 +3384,36 @@ a saturated (df = 0) model reports CFI = TLI = 1 and no χ² p-value by
 convention. (5) The RMSEA CI is <strong>90%</strong> by convention (not the analysis
 CI level), from inverting the noncentral χ². The sample covariance uses
 divisor N (weighted: Σw), matching the estimates the references produce.</p>
+</li>
+<li>
+<p><strong>CFA modification indices</strong> — the 1-df score test of each fixed
+parameter from the expected information (divisor N), lavaan's <code>epc</code> and
+<code>sepc.all</code>; non-identified candidates skipped (lavaan's <code>NA</code> rows);
+listing floor 3.84 by default. Pinned against <code>lavaan::modindices()</code> on
+Holzinger–Swineford, correlated and orthogonal — see
+<a href="#cfa-follow-ups--the-0210-conventions">CFA follow-ups</a>.</p>
+</li>
+<li>
+<p><strong>Johnson–Neyman regions</strong> — the roots of <code>|β₁ + β₃w| = t_crit·SE(w)</code>
+(t on the residual df at the interval's α), reported inside the observed
+moderator range with the significant side read from the quadratic's sign;
+pinned against <code>interactions::johnson_neyman</code> — see
+<a href="#mediation-follow-ups--the-0210-conventions">Mediation follow-ups</a>.</p>
+</li>
+<li>
+<p><strong>Three-way moderated mediation</strong> — Z joins W in the moderated model(s)
+with every product (PROCESS models 11 / 18), the Z-outer × W-inner probe
+grid, the index of moderated moderated mediation <code>a7·b</code> / <code>a·b7</code> and the
+conditional index <code>(a3 + a7z)·b</code> / <code>a·(b3 + b7z)</code> (Hayes 2018); pinned
+against <code>lm</code>/<code>vcov</code> — see
+<a href="#mediation-follow-ups--the-0210-conventions">Mediation follow-ups</a>.</p>
+</li>
+<li>
+<p><strong>Serial mediation</strong> — two mediators in causal order (PROCESS model 6):
+<code>M₂ ~ X + M₁</code> for <code>d₂₁</code>, the specific indirects <code>a₁b₁</code>, <code>a₂b₂</code>, <code>a₁d₂₁b₂</code>
+and <code>c = c′ + Σ</code> exactly; one moderator on the a- or b-paths with <code>d₂₁</code>
+unmoderated and a per-effect index; pinned against <code>lm</code> — see
+<a href="#mediation-follow-ups--the-0210-conventions">Mediation follow-ups</a>.</p>
 </li>
 <li>
 <p><strong>Meta-analysis</strong> — three recorded conventions. (1) The between-study
@@ -2618,7 +3774,7 @@ dart run tool/cstool.dart test test/numerical_validation_test.dart
 header (<code>_versions</code>) — at the time of writing SciPy 1.18, statsmodels 0.14,
 scikit-learn 1.9, lifelines 0.30, pingouin 0.6, NumPy 2.5.</p>
 <p>The <strong>survey-design</strong>, <strong>TOST</strong>, <strong>Bland–Altman</strong>, <strong>LCA</strong>, <strong>IRT</strong>,
-<strong>LOESS</strong> and <strong>permutation</strong> references have their own toolchain — R with the <code>survey</code> package (the
+<strong>LOESS</strong>, <strong>permutation</strong>, <strong>CFA follow-up</strong> and <strong>mediation follow-up</strong> references have their own toolchain — R with the <code>survey</code> package (the
 canonical reference implementation for Taylor-linearized design-based
 estimation; none of the pinned Python packages implements it), the
 <code>TOSTER</code> package (the reference for equivalence testing), the <code>blandr</code> +
@@ -2631,17 +3787,20 @@ IRT; they ship the LSAT6/LSAT7 data), the <code>coin</code> + <code>perm</code> 
 references for permutation tests, with hand enumeration in R where
 <code>coin</code>'s exact algorithms do not reach), and — for the LOESS smoother —
 base R alone (<code>stats::loess</code> is the reference; the <code>cars</code> fixture is a
-base-R dataset). Like the Python values, CI only
-reads the committed JSON:</p>
+base-R dataset), and — for the CFA follow-ups — <code>lavaan</code> (the reference
+SEM package; it ships the Holzinger–Swineford data the fixture is written
+from), and — for the mediation follow-ups — base R <code>lm</code> plus the
+<code>interactions</code> package (the Johnson–Neyman reference). Like the Python
+values, CI only reads the committed JSON:</p>
 <pre><code class="language-sh"># any R ≥ 4 with survey ≥ 4.4, TOSTER ≥ 0.8, blandr ≥ 0.6,
 # BlandAltmanLeh ≥ 0.3, poLCA ≥ 1.6, ltm ≥ 1.2, mirt ≥ 1.4,
 # coin ≥ 1.4 and perm ≥ 1.0; a user-space conda-forge R works:
 #   micromamba create -p ~/micromamba/envs/r-survey -c conda-forge \
-#     r-base r-survey r-toster r-polca r-coin \
+#     r-base r-survey r-toster r-polca r-coin r-lavaan \
 #     c-compiler cxx-compiler gfortran make
 #   # CRAN source builds need the env's bin on PATH for its compilers:
 #   PATH=~/micromamba/envs/r-survey/bin:$PATH Rscript -e \
-#     'install.packages(c(&quot;blandr&quot;,&quot;BlandAltmanLeh&quot;,&quot;ltm&quot;,&quot;mirt&quot;,&quot;perm&quot;),
+#     'install.packages(c(&quot;blandr&quot;,&quot;BlandAltmanLeh&quot;,&quot;ltm&quot;,&quot;mirt&quot;,&quot;perm&quot;,&quot;interactions&quot;),
 #      repos=&quot;https://cloud.r-project.org&quot;)'
 Rscript tool/validation/generate_survey_references.R
 Rscript tool/validation/generate_tost_references.R
@@ -2650,10 +3809,14 @@ Rscript tool/validation/generate_lca_references.R
 Rscript tool/validation/generate_irt_references.R
 Rscript tool/validation/generate_loess_references.R
 Rscript tool/validation/generate_permutation_references.R
+Rscript tool/validation/generate_cfa_followups_references.R
+Rscript tool/validation/generate_mediation_followups_references.R
 dart run tool/cstool.dart test test/survey_validation_test.dart \
   test/tost_validation_test.dart test/bland_altman_validation_test.dart \
   test/lca_validation_test.dart test/irt_validation_test.dart \
-  test/loess_validation_test.dart test/permutation_validation_test.dart
+  test/loess_validation_test.dart test/permutation_validation_test.dart \
+  test/cfa_followups_validation_test.dart \
+  test/mediation_followups_validation_test.dart
 </code></pre>
 <p>The R and package versions used for the committed values are recorded in each
 JSON header (<code>_versions</code>).</p>

@@ -112,6 +112,15 @@ swatch strip under the dropdown shows the palette as it will actually paint.
 See <a href="../graphs/#choosing-a-palette">Graphs → Choosing a palette</a>.</li>
 <li><strong>Output chart width</strong> — how wide charts are drawn in the Output log.</li>
 </ul>
+<h2 id="files">Files</h2>
+<ul>
+<li><strong>Protect CSV exports from formulas</strong> — on by default. When you export to
+CSV/TSV, any text cell that starts with <code>=</code>, <code>+</code>, <code>-</code>, <code>@</code>, a tab or a
+carriage return and is not a number is written with a leading apostrophe
+(<code>'</code>), which spreadsheets read as &quot;text&quot; and hide — so a value that arrived
+in your data can never run as a formula in someone's Excel or Calc. Numbers
+such as <code>-5</code> are never touched. Turn it off for a byte-faithful export.</li>
+</ul>
 <h2 id="connectivity">Connectivity</h2>
 <p>A connectivity check used to confirm the app can reach the network (relevant to
 the AI assistant when using a hosted backend). A local Ollama backend needs no
@@ -131,8 +140,11 @@ choice is persisted; <strong>your API key is never stored</strong>.</li>
 or <code>ChakataStat_OLLAMA=1</code>), each marked set or unset — so you can confirm you
 used the name the app reads.</li>
 <li><strong>Overrides</strong> — model id, temperature, maximum response tokens, base URL,
-custom headers, the tool-round cap, a system-prompt override, and a read-only
-toggle.</li>
+custom headers, the tool-round cap, a system-prompt override, and the
+read-only toggle (<strong>on by default</strong>; the same switch sits in the assistant
+panel's header). The base URL and custom headers are stored <strong>in plain
+text</strong> in your session file — keep API keys in their environment variable,
+never in a header.</li>
 <li><strong>Custom context</strong> — a free-text note about your data and goals, sent with each
 request so the assistant interprets your dataset correctly.</li>
 </ul>
@@ -145,7 +157,8 @@ your data; it only exposes the developer-facing tools.</li>
 <h2 id="where-settings-live">Where settings live</h2>
 <p>Settings are part of your persisted session, alongside the window layout, the
 recent-files list, the AI conversation and the syntax script. No API keys are
-ever written to disk.</p>
+ever written to disk — but the assistant's custom base URL and headers are, in
+plain text, so never put a key in a header.</p>
       </article>
     </div>
   </main>

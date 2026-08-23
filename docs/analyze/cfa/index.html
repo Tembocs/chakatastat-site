@@ -115,6 +115,28 @@ indicator first per factor.</li>
 <li><strong>Orthogonal factors</strong> (visible with two or more factors) forces the
 factor correlations to zero. Leave it off in most applications — real
 constructs correlate, and the correlated model reports how much.</li>
+<li><strong>Modification indices</strong> adds a table of what would most improve the
+fit (below). The field beneath it sets the listing floor — by default
+<strong>3.84</strong>, the χ² value with 1 df at the 5% level, so only indices that
+would be &quot;significant&quot; if freed are listed; enter 0 to see every
+candidate.</li>
+<li><strong>Indicators: Continuous (ML) / Ordinal (WLSMV)</strong> chooses the
+estimator. Leave <em>Continuous</em> for measured scales; choose <strong>Ordinal</strong> for
+Likert-type items (integer-coded, each distinct value an ordered
+category, a dozen at most) — see <em>Ordinal indicators</em> below. The ordinal
+estimator is single-group and has no modification indices, so those
+controls step aside while it is selected.</li>
+<li><strong>Group</strong> turns the run into a <strong>multi-group CFA</strong>: the same model is
+fitted in every group of the chosen variable (each distinct value is a
+group, in ascending order) with a mean structure, and <strong>measurement
+invariance</strong> is tested up the classic ladder. <strong>Invariance</strong> picks the
+highest level to fit — configural (same pattern, everything free), metric
+(equal loadings), scalar (equal loadings <em>and</em> intercepts; the default)
+or strict (equal residual variances too). Every level up to the chosen
+one is fitted and compared; the parameter tables then show the chosen
+level, group by group. Every group needs more complete cases than
+indicators. Modification indices are not offered for a multi-group
+model.</li>
 </ul>
 <h2 id="reading-the-output">Reading the output</h2>
 <ul>
@@ -141,7 +163,97 @@ factor.</li>
 warning: two &quot;factors&quot; may really be one.</li>
 <li><strong>CFA Variances</strong> — the factor variances and each indicator's residual
 (unique) variance, with standard errors.</li>
+<li><strong>CFA Modification Indices</strong> (on request) — one row per <em>fixed</em>
+parameter that could be freed: a <strong>cross-loading</strong> (<code>visual → x9</code>: an
+indicator on a factor it does not belong to), a <strong>residual covariance</strong>
+(<code>x7 ↔ x8</code>: two indicators sharing something beyond their factors) or,
+with orthogonal factors, a <strong>factor covariance</strong>. <strong>MI</strong> is the expected
+drop in the model χ² (1 df) from freeing that one parameter — the
+larger, the more that restriction is costing the fit — with its
+significance; <strong>EPC</strong> is the value the parameter is expected to take if
+freed, and <strong>Std. EPC</strong> the same in standardized units (a standardized
+loading, a residual correlation or a factor correlation), which tells
+you whether the change would be <em>substantively</em> large, not just
+significant. Rows are sorted largest first and cut at the floor you
+set; within-factor residual covariances of an orthogonal model are not
+listed because freeing them would not be identified. <strong>Read them as
+hints, not instructions</strong>: the indices are computed one at a time from
+the current model, they capitalize on chance in your sample, and a
+cross-loading or correlated residual should only be freed when it makes
+theoretical sense (two items with near-identical wording, say). A model
+respecified from its modification indices is exploratory — confirm it on
+new data.</li>
 </ul>
+<h2 id="multi-group-models-and-measurement-invariance">Multi-group models and measurement invariance</h2>
+<p>Before comparing factor means or loadings between groups — two schools,
+two countries, men and women — you have to show that the instrument
+<strong>measures the same thing the same way</strong> in each group; otherwise a
+difference in means may be a difference in what the items mean. The
+multi-group run answers this with the nested sequence of models in
+<strong>CFA Invariance Tests</strong>, one row each:</p>
+<ul>
+<li><strong>Configural</strong> — the same pattern of loadings in every group, all
+parameters free. If this already fits poorly, the groups do not share a
+structure and the ladder stops here.</li>
+<li><strong>Metric</strong> (+ equal loadings) — the factors are measured on the same
+scale in each group. Required before comparing relationships (factor
+correlations, regressions) across groups.</li>
+<li><strong>Scalar</strong> (+ equal intercepts) — the items have the same origin too,
+so <strong>latent means can be compared</strong>. The first group (lowest value) is
+the reference with means fixed at 0; the <strong>CFA Latent Means</strong> table gives
+the other groups' means relative to it, with standard errors and tests.</li>
+<li><strong>Strict</strong> (+ equal residual variances) — the items are equally precise
+in each group; rarely required in practice, reported for completeness.</li>
+</ul>
+<p>Each row carries the full fit block and, from the second row on, the
+<strong>Δ columns</strong> against the model one step up: the <strong>Δχ²</strong> test of the added
+constraints (a significant value says the constraint hurts) and <strong>ΔCFI</strong>
+and <strong>ΔRMSEA</strong>. The common rule of thumb — a CFI drop of more than about
+<strong>.01</strong> signals that invariance fails at that level — is guidance, not a
+law; χ² is sample-size sensitive, so read the two together. If invariance
+fails at a level, the honest report is the last level that held (and the
+comparisons it licenses), or a <em>partial</em> invariance model freeing the
+offending item — which is outside this dialog's scope.</p>
+<p>The parameter tables (<strong>Loadings</strong>, <strong>Factor Correlations</strong>, <strong>Variances</strong>,
+<strong>Intercepts</strong> and, from scalar on, <strong>Latent Means</strong>) show the chosen level
+<strong>per group</strong>; a parameter constrained equal shows the same estimate and
+standard error in every group, and the standardized loadings are
+standardized within each group. Factor variances and covariances are
+always free per group. The multi-group fit measures follow lavaan's
+definitions (RMSEA and its CI scaled for the number of groups; SRMR the
+size-weighted average over groups with mean residuals included), so they
+read the same way as lavaan's.</p>
+<h2 id="ordinal-indicators-wlsmv">Ordinal indicators (WLSMV)</h2>
+<p>Likert items are not continuous: a 1–5 response is a coarsened slice of an
+underlying continuous agreement, and fitting the ML model to the items'
+ordinary covariances pulls the loadings toward zero and distorts the fit.
+<strong>Ordinal (WLSMV)</strong> — lavaan's and Mplus's default for ordered items —
+fits the model to the items' <strong>polychoric correlations</strong> instead:</p>
+<ul>
+<li><strong>Thresholds</strong> — each item's cut points on its underlying standard-normal
+response, estimated from the cumulative proportions in each category
+(<strong>CFA Thresholds</strong>: <code>t1 (1 | 2)</code> separates category 1 from 2, and so
+on), with standard errors.</li>
+<li><strong>Polychoric correlations</strong> — the correlations the underlying continuous
+responses would have (<strong>CFA Polychoric Correlations</strong>, the matrix the
+model was fitted to).</li>
+<li><strong>Estimation</strong> — diagonally weighted least squares on that correlation
+structure; the <strong>loadings</strong> are on the underlying responses (each with
+unit variance, so the standardized loading is the loading times the
+factor's standard deviation), with <strong>robust standard errors</strong>; the
+<strong>residual variances</strong> are implied (1 minus the item's communality) and
+carry no standard error.</li>
+<li><strong>Fit</strong> — the <strong>Model Fit</strong> row shows the <em>mean-and-variance-adjusted</em>
+(scaled-shifted) χ², the statistic whose p-value is trustworthy under
+this estimator, and the CFI, TLI and RMSEA computed from it — lavaan's
+&quot;scaled&quot; column — plus SRMR. The note records the unscaled statistic and
+the scaling constants, so the result can be matched against other
+software line by line. The usual cut-offs are read the same way as for
+ML, with the usual caveats.</li>
+</ul>
+<p>Every indicator is treated as ordinal under this estimator; mixed models
+(some continuous items) are not offered. Very many categories (more than
+twelve) are refused with advice to use ML.</p>
 <h2 id="when-something-is-wrong-it-says-so">When something is wrong, it says so</h2>
 <p>CFA is an iterative estimation, and this dialog treats its failure modes
 as information, never as silent numbers:</p>
@@ -163,15 +275,20 @@ are withheld rather than printed as nonsense.</li>
 <p>A run journals a compact syntax command, e.g.:</p>
 <pre><code>cfa model=&quot;Verbal: v1 v2 v3; Speed: v4 v5 v6&quot;
 </code></pre>
-<p>with <code>orthogonal=true</code> recorded when set — re-running reproduces the same
-tables. The same tool is available to the AI assistant, MCP and batch
-scripts.</p>
-<p><em>Scope (v1):</em> single-group models with continuous indicators, maximum
-likelihood only, simple structure (one factor per indicator). Ordinal
-(WLSMV) estimation, multi-group invariance testing, modification indices
-and regression paths between factors (SEM territory) are recorded
-follow-ups, not implied promises. Validated against reference
-implementations on the classic Holzinger–Swineford example — see the
+<p>with <code>orthogonal=true</code> recorded when set, <code>modification_indices=true</code>
+(plus <code>mi_minimum=…</code> when the floor was changed from 3.84) when the table
+was requested, <code>group=site</code> (plus <code>invariance=metric</code> or another level
+when changed from the scalar default) for a multi-group run, and
+<code>estimator=wlsmv</code> for ordinal indicators — re-running reproduces the same
+tables. The same tool is available to the AI
+assistant, MCP and batch scripts.</p>
+<p><em>Scope:</em> simple structure (one factor per indicator); continuous
+indicators by maximum likelihood — single-group with modification indices
+on request, or multi-group with invariance testing up to strict — or
+ordinal indicators by WLSMV (single-group). Mixed continuous/ordinal
+models, multi-group WLSMV, partial invariance and regression paths between
+factors (SEM territory) stay out. Validated against lavaan on the classic
+Holzinger–Swineford example — continuous, multi-group and ordinal — see the
 <a href="../../validation/">validation suite</a>.</p>
       </article>
     </div>
