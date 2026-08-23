@@ -91,7 +91,7 @@
           ChakataStat is archived on
           <a href="https://zenodo.org/records/22043444">Zenodo</a>, which
           gives it two kinds of DOI. Which one you want depends on what you
-          are pointing at: the software, or the exact build that produced
+          are pointing at: the software, or the exact release that produced
           your numbers.
         </p>
 
@@ -113,10 +113,10 @@
           Use a <strong>version DOI</strong> when the result has to be
           reproducible — a paper reporting statistics ChakataStat
           computed, a pre-registration, a submitted analysis script. It
-          pins one release and one archived record, so a reader can obtain
-          the same build you used. ChakataStat prints its version under
-          <strong>Help → About</strong> and at the foot of every output
-          document.
+          pins one release and one archived record, so a reader can identify
+          the exact release you used and reach its archived materials.
+          ChakataStat prints its version under <strong>Help → About</strong>
+          and at the foot of every output document.
         </p>
         <p class="cite-block">
           Amani, E. (2026). <em>ChakataStat</em> (Version 0.21.0) [Computer
@@ -149,7 +149,10 @@
           those with the concept DOI and the version number. Each version
           record archives the release's Linux installer, its
           <code>SHA256SUMS.txt</code> checksums and the license — not
-          the source, which is not public.
+          the source, which is not public. A version DOI therefore identifies
+          the <em>release</em>: a reader who ran the Windows or Snap build of
+          0.21.0 cites the same DOI, and obtains that release from its own
+          official channel.
         </p>
 
         <h2>BibTeX</h2>
