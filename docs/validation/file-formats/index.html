@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Statistics-package file formats — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/validation/file-formats/">
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Statistics-package file formats — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/validation/file-formats/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../index.html">
+        <img class="brand-mark" src="../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <!-- One link, not a copy of the site menu. While someone is reading the
+           guide, the sidebar is the navigation that matters; marketing anchors
+           (Features, Screenshots, …) only compete with it and push the reader
+           out of what they came for. All that is owed is a way back. Single
+           link means no mobile collapse either, so there is no hamburger on
+           these pages — main.js guards for its absence. -->
+      <nav id="nav-links" class="nav-links nav-links--single">
+        <a href="../../../index.html">← Back to chakatastat.app</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">Numerical-validation suite</p>
+        <ul>
+        <li><a href="../">Overview</a></li>
+        <li><a href="../nist/">NIST StRD certified datasets</a></li>
+        <li><a href="./" aria-current="page">Statistics-package file formats</a></li>
+        <li><a href="../tolerances/">Tolerances and recorded conventions</a></li>
+        <li class="docs-nav-section">The recorded conventions</li>
+        <li><a href="../conventions/regression/">Regression conventions</a></li>
+        <li><a href="../conventions/latent-variable/">Latent-variable conventions</a></li>
+        <li><a href="../conventions/clinical-and-survey/">Clinical and survey conventions</a></li>
+        <li><a href="../conventions/resampling-and-time-series/">Resampling and time-series conventions</a></li>
+        <li class="docs-nav-section">Maintaining the suite</li>
+        <li><a href="../regenerating/">Regenerating the reference values</a></li>
+        <li class="docs-nav-section">User Guide</li>
+        <li><a href="../../">Contents</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="statistics-package-file-formats">Statistics-package file formats</h1>
+<blockquote>
+<p>Part of the <a href="../">numerical-validation suite</a>. How the SPSS, Stata and SAS readers are proven against the packages that wrote the files.</p>
+</blockquote>
+<p><em>Added 2026-08-06 (release 0.14.0 item 2); the <code>.sas7bdat</code> leg 2026-08-21
+(0.21.0 item 7). Not a numerical gate — no statistic is computed here — but
+the same discipline applied to a different kind of correctness: does a
+<code>.sav</code>, <code>.dta</code>, <code>.xpt</code> or <code>.sas7bdat</code> arrive as the file actually says?</em></p>
+<p>The readers (<code>rust/src/foreign.rs</code>) are
+<code>ambers</code> (SPSS), <code>dta</code> (Stata), <code>sas_xport</code> (SAS transport) and <code>sas7bdat</code>
+(SAS data files and <code>.sas7bcat</code> catalogs) — young, single-author, pure-Rust
+crates. That is a deliberate trade against vendoring the mature ReadStat C
+library, and the evidence below is what makes it defensible.</p>
+<p><strong>The corpus rule (standing policy, restated 0.21.0 item 8a).</strong> A
+real-world foreign file that misbehaves in one of these readers <strong>lands in
+<code>test/fixtures/foreign/corpus/</code> with
+its fix</strong>, and <code>expected.json</code> is regenerated
+(<code>generate_foreign_corpus.py</code>),
+so every field quirk becomes a permanent per-cell differential test. Fix the
+reader, grow the corpus, one commit. The rule is also at the top of
+<code>foreign.rs</code> (where the fixer is) and in the corpus README (where the files
+are). Growth so far: the first sweep (0.14.0, 11 files), the strL file
+(0.18.0), and the seven <code>.sas7bdat</code> files with two catalogs (0.21.0 item 7).</p>
+<p><strong>Two artifacts, the same shape as the numerical suite:</strong></p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Artifact</th>
+<th>Produced by</th>
+<th>Holds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test/fixtures/foreign/demo.{sav,dta,xpt}</code></td>
+<td><code>generate_foreign_fixtures.py</code></td>
+<td>small files <strong>written by pyreadstat</strong>, one of each metadata kind the <code>Variable</code> model carries</td>
+</tr>
+<tr>
+<td><code>test/fixtures/foreign/corpus/expected.json</code></td>
+<td><code>generate_foreign_corpus.py</code></td>
+<td>every cell and metadata item of 19 real-world files, as pyreadstat reads them (<code>.sas7bdat</code> value labels from the sibling <code>.sas7bcat</code> the reader would attach)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Both generators <strong>corroborate before committing</strong>: the fixture writer reads
+its own output back and asserts the writer stored what was intended, and the
+corpus generator refuses to write ground truth it cannot verify (see the
+<code>.xpt</code> note below). Fixtures are create-if-absent, so a regeneration cannot
+silently churn committed bytes.</p>
+<h2 id="why-pyreadstat-is-a-valid-oracle-here--and-was-not-going-to-be">Why pyreadstat is a valid oracle here — and was not going to be</h2>
+<p>This is the one piece of reasoning worth preserving, because it <strong>inverted</strong>
+when the implementation route changed:</p>
+<ul>
+<li><strong>Under the original plan</strong> (vendor ReadStat), pyreadstat, R's <code>haven</code> and
+<code>pandas.read_spss</code> would all have been <em>the same implementation as the thing
+under test</em> — they are ReadStat wrappers. Comparing against them would have
+proven only that the library was called correctly, and could not have caught
+a ReadStat bug. The plan therefore specified GNU <strong>PSPP</strong> and <strong>IBM's SPSS
+Statistics Data File Driver</strong> as the oracles carrying independent evidence.</li>
+<li><strong>Under the shipped route</strong> (pure-Rust readers), pyreadstat shares <em>no code</em>
+with the readers under test. It is now a genuinely independent second
+implementation, and every corpus row is the cross-implementation check the
+plan wanted PSPP for.</li>
+</ul>
+<p>So PSPP and the IBM driver are <strong>optional corroboration, not a gate</strong>. Standing
+them up would add a third opinion rather than the first independent one. What
+would change this: adopting a ReadStat-based reader after all, at which point
+the original argument returns in full and an independent oracle becomes
+mandatory again.</p>
+<p><code>.xpt</code> and <code>.sas7bdat</code> go one step further. Their corpus entries are
+cross-checked against <strong><code>pandas.read_sas</code></strong> — a native Python implementation
+independent of both ReadStat and our reader — and the generator <em>fails</em>
+rather than writing ground truth the two oracles disagree on.
+<code>pandas.read_sas</code> does not interpret SAS display formats for <code>.xpt</code>, and for
+<code>.sas7bdat</code> interprets a <em>different</em> set of them than ReadStat (it turns the
+partial-date formats into dates too), so any column either oracle rendered
+temporally is excluded from that check and pinned against our own reader
+instead.</p>
+<p><strong><code>.sas7bdat</code> has no open-source writer</strong> (pyreadstat, pandas and haven all
+read it only), so there is no pyreadstat-written <code>demo.sas7bdat</code>: the Rust
+unit tests (<code>ffi.rs</code>) pin the committed corpus files directly, and the
+stress slot reads one committed real file unscaled (recorded in its report
+as such). The <code>.sas7bdat</code> conventions, decided before the pins were written:</p>
+<ul>
+<li><strong>One SAS table for both SAS readers.</strong> <code>.sas7bdat</code> renders dates,
+datetimes and times through the same format-stem table as <code>.xpt</code>
+(<code>sas_render</code> in <code>foreign.rs</code>), <em>not</em> the crate's own classification —
+the crate would type the partial-date families (<code>MMYY</code>, <code>YEAR</code>, <code>MONYY</code>,
+…) as dates, where pyreadstat (and the <code>.xpt</code> leg) leave them as the
+stored number with a warning. The reader overrides every numeric column
+to &quot;stored number&quot; and renders itself, so one value renders identically
+from either file.</li>
+<li><strong>Fractional seconds truncate toward the earlier second</strong> (<code>sas_whole</code>):
+02:16:02.88 is in second 02:16:02, which is how pyreadstat renders it;
+a value within 1e-6 of a whole number snaps to it first (XPORT's IBM
+hexadecimal floats can land a hair off). Shared by both SAS readers.</li>
+<li><strong>Every SAS missing is blank</strong> — <code>.</code> and the tagged <code>.A</code>–<code>.Z</code>, <code>._</code> —
+matching pyreadstat's default read; a catalog label attached to a tagged
+missing is not carried and is named in a warning.</li>
+<li><strong>Value labels come only from a catalog beside the file</strong>:
+<code>name.sas7bcat</code> first, else <code>formats.sas7bcat</code> (SAS's default library
+catalog name, what a folder exported whole from SAS contains). A column
+gains labels when its format names one of the catalog's label sets, keys
+rendered as the cells render. A user-defined format with no label set is
+named in a warning — with the file name to place when there is no catalog,
+or the catalog that does not define it when there is. A catalog that
+fails to parse is a warning, not a failed import.</li>
+</ul>
+<h2 id="recorded-divergences">Recorded divergences</h2>
+<p>Where our reader and pyreadstat legitimately disagree, the app's behaviour is
+<strong>pinned</strong> in <code>test/foreign_corpus_test.dart</code>
+with its reason, exactly as a convention choice is recorded above — never
+loosened away:</p>
+<ul>
+<li><strong>Truncated multibyte strings</strong> (<code>tegulu.sav</code>): the file's Telugu text is cut
+mid-codepoint at the SPSS string width. pyreadstat drops the partial
+character; we surface U+FFFD. Neither invents data; ours shows something was
+cut.</li>
+<li><strong>SPSS QYR/MOYR/WKYR display formats</strong> (<code>simple_alltypes.sav</code>): pyreadstat
+leaves raw epoch seconds, we render real dates. Ours is the more useful
+behaviour, so it is kept and asserted date-<em>shaped</em> rather than exact-pinned
+(the exact rendering is upstream-formatting territory).</li>
+</ul>
+<h2 id="known-limits-surfaced-not-silent">Known limits, surfaced not silent</h2>
+<p>Each of these is reported in the import's warnings — to stderr headless, to the
+import summary in the GUI — so a user never has to infer them
+(production_readness.md gate 1):</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Limit</th>
+<th>Format</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>User-missing <strong>ranges</strong> (<code>lo..hi</code>)</td>
+<td>SPSS</td>
+<td>No host equivalent; dropped with a warning naming the variable</td>
+</tr>
+<tr>
+<td><strong>strL</strong> long strings</td>
+<td>Stata</td>
+<td>Carried since 0.18.0 (the GSO table after the data records is read and every reference resolved — not a limit any more); the two residual cases are surfaced, not silent: a <strong>binary</strong> payload decodes as UTF-8 with replacement (warned, naming the variable) and a <strong>dangling</strong> reference imports blank (warned per cell)</td>
+</tr>
+<tr>
+<td>Week/month/quarter/half-year display formats</td>
+<td>Stata</td>
+<td>Import as the stored number, with a warning</td>
+</tr>
+<tr>
+<td>Partial-date formats (<code>MONYY</code>, <code>MMYY</code>, <code>YYQ</code>, <code>YEAR</code>, …)</td>
+<td>SAS (<code>.xpt</code>, <code>.sas7bdat</code>)</td>
+<td>Import as the stored number, with a warning</td>
+</tr>
+<tr>
+<td><strong>Value labels</strong></td>
+<td>SAS <code>.xpt</code></td>
+<td>Not in the file at all — SAS keeps them in a separate <code>.sas7bcat</code> catalog; a variable with a user-defined format is named in a warning</td>
+</tr>
+<tr>
+<td><strong>Value labels</strong></td>
+<td>SAS <code>.sas7bdat</code></td>
+<td>Carried from a <code>.sas7bcat</code> beside the file (<code>name.sas7bcat</code> or <code>formats.sas7bcat</code>); without one — or for a format the catalog lacks — the variable is named in a warning that says what to place where</td>
+</tr>
+<tr>
+<td>Labels for tagged missings (<code>.A</code>–<code>.Z</code>)</td>
+<td>SAS <code>.sas7bdat</code></td>
+<td>Not carried (the values import blank); named in a warning</td>
+</tr>
+<tr>
+<td>Second and later datasets in a container</td>
+<td>SAS <code>.xpt</code></td>
+<td>Only the first is imported; the rest are named in a warning</td>
+</tr>
+</tbody>
+</table></div>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../index.html">Home</a> ·
+        <a href="../../../quick-start/">Quick Start</a> ·
+        <a href="../../../privacy-policy/">Privacy Policy</a> ·
+        <a href="../../../license/">License</a> ·
+        <a href="../../../cite/">How to Cite</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../js/main.js"></script>
+</body>
+</html>

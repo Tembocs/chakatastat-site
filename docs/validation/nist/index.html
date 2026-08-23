@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NIST StRD certified datasets — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/validation/nist/">
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="NIST StRD certified datasets — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/validation/nist/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../index.html">
+        <img class="brand-mark" src="../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <!-- One link, not a copy of the site menu. While someone is reading the
+           guide, the sidebar is the navigation that matters; marketing anchors
+           (Features, Screenshots, …) only compete with it and push the reader
+           out of what they came for. All that is owed is a way back. Single
+           link means no mobile collapse either, so there is no hamburger on
+           these pages — main.js guards for its absence. -->
+      <nav id="nav-links" class="nav-links nav-links--single">
+        <a href="../../../index.html">← Back to chakatastat.app</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">Numerical-validation suite</p>
+        <ul>
+        <li><a href="../">Overview</a></li>
+        <li><a href="./" aria-current="page">NIST StRD certified datasets</a></li>
+        <li><a href="../file-formats/">Statistics-package file formats</a></li>
+        <li><a href="../tolerances/">Tolerances and recorded conventions</a></li>
+        <li class="docs-nav-section">The recorded conventions</li>
+        <li><a href="../conventions/regression/">Regression conventions</a></li>
+        <li><a href="../conventions/latent-variable/">Latent-variable conventions</a></li>
+        <li><a href="../conventions/clinical-and-survey/">Clinical and survey conventions</a></li>
+        <li><a href="../conventions/resampling-and-time-series/">Resampling and time-series conventions</a></li>
+        <li class="docs-nav-section">Maintaining the suite</li>
+        <li><a href="../regenerating/">Regenerating the reference values</a></li>
+        <li class="docs-nav-section">User Guide</li>
+        <li><a href="../../">Contents</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="nist-strd-certified-datasets">NIST StRD certified datasets</h1>
+<blockquote>
+<p>Part of the <a href="../">numerical-validation suite</a>. The certified-value leg: every dataset NIST publishes, scored by digits of agreement.</p>
+</blockquote>
+<p>The cross-package suite above proves the engine <strong>agrees with other trusted
+software</strong>. The StRD leg proves something stronger for the procedures it
+covers: agreement with values <strong>certified by a national metrology institute</strong>.
+The <a href="https://www.itl.nist.gov/div898/strd/">NIST Statistical Reference Datasets</a>
+(StRD) were published by the U.S. National Institute of Standards and
+Technology specifically so statistical software can demonstrate its numerical
+accuracy: each dataset carries <em>certified values</em> computed at NIST in
+high-precision arithmetic — to 15 significant digits (11 for the nonlinear
+suite) — with graded numerical difficulty, including deliberately ill-behaved
+cases (Longley's extreme collinearity, Filip's 10th-degree polynomial, the
+NumAcc cancellation series). They are public domain and are the standard
+benchmark in the software-accuracy literature.</p>
+<h2 id="how-it-works">How it works</h2>
+<ul>
+<li><strong>The files are committed verbatim</strong> under
+<code>test/validation/data/nist/</code> — byte for
+byte as published. Each <code>.dat</code> file carries both the data <em>and</em> the
+certified values in one ASCII document.</li>
+<li><strong>Both are parsed out of the same file</strong> by
+<code>test/validation/nist_strd.dart</code>, so
+no certified number is hand-transcribed anywhere: if a check disagrees with
+NIST it can only be the engine, never a copying error. (The one transcription
+is the nonlinear <em>model expressions</em> — structure, not numbers — rewritten
+from each file's <code>Model:</code> block into the NLS tool's grammar.)
+<code>test/nist_strd_parser_test.dart</code>
+guards the files' integrity and the parser, engine-free.</li>
+<li><strong><code>test/nist_strd_test.dart</code></strong> drives every
+dataset end to end through the real native engine (the same
+<code>NativeEngine.open()</code> path as the cross-package suite) and scores each
+statistic by the <strong>log relative error</strong> — LRE, the number of significant
+digits on which the engine and NIST agree
+(<code>LRE = −log₁₀(|engine − certified| / |certified|)</code>), the metric of
+McCullough, <em>&quot;Assessing the Reliability of Statistical Software&quot;</em>, The
+American Statistician 52/53 (1998/1999). Every statistic must meet a
+minimum-LRE floor keyed on the suite and on NIST's published difficulty
+grade; the suite prints the per-dataset achieved LREs, recorded below.</li>
+</ul>
+<h2 id="coverage">Coverage</h2>
+<p>All four StRD suites, <strong>all 58 of NIST's datasets</strong> (the per-dataset roster
+is below, guarded):</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Suite</th>
+<th>Datasets</th>
+<th>Engine path</th>
+<th>Statistics checked</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Univariate summary statistics</td>
+<td>all 9 (PiDigits … NumAcc4)</td>
+<td><code>explore</code>, <code>autocorrelation</code></td>
+<td>mean, s, lag-1 r</td>
+</tr>
+<tr>
+<td>One-way ANOVA</td>
+<td>all 11 (SiRstv, SmLs01–09, AtmWtAg)</td>
+<td><code>anova</code></td>
+<td>df (exact), SS, MS, F</td>
+</tr>
+<tr>
+<td>Linear least squares</td>
+<td>all 11 (Norris … Wampler5; NoInt1/NoInt2 through the origin, <code>intercept: false</code>)</td>
+<td><code>regression_linear</code></td>
+<td>every coefficient and its SE, R², residual SD, F</td>
+</tr>
+<tr>
+<td>Nonlinear least squares</td>
+<td>all 27, across all difficulty grades (Nelson on the loader's <code>ln(y)</code>)</td>
+<td><code>nonlinear_regression</code></td>
+<td>every parameter and its SE, residual SS, residual SD</td>
+</tr>
+</tbody>
+</table></div>
+<p>The polynomial linear datasets (Pontius, Filip, Wampler) publish only <code>y</code> and
+<code>x</code>; the higher powers their certified models include are synthesized as
+columns by the loader — and so is Nelson's response: its certified model is
+<code>log[y] = b1 − b2·x1·exp(−b3·x2)</code>, so the loader's <code>logResponse</code> flag fits
+the NLS tool to a synthesized <code>ln(y)</code> column (the decision block below).
+Nonlinear fits start from NIST's <strong>Start 2</strong>; Start-1 robustness is an
+optimizer property, not a numerical-correctness one.</p>
+<h2 id="coverage-roster-all-58">Coverage roster (all 58)</h2>
+<p>Every StRD dataset NIST publishes, suite by suite — covered ✅ with the engine
+path, or ❌ with the reason — so &quot;all 58&quot; can be checked at a glance rather
+than by counting files (and a future exclusion would have to say why, here). <strong>Guarded</strong>: an engine-free test in
+<code>nist_strd_parser_test.dart</code> parses
+this table and asserts that its ✅ set equals the committed files under
+<code>test/validation/data/nist/</code> <em>and</em> the per-suite lists in
+<code>nist_strd_test.dart</code>, that each ✅ row's
+suite and difficulty match the file's header, and that every ❌ row carries a
+reason — so the roster cannot drift from the suite. (Added 2026-08-21, 0.21.0
+item 11, with the ten nonlinear datasets that had been left unselected when
+the suite was built.)</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>Suite</th>
+<th>Difficulty</th>
+<th>Covered</th>
+<th>Engine path / reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PiDigits</td>
+<td>univariate</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>explore</code>, <code>autocorrelation</code></td>
+</tr>
+<tr>
+<td>Lottery</td>
+<td>univariate</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>explore</code>, <code>autocorrelation</code></td>
+</tr>
+<tr>
+<td>Lew</td>
+<td>univariate</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>explore</code>, <code>autocorrelation</code></td>
+</tr>
+<tr>
+<td>Mavro</td>
+<td>univariate</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>explore</code>, <code>autocorrelation</code></td>
+</tr>
+<tr>
+<td>Michelso</td>
+<td>univariate</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>explore</code>, <code>autocorrelation</code></td>
+</tr>
+<tr>
+<td>NumAcc1</td>
+<td>univariate</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>explore</code>, <code>autocorrelation</code></td>
+</tr>
+<tr>
+<td>NumAcc2</td>
+<td>univariate</td>
+<td>average</td>
+<td>✅</td>
+<td><code>explore</code>, <code>autocorrelation</code></td>
+</tr>
+<tr>
+<td>NumAcc3</td>
+<td>univariate</td>
+<td>average</td>
+<td>✅</td>
+<td><code>explore</code>, <code>autocorrelation</code></td>
+</tr>
+<tr>
+<td>NumAcc4</td>
+<td>univariate</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>explore</code>, <code>autocorrelation</code></td>
+</tr>
+<tr>
+<td>SiRstv</td>
+<td>anova</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>anova</code></td>
+</tr>
+<tr>
+<td>SmLs01</td>
+<td>anova</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>anova</code></td>
+</tr>
+<tr>
+<td>SmLs02</td>
+<td>anova</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>anova</code></td>
+</tr>
+<tr>
+<td>SmLs03</td>
+<td>anova</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>anova</code></td>
+</tr>
+<tr>
+<td>AtmWtAg</td>
+<td>anova</td>
+<td>average</td>
+<td>✅</td>
+<td><code>anova</code></td>
+</tr>
+<tr>
+<td>SmLs04</td>
+<td>anova</td>
+<td>average</td>
+<td>✅</td>
+<td><code>anova</code></td>
+</tr>
+<tr>
+<td>SmLs05</td>
+<td>anova</td>
+<td>average</td>
+<td>✅</td>
+<td><code>anova</code></td>
+</tr>
+<tr>
+<td>SmLs06</td>
+<td>anova</td>
+<td>average</td>
+<td>✅</td>
+<td><code>anova</code></td>
+</tr>
+<tr>
+<td>SmLs07</td>
+<td>anova</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>anova</code> (floor bounded by data representation)</td>
+</tr>
+<tr>
+<td>SmLs08</td>
+<td>anova</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>anova</code> (floor bounded by data representation)</td>
+</tr>
+<tr>
+<td>SmLs09</td>
+<td>anova</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>anova</code> (floor bounded by data representation)</td>
+</tr>
+<tr>
+<td>Norris</td>
+<td>linear</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>regression_linear</code></td>
+</tr>
+<tr>
+<td>Pontius</td>
+<td>linear</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>regression_linear</code> (powers synthesized)</td>
+</tr>
+<tr>
+<td>NoInt1</td>
+<td>linear</td>
+<td>average</td>
+<td>✅</td>
+<td><code>regression_linear</code>, <code>intercept: false</code> (0.21.0 item 12)</td>
+</tr>
+<tr>
+<td>NoInt2</td>
+<td>linear</td>
+<td>average</td>
+<td>✅</td>
+<td><code>regression_linear</code>, <code>intercept: false</code> (0.21.0 item 12)</td>
+</tr>
+<tr>
+<td>Filip</td>
+<td>linear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>regression_linear</code> (powers synthesized; the QR solver of 0.21.0 item 14 — a known limitation before it)</td>
+</tr>
+<tr>
+<td>Longley</td>
+<td>linear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>regression_linear</code></td>
+</tr>
+<tr>
+<td>Wampler1</td>
+<td>linear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>regression_linear</code> (powers synthesized; no finite F)</td>
+</tr>
+<tr>
+<td>Wampler2</td>
+<td>linear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>regression_linear</code> (powers synthesized; no finite F)</td>
+</tr>
+<tr>
+<td>Wampler3</td>
+<td>linear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>regression_linear</code> (powers synthesized; no finite F)</td>
+</tr>
+<tr>
+<td>Wampler4</td>
+<td>linear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>regression_linear</code> (powers synthesized; no finite F)</td>
+</tr>
+<tr>
+<td>Wampler5</td>
+<td>linear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>regression_linear</code> (powers synthesized; no finite F)</td>
+</tr>
+<tr>
+<td>Misra1a</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>Chwirut2</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>Chwirut1</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>Lanczos3</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>Gauss1</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>Gauss2</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code> (added 0.21.0 item 11)</td>
+</tr>
+<tr>
+<td>DanWood</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>Misra1b</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>Kirby2</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>Hahn1</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>Nelson</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code> on the loader's synthesized <code>ln(y)</code> (<code>logResponse</code>, 0.21.0 item 13)</td>
+</tr>
+<tr>
+<td>MGH17</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code> (added 0.21.0 item 11)</td>
+</tr>
+<tr>
+<td>Lanczos1</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code> (added 0.21.0 item 11) — scored, <strong>known limitation</strong> (problem-bounded SDs)</td>
+</tr>
+<tr>
+<td>Lanczos2</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code> (added 0.21.0 item 11)</td>
+</tr>
+<tr>
+<td>Gauss3</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code> (added 0.21.0 item 11)</td>
+</tr>
+<tr>
+<td>Misra1c</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code> (added 0.21.0 item 11)</td>
+</tr>
+<tr>
+<td>Misra1d</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code> (added 0.21.0 item 11)</td>
+</tr>
+<tr>
+<td>Roszman1</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>ENSO</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>MGH09</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>Thurber</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>BoxBOD</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>Rat42</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>MGH10</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code> (added 0.21.0 item 11 — the iteration-cap finding)</td>
+</tr>
+<tr>
+<td>Eckerle4</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code></td>
+</tr>
+<tr>
+<td>Rat43</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code> (added 0.21.0 item 11)</td>
+</tr>
+<tr>
+<td>Bennett5</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>✅</td>
+<td><code>nonlinear_regression</code> (added 0.21.0 item 11 — the iteration-cap finding)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Deliberate exclusions</strong> (the same standard as the list above — documented,
+not silent):</p>
+<ul>
+<li><strong>Wampler F statistics</strong> — the exact-fit Wampler datasets certify a zero
+residual sum of squares, so no finite F exists to compare; their
+coefficients, SEs, R² and residual SD are all still checked.</li>
+</ul>
+<p><em>(Two datasets were excluded here until 2026-08-21. <strong>NoInt1 / NoInt2</strong>
+certify regression <strong>through the origin</strong>, which the engine did not offer;
+the <code>intercept</code> option shipped as 0.21.0 item 12 and both now run under
+<code>intercept: false</code> — the conventions are in
+<a href="../conventions/regression/#regression-through-the-origin--the-0210-conventions">Regression through the origin</a>.
+<strong>Nelson</strong> certifies a fit to <code>log(y)</code>, a response transform the NLS tool does
+not apply; the decision, 0.21.0 item 13: <strong>harness-only</strong> — the StRD loader's
+<code>logResponse</code> flag synthesizes <code>ln(y)</code> exactly as it synthesizes the
+polynomial powers, and the dataset joined the suite under the
+average-difficulty floor (LRE 7.3). A product-side <code>response_transform</code>
+argument on <code>nonlinear_regression</code> is <strong>out of scope, not deferred</strong> — it
+would duplicate Compute Variable (<code>LN(y)</code>) for one case; the gap was in the
+harness, not the estimator.)</em></p>
+<h2 id="what-the-suite-found-and-fixed">What the suite found (and fixed)</h2>
+<p>Building the suite surfaced two numerical-hygiene defects and one genuine
+limitation (since fixed), and widening it to the full nonlinear suite
+(2026-08-21) a third defect and a second limitation — exactly the kind of
+discovery it exists for:</p>
+<ul>
+<li><strong>One-way ANOVA cancellation (fixed, 2026-07-02).</strong> The between-groups sum
+of squares was accumulated on the raw values; on data with many constant
+leading digits (SmLs07-09 are graded <em>higher difficulty</em> for exactly this)
+the group spread rounded away before the means were ever differenced,
+leaving <strong>0.5–2.7 digits</strong> of agreement. The fix in
+<code>rust/src/analyze/compare_means.rs</code>:
+the sums of squares are translation-invariant, so they are now accumulated
+about a data point (with Neumaier-compensated summation in <code>moments</code>),
+lifting SmLs07-09 to <strong>3.9–4.0</strong> — the double-precision ceiling for these
+files (see the floor note below) — and the average-difficulty tier from
+~6.5–8.5 to ~9.9–10.2. Pinned by the
+<code>one_way_anova_is_translation_invariant</code> Rust test in
+<code>rust/src/ffi.rs</code> (a 2³⁰ offset of exactly
+representable data must not change SS/MS/F).</li>
+<li><strong>NLS finite-difference step floor (fixed, 2026-07-02).</strong> The Jacobian's
+step had an absolute floor of <code>1e-6</code> — larger than some certified
+parameters themselves (Hahn1's b7 ≈ 1e-7) — so the optimizer steered on a
+meaningless derivative and stalled far from the minimum (Hahn1 <strong>0.7</strong>,
+Kirby2 <strong>4.5</strong>). The step in
+<code>rust/src/analyze/nonlinear.rs</code> is
+now relative to the parameter's own scale (floor only at exactly zero),
+lifting Hahn1 to <strong>8.0</strong> and Kirby2 to <strong>7.6</strong> and improving nearly every
+other fit.</li>
+<li><strong>Filip (known limitation 2026-07-02 → fixed 2026-08-21).</strong> The linear
+solver could not fit Filip's 10th-degree polynomial design: the condition
+number of the design is squared by the normal-equations path, and the
+returned coefficients were meaningless (LRE 0) — the classic result this
+dataset was designed to expose; historically several major packages failed
+it too. <strong>The fix (0.21.0 item 14):</strong> <code>regression_linear</code> now solves the
+weighted least-squares problem by <strong>Householder QR of the √W-scaled,
+column-equilibrated design</strong> (<code>wls_qr</code> in
+<code>rust/src/analyze/regression.rs</code>) —
+β by back-substitution on R, the covariance bread <code>(XᵀWX)⁻¹ = R⁻¹R⁻ᵀ</code>
+feeding the model-based SEs, the robust sandwich and the leverage exactly
+as before, so every downstream statistic moved to the new path at once
+(the plain fit, its through-origin variant, the stepwise oracle and the
+survey-design fit all go through it). Filip scores <strong>7.2</strong> (R's <code>lm</code>
+reaches the same class on this file), Longley moved 7.4 → <strong>11.3</strong>, and
+the exact-fit Wampler family 4.8–8.6 → <strong>6.1–12.7</strong>; the
+higher-difficulty linear floor rose from 4.5 to <strong>5.0</strong>. Nothing else
+moved beyond last-digit noise (Norris 13.3 → 12.2 and Pontius 10.8 → 12.2
+are rounding-level at 12+ digits; the cross-package <code>reg_linear/*</code> pins
+are unchanged). Pinned on the Rust side by a test that reads the
+committed <code>Filip.dat</code> verbatim (data and certified values) and asserts
+LRE ≥ 6 for every coefficient and SD, plus the solver's unit tests
+(closed-form weighted fit and bread, exact dependence refused, a degree-9
+design the normal equations get wrong by a factor ~100). The
+<strong>conditioning note</strong> the record asked for came along — see
+<a href="../conventions/regression/#linear-least-squares-by-qr--the-0210-conventions">Linear least squares by QR</a>.</li>
+<li><strong>NLS iteration cap (fixed, 2026-08-21).</strong> Adding the ten unselected
+nonlinear datasets (0.21.0 item 11) found <strong>MGH10</strong> and <strong>Bennett5</strong>
+(both <em>higher</em> difficulty) stalling unconverged at the Levenberg–Marquardt
+cap of <strong>200</strong> iterations — MGH10 at SSE ≈ 8600 against the certified
+87.9 (LRE 0), Bennett5 at LRE 1.6. From NIST's Start 2 they need ~440 and
+~450 iterations (Bennett5 converges from its distant Start 1 too, in ~490;
+MGH10 from Start 1 does not in 5000 and is not a target — it is the
+textbook case for it). The cap in
+<code>rust/src/analyze/nonlinear.rs</code> is
+now <strong>1000</strong>, which lifts MGH10 to <strong>8.5</strong> and Bennett5 to <strong>7.0</strong>; pinned
+by the <code>mgh10_converges_from_start_2_within_the_iteration_cap</code> Rust test
+(the 16 points embedded, certified values to 1e-7 relative). In the same
+pass the <strong>convergence flag</strong> was made honest: a fit that stalls because
+no damped step can decrease the SSE any further is at its floating-point
+floor (Lanczos2 reaches its certified minimum exactly this way, after 198
+iterations) and now reports <em>Converged: Yes</em>; <em>No</em> means one thing — the
+cap was reached — and the Model Summary note says so.</li>
+<li><strong>Lanczos1 (known limitation, bounded by the problem).</strong> An exact-data
+fit: the certified residual sum of squares is <strong>1.4 × 10⁻²⁵</strong> on data of
+magnitude 1, i.e. residuals of ~8 × 10⁻¹⁴ against a model that double
+precision evaluates to ~5 × 10⁻¹⁶ — each residual is good to two or three
+digits, so the SSE (LRE <strong>2.9</strong>) and the parameter standard deviations
+(∝ √SSE, LRE <strong>3.2</strong>) cannot reach the average-difficulty floor in double
+precision, while the <strong>estimates themselves sit at the 11-digit cap</strong>
+(10.6–11.0). Recorded in the test's <code>knownLimits</code> like Filip (still scored,
+asserted to stay below the floor); the same row is the reason McCullough's
+assessments treat Lanczos1's SDs separately.</li>
+</ul>
+<h2 id="achieved-lres">Achieved LREs</h2>
+<p>From the watched run of <code>flutter test test/nist_strd_test.dart</code> on
+2026-07-03 (Windows x64, ChakataStat engine 0.5.0 — the in-house tabular
+engine). This run re-recorded the table after the Polars removal, and every
+achieved LRE came out <strong>identical</strong> to the 2026-07-02 Polars-era run —
+including ENSO's build-sensitive worst statistic — confirming the storage
+swap did not perturb a single scored digit. <em>Min LRE</em> is the worst
+statistic of that dataset; the cap is 15 (11 nonlinear). The floors sit about
+a digit under the achieved values because the iterative NLS fits amplify
+last-bit codegen/libm differences across builds and platforms (an engine
+rebuild alone was observed to move ENSO's worst statistic between 5.0 and
+5.9); the closed-form suites are bit-stable. One floor is bounded by the
+<em>problem</em>, not the algorithm: <strong>higher-difficulty ANOVA</strong> by data
+representation (nine constant leading digits leave an f64 only ~4 digits of
+the certified SS — NIST's decimal data simply cannot be represented more
+finely). The <strong>higher-difficulty linear</strong> floor was 4.5 while the
+normal-equations solver held the exact-fit Wampler datasets (certified SDs of
+exactly 0, scored by absolute LRE) near it; the QR solver of 2026-08-21
+(0.21.0 item 14) lifted the family to 6.1–12.7 and Filip to 7.2, and the
+floor now sits at 5.0, a digit under the new worst. The linear rows below
+are from that run.
+The NoInt1 / NoInt2 rows (regression through the origin, <code>intercept: false</code>)
+and the eleven nonlinear rows after MGH09 (Gauss2 … Nelson) were added from
+the watched runs of 2026-08-21 (Linux x64, the 0.21.0 tree — items 12, 11
+and 13); the NoInt certified values are exact-arithmetic fits of generated integer
+data, and the engine reproduces them to the 15-digit cap less a bit.</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>Suite</th>
+<th>Difficulty</th>
+<th>Floor</th>
+<th>Min LRE</th>
+<th>Worst statistic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PiDigits</td>
+<td>univariate</td>
+<td>lower</td>
+<td>12.0</td>
+<td>13.0</td>
+<td>r1</td>
+</tr>
+<tr>
+<td>Lottery</td>
+<td>univariate</td>
+<td>lower</td>
+<td>12.0</td>
+<td>15.0</td>
+<td>mean</td>
+</tr>
+<tr>
+<td>Lew</td>
+<td>univariate</td>
+<td>lower</td>
+<td>12.0</td>
+<td>15.0</td>
+<td>r1</td>
+</tr>
+<tr>
+<td>Mavro</td>
+<td>univariate</td>
+<td>lower</td>
+<td>12.0</td>
+<td>13.1</td>
+<td>sd</td>
+</tr>
+<tr>
+<td>Michelso</td>
+<td>univariate</td>
+<td>lower</td>
+<td>12.0</td>
+<td>13.4</td>
+<td>r1</td>
+</tr>
+<tr>
+<td>NumAcc1</td>
+<td>univariate</td>
+<td>lower</td>
+<td>12.0</td>
+<td>15.0</td>
+<td>mean</td>
+</tr>
+<tr>
+<td>NumAcc2</td>
+<td>univariate</td>
+<td>average</td>
+<td>9.0</td>
+<td>13.7</td>
+<td>r1</td>
+</tr>
+<tr>
+<td>NumAcc3</td>
+<td>univariate</td>
+<td>average</td>
+<td>9.0</td>
+<td>9.5</td>
+<td>sd</td>
+</tr>
+<tr>
+<td>NumAcc4</td>
+<td>univariate</td>
+<td>higher</td>
+<td>7.5</td>
+<td>8.3</td>
+<td>sd</td>
+</tr>
+<tr>
+<td>SiRstv</td>
+<td>anova</td>
+<td>lower</td>
+<td>12.0</td>
+<td>13.1</td>
+<td>F</td>
+</tr>
+<tr>
+<td>SmLs01</td>
+<td>anova</td>
+<td>lower</td>
+<td>12.0</td>
+<td>15.0</td>
+<td>between_ss</td>
+</tr>
+<tr>
+<td>SmLs02</td>
+<td>anova</td>
+<td>lower</td>
+<td>12.0</td>
+<td>15.0</td>
+<td>between_ss</td>
+</tr>
+<tr>
+<td>SmLs03</td>
+<td>anova</td>
+<td>lower</td>
+<td>12.0</td>
+<td>13.0</td>
+<td>F</td>
+</tr>
+<tr>
+<td>AtmWtAg</td>
+<td>anova</td>
+<td>average</td>
+<td>9.0</td>
+<td>10.2</td>
+<td>F</td>
+</tr>
+<tr>
+<td>SmLs04</td>
+<td>anova</td>
+<td>average</td>
+<td>9.0</td>
+<td>10.1</td>
+<td>between_ss</td>
+</tr>
+<tr>
+<td>SmLs05</td>
+<td>anova</td>
+<td>average</td>
+<td>9.0</td>
+<td>9.9</td>
+<td>between_ss</td>
+</tr>
+<tr>
+<td>SmLs06</td>
+<td>anova</td>
+<td>average</td>
+<td>9.0</td>
+<td>9.9</td>
+<td>between_ss</td>
+</tr>
+<tr>
+<td>SmLs07</td>
+<td>anova</td>
+<td>higher</td>
+<td>3.5</td>
+<td>4.0</td>
+<td>between_ss</td>
+</tr>
+<tr>
+<td>SmLs08</td>
+<td>anova</td>
+<td>higher</td>
+<td>3.5</td>
+<td>3.9</td>
+<td>between_ss</td>
+</tr>
+<tr>
+<td>SmLs09</td>
+<td>anova</td>
+<td>higher</td>
+<td>3.5</td>
+<td>3.9</td>
+<td>between_ss</td>
+</tr>
+<tr>
+<td>Norris</td>
+<td>linear</td>
+<td>lower</td>
+<td>10.0</td>
+<td>12.2</td>
+<td>B0_est</td>
+</tr>
+<tr>
+<td>Pontius</td>
+<td>linear</td>
+<td>lower</td>
+<td>10.0</td>
+<td>12.2</td>
+<td>B0_est</td>
+</tr>
+<tr>
+<td>NoInt1</td>
+<td>linear</td>
+<td>average</td>
+<td>8.0</td>
+<td>14.7</td>
+<td>B1_est</td>
+</tr>
+<tr>
+<td>NoInt2</td>
+<td>linear</td>
+<td>average</td>
+<td>8.0</td>
+<td>15.0</td>
+<td>B1_est</td>
+</tr>
+<tr>
+<td>Filip</td>
+<td>linear</td>
+<td>higher</td>
+<td>5.0</td>
+<td>7.2</td>
+<td>B10_est</td>
+</tr>
+<tr>
+<td>Longley</td>
+<td>linear</td>
+<td>higher</td>
+<td>5.0</td>
+<td>11.3</td>
+<td>B1_est</td>
+</tr>
+<tr>
+<td>Wampler1</td>
+<td>linear</td>
+<td>higher</td>
+<td>5.0</td>
+<td>8.9</td>
+<td>B0_est</td>
+</tr>
+<tr>
+<td>Wampler2</td>
+<td>linear</td>
+<td>higher</td>
+<td>5.0</td>
+<td>12.7</td>
+<td>B3_est</td>
+</tr>
+<tr>
+<td>Wampler3</td>
+<td>linear</td>
+<td>higher</td>
+<td>5.0</td>
+<td>9.1</td>
+<td>B0_est</td>
+</tr>
+<tr>
+<td>Wampler4</td>
+<td>linear</td>
+<td>higher</td>
+<td>5.0</td>
+<td>8.1</td>
+<td>B1_est</td>
+</tr>
+<tr>
+<td>Wampler5</td>
+<td>linear</td>
+<td>higher</td>
+<td>5.0</td>
+<td>6.1</td>
+<td>B1_est</td>
+</tr>
+<tr>
+<td>Misra1a</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>6.0</td>
+<td>9.3</td>
+<td>b1_sd</td>
+</tr>
+<tr>
+<td>Misra1b</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>6.0</td>
+<td>8.5</td>
+<td>b2_sd</td>
+</tr>
+<tr>
+<td>Chwirut1</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>6.0</td>
+<td>7.5</td>
+<td>b1_est</td>
+</tr>
+<tr>
+<td>Chwirut2</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>6.0</td>
+<td>7.4</td>
+<td>b1_est</td>
+</tr>
+<tr>
+<td>DanWood</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>6.0</td>
+<td>9.8</td>
+<td>b2_sd</td>
+</tr>
+<tr>
+<td>Gauss1</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>6.0</td>
+<td>10.2</td>
+<td>b8_sd</td>
+</tr>
+<tr>
+<td>Lanczos3</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>6.0</td>
+<td>7.0</td>
+<td>b2_sd</td>
+</tr>
+<tr>
+<td>Kirby2</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>4.5</td>
+<td>7.6</td>
+<td>b1_est</td>
+</tr>
+<tr>
+<td>Hahn1</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>4.5</td>
+<td>8.0</td>
+<td>b1_est</td>
+</tr>
+<tr>
+<td>Roszman1</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>4.5</td>
+<td>7.8</td>
+<td>b2_est</td>
+</tr>
+<tr>
+<td>ENSO</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>4.5</td>
+<td>5.0</td>
+<td>b8_est</td>
+</tr>
+<tr>
+<td>Thurber</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>4.5</td>
+<td>5.7</td>
+<td>b7_sd</td>
+</tr>
+<tr>
+<td>BoxBOD</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>4.5</td>
+<td>7.1</td>
+<td>b2_sd</td>
+</tr>
+<tr>
+<td>Rat42</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>4.5</td>
+<td>8.0</td>
+<td>b1_sd</td>
+</tr>
+<tr>
+<td>Eckerle4</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>4.5</td>
+<td>8.5</td>
+<td>b3_sd</td>
+</tr>
+<tr>
+<td>MGH09</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>4.5</td>
+<td>5.9</td>
+<td>b2_est</td>
+</tr>
+<tr>
+<td>Gauss2</td>
+<td>nonlinear</td>
+<td>lower</td>
+<td>6.0</td>
+<td>9.7</td>
+<td>b5_sd</td>
+</tr>
+<tr>
+<td>Gauss3</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>4.5</td>
+<td>9.0</td>
+<td>b3_sd</td>
+</tr>
+<tr>
+<td>Lanczos1</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>—</td>
+<td>2.9</td>
+<td><em>known limitation (above)</em></td>
+</tr>
+<tr>
+<td>Lanczos2</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>4.5</td>
+<td>6.8</td>
+<td>b3_sd</td>
+</tr>
+<tr>
+<td>Misra1c</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>4.5</td>
+<td>8.4</td>
+<td>b2_sd</td>
+</tr>
+<tr>
+<td>Misra1d</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>4.5</td>
+<td>10.2</td>
+<td>b2_sd</td>
+</tr>
+<tr>
+<td>MGH10</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>4.5</td>
+<td>8.5</td>
+<td>b2_sd</td>
+</tr>
+<tr>
+<td>MGH17</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>4.5</td>
+<td>6.6</td>
+<td>b2_sd</td>
+</tr>
+<tr>
+<td>Rat43</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>4.5</td>
+<td>7.2</td>
+<td>b4_est</td>
+</tr>
+<tr>
+<td>Bennett5</td>
+<td>nonlinear</td>
+<td>higher</td>
+<td>4.5</td>
+<td>7.0</td>
+<td>b1_sd</td>
+</tr>
+<tr>
+<td>Nelson</td>
+<td>nonlinear</td>
+<td>average</td>
+<td>4.5</td>
+<td>7.3</td>
+<td>b2_est</td>
+</tr>
+</tbody>
+</table></div>
+<p>For context, McCullough's published assessments graded major commercial
+packages of the era at similar or lower LREs on the same files (several
+failed Filip outright, and low single digits on SmLs07-09 were common). A
+current run always prints this table (the suite's <code>tearDownAll</code>), so the
+recorded numbers can be refreshed by pasting from any watched run.</p>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../index.html">Home</a> ·
+        <a href="../../../quick-start/">Quick Start</a> ·
+        <a href="../../../privacy-policy/">Privacy Policy</a> ·
+        <a href="../../../license/">License</a> ·
+        <a href="../../../cite/">How to Cite</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../js/main.js"></script>
+</body>
+</html>

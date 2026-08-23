@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tolerances and recorded conventions — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/validation/tolerances/">
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Tolerances and recorded conventions — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/validation/tolerances/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../index.html">
+        <img class="brand-mark" src="../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <!-- One link, not a copy of the site menu. While someone is reading the
+           guide, the sidebar is the navigation that matters; marketing anchors
+           (Features, Screenshots, …) only compete with it and push the reader
+           out of what they came for. All that is owed is a way back. Single
+           link means no mobile collapse either, so there is no hamburger on
+           these pages — main.js guards for its absence. -->
+      <nav id="nav-links" class="nav-links nav-links--single">
+        <a href="../../../index.html">← Back to chakatastat.app</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">Numerical-validation suite</p>
+        <ul>
+        <li><a href="../">Overview</a></li>
+        <li><a href="../nist/">NIST StRD certified datasets</a></li>
+        <li><a href="../file-formats/">Statistics-package file formats</a></li>
+        <li><a href="./" aria-current="page">Tolerances and recorded conventions</a></li>
+        <li class="docs-nav-section">The recorded conventions</li>
+        <li><a href="../conventions/regression/">Regression conventions</a></li>
+        <li><a href="../conventions/latent-variable/">Latent-variable conventions</a></li>
+        <li><a href="../conventions/clinical-and-survey/">Clinical and survey conventions</a></li>
+        <li><a href="../conventions/resampling-and-time-series/">Resampling and time-series conventions</a></li>
+        <li class="docs-nav-section">Maintaining the suite</li>
+        <li><a href="../regenerating/">Regenerating the reference values</a></li>
+        <li class="docs-nav-section">User Guide</li>
+        <li><a href="../../">Contents</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="tolerances-and-recorded-conventions">Tolerances and recorded conventions</h1>
+<blockquote>
+<p>Part of the <a href="../">numerical-validation suite</a>. What each tolerance means, and every convention chosen where a statistic has more than one defensible definition.</p>
+</blockquote>
+<p>Most statistics agree to <code>1e-4</code>–<code>1e-6</code>. A looser tolerance always names a
+<em>reason</em> in the reference's <code>source</code> string. Where a statistic has more than one
+defensible definition, the reference is computed in the engine's convention and
+the choice is recorded here — these are <strong>agreements about definitions, not
+discrepancies</strong>:</p>
+<ul>
+<li>
+<p><strong>Quantiles</strong> (Explore percentiles) — the engine uses the <strong>Hazen</strong> definition
+(plotting position <code>(k − ½)/n</code>); the reference uses
+<code>numpy.percentile(method=&quot;hazen&quot;)</code>. (NumPy's default <code>&quot;linear&quot;</code> is a different,
+equally valid convention.)</p>
+</li>
+<li>
+<p><strong>Mann-Whitney</strong> — the engine reports the asymptotic test from a <strong>tie-corrected
+z with no continuity correction</strong>; the reference derives both <em>z</em> and <em>p</em> from
+that same z, rather than SciPy's continuity-corrected <em>p</em>.</p>
+</li>
+<li>
+<p><strong>Type III SS</strong> (factorial GLM) — only well-defined under <strong>sum-to-zero
+contrasts</strong>; the reference fits <code>C(group, Sum)*C(sex, Sum)</code> so statsmodels'
+<code>anova_lm(typ=3)</code> reproduces the engine's main-effect SS in the presence of an
+interaction.</p>
+</li>
+<li>
+<p><strong>ARIMA</strong> — the engine fits AR by <strong>conditional least squares</strong>; the AR(1)
+reference is the OLS lag-1 regression (the exact CLS estimator), not
+statsmodels' unconditional ML, which would differ slightly.</p>
+</li>
+<li>
+<p><strong>Negative binomial</strong> — the dispersion <code>α</code> is ML-estimated, with a looser <code>5e-2</code>
+tolerance on the dispersion alone (the mean-model coefficients match tightly).</p>
+</li>
+<li>
+<p><strong>CFA</strong> — five recorded conventions, each pinned against the references.
+(1) <strong>Scale setting</strong>: each factor's first indicator is the reference,
+its loading fixed at 1; factor variances are free. (2) <strong>χ² = N·F</strong> with
+divisor <strong>N</strong> (not N−1) — pinned by reproducing lavaan's published
+Holzinger–Swineford χ² = 85.306 = 301·F. (3) Standard errors use the
+<strong>expected (Fisher) information</strong> with divisor N — the lavaan/semopy
+default; the observed-Hessian alternative disagrees with both references
+exactly where the model misfits, so it is deliberately not used.
+(4) The <strong>baseline model</strong> behind CFI/TLI is the independence model
+(diagonal Σ at the ML variances, closed form <code>F_b = Σ ln s_jj − ln|S|</code>);
+a saturated (df = 0) model reports CFI = TLI = 1 and no χ² p-value by
+convention. (5) The RMSEA CI is <strong>90%</strong> by convention (not the analysis
+CI level), from inverting the noncentral χ². The sample covariance uses
+divisor N (weighted: Σw), matching the estimates the references produce.</p>
+</li>
+<li>
+<p><strong>CFA modification indices</strong> — the 1-df score test of each fixed
+parameter from the expected information (divisor N), lavaan's <code>epc</code> and
+<code>sepc.all</code>; non-identified candidates skipped (lavaan's <code>NA</code> rows);
+listing floor 3.84 by default. Pinned against <code>lavaan::modindices()</code> on
+Holzinger–Swineford, correlated and orthogonal — see
+<a href="../conventions/latent-variable/#cfa-follow-ups--the-0210-conventions">CFA follow-ups</a>.</p>
+</li>
+<li>
+<p><strong>Johnson–Neyman regions</strong> — the roots of <code>|β₁ + β₃w| = t_crit·SE(w)</code>
+(t on the residual df at the interval's α), reported inside the observed
+moderator range with the significant side read from the quadratic's sign;
+pinned against <code>interactions::johnson_neyman</code> — see
+<a href="../conventions/regression/#mediation-follow-ups--the-0210-conventions">Mediation follow-ups</a>.</p>
+</li>
+<li>
+<p><strong>Three-way moderated mediation</strong> — Z joins W in the moderated model(s)
+with every product (PROCESS models 11 / 18), the Z-outer × W-inner probe
+grid, the index of moderated moderated mediation <code>a7·b</code> / <code>a·b7</code> and the
+conditional index <code>(a3 + a7z)·b</code> / <code>a·(b3 + b7z)</code> (Hayes 2018); pinned
+against <code>lm</code>/<code>vcov</code> — see
+<a href="../conventions/regression/#mediation-follow-ups--the-0210-conventions">Mediation follow-ups</a>.</p>
+</li>
+<li>
+<p><strong>Serial mediation</strong> — two mediators in causal order (PROCESS model 6):
+<code>M₂ ~ X + M₁</code> for <code>d₂₁</code>, the specific indirects <code>a₁b₁</code>, <code>a₂b₂</code>, <code>a₁d₂₁b₂</code>
+and <code>c = c′ + Σ</code> exactly; one moderator on the a- or b-paths with <code>d₂₁</code>
+unmoderated and a per-effect index; pinned against <code>lm</code> — see
+<a href="../conventions/regression/#mediation-follow-ups--the-0210-conventions">Mediation follow-ups</a>.</p>
+</li>
+<li>
+<p><strong>Meta-analysis</strong> — three recorded conventions. (1) The between-study
+variance is the <strong>DerSimonian–Laird moment estimate, truncated at zero</strong>
+(as is I²) — the metafor/textbook convention; statsmodels'
+<code>combine_effects</code> reports the <em>raw</em> (possibly negative) τ² and pools with
+it, so <code>meta.csv</code> is built deliberately heterogeneous (the generator
+asserts raw τ² &gt; 0) to keep the two sides comparable — a homogeneous
+dataset would make the engine's truncated RE collapse onto FE while
+statsmodels' would not. (2) Pooled and per-study intervals are
+<strong>large-sample Wald (z-based)</strong>; the Knapp–Hartung adjustment is out of
+scope for v1. (3) <strong>Egger's test</strong> is the classic OLS of the standardized
+effect on the precision with the intercept tested at k − 2 df (equivalent
+to WLS of effect on SE under 1/SE² weights). The dataset's Weight Cases
+setting is <strong>meaningless by design</strong> for meta-analysis — rows are studies
+and the inverse-variance weights are the statistic's own — so, like time
+series, it carries the standard unweighted note and has no weighted
+reference.</p>
+</li>
+<li>
+<p><strong>Case weighting</strong> — the engine treats Weight Cases as a <strong>frequency weight</strong>:
+a weight-<code>w</code> case behaves exactly like <code>w</code> coincident copies (the procedures
+weighted on 2026-06-18 — clustering, discriminant, RM-ANOVA/MANOVA, survival —
+are tested against that <em>weight ≡ replication</em> identity). One sub-case carries a
+convention: <strong>Cox with the Efron ties correction</strong> under <em>non-integer</em> weights.
+The tied-event discount steps over the weighted event total, which reproduces
+replication exactly for integer weights but is an approximation for fractional
+ones (the same approach lifelines takes); the default Breslow correction is
+exact for any weights. <strong>Time series</strong> (ACF/PACF, ARIMA) is deliberately
+<em>unweighted</em> — a frequency weight is undefined for a series taken in order — so
+it has no weighted reference. The <strong>REML τ²</strong> (0.11.0) is the standard
+fixed-point iteration on the restricted likelihood — metafor's default
+estimator — bounded at zero, iteration-capped with a hit cap reported in
+the output note; Q, its p and I² stay defined from the fixed-effect fit
+and are estimator-independent, so only τ², the random-effects pooling and
+the per-study random weights change with the <code>tau_method</code> choice.</p>
+</li>
+<li>
+<p><strong>Violin plot (kernel density)</strong> — four recorded conventions (0.12.0).
+(1) The bandwidth is <strong>Silverman's scaling rule as scipy implements it</strong>,
+<code>h = (3W/4)^(−1/5)·σ</code> with σ the ddof-1 standard deviation — deliberately
+<em>not</em> R <code>bw.nrd0</code>'s <code>0.9·min(σ, IQR/1.34)·n^(−1/5)</code> rule of thumb, so the
+unweighted comparison against
+<code>scipy.stats.gaussian_kde(bw_method='silverman')</code> is exact (the Rust unit
+tests pin scipy's own numbers to 1e-12, and the gate-4 ids pin them again
+end-to-end at 1e-9). (2) <strong>Weights are frequency weights</strong>, <code>W = Σw</code> in
+both the bandwidth and the variance, keeping the engine-wide <em>weight ≡
+replication</em> identity — scipy's own <code>weights=</code> parameter is an
+importance-weight convention (Kish effective N, reliability-weights
+variance) and is deliberately <strong>not</strong> matched; the weighted identity is
+asserted in <code>rust/src/analyze/graphs.rs</code>'s <code>violin_tests</code> rather than
+pinned here, since this suite runs unweighted. (3) The density curve is
+evaluated on a fixed <strong>96-point grid over [min − 3h, max + 3h]</strong> (R
+<code>density</code>'s <code>cut = 3</code> convention), and the gate-4 density ids name <em>grid
+rows</em>, not quantiles, so no quantile convention can drift between the
+sides. (4) A group with fewer than two distinct values (or W ≤ 1) has
+<strong>no density by design</strong> — its statistics row keeps null bandwidth and the
+table note names the group; the run never fails for it.</p>
+</li>
+<li>
+<p><strong>Propensity score</strong> — five recorded conventions (0.13.0). (1) The score
+model is the same binomial IRLS fit logistic regression uses, pinned
+against statsmodels' independent <code>Logit</code> MLE at 1e-6. (2) <strong>Matching
+distance and the caliper live on the logit of the score</strong>; the caliper
+option is a multiple of the SD of the logit over the analyzed sample —
+the scale Austin (2011)'s 0.2 recommendation is stated on. (3) Matching
+is <strong>greedy 1:k nearest-neighbour without replacement, estimand ATT</strong>,
+treated processed in descending score order with <em>every</em> tie (processing
+order and equidistant candidates) broken by dataset order, so the result
+is deterministic; the gate-4 matching ids are pinned against an
+<strong>independent NumPy implementation of exactly these conventions</strong>, not
+against a package — MatchIt's nearest-neighbour defaults differ
+(distance scale, processing order), so exact parity with its documented
+examples is not expected and a transcribed number would corroborate
+nothing. (4) <strong>Balance is the standardized mean difference over the
+unadjusted pooled SD</strong> √((s²T+s²C)/2), the same denominator before and
+after adjustment; IPTW weights are 1/e vs 1/(1−e) for <code>ate</code> (default)
+and 1 vs e/(1−e) for <code>att</code>. (5) The whole procedure is <strong>computed
+unweighted by design</strong>: weight ≡ replication is not well defined for
+pairing, and IPTW layered on a frequency weight would compound two case
+multiplicities — a pre-existing Weight Cases variable only selects
+cases (<code>mark_unweighted</code>), and the weight the procedure <em>emits</em> is the
+product.</p>
+</li>
+<li>
+<p><strong>Panel regression</strong> — six recorded conventions (0.15.0), each decided
+<em>before</em> the core was written (the release plan's risk shape —
+<code>docs/releases/release_0.15.0.md</code>, kept private — demanded exactly this) and each
+verified against the published Stata results for the classic 10-firm
+Grunfeld data before being pinned. The reference package is
+<strong><code>linearmodels</code></strong> (pinned in the JSON header), whose defaults reproduce
+Stata's <code>xtreg</code> numbers on Grunfeld to publication precision.
+(1) <strong>RE variance components: Swamy–Arora</strong>, exactly as
+<code>linearmodels.RandomEffects</code> (default <code>small_sample=False</code>) implements it —
+σ²ₑ = within-SSR / (N − n − K); the between regression is OLS of entity
+means on entity means with constant, σ²ᵤ = max(0, between-SSR/(n − K − 1)
+− σ²ₑ/T̄) with <strong>T̄ the harmonic mean</strong> of the entity sizes; per-entity
+θᵢ = 1 − √(σ²ₑ/(Tᵢσ²ᵤ + σ²ₑ)). Wallace–Hussain and Amemiya give visibly
+different θ and are deliberately not offered. Verified: θ = 0.861224 on
+Grunfeld, Stata's published value.
+(2) <strong>FE degrees of freedom: the n − 1 absorbed entity effects are charged
+against the residual df</strong> — df = N − n − K, matching Stata <code>xtreg, fe</code>,
+plm's within default and <code>linearmodels</code> <code>debiased=True</code>. This is the
+single most common source of &quot;your numbers don't match&quot; reports, so the
+output note names the df. The FE <strong>intercept</strong> is reported Stata-style:
+the within regression runs on demeaned data with the grand means added
+back, so the constant is the grand-mean intercept (−58.744 on Grunfeld).
+(3) <strong>Hausman: the classic form</strong>, slopes only (no intercept),
+H = d′(V_FE − V_RE)⁻¹d on the <strong>conventional (homoskedastic) covariances</strong>
+— the classic test's efficiency argument requires the efficient RE
+estimator, so it is never computed from clustered covariances. df = the
+number of common slopes. The finite-sample negative-H case is <strong>reported
+as computed with an explanatory note, never clamped</strong> — a negative H is
+evidence the test's conditions failed, and hiding it would misreport.
+Verified: H = 2.3304 on Grunfeld (Stata: chi2(2) = 2.33).
+(4) <strong>Cluster-robust (by entity) small-sample correction: Stata's
+<code>xtreg, fe</code> factor</strong> c = G/(G−1) · (N−1)/(N−K) applied to the sandwich,
+with K = intercept + slopes only — for FE the absorbed entity effects are
+deliberately <strong>not</strong> charged in this factor. This is the famous
+<code>xtreg</code>-vs-<code>areg</code> split (<code>areg</code> charges them and gives larger SEs); the
+<code>xtreg</code> convention is pinned because it is the one the published Grunfeld
+clustered SEs come from, the one <code>linearmodels</code>
+(<code>debiased=True, group_debias=True</code>) reproduces, and the one panel users
+expect. Verified: FE clustered SEs 0.0151945 / 0.0527518 on Grunfeld.
+(5) <strong>t statistics on the residual df for all three estimators</strong> —
+<code>linearmodels</code>' presentation. Stata reports z for RE (GLS asymptotics);
+the t-based p is the more conservative choice and keeps one presentation
+across the estimator option.
+(6) <strong>R² definitions are <code>linearmodels</code>' <code>_rsquared</code></strong>: within =
+1 − SSR/TSS on entity-demeaned data, between = on entity means, overall =
+on raw data, each using the fitted model's full coefficient vector. Stata
+defines between/overall R² as squared correlations, which differ; the
+1 − SSR/TSS family is used because it is the one the reference reports.
+The procedure is <strong>computed unweighted by design</strong> (<code>mark_unweighted</code>):
+the within/quasi-demeaning transformations under <em>weight ≡ replication</em>
+would need every entity mean re-derived under frequency weights, and no
+reference implements that combination to compare against — the weight
+selects cases only, and the note says so.</p>
+</li>
+<li>
+<p><strong>Moderated mediation</strong> — six recorded conventions (0.15.0), following the
+PROCESS (Hayes) definitions throughout so a user comparing against the
+PROCESS macro sees the same model shapes; the deterministic quantities are
+pinned against statsmodels OLS (<code>mediation_mod/*</code>).
+(1) <strong>Model shapes are PROCESS models 7 / 14 / 58</strong>: the moderator W and
+its product term enter <strong>only the moderated model(s)</strong> — <code>moderation=a</code>
+puts W and X·W in each mediator model and leaves the outcome model alone;
+<code>moderation=b</code> puts W and every M·W in the outcome model and leaves the
+mediator models alone; <code>both</code> does both. W is never silently added as a
+covariate to an unmoderated model.
+(2) <strong>Probe values</strong>: a moderator with ≤ 5 distinct values over the
+listwise sample is treated as categorical and probed at <strong>each value</strong>;
+otherwise at the <strong>mean − 1 SD / mean / mean + 1 SD</strong> (Aiken–West), the
+SD with the n − 1 denominator, unweighted like the rest of the procedure.
+Probe values are computed once on the full sample and <strong>held fixed across
+bootstrap resamples</strong>.
+(3) <strong>The index of moderated mediation</strong> (<code>a₃·b</code> for model 7, <code>a·b₃</code> for
+model 14) is reported only when <strong>exactly one</strong> path is moderated; with
+both paths moderated the indirect effect is quadratic in W, no single
+index exists, and the output says so instead — the same choice PROCESS
+makes for model 58.
+(4) <strong>No total-effect model when a moderator is present</strong>: the
+decomposition c = c′ + ab does not hold conditionally, so a &quot;total&quot; row
+would misreport; the path-table note states this.
+(5) <strong>Conditional (simple slope) inference from the coefficient
+covariance</strong>: Var(β₁ + w·β₃) = V₁₁ + w²·V₃₃ + 2w·V₁₃, t on the model's
+residual df — pinned against statsmodels <code>cov_params()</code>
+(<code>mediation_mod/a_cond_hi_se</code>).
+(6) <strong>Bootstrap CIs are not pinned</strong> (seed-dependent), the convention
+established for mediation v1; the conditional indirect effects and the
+index reuse v1's exact resampling contract (shared PRNG, quantile rule
+and BCa points), so they stay byte-reproducible for a fixed seed. When
+the <code>moderator</code> option is absent the output is <strong>byte-identical to v1</strong>
+(the branch is taken before any moderated code runs), so every existing
+journaled <code>mediation</code> command replays unchanged.</p>
+</li>
+<li>
+<p><strong>The 0.16.0 chart repertoire</strong> — four chart kinds that add <strong>no new
+statistic</strong>, so none is pinned here; what they add is <em>reading</em> conventions,
+and those are recorded because a user comparing against another package will
+ask about them. (1) <strong>Scatterplot matrix</strong>: cases are dropped <strong>listwise</strong>,
+not pairwise — a matrix is read by comparing panels, and panels drawn on
+different case subsets are not comparable — with the dropped count in the
+note; the diagonal carries the <strong>variable name</strong> (base R <code>pairs</code>' default,
+not a density), both triangles are drawn, and the variable count is capped at
+<strong>8</strong> by the <code>max_cases</code> convention (<code>max_variables</code>, 0 removes it). Panels
+are laid in the largest centred <strong>square</strong> of the plot, because a stretched
+scatter flattens its cloud and would make one relationship look different in
+different cells. A density on the diagonal and correlations in the upper
+triangle are deliberate v1 exclusions — the second would put a statistic in a
+chart tool. (2) <strong>ECDF</strong>: ties step <strong>once</strong>, by their combined weight, so
+the curve is right-continuous; drawing one point per case would ramp through
+a tie, which is a distribution the data does not have. Weights are frequency
+weights on the engine-wide <em>weight ≡ replication</em> identity, asserted in
+<code>graphs.rs</code>'s <code>repertoire_tests</code>. Each group's curve is normalized <strong>within
+group</strong>, so every curve reaches 1. (3) <strong>Cleveland dot plot</strong>: categories are
+sorted <strong>by value, descending, by default</strong> (<code>sort</code> = <code>value</code> | <code>category</code>) —
+sorting is half of what makes a dot plot readable, and unlike a bar chart no
+baseline anchors the eye. The value axis deliberately <strong>does not start at
+zero</strong> (that is the whole argument for the form), which is why the leader
+line spans the full plot width rather than running from the axis to the dot:
+a partial leader draws a bar from the axis minimum, the exact lie the chart
+exists to avoid. (4) <strong>Bubble chart</strong>: <strong>area</strong> is proportional to the value,
+<code>r ∝ √size</code> — mapping the value to the radius inflates it by the square, and
+the rule lives in one exported <code>bubbleRadius</code> with a numeric test on it
+rather than inline in a paint loop. Non-positive sizes have no area and are
+dropped, with the count in the note rather than silently.</p>
+</li>
+<li>
+<p><strong>Complex survey designs</strong> — the design declaration, the covered-procedure
+list, the five estimation conventions and the v1 scope cuts are decided and
+recorded in their own section above,
+<a href="../conventions/clinical-and-survey/#complex-survey-designs--the-v1-conventions">Complex survey designs</a>
+(0.19.0 item 1, recorded <em>before</em> any pin — the 0.15.0 rule).</p>
+</li>
+<li>
+<p><strong>Equivalence tests (TOST)</strong> — the tool shape, the test conventions, the
+SMD-bound standardizers, the two recorded <code>TOSTER</code> divergences and the v1
+scope cuts are decided and recorded in their own section above,
+<a href="../conventions/clinical-and-survey/#equivalence-tests-tost--the-v1-conventions">Equivalence tests (TOST)</a>
+(0.19.0 item 2, recorded <em>before</em> any pin). The pins ride their own
+R-backed suite — <code>tool/validation/generate_tost_references.R</code> →
+<code>test/validation/tost_reference_values.json</code> →
+<code>test/tost_validation_test.dart</code>
+(90 values on the <code>sleep</code> documented-example data plus a synthetic
+unequal-variance block, with the orphan guard) — because the reference
+implementation is R <code>TOSTER</code>, not a package in the pinned Python set.
+Degenerate bounds are error paths, not values, so they are pinned as
+errors-as-data in <code>analysis_test.dart</code> / <code>tool_dispatcher_test.dart</code>.</p>
+</li>
+<li>
+<p><strong>Bland–Altman method comparison</strong> — the difference direction, the fixed
+1.96 multiplier, the t-based CI forms (the 1999 exact LoA variance with
+z = 1.96), the proportional-bias table and the v1 scope cuts are decided
+and recorded in their own section above,
+<a href="../conventions/clinical-and-survey/#blandaltman-method-comparison--the-v1-conventions">Bland–Altman method comparison</a>
+(0.19.0 item 3, recorded <em>before</em> any pin). The pins ride their own
+R-backed suite — <code>tool/validation/generate_bland_altman_references.R</code> →
+<code>test/validation/bland_altman_reference_values.json</code> →
+<code>test/bland_altman_validation_test.dart</code>
+(54 values: dual references on the original Bland &amp; Altman (1986) PEFR
+data plus a synthetic incomplete pair, with the orphan guard) — because
+the reference implementations are R <code>blandr</code> and <code>BlandAltmanLeh</code>, not
+packages in the pinned Python set. The one
+loosened tolerance: the LoA-CI pins against <code>blandr</code> carry <code>5e-3</code>
+absolute, because <code>blandr</code> computes the 1999 variance with
+z = Φ⁻¹(0.975) where our recorded convention (and its own lines) use the
+literal 1.96 — the divergence is recorded in the section above, and the
+same surfaces are also pinned at <code>1e-9</code> against R values computed in the
+recorded convention (the item-1 &quot;R SEs + our t interval&quot; precedent).</p>
+</li>
+<li>
+<p><strong>Latent class analysis</strong> — the reference (<code>poLCA</code>) and its documented
+examples, the estimator and starts policy, the fit-block formulas, the
+descending-π ordering (also the pin alignment rule) and the v1 scope
+cuts are decided and recorded in their own section above,
+<a href="../conventions/latent-variable/#latent-class-analysis--the-v1-conventions">Latent class analysis</a>
+(0.19.0 item 4, recorded <em>before</em> any pin; spike-gated). The pins ride
+their own R-backed suite — <code>tool/validation/generate_lca_references.R</code> →
+<code>test/validation/lca_reference_values.json</code> →
+<code>test/lca_validation_test.dart</code>
+on poLCA's own <code>values</code> and <code>carcinoma</code> example data, with the orphan
+guard — because the reference implementation is R <code>poLCA</code>, not a package
+in the pinned Python set. aBIC and entropy are R-computed from poLCA's
+LL/npar/posterior (poLCA does not print them); the EM optimum is what is
+pinned, so tolerances are looser than closed-form suites (LL ~1e-6,
+probabilities ~1e-5).</p>
+</li>
+<li>
+<p><strong>Item response theory</strong> — the dual references (<code>ltm</code> + <code>mirt</code>, the CFA
+rule) on the canonical LSAT6/LSAT7 data, the Bock–Aitkin quadrature, the
+θ ~ N(0,1) identification, the reported parameterization and the v1
+scope cuts are decided and recorded in their own section above,
+<a href="../conventions/latent-variable/#item-response-theory--the-v1-conventions">Item response theory</a>
+(0.19.0 item 5, recorded <em>before</em> any pin; spike-gated). The pins ride
+their own R-backed suite — <code>tool/validation/generate_irt_references.R</code> →
+<code>test/validation/irt_reference_values.json</code> →
+<code>test/irt_validation_test.dart</code>
+with the orphan guard — because the reference implementations are R
+packages, not the pinned Python set. Both packages are pinned
+<strong>separately on the same cells</strong> at tolerances set from their own
+measured disagreement (~8e-4 on parameters, 5e-5 on the LL): a value
+inside both pins is inside the genuine reference uncertainty.</p>
+</li>
+<li>
+<p><strong>LOESS smoother (scatterplot)</strong> — the exact local-linear tricube
+algorithm (the q rule with its verified <code>10⁻⁷</code> epsilon, tricube over all
+points inside the q-th-nearest bandwidth, the weighted local line), the
+101-point evaluation grid, the degenerate-window fallbacks and the v1
+scope cuts are decided and recorded in their own section above,
+<a href="../conventions/resampling-and-time-series/#loess-smoother-on-the-scatterplot--the-v1-conventions">LOESS smoother on the scatterplot</a>
+(0.19.0 item 6, recorded <em>before</em> any pin). The pins ride their own
+R-backed suite — <code>tool/validation/generate_loess_references.R</code> →
+<code>test/validation/loess_reference_values.json</code> →
+<code>test/loess_validation_test.dart</code>
+(on the base-R <code>cars</code> data plus seeded synthetic fixtures, with the
+orphan guard) — because the reference is R <code>stats::loess</code>
+(<code>degree = 1, surface = &quot;direct&quot;</code>, default control), not a package in
+the pinned Python set. Verified agreement is machine precision, so the
+pins carry the standard <code>1e-9</code>; the three recorded reference quirks
+(<code>lowess</code> defaults, <code>statistics = &quot;exact&quot;</code>, singular-window
+pseudoinverse artifacts) live in the section above.</p>
+</li>
+<li>
+<p><strong>Permutation tests</strong> — the covered tests, the two-sided/observed-
+direction counting, the automatic exact threshold (1,000,000
+arrangements), the (b+1)/(m+1) Monte-Carlo estimator with its 99%
+Clopper–Pearson CI, the Fisher–Yates draw contract and the v1 scope cuts
+are decided and recorded in their own section above,
+<a href="../conventions/resampling-and-time-series/#permutation-tests--the-v1-conventions">Permutation tests</a>
+(0.19.0 item 7, recorded <em>before</em> any pin). The pins ride their own
+R-backed suite — <code>tool/validation/generate_permutation_references.R</code> →
+<code>test/validation/permutation_reference_values.json</code> →
+<code>test/permutation_validation_test.dart</code>
+with the orphan guard — because the references are R <code>coin</code> and <code>perm</code>
+(plus hand enumeration in R where <code>coin</code>'s exact algorithms do not reach
+the correlation problem). Exact p's pin exactly; Monte-Carlo p's pin the
+exact/reference p at a tolerance derived from the binomial simulation
+SE at the pinned seed's m (named in the <code>source</code>); bitwise seed
+reproducibility is asserted engine-side, the bootstrap precedent. Two
+recorded reference divergences: <code>coin</code> reports the raw b/m estimator
+(we use the +1 form, <code>perm</code>'s convention), and <code>cor.test</code>'s exact
+Spearman is tie-free only (our midrank enumeration extends it; pins
+stay on tie-free data).</p>
+</li>
+<li>
+<p><strong>GLM quantile residuals</strong> — the per-family residual definitions, the seed
+policy, the reference lines and the panel names are decided and recorded in
+their own section above,
+<a href="../conventions/regression/#glm-quantile-residuals--the-per-family-definitions">GLM quantile residuals</a>
+(0.16.0). The two pinning conventions that belong in <em>this</em> list:
+(1) <strong>Gamma is pinned end to end at <code>1e-9</code></strong> — its residual is
+non-randomized, so <code>Φ⁻¹(F_Γ(y))</code> is a deterministic function of the fit and
+SciPy reproduces it exactly. (2) The <strong>discrete families are pinned as
+containment, not as point parity</strong>: the residual depends on a PRNG draw no
+reference package can reproduce, so each <code>glm_resid/*</code> id pins the <strong>midpoint
+of the case's CDF bracket</strong> as <code>value</code> with <strong>half the bracket width</strong> as
+<code>tol</code>, and the Dart probe returns <code>Φ(r)</code> — the existing <code>value ± tol</code>
+machinery then expresses exactly the assertion that matters, that the
+residual's probability integral transform falls inside the bracket SciPy
+computes. This checks the CDF <em>and</em> the randomization range per case, which a
+single transcribed number could not. Reproducibility itself is asserted
+separately, by running the same command twice and requiring the tables to
+agree exactly.</p>
+</li>
+</ul>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../index.html">Home</a> ·
+        <a href="../../../quick-start/">Quick Start</a> ·
+        <a href="../../../privacy-policy/">Privacy Policy</a> ·
+        <a href="../../../license/">License</a> ·
+        <a href="../../../cite/">How to Cite</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../js/main.js"></script>
+</body>
+</html>

@@ -1098,22 +1098,22 @@ section h2 {
 
 /* Responsive */
 
-/* The nav collapses to the toggle at 860px, not 640px: with the Validation
-   link there are seven of them, and together with the brand and the Download
-   CTA they overflowed the header between roughly 700 and 900px. This is a
-   wider breakpoint than the rest of the layout uses on purpose — the nav runs
-   out of room before the content columns do. Measured, not guessed: with the
-   Download item removed from the menu (the button beside it already does that
-   job) the full nav needs ~864px at the tightened gap, so it collapses below
-   890 and the tightened gap covers the band up to 980. Re-measure these two
-   numbers if a menu item is ever added back. */
-@media (max-width: 980px) {
+/* The nav collapses to the toggle far above the layout's other breakpoints on
+   purpose: it runs out of room before the content columns do. Both numbers are
+   measured, not guessed, and were re-measured on 2026-08-23 when the Cite link
+   made it seven items (User Guide, Validation, Cite, Features, Quick Start,
+   Screenshots, Analyze). At the tightened gap the row fits down to ~1030px and
+   wraps below that, so: the tightened gap covers the band up to 1120, and the
+   whole row collapses into the toggle at 1020. Re-measure both if an item is
+   ever added or removed — a wrapped nav is how the last addition announced
+   itself. */
+@media (max-width: 1120px) {
   .nav-links {
-    gap: 18px;
+    gap: 16px;
   }
 }
 
-@media (max-width: 890px) {
+@media (max-width: 1020px) {
   /* The documentation pages' single back-link is exempt: there is nothing to
      collapse, no hamburger to collapse it into, and hiding it would strand a
      reader on a phone with no way back to the site. */

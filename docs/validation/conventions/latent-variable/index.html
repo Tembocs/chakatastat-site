@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Latent-variable conventions — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/validation/conventions/latent-variable/">
+  <link rel="icon" type="image/svg+xml" href="../../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Latent-variable conventions — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/validation/conventions/latent-variable/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../../index.html">
+        <img class="brand-mark" src="../../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <!-- One link, not a copy of the site menu. While someone is reading the
+           guide, the sidebar is the navigation that matters; marketing anchors
+           (Features, Screenshots, …) only compete with it and push the reader
+           out of what they came for. All that is owed is a way back. Single
+           link means no mobile collapse either, so there is no hamburger on
+           these pages — main.js guards for its absence. -->
+      <nav id="nav-links" class="nav-links nav-links--single">
+        <a href="../../../../index.html">← Back to chakatastat.app</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../../index.html#download">Download</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">Numerical-validation suite</p>
+        <ul>
+        <li><a href="../../">Overview</a></li>
+        <li><a href="../../nist/">NIST StRD certified datasets</a></li>
+        <li><a href="../../file-formats/">Statistics-package file formats</a></li>
+        <li><a href="../../tolerances/">Tolerances and recorded conventions</a></li>
+        <li class="docs-nav-section">The recorded conventions</li>
+        <li><a href="../regression/">Regression conventions</a></li>
+        <li><a href="./" aria-current="page">Latent-variable conventions</a></li>
+        <li><a href="../clinical-and-survey/">Clinical and survey conventions</a></li>
+        <li><a href="../resampling-and-time-series/">Resampling and time-series conventions</a></li>
+        <li class="docs-nav-section">Maintaining the suite</li>
+        <li><a href="../../regenerating/">Regenerating the reference values</a></li>
+        <li class="docs-nav-section">User Guide</li>
+        <li><a href="../../../">Contents</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="latent-variable-conventions">Latent-variable conventions</h1>
+<blockquote>
+<p>Part of the <a href="../../">numerical-validation suite</a>. The recorded conventions behind confirmatory factor analysis, latent class analysis and item response theory.</p>
+</blockquote>
+<h2 id="latent-class-analysis--the-v1-conventions">Latent class analysis — the v1 conventions</h2>
+<p><em>Decided 2026-08-18, before any code, as sub-task 4a of
+<code>docs/releases/release_0.19.0.md</code> item 4 (kept private). LCA answers &quot;how
+many unobserved subgroups?&quot; for <strong>categorical</strong> indicators — mixture
+modeling the clustering tools cannot do (no fit indices, no membership
+probabilities, continuous-only distance). This is an <strong>estimation-risk</strong>
+item (EM over a latent structure): it opens with a spike against the
+reference and holds until parity passes. Every convention below was
+verified against <strong>R <code>poLCA</code> 1.6.0.2</strong> (R 4.5.3) by reading its source and
+running its documented examples — not recorded from memory. The pinned
+values live in <code>tool/validation/generate_lca_references.R</code> and
+<code>test/validation/lca_reference_values.json</code> (sub-task 4i).</em></p>
+<h3 id="the-reference-and-its-documented-examples">The reference and its documented examples</h3>
+<p><code>poLCA</code> is the reference implementation; the pinned datasets are its own
+documented examples, shipped with the package: <strong><code>values</code></strong> (Goodman's 1974
+universalistic/particularistic-values data — 4 dichotomous items, n = 216;
+the <code>?poLCA</code> worked example, fit with 2 classes) and <strong><code>carcinoma</code></strong>
+(Agresti's seven-pathologist carcinoma ratings — 7 dichotomous items,
+n = 118; the <code>?carcinoma</code> example, fit with 3 classes, plus 2- and 4-class
+fits for the enumeration table). Verified global-optimum log-likelihoods
+(high-<code>nrep</code> runs): values 2-class <strong>−504.467670</strong>, carcinoma 2/3/4-class
+<strong>−317.256837 / −293.704979 / −289.285849</strong>. The carcinoma fit reaches
+<strong>exact 0/1 boundary estimates</strong> — deliberately kept as a pinned example,
+since boundary handling is where an EM implementation breaks.</p>
+<h3 id="the-model-and-the-estimator">The model and the estimator</h3>
+<ol>
+<li><strong>The model</strong>: C latent classes over J categorical indicators; class
+shares π_c and class-conditional item-category probabilities
+ρ_{cjk}; cell probability <code>Σ_c π_c ∏_j ρ_{c,j,y_j}</code>. Indicator
+categories are the <strong>distinct observed values</strong> of each indicator over
+the analyzed cases (sorted; string or numeric both fine). An indicator
+with a single observed level errors as data, and one with more than
+<strong>15</strong> levels errors as data as well (&quot;looks continuous&quot;) — LCA over a
+mistakenly-passed scale variable would silently explode the cell space.</li>
+<li><strong>Estimation is plain EM</strong> (E-step posteriors, M-step weighted
+proportions), converged when the log-likelihood improves by less than
+<code>tol</code> (<strong>1e-10</strong>, poLCA's default) or at <code>max_iterations</code> (<strong>1000</strong>,
+poLCA's default). <strong>Listwise deletion</strong> of cases incomplete on any
+indicator (poLCA's <code>na.rm = TRUE</code> default); retaining partial responses
+(<code>na.rm = FALSE</code>) is a recorded cut.</li>
+<li><strong>Random starts</strong>: <code>starts</code> (default <strong>20</strong> — deliberately <em>not</em>
+poLCA's <code>nrep = 1</code> default, which on a multimodal likelihood silently
+reports a local optimum; the pins pass because both sides find the
+global optimum) from random normalized π and ρ draws, keeping the
+best-LL converged solution. <strong>Deterministic by default</strong>: a fixed
+built-in base seed, with a <code>seed</code> option to explore other starts —
+running the same command twice must reproduce the tables exactly (the
+bootstrap precedent; asserted by a test). The initialization scheme
+need not match poLCA's — what is pinned is the converged optimum.</li>
+<li><strong>Boundary probabilities are legitimate MLEs</strong> (carcinoma reaches exact
+0 and 1): no smoothing, no clamping of estimates; logs are guarded at
+1e-300 for evaluation only. A class to which <strong>no case is modally
+assigned</strong> is reported with a plain note (fewer classes likely fit
+better), never silently dropped.</li>
+<li><strong>Class order is descending class share π</strong> (ties by first-seen) —
+poLCA's own ordering is start-dependent, so this is also the
+<strong>label-switching alignment rule for every pin</strong>: the reference
+generator sorts poLCA's classes by descending <code>P(class)</code> before writing
+values, and the engine emits classes in the same order.</li>
+</ol>
+<h3 id="the-fit-block-polcas-definitions-verified-from-source">The fit block (poLCA's definitions, verified from source)</h3>
+<ul>
+<li><strong>npar = C·Σ_j(K_j−1) + (C−1)</strong>; <strong>AIC = −2LL + 2·npar</strong>;
+<strong>BIC = −2LL + npar·ln N</strong> with <strong>N the analyzed cases</strong> (not cells);
+<strong>residual df = min(N, ∏K_j − 1) − npar</strong> — all poLCA's formulas
+verbatim. The <strong>identification pre-flight errors as data when residual
+df &lt; 0</strong> (poLCA merely warns): more parameters than identifiable
+information is the exact failure the pre-flight exists to stop.</li>
+<li><strong>aBIC = −2LL + npar·ln((N+2)/24)</strong> (Sclove's sample-size-adjusted BIC —
+the Mplus convention; poLCA does not report it, so its pins are
+R-computed from poLCA's LL and npar).</li>
+<li><strong>Entropy</strong> is the <strong>relative entropy of the posterior classification</strong>,
+<code>1 − Σ_i Σ_c(−p_ic ln p_ic)/(N ln C)</code> (the Mplus convention; near 1 =
+crisp classes). Undefined at C = 1 (null cell). Pinned R-computed from
+poLCA's posterior matrix.</li>
+<li><strong>G² = 2·Σ freq·ln(freq/fit)</strong> over the observed response patterns and
+<strong>X² = Σ(freq − fit)²/fit + (N − Σfit)</strong> (the unobserved-cell tail
+term) — poLCA's exact forms, verified from source.</li>
+<li><strong>Classification quality</strong>: the C×C table of <strong>average posterior
+probabilities by modally assigned class</strong> (the Mplus AvePP diagnostic),
+with the assigned-N column.</li>
+</ul>
+<h3 id="saved-columns-and-the-tool-shape">Saved columns and the tool shape</h3>
+<p>A dedicated <strong><code>latent_class</code> tool</strong> (catalog 105 → 106), engine module
+beside the reduction family. <code>classes</code> is the fitted class count; an
+optional <strong><code>compare_max</code></strong> fits 1…compare_max-class models under the same
+settings and prepends a <strong>Class Enumeration</strong> table (LL, npar, AIC, BIC,
+aBIC, entropy per count) — the enumeration workflow in one journaled
+command. <code>save_class</code> / <code>save_posteriors</code> save the modal class (in the
+descending-π order) and the C posterior columns — the cluster/propensity
+save shape. <strong>Recorded finding (4e)</strong>: the read-only <code>ToolPolicy</code> gates
+per <em>tool</em> (<code>mutatesData</code>), and the actual cluster/propensity precedent
+leaves save-capable analyses ungated — there is no per-call &quot;block only
+the save variant&quot; mechanism to hook into. <code>latent_class</code> follows the
+precedent (an analysis, not <code>mutatesData</code>); the cross-cutting gap (a
+read-only session can still save columns via any save-capable analysis) is
+recorded in the feature bucket as its own deferral rather than patched
+ad-hoc for one tool. <strong>Closed in 0.21.0 item 1 (2026-08-21)</strong>: the save
+options are declared on the catalog parameter (<code>savesColumns</code>) and the
+read-only policy withholds and refuses them per call — the record is
+<code>docs/design/advanced_features.md</code> §3 and <code>docs/releases/release_0.21.0.md</code>
+item 1 (both kept private).</p>
+<h3 id="weights-design-and-scope-cuts">Weights, design, and scope cuts</h3>
+<ul>
+<li><strong>Frequency weights</strong> enter the E/M sums and every count (N = Σw in the
+fit block, df, entropy and the pattern frequencies), keeping the
+<em>weight ≡ replication</em> identity, asserted by a Rust unit test. poLCA has
+no weights, so the pins run unweighted. A declared <strong>survey design is
+not covered</strong> — the standard ignores-design note (item-1 list
+unchanged).</li>
+<li><strong>Out of scope for v1 (recorded cuts)</strong>: covariates on class membership
+(poLCA's regression arm), ordinal/constrained item models, partial
+missing-response retention, and bootstrap LR tests for class enumeration
+(BLRT) — the enumeration table's information criteria are the v1
+decision aids.</li>
+</ul>
+<h2 id="item-response-theory--the-v1-conventions">Item response theory — the v1 conventions</h2>
+<p><em>Decided 2026-08-18, before any code, as sub-task 5a of
+<code>docs/releases/release_0.19.0.md</code> item 5 (kept private). IRT models each
+binary item's probability of a correct/keyed response as a function of a
+latent trait θ — item <strong>difficulty</strong> and <strong>discrimination</strong> rather than a
+single reliability number, plus <strong>information curves</strong> showing <em>where</em> on
+the trait the test measures well. This is the second <strong>estimation-risk</strong>
+item (MML/EM over a latent trait): it opens with a spike against the
+references and holds until parity passes. Every convention below was
+verified against <strong>both</strong> reference packages — R <code>ltm</code> 1.2-0 and <code>mirt</code>
+1.46.1 (R 4.5.3), the CFA dual-reference rule — on the canonical LSAT
+data, not recorded from memory. The pinned values live in
+<code>tool/validation/generate_irt_references.R</code> and
+<code>test/validation/irt_reference_values.json</code> (sub-task 5h).</em></p>
+<h3 id="the-references-and-their-data">The references and their data</h3>
+<p>The pinned datasets are the two canonical LSAT tables both packages ship:
+<strong>LSAT6</strong> (Bock &amp; Lieberman's five-item LSAT section 6, n = 1000 — <code>ltm</code>'s
+<code>LSAT</code>, <code>mirt</code>'s <code>LSAT6</code>; the Rasch example) and <strong>LSAT7</strong> (five items,
+n = 1000 — <code>mirt</code>'s <code>LSAT7</code>; the 2PL example in <code>mirt</code>'s own
+documentation). Verified cross-package agreement on the LSAT7 2PL fit —
+log-likelihood −2658.8052 to 5e-5, parameters to ~8e-4, standard errors to
+~2e-4 — sets the pin tolerances: <strong>each package is pinned separately on
+the same cells</strong> (the dual-pin shape from item 3) at ~2e-3, tighter where
+the evidence allows.</p>
+<h3 id="the-model-and-the-estimator-2">The model and the estimator</h3>
+<ol>
+<li><strong>Models</strong>: the 2PL, <code>P(y=1|θ) = logistic(aθ + d)</code>, and the <strong>Rasch
+model as its common-discrimination constraint</strong> — one shared <code>a</code>, free
+per-item difficulties, <strong>θ ~ N(0,1) fixed</strong> in both (the latent-scale
+identification, named in the output note). This is <code>ltm::rasch()</code>'s
+convention; <code>mirt</code>'s Rasch (a ≡ 1, free latent variance σ²) is the
+same model rescaled — a = σ, b = −d/σ — verified numerically on LSAT6
+(σ̂ = √0.572 = 0.756 vs <code>ltm</code>'s common â = 0.7551) and asserted by
+transform in the generator. <strong>Rasch-as-constrained-2PL is checked
+explicitly</strong> (the 5c row): fixing the 2PL's slopes equal must reproduce
+the Rasch fit.</li>
+<li><strong>Estimation is Bock–Aitkin MML/EM</strong>: E-step posteriors over a fixed
+quadrature — <strong>61 equally spaced nodes on [−6, 6], standard-normal
+weights normalized to sum 1</strong> (<code>mirt</code>'s default fixed-point scheme;
+<code>ltm</code>'s 40-point Gauss–Hermite lands inside the cross-package tolerance
+regardless, per the evidence above) — M-step per-item weighted logistic
+Newton (2PL), or difficulty-wise Newton with a shared-slope outer
+Newton (Rasch). <strong>Deterministic starts</strong> (a = 1, d = 0): the marginal
+likelihood is well-behaved for these models and both references start
+deterministically — no seed, no random starts. Converged when the
+marginal LL improves by &lt; 1e-8, capped at 500 EM cycles; iterations
+and convergence reported in the note.</li>
+<li><strong>Parameterization</strong>: estimated in slope–intercept <code>(a, d)</code> (the
+numerically stable form, <code>mirt</code>'s internal one); <strong>reported in the
+classical IRT parameterization</strong> — Discrimination <code>a</code>, Difficulty
+<code>b = −d/a</code> — with the parameterization named in the table note (the 5a
+requirement). SEs come from the <strong>observed information</strong> (central-
+difference Hessian of the marginal log-likelihood at the MLE —
+<code>ltm</code>'s approach, and <code>mirt</code>'s Oakes SEs agree to ~2e-4), with the
+difficulty SE by the delta method. Under Rasch the shared
+discrimination's SE appears on each row (one parameter, one SE —
+noted).</li>
+<li><strong>The fit block</strong>: marginal log-likelihood; npar = 2J (2PL) or J + 1
+(Rasch); AIC = −2LL + 2·npar and BIC = −2LL + npar·ln N with N the
+analyzed cases (Σw when weighted).</li>
+<li><strong>Information</strong>: item information <code>I_j(θ) = a_j²·P_j(1−P_j)</code> and test
+information <code>I(θ) = Σ_j I_j(θ)</code>, tabulated on the <strong>θ grid −4 … 4 in
+steps of 0.1</strong> (81 points) with <code>SE(θ) = 1/√I(θ)</code> alongside the test
+curve. The curves are <strong>line-chart geometry</strong>: the engine emits them
+as (series, θ, value) tables and the chart layer renders them as
+<code>LineChartData</code> — the shipped multi-series line painter, palette,
+legend and editor apply from day one with <strong>no new painter</strong> (the 5d
+row's &quot;painter layout-helper tests&quot; become spec-builder tests).</li>
+<li><strong>Data</strong>: binary indicators — each item must show <strong>exactly two
+observed levels</strong> over the analyzed cases (sorted; the <strong>higher level
+is the keyed/correct response</strong>, stated in the note); anything else
+errors as data, naming the item. Listwise deletion of incomplete
+cases. <strong>Frequency weights</strong> enter the pattern frequencies and every
+count (the <em>weight ≡ replication</em> identity, asserted by a Rust unit
+test); the references have no weights, so the pins run unweighted. A
+declared <strong>survey design is not covered</strong> — the standard
+ignores-design note.</li>
+</ol>
+<h3 id="out-of-scope-for-v1-recorded-cuts">Out of scope for v1 (recorded cuts)</h3>
+<ul>
+<li><strong>No 3PL</strong> — the plan's own cut (guessing-parameter estimation is
+notoriously fragile); revisit only if asked, with priors.</li>
+<li><strong>No polytomous models</strong> (graded response, partial credit), <strong>no saved
+ability (EAP/MAP) scores</strong>, <strong>no item-fit statistics</strong>, and <strong>no ICC
+trace-line plots</strong> (the information curves are the v1 figures) — each a
+natural follow-up, recorded here.</li>
+</ul>
+<h2 id="cfa-follow-ups--the-0210-conventions">CFA follow-ups — the 0.21.0 conventions</h2>
+<p><em>Recorded 2026-08-21, before any code, for
+<code>docs/releases/release_0.21.0.md</code> item 4 (kept private): the three
+follow-ups the CFA v1 scope line left behind. Each sub-item adds its
+subsection here when its row <strong>a</strong> lands; the pins live in
+<code>test/cfa_followups_validation_test.dart</code>
+against
+<code>cfa_followups_reference_values.json</code>
+from
+<code>generate_cfa_followups_references.R</code>.</em></p>
+<p><strong>The reference is lavaan</strong> (0.7-2 at the time of writing, in the R
+validation env) — the package whose conventions CFA v1 was already pinned
+against (expected information, divisor N), so every follow-up is measured
+against the same yardstick. <strong>The fixture</strong> is the Holzinger–Swineford data
+as lavaan ships it (<code>cfa_followups.csv</code>: <code>x1..x9</code> byte-identical per value
+to the semopy copy in <code>hs1939.csv</code>, plus <code>school</code>, <code>sex</code>, and the ordinal
+recodes <code>o1..o9</code> — each <code>x</code> cut at its own quartiles into four ordered
+categories, deterministically), so the multi-group and ordinal sub-items
+pin against lavaan's own documented example.</p>
+<h3 id="modification-indices-4mi">Modification indices (4·MI)</h3>
+<ul>
+<li><strong>What is computed.</strong> For every <em>fixed</em> parameter of the fitted model —
+each cross-loading (an indicator on a factor it does not belong to), each
+residual covariance between two indicators, and, under <code>orthogonal</code>, each
+factor covariance — the <strong>modification index</strong> is the 1-df Lagrange
+multiplier (score) test of freeing that parameter alone:
+<code>MI = S_k² / V_k</code>, with <code>S_k = −(N/2) ∂F/∂θ_k</code> the score of the fixed
+parameter at the restricted ML solution and
+<code>V_k = I_kk − I_kf I_ff⁻¹ I_fk</code> its expected information <strong>conditional on
+the free parameters</strong> (Sörbom 1989). It approximates the χ² drop a refit
+with that parameter freed would show (the score and likelihood-ratio
+tests coincide to first order; a Rust test asserts the agreement near the
+null). The <strong>EPC</strong> is the expected parameter change <code>S_k / V_k</code>; the
+<strong>Std. EPC</strong> is lavaan's <code>sepc.all</code> — the completely standardized value:
+a loading as <code>EPC·√φ_ff / √σ̂_jj</code> (the standardized-loading metric), a
+residual covariance as <code>EPC / √(θ_i θ_j)</code> (a residual correlation), a
+factor covariance as <code>EPC / √(φ_rr φ_cc)</code> (a factor correlation).</li>
+<li><strong>Information matrix.</strong> Expected (Fisher), divisor N — the same matrix
+the v1 standard errors use, so the MIs, the SEs and lavaan's defaults
+agree by construction. When it is singular (the v1 &quot;empirically
+underidentified&quot; signal) the table is emitted with no rows and a note,
+exactly as the SEs are withheld.</li>
+<li><strong>Non-identified candidates are skipped, not printed.</strong> A candidate whose
+conditional information <code>V_k</code> is (numerically) zero cannot be freed
+identifiably — e.g. a residual covariance <em>within</em> a three-indicator
+factor of an orthogonal model, where that block is just-identified on its
+own. lavaan computes these as <code>NA</code> and drops them by default; the engine
+skips them. The identified candidate sets are the same (54 for the
+correlated HS model: 18 cross-loadings + 36 residual covariances; 48 for
+the orthogonal one: 18 + 27 between-factor residual covariances + 3
+factor covariances — a Rust test asserts both counts).</li>
+<li><strong>Listing floor.</strong> The table lists candidates with <code>MI ≥ mi_minimum</code>,
+largest first; the default floor is <strong>3.84</strong> (χ²(1) at α = .05, lavaan's
+<code>minimum.value</code> idiom rather than a top-N, so an empty table is itself the
+answer &quot;no single freed parameter would be significant&quot;); <code>0</code> lists every
+candidate. A just-identified model reports that there is nothing
+identifiable to free. Each row also carries the 1-df p-value of its MI.</li>
+<li><strong>The note warns.</strong> Indices are one-at-a-time approximations from the
+current solution and data-driven; the table's note says a freed
+parameter needs a substantive reason and that a respecified model is
+exploratory. The guide repeats it.</li>
+<li><strong>Pins.</strong> Ten candidates on HS (the four largest of the correlated model
+plus two mid-table ones; the three factor covariances and a between-factor
+residual covariance of the orthogonal model), each on MI (tol 2e-3),
+EPC and Std. EPC (2e-4), against <code>lavaan::modindices()</code>.</li>
+</ul>
+<h3 id="multi-group-invariance-4mg">Multi-group invariance (4·MG)</h3>
+<ul>
+<li><strong>The model.</strong> The same measurement model in every group of a grouping
+variable, <strong>with a mean structure</strong>: <code>Σ_g = Λ_g Φ_g Λ_gᵀ + Θ_g</code>,
+<code>μ_g = ν_g + Λ_g α_g</code>. Groups are the distinct non-missing values of the
+grouping variable in ascending order; cases with a missing group value
+are excluded (the note counts them); every group needs more complete
+cases than indicators (the error names the group). The grouping variable
+may not also be an indicator.</li>
+<li><strong>The ladder</strong> is lavaan's <code>group.equal</code> sequence with its
+parameterization, fitted configural → requested level and compared
+model-to-model: <strong>configural</strong> (same pattern, all parameters free;
+intercepts free per group, latent means fixed at 0 everywhere — so the
+mean structure is saturated and the χ² equals the covariance-only one),
+<strong>metric</strong> (+ loadings equal), <strong>scalar</strong> (+ intercepts equal; latent
+means free in groups 2…G, the <strong>first group the reference at 0</strong>),
+<strong>strict</strong> (+ residual variances equal). Factor variances and
+covariances are free in every group at every level. The default
+requested level is <strong>scalar</strong> (the level that licenses latent-mean
+comparison). Reference-indicator scaling throughout (the first indicator's
+loading fixed at 1 in every group).</li>
+<li><strong>Fit function and χ².</strong> <code>F = Σ_g (n_g/N)·F_g</code> with the normal-theory
+discrepancy including the mean term, <code>χ² = N·F = Σ_g n_g F_g</code>;
+<code>df = G·(p(p+1)/2 + p) − npar</code>. Each group's covariance part reuses the
+single-group objective on <code>S_g + r rᵀ</code> (the identity
+<code>tr((S + rrᵀ)Σ⁻¹) = tr(SΣ⁻¹) + rᵀΣ⁻¹r</code>); equality constraints are
+parameter sharing in one working vector, so the v1 optimizer,
+parameterization and restart policy carry over (a finite-difference test
+checks the analytic gradient at every level).</li>
+<li><strong>Fit indices, lavaan's multi-group definitions (verified numerically
+against <code>fitMeasures()</code> on HS by school).</strong> Baseline: the per-group
+independence model with saturated means (<code>df_b = G·p(p−1)/2</code>); CFI/TLI
+as in v1 from those; <strong>RMSEA and its 90% CI carry the √G factor</strong>
+(<code>√G·√((χ²−df)/(df·N))</code>); <strong>SRMR is the N-weighted mean of the per-group
+SRMRs with the mean residuals included</strong> — each standardized by the
+observed SD and counted among <code>p(p+1)/2 + p</code> residuals (lavaan's
+<code>srmr</code> = <code>srmr_bentler</code>; its <code>_nomean</code> twin is the covariance-only
+average, recorded but not printed).</li>
+<li><strong>Comparison columns.</strong> Δχ² and Δdf against the model one level up, with
+the χ² p-value of the difference (the likelihood-ratio test of the added
+constraints), ΔCFI and ΔRMSEA. The note states the ΔCFI ≈ .01 rule of
+thumb (Cheung &amp; Rensvold) as guidance, never as a verdict.</li>
+<li><strong>Standard errors.</strong> Expected information summed over groups —
+<code>(n_g/2)·tr(Σ_g⁻¹ D_a Σ_g⁻¹ D_b)</code> for the covariance part plus
+<code>n_g·m_aᵀ Σ_g⁻¹ m_b</code> for the mean part (<code>m_a = ∂μ_g/∂θ_a</code>) — divisor N,
+as v1; a shared parameter's SE is reported identically in every group.
+The standardized loadings are completely standardized <strong>within each
+group</strong>.</li>
+<li><strong>Tables.</strong> &quot;CFA Invariance Tests&quot; (one row per fitted level), then the
+requested level's per-group &quot;CFA Loadings&quot;, &quot;CFA Factor Correlations&quot;,
+&quot;CFA Variances&quot;, &quot;CFA Intercepts&quot; and — from scalar on — &quot;CFA Latent
+Means&quot; (group 1's fixed 0 with no SE). Modification indices are not
+offered for a multi-group model (errors as data).</li>
+<li><strong>Pins.</strong> On HS by <code>school</code> (lavaan <code>group.label</code> set to the ascending
+order the engine uses, so Grant-White is the reference group): per level
+χ², df, CFI, TLI, RMSEA (+ CI), SRMR, the baseline χ²; parameters at
+configural (a free loading per group), metric (the shared loading), scalar
+(a shared intercept, the latent means of group 2 with their SEs) and
+strict (a shared residual variance) — see the generator for the exact
+calls.</li>
+</ul>
+<h3 id="ordinal-indicators--wlsmv-4wlsmv">Ordinal indicators — WLSMV (4·WLSMV)</h3>
+<ul>
+<li><strong>When.</strong> <code>estimator: &quot;wlsmv&quot;</code> treats <strong>every</strong> indicator as ordinal:
+integer-coded, each distinct value an ordered category (2 to 12 of them —
+more reads as continuous and is refused with advice to use ML), listwise
+over the indicators, frequency-weighted counts. Mixed
+continuous/ordinal models, multi-group WLSMV and modification indices
+under WLSMV are not offered (errors as data). lavaan's defaults for
+<code>ordered=</code> are the reference: estimator DWLS, test <code>scaled.shifted</code>,
+<strong>delta parameterization</strong>, reference-indicator scaling.</li>
+<li><strong>Sample statistics.</strong> Thresholds <code>τ_jc = Φ⁻¹(cumulative proportion)</code>
+from the weighted margins; polychoric correlations by the two-step ML
+estimator of the <code>polychoric_correlation</code> tool (thresholds fixed at the
+margins, ρ by golden-section ML, the bivariate normal CDF by Simpson
+quadrature). Both reproduce lavaan's <code>sampstat</code> (thresholds to 1e-6,
+polychorics to 2e-4 — quadrature, not convention).</li>
+<li><strong>The asymptotic covariance Γ (Muthén 1984), from per-case influence
+functions — lavaan's assembly, read from its source.</strong> A threshold's
+influence is <code>(1{y ≤ c} − Φ(τ_c)) / φ(τ_c)</code>; a polychoric's is its
+pairwise-likelihood score <code>(∂π_ab/∂ρ)/π_ab</code> minus the cross term times
+the two items' threshold influences (the two-step plug-in correction),
+divided by the information for ρ — where <strong>both the information and the
+cross term are the outer-product (empirical) forms</strong> lavaan uses
+(<code>A22 = mean(s_ρ²)</code>, <code>A21 = mean(s_ρ · s_τ^biv)</code> with the pairwise
+likelihood's own threshold scores), <em>not</em> the expected information (which
+lands ~10 % off). Γ is the weighted sample covariance of the influences
+(<code>Σw·infl·inflᵀ / N</code>: per-case, the covariance of the statistics being
+Γ/N). Verified entry by entry against <code>lavInspect(fit, &quot;gamma&quot;)</code> — the
+36 polychoric diagonals agree to 1e-7, the threshold diagonals and the
+cross terms to the same order. Only the polychoric
+block enters the fit, the test and the parameter SEs: thresholds are
+free and exactly identified, so they drop out of <code>F</code> and of <code>U</code> — a
+consequence of the block structure, not an approximation — while their
+estimation still reaches Γ through the influence correction.</li>
+<li><strong>Estimation.</strong> DWLS: <code>F = Σ_{j&lt;k} (ρ̂_jk − σ_jk)² / Γ_jk,jk</code>, the
+correlation structure <code>σ = ΛΦΛᵀ</code> off-diagonal; residual variances are
+<code>1 − (ΛΦΛᵀ)_jj</code> (implied, no SE) under the delta parameterization; Φ
+Cholesky-parameterized as in v1, minimized by the shared BFGS with the
+restart policy; a communality above 1 is the Heywood flag. The gradient
+is analytic (finite-difference test). At lavaan's own estimates the
+engine's <code>F</code> equals lavaan's to 1e-8 (the residual correlations agree to
+1e-8), so the estimates are the same minimum.</li>
+<li><strong>Test statistic.</strong> <code>T = (N−1)·F</code> — lavaan's WLS convention (verified:
+<code>Σ r²/Γ_kk</code> at lavaan's own estimates times 300 reproduces its <code>chisq</code>
+51.5368 on the fixture; ML uses N·F), then the <strong>scaled-shifted</strong> statistic
+<code>T* = a·T + b</code>, <code>a = √(df/tr((UΓ)²))</code>, <code>b = df − a·tr(UΓ)</code>,
+<code>U = W − WΔ(ΔᵀWΔ)⁻¹ΔᵀW</code>, <code>W = diag(Γ)⁻¹</code>, <code>Δ = ∂σ/∂θ</code> at the solution —
+reproduced to 1e-6 from lavaan's own <code>gamma</code>/<code>wls.v</code>/<code>delta</code> (lavaan's
+<code>chisq.scaling.factor</code> is <code>1/a</code>). The <strong>baseline</strong> (independence) model
+has no free correlation parameter, so <code>U_b = W</code>, <code>tr(U_bΓ) = #pairs</code>,
+and its <code>T_b = (N−1)·Σ ρ̂²/Γ_kk</code> is scaled the same way. The p-value is
+χ²_df of <code>T*</code>.</li>
+<li><strong>Fit indices — the &quot;scaled&quot; family</strong> (<code>cfi.scaled</code>, <code>tli.scaled</code>,
+<code>rmsea.scaled</code> with its CI), all from <code>T*</code> and <code>T*_b</code>; <strong>RMSEA and its
+90% CI use N − 1</strong> (lavaan's categorical convention, verified to 1e-6:
+N gives 0.08332, N−1 gives lavaan's 0.08346); <strong>SRMR</strong> is the RMS of the
+off-diagonal residual correlations over <strong>p(p+1)/2</strong> (the diagonal
+residuals are zero by construction but counted — lavaan's <code>srmr</code> for
+categorical data, 0.065641; the off-diagonal-only mean would be
+0.073388). The robust variants (<code>cfi.robust</code>, <code>rmsea.robust</code>) are not
+printed — recorded as a possible follow-up.</li>
+<li><strong>Standard errors.</strong> Robust sandwich
+<code>(ΔᵀWΔ)⁻¹ ΔᵀWΓWΔ (ΔᵀWΔ)⁻¹ / (N − 1)</code> for loadings and Φ (lavaan's <code>se</code>
+under WLSMV — pinned at 1e-3), threshold SEs <code>√(Γ_ττ / (N − 1))</code>
+(lavaan 0.07739 for o1|t1, reproduced). The standardized loading is
+<code>λ√φ</code> (unit latent-response variance).</li>
+<li><strong>Tables.</strong> The four ML tables with the same columns (the Model Fit row
+carries <code>T*</code>; the note gives a, b, T, the baseline), plus &quot;CFA
+Thresholds&quot; (indicator, <code>t_c (lower | upper category)</code>, estimate, SE) and
+&quot;CFA Polychoric Correlations&quot; (the matrix the model was fitted to).</li>
+<li><strong>Pins.</strong> On the quartile-cut <code>o1..o9</code> of the fixture against
+<code>lavaan::cfa(..., ordered = o1..o9)</code>: <code>T</code>, <code>T*</code>, df, p, CFI, TLI, RMSEA
+(+ CI), SRMR, the scaled baseline; six loadings with SEs, the six Φ
+entries with SEs, a factor correlation, five thresholds with SEs, four
+polychorics — the unit tests pin them from the embedded digits of the
+same fixture, the gate-4 suite end to end.</li>
+</ul>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../../index.html">Home</a> ·
+        <a href="../../../../quick-start/">Quick Start</a> ·
+        <a href="../../../../privacy-policy/">Privacy Policy</a> ·
+        <a href="../../../../license/">License</a> ·
+        <a href="../../../../cite/">How to Cite</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../../js/main.js"></script>
+</body>
+</html>

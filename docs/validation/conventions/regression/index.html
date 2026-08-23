@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Regression conventions — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/validation/conventions/regression/">
+  <link rel="icon" type="image/svg+xml" href="../../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Regression conventions — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/validation/conventions/regression/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../../index.html">
+        <img class="brand-mark" src="../../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <!-- One link, not a copy of the site menu. While someone is reading the
+           guide, the sidebar is the navigation that matters; marketing anchors
+           (Features, Screenshots, …) only compete with it and push the reader
+           out of what they came for. All that is owed is a way back. Single
+           link means no mobile collapse either, so there is no hamburger on
+           these pages — main.js guards for its absence. -->
+      <nav id="nav-links" class="nav-links nav-links--single">
+        <a href="../../../../index.html">← Back to chakatastat.app</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../../index.html#download">Download</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">Numerical-validation suite</p>
+        <ul>
+        <li><a href="../../">Overview</a></li>
+        <li><a href="../../nist/">NIST StRD certified datasets</a></li>
+        <li><a href="../../file-formats/">Statistics-package file formats</a></li>
+        <li><a href="../../tolerances/">Tolerances and recorded conventions</a></li>
+        <li class="docs-nav-section">The recorded conventions</li>
+        <li><a href="./" aria-current="page">Regression conventions</a></li>
+        <li><a href="../latent-variable/">Latent-variable conventions</a></li>
+        <li><a href="../clinical-and-survey/">Clinical and survey conventions</a></li>
+        <li><a href="../resampling-and-time-series/">Resampling and time-series conventions</a></li>
+        <li class="docs-nav-section">Maintaining the suite</li>
+        <li><a href="../../regenerating/">Regenerating the reference values</a></li>
+        <li class="docs-nav-section">User Guide</li>
+        <li><a href="../../../">Contents</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="regression-conventions">Regression conventions</h1>
+<blockquote>
+<p>Part of the <a href="../../">numerical-validation suite</a>. The recorded conventions behind the regression and GLM numbers.</p>
+</blockquote>
+<h2 id="glm-quantile-residuals--the-per-family-definitions">GLM quantile residuals — the per-family definitions</h2>
+<p><em>Decided 2026-08-09, before any code, as step 1a of
+<code>docs/releases/release_0.16.0.md</code> item 1 (kept private). The diagnostic panel
+for <strong>linear</strong> regression shipped in 0.12.0; extending it to the GLM families is
+new statistics, not plumbing, because &quot;residual of what?&quot; has a different answer
+per family. These are those answers.</em></p>
+<h3 id="the-residual-randomized-quantile-residuals-every-family">The residual: randomized quantile residuals, every family</h3>
+<p>For an observation <code>y</code> with fitted distribution <code>F(· ; θ̂)</code>, the <strong>quantile
+residual</strong> (Dunn &amp; Smyth 1996) is</p>
+<pre><code>r = Φ⁻¹(u),    u ~ Uniform( F(y⁻ ; θ̂), F(y ; θ̂) ]
+</code></pre>
+<p>where <code>F(y⁻)</code> is the left limit — <code>F(y−1)</code> for an integer-valued outcome, and
+<code>F(y)</code> itself for a continuous one, which collapses the interval to a point and
+makes the residual <strong>exact and non-random</strong>.</p>
+<p><strong>Why not deviance or Pearson.</strong> For a discrete outcome they are misleading <em>by
+construction</em>: the raw, deviance and Pearson residuals of a Bernoulli fit each
+take one value per outcome level at a given fitted mean, so the scatter forms
+<strong>arcs — one per level</strong> — and a user who recognises the Residuals-vs-Fitted
+layout reads structure that is an artefact of the outcome being binary, not
+evidence about the model. Poisson fits at small <code>μ</code> band the same way. Quantile
+residuals have no such artefact and are <strong>exactly N(0, 1)</strong> under a correctly
+specified model (treating θ̂ as known), for <em>every</em> family — so one reading of
+the panel applies across the whole catalog.</p>
+<p><strong>Gamma is the deliberate uniformity choice, and it departs from R.</strong> The
+outcome is continuous, so deviance residuals do <em>not</em> band and R's <code>plot.glm</code>
+would draw them. We use the exact (non-randomized) quantile residual anyway, so
+that one residual concept, one reference line and one sentence in the User Guide
+cover all six families. The panel already departs from R's default for the
+discrete families — that departure is the entire reason the panel exists — and
+being internally consistent is worth more than matching a default we have
+already, correctly, left behind. The User Guide states which residual is drawn
+so a user cross-checking against R is never surprised.</p>
+<h3 id="the-cdf-bracket-per-family">The CDF bracket per family</h3>
+<p><code>μ</code> is the fitted mean, <code>α</code> the NB2 dispersion, <code>φ</code> the gamma dispersion
+(the engine's Pearson statistic per residual df), <code>π</code> the structural-zero
+probability and <code>θ</code> the hurdle-crossing probability.</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Family</th>
+<th><code>F(y⁻)</code></th>
+<th><code>F(y)</code></th>
+<th>Randomized</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Binomial — logit / probit / cloglog</td>
+<td><code>y=0</code>: 0 · <code>y=1</code>: 1−μ</td>
+<td><code>y=0</code>: 1−μ · <code>y=1</code>: 1</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Poisson</td>
+<td><code>F_P(y−1; μ)</code></td>
+<td><code>F_P(y; μ)</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Negative binomial (NB2)</td>
+<td><code>F_NB(y−1; μ, α)</code></td>
+<td><code>F_NB(y; μ, α)</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Gamma</td>
+<td><code>F_Γ(y; ν=1/φ, rate=ν/μ)</code></td>
+<td>identical</td>
+<td><strong>no</strong></td>
+</tr>
+<tr>
+<td>Zero-inflated Poisson / NB</td>
+<td><code>F_ZI(y−1)</code></td>
+<td><code>F_ZI(y)</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Hurdle Poisson / NB</td>
+<td><code>F_H(y−1)</code></td>
+<td><code>F_H(y)</code></td>
+<td>yes</td>
+</tr>
+</tbody>
+</table></div>
+<p>with the two mixture CDFs written in terms of the count CDF <code>F_c</code> and its
+mass at zero <code>f_c(0)</code>:</p>
+<pre><code>F_ZI(k) = π + (1−π)·F_c(k)                            k ≥ 0,  F_ZI(−1) = 0
+F_H(0)  = 1−θ
+F_H(k)  = (1−θ) + θ·(F_c(k) − f_c(0)) / (1 − f_c(0))  k ≥ 1,  F_H(−1)  = 0
+</code></pre>
+<p>The three CDFs are <code>stats.rs</code>'s <code>poisson_cdf</code>, <code>negbin_cdf</code> and <code>gamma_cdf</code>,
+each built on the regularized incomplete gamma / beta functions the engine
+already carries, and each pinned against SciPy in <code>stats.rs</code>'s own tests.</p>
+<h3 id="the-seed-policy">The seed policy</h3>
+<p>Randomization collides with the reproducibility contract — the same journaled
+command must produce the same output — so the draw is <strong>seeded, from the
+engine's existing convention</strong>: the integer <code>seed</code> option, default <strong>1</strong>
+(<code>DEFAULT_SEED</code> in resample.rs), through
+the same SplitMix64 generator the bootstrap uses, drawn <strong>once per case in
+listwise order</strong>. Same command + same data ⇒ the same plot, always. The seed is
+named in the table note exactly as the bootstrap names its own.</p>
+<p>Two rejected alternatives, recorded so they are not re-litigated. A <strong>clock or
+entropy seed</strong> breaks the contract outright. A <strong>data-derived seed</strong> (hashing
+the response column, say) looks attractive but is worse than a constant: it
+changes when any case changes, so two runs on nearly-identical data get
+unrelated realizations and cannot be compared — the opposite of what a
+diagnostic is for.</p>
+<p>The seed is deliberately <strong>user-settable</strong>, because Dunn &amp; Smyth's own advice is
+to inspect several realizations: any single one carries randomization noise, and
+a feature that appears under one seed and not another is noise, not misfit.
+Varying <code>seed</code> is how that check is made, and because it is journaled a report
+can say which realization it shows.</p>
+<h3 id="the-reference-lines--where-the-linear-panels-convention-does-not-transfer">The reference lines — where the linear panel's convention does not transfer</h3>
+<ul>
+<li><strong>Quantile Residuals vs Linear Predictor</strong> — a horizontal line at <strong>zero</strong>.
+Quantile residuals have mean zero under a correct model, so this transfers
+unchanged from the OLS panel.</li>
+<li><strong>Q-Q Plot of Quantile Residual</strong> — the <strong>identity line (slope 1, intercept
+0)</strong>, <em>not</em> the first/third-quartile fit the linear panel draws (the R
+<code>qqline</code> convention <code>qq_plot</code> uses). Quantile residuals are standard normal
+<strong>by construction</strong> under a correct model, so the theoretical line is known a
+priori; fitting a line through the sample quartiles would absorb exactly the
+location and scale misfit the plot exists to reveal. This is the one place in
+the panel where the OLS convention is deliberately not carried over, and the
+reference-line table records <code>slope = 1, intercept = 0</code> as constants rather
+than as a fit.</li>
+</ul>
+<h3 id="the-x-axis-the-linear-predictor-not-the-fitted-mean">The x axis: the linear predictor, not the fitted mean</h3>
+<p>Both scatters are drawn against the <strong>linear predictor η</strong> (the link scale).
+This is R's <code>plot.glm</code> convention — <code>stats:::plot.lm</code> takes <code>predict(x)</code>, which
+for a <code>glm</code> object is the link-scale prediction, and carries the source comment
+<code>## != fitted() for glm</code>. On the response scale the fitted values of a binomial
+or count fit compress against their boundary and the plot loses its resolution.
+For the zero-inflated and hurdle models it is the <strong>count component's</strong> linear
+predictor, since that is the component the count CDF describes.</p>
+<h3 id="the-panel-names">The panel names</h3>
+<p>The OLS titles are never reused: &quot;Residuals vs Fitted&quot;, &quot;Scale-Location&quot; and
+&quot;Q-Q Plot of Std. Residual&quot; name different quantities, and a returning user must
+not be told they are looking at the three plots they already know.</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Emitted table</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Quantile Residuals vs Linear Predictor</code></td>
+<td>η against the quantile residual</td>
+</tr>
+<tr>
+<td><code>Q-Q Plot of Quantile Residual</code></td>
+<td>Blom rankits against the sorted residuals</td>
+</tr>
+<tr>
+<td><code>Q-Q Reference Line</code></td>
+<td>the identity line, as constants</td>
+</tr>
+</tbody>
+</table></div>
+<p>Each note names the family, says whether the residual is randomized, and gives
+the seed when it is.</p>
+<h3 id="undefined-residuals-are-skipped-not-nulled">Undefined residuals are skipped, not nulled</h3>
+<p>The 0.12.0 item-2d convention. A fitted probability at the boundary — perfect
+separation in a logistic fit — puts <code>u</code> at 0 or 1, so <code>Φ⁻¹(u)</code> is ±∞; that case
+is <strong>dropped from the table</strong> rather than emitted as a null. With no finite
+residual anywhere the table is empty and the chart layer's empty-check
+suppresses the plot, which is the honest outcome for a degenerate fit.</p>
+<h3 id="out-of-scope-for-v1">Out of scope for v1</h3>
+<p>No influence diagnostics for the GLM families (Cook's distance, leverage,
+DFBETA), no half-normal plots with simulated envelopes, and no binned-residual
+plot. Each is a defensible follow-up and each is its own validation problem.</p>
+<h2 id="mediation-follow-ups--the-0210-conventions">Mediation follow-ups — the 0.21.0 conventions</h2>
+<p><em>Recorded 2026-08-21, before any code, for
+<code>docs/releases/release_0.21.0.md</code> item 5 (kept private): the three
+follow-ups the 0.15.0 moderated-mediation scope line left behind. Each
+sub-item adds its subsection here when its row <strong>a</strong> lands; the pins live
+in
+<code>test/mediation_followups_validation_test.dart</code>
+against
+<code>mediation_followups_reference_values.json</code>
+from
+<code>generate_mediation_followups_references.R</code>.</em></p>
+<p><strong>The fixture</strong> is a deterministic synthetic dataset
+(<code>mediation_followups.csv</code>, n = 200, fixed seed, create-if-absent) built so
+every follow-up has something to find: a real <code>X·W</code> interaction on the
+a-path and a real <code>M₁·W</code> interaction on the b-path (so the Johnson–Neyman
+quadratics have finite roots inside the observed range — asserted at
+generation), a second moderator <code>Z</code> with a three-way <code>X·W·Z</code> term, and a
+serial chain <code>X → M₁ → M₂ → Y</code>. <strong>The references are R <code>lm</code> for every OLS
+quantity</strong> (the same algebra statsmodels reproduced for 0.15.0) and the
+<code>interactions</code> package for the Johnson–Neyman boundaries.</p>
+<h3 id="johnsonneyman-regions-5jn">Johnson–Neyman regions (5·JN)</h3>
+<ul>
+<li><strong>What is solved.</strong> For each moderated path, the conditional effect
+<code>θ(w) = β₁ + β₃·w</code> with <code>Var θ(w) = V₁₁ + w²V₃₃ + 2wV₁₃</code> (the 0.15.0
+conditional-slope convention); the boundaries are the roots of
+<code>|θ(w)| = t_crit·SE(w)</code>, i.e. of
+<code>(β₃² − t²V₃₃)·w² + 2(β₁β₃ − t²V₁₃)·w + (β₁² − t²V₁₁) = 0</code>, with
+<strong><code>t_crit</code> Student's t on the model's residual df at the interval's α</strong>
+(the <code>confidence</code> argument; two-sided). A vanishing quadratic coefficient
+falls back to the linear root; a negative discriminant means no crossing.
+PROCESS and <code>interactions::johnson_neyman</code> define the boundaries
+identically (same t, same df); the latter is the pin.</li>
+<li><strong>Only boundaries inside the observed range of W are reported</strong> (PROCESS's
+convention; <code>interactions</code> solves the same roots but plots over a widened
+range). The effect at each boundary equals ±t_crit·SE by construction —
+the table prints both so the reader can see the identity — with the
+percent of analyzed cases below and above. Which side of a boundary is
+significant is read from the quadratic's sign at the interval midpoint,
+and the note spells the region out in words (&quot;significant for W &lt; a and
+W &gt; b&quot;, &quot;for W &gt; a&quot;, &quot;over the whole observed range&quot;, &quot;nowhere in the
+observed range&quot;).</li>
+<li><strong>The plot</strong> is the conditional effect and its <code>confidence</code>% band over a
+41-point grid of the observed range (the boundaries inserted), with the
+zero line and the boundaries as vertical reference lines — a band-line
+chart (the forecast chart's geometry with a moderator axis). The grid
+table is emitted beside it so the chart replays from the journal.</li>
+<li><strong>Not for the indirect effect.</strong> Johnson–Neyman is analytic for the OLS
+conditional effect only; the conditional <em>indirect</em> effect's inference is
+bootstrap-only, so no region is drawn for it (PROCESS makes the same
+choice). Recorded as a non-goal.</li>
+<li><strong>Pins.</strong> The a-path (<code>m1 ~ x*w</code>) boundaries (both inside the range) with
+the effect, SE and percent-below at the lower one; the b-path
+(<code>y ~ x + m1*w</code>) boundaries and their count inside the range — against
+<code>interactions::johnson_neyman(…, alpha = .05)$bounds</code> and <code>lm</code>/<code>vcov</code>.</li>
+</ul>
+<h3 id="three-way-interactions-53w">Three-way interactions (5·3W)</h3>
+<ul>
+<li><strong>The model shapes.</strong> A second moderator Z (<code>moderator2</code>, numeric,
+distinct from every other role) joins W in <strong>the moderated model(s)
+only</strong> with every product: a-path <code>M ~ X + W + X·W + Z + X·Z + W·Z + X·W·Z (+ C)</code> (PROCESS model 11's first stage), b-path <code>Y ~ X + M + W + M·W + Z + M·Z + W·Z + M·W·Z (+ C)</code> per mediator (model 18's second
+stage), <code>both</code> both. The coefficients are labelled <code>a1…a7</code> / <code>b1…b7</code> in
+that order (a5 = X·Z, a7 = X·W·Z; b5 = M·Z, b7 = M·W·Z). Without Z the
+output is byte-identical to 0.15.0's.</li>
+<li><strong>Probes and the grid.</strong> Each moderator is probed by the 0.15.0 rule on
+its own (≤ 5 distinct values → each value; else mean ∓/± 1 SD, SD with
+n − 1); the grid is <strong>Z-outer, W-inner</strong>, so a table reads &quot;at Z = z: W
+= …&quot; down the page, and the interaction plot is drawn <strong>once per Z
+probe</strong> (titles &quot;… at Z = label&quot;). Probe values are held fixed across
+bootstrap resamples.</li>
+<li><strong>Conditional effects</strong> at <code>(w, z)</code>: the contrast <code>a1 + a3·w + a5·z + a7·wz</code> (b analogue) with <code>Var = cᵀVc</code> from the coefficient covariance,
+t on the residual df — pinned against <code>lm</code>/<code>vcov</code>.</li>
+<li><strong>Indices (Hayes 2018).</strong> With exactly one path moderated: the <strong>index of
+moderated moderated mediation</strong> <code>a7·b</code> / <code>a·b7</code> (how W's moderation of
+the indirect effect changes with Z) and the <strong>conditional index of
+moderated mediation</strong> by W at each Z probe <code>(a3 + a7·z)·b</code> /
+<code>a·(b3 + b7·z)</code>; both bootstrapped like the conditional indirect effects.
+With both paths moderated neither exists (the indirect effect is
+bilinear in W), and the output says so.</li>
+<li><strong>Johnson–Neyman with Z</strong> solves the regions of W <strong>at each Z probe</strong> on
+the combined coefficients <code>θ(w | z) = (β₁ + β₅z) + (β₃ + β₇z)·w</code> with the
+covariance of those two combinations — tables &quot;… at Z = label&quot;.</li>
+<li><strong>Pins.</strong> <code>lm(m1 ~ x*w*z)</code>: a7 and its SE; the conditional slope and SE at
+(w_hi, z_lo); the conditional indirect effect there (b from
+<code>lm(y ~ x + m1)</code>); a7·b; (a3 + a7·z_lo)·b. <code>lm(y ~ x + m1*w*z)</code>: b7 and
+its SE; the conditional b-slope and SE at (w_lo, z_hi).</li>
+</ul>
+<h3 id="serial-mediation-5ser">Serial mediation (5·SER)</h3>
+<ul>
+<li><strong>The model.</strong> <code>serial</code> with <strong>exactly two</strong> mediators in causal order
+(the listed order: M₁ affects M₂): <code>M₁ ~ X (+C)</code>, <code>M₂ ~ X + M₁ (+C)</code>
+— the <code>d₂₁</code> path — <code>Y ~ X + M₁ + M₂ (+C)</code> and the total model
+<code>Y ~ X (+C)</code>, all OLS (PROCESS model 6). Specific indirect effects
+<code>a₁b₁</code>, <code>a₂b₂</code> and the serial <code>a₁d₂₁b₂</code>, their sum the total indirect;
+<code>c = c′ + Σ</code> holds exactly (asserted). The path rows are labelled
+<code>a1, a2, d21, b1, b2, c′, c</code>; the indirect rows <code>X → M₁ → Y</code>,
+<code>X → M₂ → Y</code>, <code>X → M₁ → M₂ → Y</code>, total. Pairwise contrasts between the
+specific indirects are <strong>not</strong> reported (a recorded cut).</li>
+<li><strong>With one moderator.</strong> W enters the a-paths (<code>X·W</code> in both mediator
+models — M₂'s keeps M₁ after the moderated terms), the b-paths (<code>M₁·W</code>,
+<code>M₂·W</code> in the outcome model) or both; <strong><code>d₂₁</code> is not moderated</strong>
+(recorded; PROCESS model 83 / 87 shapes less the direct-path
+moderation). Each specific indirect effect is conditional on W —
+the serial one <code>a₁(w)·d₂₁·b₂(w)</code> — and, with one path moderated, linear
+in W, so each carries an index of moderated mediation: the serial path's
+is <code>a₁₃·d₂₁·b₂</code> under a-moderation, <code>a₁·d₂₁·b₂₃</code> under b-moderation.
+The serial effect is the third block of the conditional-indirect table
+and the third row of the index table. A second moderator is <strong>not
+combinable</strong> with <code>serial</code> (errors as data). Bootstrap CIs follow the
+v1 contract (not pinned).</li>
+<li><strong>Pins.</strong> <code>lm</code> paths on the fixture: <code>d21</code> and its SE, <code>a2</code>, the three
+specific indirects and their total, the total effect <code>c</code>; the
+a-moderated serial model's <code>d21</code>, the conditional serial indirect at the
+W mean and its index <code>a3·d21·b2</code>.</li>
+</ul>
+<h2 id="regression-through-the-origin--the-0210-conventions">Regression through the origin — the 0.21.0 conventions</h2>
+<p><em>Recorded 2026-08-21, before any code, for
+<code>docs/releases/release_0.21.0.md</code> item 12: the <code>intercept</code> argument on
+<code>linear_regression</code> (default <code>true</code>; <code>false</code> fits the model without a
+constant — regression through the origin, <code>y = b₁x₁ + … + bₖxₖ + e</code>). The
+summary statistics change meaning without a constant and packages have
+differed historically, so the definitions are fixed here first; the pins are
+NIST's NoInt1 / NoInt2 in
+<code>nist_strd_test.dart</code> and a statsmodels
+set (<code>reg_linear/noint_*</code>) in
+<code>numerical_validation_test.dart</code>.</em></p>
+<p><strong>Why the statistics change.</strong> With a constant in the model the residuals
+sum to zero and the total sum of squares about the mean splits exactly into
+regression and residual parts (<code>SST = SSR + SSE</code>); R² = SSR/SST is then the
+share of the <em>variance</em> explained. Without a constant neither holds — the
+residuals need not sum to zero, the centred decomposition fails, and the
+centred R² can come out negative. Every reference that certifies or prints a
+through-origin fit (NIST StRD NoInt1/NoInt2; R's
+<code>summary(lm(y ~ x - 1))</code>; statsmodels <code>OLS</code> without <code>add_constant</code>, which
+switches to <code>uncentered_tss</code> when it detects no constant) therefore uses the
+<strong>uncentred</strong> decomposition about zero, and so does the engine:</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Quantity</th>
+<th>With the constant (unchanged)</th>
+<th>Through the origin (<code>intercept: false</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Design row</td>
+<td><code>[1, x₁ … xₖ]</code>, <code>p = k + 1</code></td>
+<td><code>[x₁ … xₖ]</code>, <code>p = k</code></td>
+</tr>
+<tr>
+<td>Total SS, df</td>
+<td><code>Σ w(y − ȳ)²</code>, <code>n − 1</code></td>
+<td><code>Σ w y²</code>, <code>n</code></td>
+</tr>
+<tr>
+<td>Regression SS, df</td>
+<td><code>SST − SSE</code>, <code>p − 1 = k</code></td>
+<td><code>SST − SSE</code> (= <code>Σ w ŷ²</code>), <code>p = k</code></td>
+</tr>
+<tr>
+<td>R²</td>
+<td><code>1 − SSE/SST</code> (centred)</td>
+<td><code>1 − SSE/Σ w y²</code> (uncentred)</td>
+</tr>
+<tr>
+<td>Adjusted R²</td>
+<td><code>1 − (1 − R²)(n − 1)/(n − p)</code></td>
+<td><code>1 − (1 − R²)·n/(n − p)</code></td>
+</tr>
+<tr>
+<td>F</td>
+<td><code>MSR/MSE</code> on <code>(k, n − k − 1)</code></td>
+<td><code>MSR/MSE</code> on <code>(k, n − k)</code></td>
+</tr>
+<tr>
+<td>Std. error of the estimate</td>
+<td><code>√MSE</code>, <code>MSE = SSE/(n − p)</code></td>
+<td>the same, with <code>p = k</code></td>
+</tr>
+<tr>
+<td>Coefficients table</td>
+<td>constant row first</td>
+<td><strong>no constant row</strong></td>
+</tr>
+<tr>
+<td>Standardized Beta, Partial, Part</td>
+<td>shown</td>
+<td><strong>blank</strong> — they are centred-moment constructs (Beta needs <code>sd(y)</code>; partial/part derive from the centred R² decomposition)</td>
+</tr>
+<tr>
+<td>Tolerance / VIF</td>
+<td>from the predictor correlation matrix</td>
+<td><strong>kept</strong> — predictor-only quantities, independent of the response and the constant</td>
+</tr>
+<tr>
+<td>Durbin–Watson, Residuals Statistics</td>
+<td>on the residuals</td>
+<td>unchanged</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>n</code> is the sum of the case weights throughout, as in the intercept model.</p>
+<p><strong>The sibling paths, decided per path:</strong></p>
+<ul>
+<li><strong>Robust (HC0/HC1/HC3) standard errors</strong> — allowed, unchanged formulas
+over the no-constant design (<code>HC1</code>'s <code>N/(N − p)</code> uses <code>p = k</code>; <code>HC3</code>'s
+leverage is the no-constant hat diagonal).</li>
+<li><strong>Stepwise entry</strong> (forward/backward) — allowed; the selection oracle fits
+each candidate model through the origin too, so the p-values it ranks by
+are the ones the final table prints.</li>
+<li><strong>Casewise diagnostics, diagnostic plots, saved columns</strong> — allowed;
+leverage and Cook's distance come from the no-constant hat matrix with
+<code>p = k</code>.</li>
+<li><strong>Survey design</strong> — refused &quot;(v1)&quot; as errors-as-data, like <code>casewise</code>,
+<code>diagnostics</code> and <code>save</code> under a design (the design-based fit keeps its
+constant).</li>
+<li><strong>Journal</strong> — <code>command_for_request</code> emits <code>intercept: false</code> only when the
+option is off, so every existing <code>.cks</code> script and every default run stays
+byte-identical; the dispatcher passes the option to the engine only when
+false.</li>
+</ul>
+<p><strong>References.</strong> NIST StRD NoInt1 (n = 11) and NoInt2 (n = 3), both
+<em>average</em> difficulty, certify <code>B1</code>, its standard deviation, the residual
+standard deviation, R² and the ANOVA table with F — all in exactly the
+uncentred form above (NoInt1's certified R² = 0.999365… is
+<code>SSR/(SSR + SSE)</code> = 200457.73/(200457.73 + 127.27); a centred R² on the same
+data would be 1.0). statsmodels <code>OLS(bp, [age, chol, bmi]).fit()</code> on
+<code>clinic.csv</code> pins R², adjusted R², F and its p, and the <code>age</code> coefficient and
+SE against the cross-package suite; R's <code>lm(y ~ . - 1)</code> prints the same
+definitions (<code>summary.lm</code> computes <code>r.squared</code> with <code>df.int = 0</code>).</p>
+<h2 id="linear-least-squares-by-qr--the-0210-conventions">Linear least squares by QR — the 0.21.0 conventions</h2>
+<p><em>Recorded 2026-08-21 for <code>docs/releases/release_0.21.0.md</code> item 14, raised
+from the StRD coverage work: the <code>regression_linear</code> solver moved from the
+normal equations to Householder QR, and the output gained a conditioning
+note. No statistic changed definition — the pins are the existing linear
+StRD datasets (Filip joining them) and the <code>reg_linear/*</code> cross-package set,
+all unchanged except that Filip now passes.</em></p>
+<p><strong>The solver.</strong> <code>wls_qr</code> forms <code>A = √W·X</code> (the design row with or without
+the constant), <strong>equilibrates</strong> its columns to unit norm, reduces it by
+Householder reflections to <code>R</code>, and back-substitutes <code>R β = Qᵀ√W·y</code>; the
+covariance bread is <code>(XᵀWX)⁻¹ = D⁻¹ R⁻¹R⁻ᵀ D⁻¹</code> (<code>D</code> the column norms).
+Equilibration leaves the solution unchanged and makes the two checks below
+unit-free. Every downstream statistic reads <code>β</code> and the bread exactly as it
+read the inverted <code>XᵀWX</code> — model-based SEs, HC0/1/3 sandwiches, leverage,
+Cook's distance, the stepwise oracle's p-values, the survey-design Taylor
+sandwich — so there is one linear solver, not two.</p>
+<p><strong>Dependence.</strong> A column whose |R_kk| (on unit-norm columns) falls below
+<strong>1e-13</strong> is declared linearly dependent on those before it and the fit is
+refused with the existing &quot;predictors are collinear&quot; error-as-data — exact
+dependence leaves |R_kk| at rounding level (1e-16 … 1e-14), while NIST's
+Filip, the worst-conditioned design the engine is certified on, stays well
+above (its κ bound is 1.9 × 10⁷). <code>n &lt; p</code> and an identically zero column
+are refused the same way.</p>
+<p><strong>The conditioning note</strong> (the gate-1 surface the Filip record asked for).
+The solver reports a <strong>lower bound on κ₂</strong> of the equilibrated design — the
+ratio of the largest to the smallest |R_kk|, which never overstates the
+conditioning and is exact for an orthogonal design. At or beyond
+<strong>1e8</strong> the Model Summary note adds: <em>&quot;The design is ill-conditioned
+(condition number at least κ; from the QR of the unit-scaled predictors): the
+coefficients carry correspondingly fewer reliable digits — consider centring
+or rescaling the predictors.&quot;</em> The threshold is the point where double
+precision leaves at most ~8 of its 16 digits in the coefficients. It is an
+<strong>accuracy</strong> note, not a collinearity diagnostic — Tolerance/VIF remain the
+statistical ones — and it is deliberately phrased as a bound (&quot;at least&quot;).
+Pinned by an <code>ffi.rs</code> test (present on degree-9 raw powers over [1, 1.2],
+absent on a plain predictor, exact dependence still refused).</p>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../../index.html">Home</a> ·
+        <a href="../../../../quick-start/">Quick Start</a> ·
+        <a href="../../../../privacy-policy/">Privacy Policy</a> ·
+        <a href="../../../../license/">License</a> ·
+        <a href="../../../../cite/">How to Cite</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../../js/main.js"></script>
+</body>
+</html>

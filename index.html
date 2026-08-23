@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ChakataStat — Statistical analysis, done properly</title>
-  <meta name="description" content="ChakataStat is a desktop app for statistical data analysis: a fast, spreadsheet-style data editor backed by a native Rust engine, with a broad Analyze program, an AI assistant, and full reproducibility built in.">
+  <meta name="description" content="ChakataStat is a desktop app for statistical data analysis: a fast, spreadsheet-style data editor backed by a native Rust engine, with a broad Analyze menu, an AI assistant, and full reproducibility built in.">
 
   <link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg">
   <link rel="alternate icon" href="assets/favicon-256.png">
@@ -17,7 +17,7 @@
   <!-- Open Graph / social preview. -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="ChakataStat — Statistical analysis, done properly">
-  <meta property="og:description" content="A desktop app for statistical data analysis: a spreadsheet-style editor backed by a native Rust engine, a broad Analyze program, an AI assistant, and full reproducibility.">
+  <meta property="og:description" content="A desktop app for statistical data analysis: a spreadsheet-style editor backed by a native Rust engine, a broad Analyze menu, an AI assistant, and full reproducibility.">
   <meta property="og:url" content="https://chakatastat.app/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta property="og:image:type" content="image/jpeg">
@@ -112,7 +112,8 @@
 
       <nav id="nav-links" class="nav-links">
         <a href="docs/">User Guide</a>
-        <a href="#validated">Validation</a>
+        <a href="docs/validation/">Validation</a>
+        <a href="cite/">Cite</a>
         <a href="#features">Features</a>
         <a href="quick-start/">Quick Start</a>
         <a href="#screenshots">Screenshots</a>
@@ -144,16 +145,16 @@
           <p class="eyebrow">Desktop statistical analysis</p>
           <h1>Statistical analysis, done properly.</h1>
           <p class="lede">
-            ChakataStat is a desktop app for serious data analysis — a fast,
-            spreadsheet-style editor backed by a native Rust engine, with a
-            broad Analyze program, an in-app AI assistant, and full
+            ChakataStat is a desktop app for statistical data analysis — a
+            fast, spreadsheet-style editor backed by a native Rust engine, with a
+            broad Analyze menu, an in-app AI assistant, and full
             reproducibility built in.
           </p>
           <div class="hero-actions">
             <a class="btn btn-primary btn-lg" href="#download">Download ChakataStat</a>
             <a class="btn btn-ghost btn-lg" href="#features">See what it does</a>
           </div>
-          <p class="hero-platforms">v0.21.0 · Windows · Linux · Free to use</p>
+          <p class="hero-platforms">v0.21.0 · Windows · Linux · free to use</p>
         </div>
         <div class="hero-shot">
           <figure class="app-frame">
@@ -212,7 +213,7 @@
             </p>
           </li>
           <li class="stat-item" data-reveal>
-            <p class="stat-figure">2,485</p>
+            <p class="stat-figure">2,488</p>
             <p class="stat-label">
               automated tests across the engine and the application, run green
               on Windows, macOS and Linux before a release ships.
@@ -243,7 +244,7 @@
 
     <section class="features" id="features">
       <div class="container">
-        <h2>Everything you need for real analysis</h2>
+        <h2>Built for the whole of an analysis</h2>
         <p class="section-lede">
           One application, five ways to reach the same catalog: the GUI, an
           editable syntax console, the AI assistant, an MCP server for
@@ -255,7 +256,7 @@
             <span class="feature-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
             </span>
-            <h3>A broad Analyze program</h3>
+            <h3>A broad Analyze menu</h3>
             <p>Descriptives, regression, GLM and mixed models, survival and time series with VAR and Granger causality, complex survey designs, multivariate methods, latent class analysis and item response theory, confirmatory factor analysis with multi-group invariance testing, equivalence tests, Bland-Altman method comparison, meta-analysis, propensity-score analysis, Bayesian and permutation tests &mdash; 108 analysis tools in one catalog, each reporting the conventional effect sizes beside the test they describe.</p>
           </article>
           <article class="feature-card" data-reveal>
@@ -263,7 +264,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.5h18v13H3zM3 10h18M9 10v8.5M15 10v8.5"/></svg>
             </span>
             <h3>Data editor</h3>
-            <p>A fast, Excel-like sheet with a Variable View for metadata, value labels, missing-value handling, and self-documenting column tooltips.</p>
+            <p>A spreadsheet-style sheet with a Variable View for metadata, value labels, missing-value handling, and self-documenting column tooltips.</p>
           </article>
           <article class="feature-card" data-reveal>
             <span class="feature-icon" aria-hidden="true">
@@ -298,7 +299,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4.5 13.5H11l-1 8.5 8.5-11.5H12z"/></svg>
             </span>
             <h3>Native performance</h3>
-            <p>A native Rust engine &mdash; an in-house columnar store with Parquet I/O over Apache Arrow &mdash; does the heavy lifting on a worker thread, so the interface never freezes on a long fit.</p>
+            <p>A native Rust engine &mdash; an in-house columnar store with Parquet I/O over Apache Arrow &mdash; does the heavy lifting on a worker thread, so the interface stays responsive while a long fit runs.</p>
           </article>
         </div>
       </div>
@@ -387,7 +388,7 @@ ChakataStat --mcp health_study.csv</code></pre>
             <button role="tab" id="shot-tab-editor" aria-controls="shot-panel-editor" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Chart editor</button>
             <button role="tab" id="shot-tab-blandaltman" aria-controls="shot-panel-blandaltman" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Bland-Altman</button>
             <button role="tab" id="shot-tab-syntax" aria-controls="shot-panel-syntax" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Syntax editor</button>
-            <button role="tab" id="shot-tab-jn" aria-controls="shot-panel-jn" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Johnson-Neyman</button>
+            <button role="tab" id="shot-tab-jn" aria-controls="shot-panel-jn" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Johnson&ndash;Neyman</button>
           </div>
 
           <div class="shot-panel" role="tabpanel" id="shot-panel-data" aria-labelledby="shot-tab-data" tabindex="0">
@@ -486,7 +487,7 @@ ChakataStat --mcp health_study.csv</code></pre>
                 <img src="assets/screenshots/bland-altman.png" alt="A Bland-Altman method-comparison plot in ChakataStat: mean versus difference of two systolic readings, with the bias line and the 1.96 limits of agreement" loading="lazy">
                 <span class="visually-hidden"> &mdash; enlarge</span>
               </button>
-              <figcaption>Bland-Altman method comparison, new in 0.19.0 &mdash; bias and limits of agreement drawn over the mean-difference cloud, with the statistics table beside it.</figcaption>
+              <figcaption>Bland-Altman method comparison, added in 0.19.0 &mdash; bias and limits of agreement drawn over the mean-difference cloud, with the statistics table beside it.</figcaption>
             </figure>
           </div>
           <div class="shot-panel" role="tabpanel" id="shot-panel-syntax" aria-labelledby="shot-tab-syntax" tabindex="0" hidden>
@@ -495,16 +496,16 @@ ChakataStat --mcp health_study.csv</code></pre>
                 <img src="assets/screenshots/syntax-editor.png" alt="The ChakataStat syntax editor: a highlighted script with line numbers, run-state dots in the gutter, a wavy underline under a mistyped argument, and the completion overlay listing the dataset's variables" loading="lazy">
                 <span class="visually-hidden"> &mdash; enlarge</span>
               </button>
-              <figcaption>The syntax editor, new in 0.20.0 &mdash; line numbers, syntax colouring, as-you-type checking with a &ldquo;did you mean&rdquo; hint, completion over the catalog and your variables, and a gutter that shows which commands have run this session.</figcaption>
+              <figcaption>The syntax editor, added in 0.20.0 &mdash; line numbers, syntax colouring, as-you-type checking with a &ldquo;did you mean&rdquo; hint, completion over the catalog and your variables, and a gutter that shows which commands have run this session.</figcaption>
             </figure>
           </div>
           <div class="shot-panel" role="tabpanel" id="shot-panel-jn" aria-labelledby="shot-tab-jn" tabindex="0" hidden>
             <figure class="screenshot-card">
               <button class="shot-trigger" type="button">
-                <img src="assets/screenshots/johnson-neyman.png" alt="A Johnson-Neyman plot in ChakataStat: the conditional effect of physical activity on BMI across age, with its confidence band and the region of significance marked" loading="lazy">
+                <img src="assets/screenshots/johnson-neyman.png" alt="A Johnson&ndash;Neyman plot in ChakataStat: the conditional effect of physical activity on BMI across age, with its confidence band and the region of significance marked" loading="lazy">
                 <span class="visually-hidden"> &mdash; enlarge</span>
               </button>
-              <figcaption>Johnson&ndash;Neyman regions, new in 0.21.0 &mdash; the conditional effect of a moderated path drawn across the observed moderator range with its confidence band, and the moderator values where it turns significant marked on the plot.</figcaption>
+              <figcaption>Johnson&ndash;Neyman regions, added in 0.21.0 &mdash; the conditional effect of a moderated path drawn across the observed moderator range with its confidence band, and the moderator values where it turns significant marked on the plot.</figcaption>
             </figure>
           </div>
         </div>
@@ -518,7 +519,7 @@ ChakataStat --mcp health_study.csv</code></pre>
           <p class="analyze-caption">analysis tools, one catalog</p>
         </div>
         <div class="analyze-copy">
-          <h2>A statistics program that goes deep</h2>
+          <h2>What is in the Analyze menu</h2>
           <p>
             Descriptive Statistics, Compare Means and Correlate; Regression
             (linear, logistic, Poisson, regularized, robust, nonlinear,
@@ -528,7 +529,7 @@ ChakataStat --mcp health_study.csv</code></pre>
             Cluster and Discriminant
             analysis; Survival (Kaplan-Meier, Cox, parametric); Time Series
             (ARIMA, seasonal decomposition); Meta-Analysis (fixed effects,
-            DerSimonian-Laird or REML random effects, with forest and funnel
+            DerSimonian&ndash;Laird or REML random effects, with forest and funnel
             plots); Bayesian tests; and
             Nonparametric methods — with the conventional effect sizes
             reported by default beside the tests they describe.
@@ -549,11 +550,11 @@ ChakataStat --mcp health_study.csv</code></pre>
     <section class="download" id="download">
       <div class="container download-inner">
         <h2>Get ChakataStat</h2>
-        <p>Available for Windows and Linux — macOS is coming soon.</p>
+        <p>Available for Windows and Linux. There is no macOS build yet.</p>
         <div class="download-buttons">
           <a class="btn btn-primary btn-lg" href="https://apps.microsoft.com/detail/9MZNTHP2LF4S" data-platform="windows">Get it from the Microsoft Store</a>
           <a class="btn btn-primary btn-lg" href="https://snapcraft.io/chakatastat" data-platform="linux">Get it from the Snap Store</a>
-          <span class="btn btn-disabled btn-lg" aria-disabled="true">macOS — coming soon</span>
+          <span class="btn btn-disabled btn-lg" aria-disabled="true">macOS — not yet available</span>
         </div>
         <p class="download-meta">Version 0.21.0 · free to use · no account needed</p>
         <p class="download-note">

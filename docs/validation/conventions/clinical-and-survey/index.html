@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Clinical and survey conventions — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/validation/conventions/clinical-and-survey/">
+  <link rel="icon" type="image/svg+xml" href="../../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Clinical and survey conventions — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/validation/conventions/clinical-and-survey/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../../index.html">
+        <img class="brand-mark" src="../../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <!-- One link, not a copy of the site menu. While someone is reading the
+           guide, the sidebar is the navigation that matters; marketing anchors
+           (Features, Screenshots, …) only compete with it and push the reader
+           out of what they came for. All that is owed is a way back. Single
+           link means no mobile collapse either, so there is no hamburger on
+           these pages — main.js guards for its absence. -->
+      <nav id="nav-links" class="nav-links nav-links--single">
+        <a href="../../../../index.html">← Back to chakatastat.app</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../../index.html#download">Download</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">Numerical-validation suite</p>
+        <ul>
+        <li><a href="../../">Overview</a></li>
+        <li><a href="../../nist/">NIST StRD certified datasets</a></li>
+        <li><a href="../../file-formats/">Statistics-package file formats</a></li>
+        <li><a href="../../tolerances/">Tolerances and recorded conventions</a></li>
+        <li class="docs-nav-section">The recorded conventions</li>
+        <li><a href="../regression/">Regression conventions</a></li>
+        <li><a href="../latent-variable/">Latent-variable conventions</a></li>
+        <li><a href="./" aria-current="page">Clinical and survey conventions</a></li>
+        <li><a href="../resampling-and-time-series/">Resampling and time-series conventions</a></li>
+        <li class="docs-nav-section">Maintaining the suite</li>
+        <li><a href="../../regenerating/">Regenerating the reference values</a></li>
+        <li class="docs-nav-section">User Guide</li>
+        <li><a href="../../../">Contents</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="clinical-and-survey-conventions">Clinical and survey conventions</h1>
+<blockquote>
+<p>Part of the <a href="../../">numerical-validation suite</a>. The recorded conventions behind equivalence testing, method comparison and complex survey designs.</p>
+</blockquote>
+<h2 id="complex-survey-designs--the-v1-conventions">Complex survey designs — the v1 conventions</h2>
+<p><em>Decided 2026-08-18, before any code, as sub-task 1a of
+<code>docs/releases/release_0.19.0.md</code> item 1 (kept private). ChakataStat's Weight
+Cases weight is a frequency weight; a survey dataset carries a <strong>design</strong> —
+strata, PSUs (clusters), sampling weights — and needs design-based standard
+errors. Every convention below was verified against R <code>survey</code> (4.5, R 4.5.3)
+on a hand-computed toy design before being recorded; the reference scripts and
+pinned values live in <code>tool/validation/generate_survey_references.R</code> and
+<code>test/validation/survey_reference_values.json</code> (sub-task 1b).</em></p>
+<h3 id="the-declaration">The declaration</h3>
+<p>A <strong>dataset-level design</strong>, declared once (Data ▸ Survey Design… / the
+<code>survey_design</code> tool) and carried in the request JSON as a <code>design</code> field
+beside <code>filter</code>/<code>weight</code>/<code>split</code>:</p>
+<ul>
+<li><strong><code>weight</code></strong> (required): the sampling-weight variable. Every case must have
+a positive, finite weight — a missing, zero or negative value is a
+declaration <strong>error</strong>, not an exclusion (a sampling weight is part of the
+design; silently dropping a case would misestimate every total).</li>
+<li><strong><code>psu</code></strong> (optional): the primary-sampling-unit (cluster) variable. Absent
+means element sampling — each case is its own PSU (R <code>ids = ~1</code>).</li>
+<li><strong><code>strata</code></strong> (optional): the stratum variable. Absent means one stratum.</li>
+<li>Missing values in <code>psu</code>/<code>strata</code> are declaration <strong>errors</strong>.</li>
+<li>PSU identifiers are read <strong>nested within strata</strong> (R <code>nest = TRUE</code>): the
+same PSU value in two strata is two distinct PSUs.</li>
+<li><strong>Weight Cases and a survey design are mutually exclusive.</strong> A request
+carrying both errors (&quot;choose one&quot;): layering a frequency weight over a
+sampling weight would compound two case multiplicities (the propensity
+precedent). The Survey Design dialog clears Weight Cases on apply and
+vice versa.</li>
+</ul>
+<h3 id="the-covered-procedures-the-v1-list-quoted-verbatim-by-later-sub-tasks">The covered procedures (the v1 list, quoted verbatim by later sub-tasks)</h3>
+<p>Design-aware behaviour ships for exactly these engine kinds:
+<strong><code>explore</code>, <code>frequencies</code>, <code>crosstabs</code> (two-way), <code>means</code>,
+<code>regression_linear</code>, <code>regression_logistic</code></strong>. With a design declared, every
+analysis kind <strong>not</strong> on this list appends a plain note that it ran ignoring
+the design (the whole point of the item: nothing is wrong <em>silently</em>); the
+<code>descriptives</code> tool (the light <code>describe</code> endpoint) gets the same note on the
+Dart side. Power analysis takes no dataset and carries no note.</p>
+<h3 id="the-five-estimation-conventions">The five estimation conventions</h3>
+<ol>
+<li><strong>Variance estimation is Taylor linearization over stratum/PSU totals</strong>
+(with replacement): for per-case linearized scores <code>uᵢ</code>, with PSU totals
+<code>z_hi = Σ_{i∈PSU} uᵢ</code> in stratum <code>h</code> holding <code>n_h</code> PSUs,
+<code>V̂ = Σ_h n_h/(n_h−1) Σ_i (z_hi − z̄_h)²</code> — verified to reproduce
+<code>svymean</code>/<code>svytotal</code>/<code>svyby</code> standard errors exactly. Scores: total
+<code>uᵢ = wᵢyᵢ</code>; mean/proportion <code>uᵢ = wᵢ(yᵢ−μ̂)/N̂</code>; ratio
+<code>uᵢ = wᵢ(yᵢ−R̂xᵢ)/X̂</code>. <strong>Design df = (number of PSUs) − (number of
+strata)</strong> (<code>degf.svydesign</code>), and <strong>all confidence intervals use t on the
+design df</strong> — the SPSS Complex Samples / Stata convention, deliberately
+<em>not</em> R's <code>confint(svymean(…))</code> normal default; references are therefore
+pinned as SEs from R plus intervals recomputed in this convention
+(an agreement about definitions, recorded here). <strong>Deff uses the
+with-replacement SRS baseline</strong> (R <code>deff = &quot;replace&quot;</code>, consistent with
+no-FPC v1): <code>deff = V̂_design / (s²/n)</code> for a mean (for a total,
+<code>V̂_design / (N̂²·s²/n)</code>) with <code>s² = (n/(n−1))·Σwᵢ(yᵢ−ȳ_w)²/N̂</code> — the
+<code>svyvar</code> estimate, verified numerically.</li>
+<li><strong>Lonely PSUs error.</strong> A stratum with a single PSU makes the variance
+estimator undefined; the R default (<code>survey.lonely.psu = &quot;fail&quot;</code>) is
+kept: declaring (or analyzing under) a design whose analyzed structure
+has a single-PSU stratum returns the errors-as-data message
+<code>stratum &quot;&lt;value&gt;&quot; has only one PSU; design-based variance needs at least two PSUs per stratum (lonely PSU)</code>. Because subsetting is domain
+estimation (below), the PSU structure never shrinks after declaration,
+so the check at declaration is authoritative (the estimator re-checks
+defensively).</li>
+<li><strong>Subpopulations are domains, never row subsets.</strong> Select Cases, Split
+File groups, and missing values on analysis variables all become
+<strong>domain estimation</strong>: out-of-domain cases keep their stratum/PSU
+membership with their score zeroed, and the variance runs over the full
+design structure (the classic subset-vs-domain SE trap). Verified to
+reproduce <code>svyby</code>/domain-<code>svymean</code> exactly; this is also what
+<code>svymean(na.rm = TRUE)</code> does with missing values.</li>
+<li><strong>Proportion CIs are logit-scale</strong> (the <code>svyciprop(method = &quot;logit&quot;)</code>
+default, named &quot;logit&quot; in the output note):
+<code>expit( logit(p̂) ± t_df · SE(p̂)/(p̂(1−p̂)) )</code> with <code>SE(p̂)</code> the Taylor SE
+of the mean of the indicator — verified to reproduce <code>svyciprop</code>
+end-to-end. Degenerate <code>p̂ ∈ {0, 1}</code> leaves the CI blank (the logit is
+undefined), never fabricated.</li>
+<li><strong>The crosstab test is the Rao–Scott second-order (Satterthwaite)
+correction with the F reference</strong> — <code>svychisq</code>'s default
+(<code>statistic = &quot;F&quot;</code>), implemented exactly as <code>survey</code> does: Pearson X² on
+the estimated proportions scaled to the unweighted n; Δ =
+<code>(CᵀD̂⁻¹C/n)⁻¹ (CᵀD̂⁻¹V̂D̂⁻¹C)</code> with <code>C</code> the interaction contrasts
+residualized on the main effects and <code>V̂</code> the full Taylor covariance of
+the cell proportions; <code>F = X²/tr(Δ)</code> on <code>(d₀, d₀·ν)</code> df, where
+<code>d₀ = tr(Δ)²/tr(Δ²)</code> and <code>ν</code> is the design df. The first-order
+correction is deliberately not offered in v1.</li>
+</ol>
+<h3 id="regression-under-a-design">Regression under a design</h3>
+<p><code>svyglm</code>'s conventions, verified: point estimates are the
+sampling-weighted fit (WLS for linear; weighted IRLS for the binary
+links), and the coefficient covariance is the Taylor sandwich
+<code>A⁻¹BA⁻¹</code> — <code>A</code> the weighted information (<code>XᵀWX</code>), <code>B</code> the stratified
+PSU-total variance of the per-case score <code>uᵢ = wᵢ(yᵢ−μᵢ)xᵢ·(dμ/dη)/V(μ)</code>
+(for identity and logit links this is <code>wᵢeᵢxᵢ</code>). Inference is <strong>t on
+<code>(design df) − p + 1</code></strong> (<code>p</code> = number of coefficients, intercept included)
+— <code>summary.svyglm</code>'s df, verified — for the coefficient tests <strong>and</strong> the
+CIs (<code>confint.svyglm</code>'s Wald form). The logistic table keeps Exp(B) with
+the CI as <code>exp(B ± t·SE)</code>. Under a design the linear model's classic ANOVA
+table, Durbin-Watson, standardized betas, partial/part correlations and
+tolerance/VIF are <strong>not produced</strong> (they are SRS constructs); the model
+summary reports the weighted R² and names the design. Options that would
+silently mean something else under a design <strong>error as data</strong> in v1:
+stepwise <code>method</code> selection, <code>robust</code> (the design SEs are already a
+sandwich), <code>casewise</code>, <code>diagnostics</code>, <code>save</code>, and the logistic
+<code>hosmer_lemeshow</code>.</p>
+<h3 id="out-of-scope-for-v1-recorded-cuts">Out of scope for v1 (recorded cuts)</h3>
+<ul>
+<li><strong>No finite population correction</strong> — NHANES-class with-replacement
+designs do not use it; the <code>design</code> JSON leaves room for an <code>fpc</code> field.</li>
+<li><strong>No BRR/jackknife replicate weights</strong> — Taylor linearization only;
+replicate methods are a recorded follow-up (the bucket pointer).</li>
+<li><strong>No multistage variance</strong> — first-stage (ultimate-cluster) PSUs only,
+which is exactly what the with-replacement approximation uses.</li>
+<li><strong>No design-based quantiles</strong> (<code>svyquantile</code> is its own methodological
+area): the design-aware Explore table reports estimate/SE/CI/deff for
+means and totals only, and is labelled design-based.</li>
+<li>The layered (three-way) crosstab and its CMH block are <strong>not</strong>
+design-aware: under a design the layered path runs as today and carries
+the ignores-design note.</li>
+</ul>
+<h2 id="equivalence-tests-tost--the-v1-conventions">Equivalence tests (TOST) — the v1 conventions</h2>
+<p><em>Decided 2026-08-18, before any code, as sub-task 2a of
+<code>docs/releases/release_0.19.0.md</code> item 2 (kept private). &quot;Not significantly
+different&quot; is not &quot;equivalent&quot;; the two-one-sided-tests procedure tests
+whether a mean difference lies <strong>inside</strong> declared equivalence bounds. Every
+convention below was verified against R <code>TOSTER</code> 0.8.6 (the reference
+package, R 4.5.3) by running its <code>t_TOST</code> on hand-checkable data and
+reproducing its output from the hand formulas — not recorded from memory.
+The pinned values live in <code>tool/validation/generate_tost_references.R</code> and
+<code>test/validation/tost_reference_values.json</code> (sub-task 2f).</em></p>
+<h3 id="the-shape-the-2a-decision">The shape (the 2a decision)</h3>
+<p>A <strong>dedicated <code>equivalence_ttest</code> tool</strong> — not a <code>tost</code> mode on the three
+t-test tools — modeled on the <code>bayesian_ttest</code> precedent: one tool, a
+<code>test</code> argument (<code>one_sample</code> / <code>paired</code> / <code>independent</code>), sharing the
+t-test machinery engine-side (<code>compare_means.rs</code>) under one new
+<code>equivalence_ttest</code> analyze kind. Reasons, recorded: the presentation
+(bounds, two one-sided tests, TOST p, 1−2α CI, decision) shares almost no
+columns with the classic t tables, so a mode would triple-touch three
+dialogs and three table layouts for no reuse; the in-catalog precedent for
+&quot;alternative inference over the t-test machinery&quot; (<code>bayesian_ttest</code>) is a
+dedicated tool; and a named tool is what an assistant/MCP caller can find
+(&quot;equivalence test&quot; → <code>equivalence_ttest</code>). Catalog moves 103 → 104, which
+settles the 0.19.0 expected final count at <strong>108</strong>.</p>
+<h3 id="the-test">The test</h3>
+<ol>
+<li><strong>TOST is two one-sided t tests of the observed difference against the
+declared bounds, on the same standard error and df as the corresponding
+classical t test</strong> — verified to reproduce <code>t_TOST</code> exactly from the
+hand formulas: <code>t_lower = (diff − L)/SE</code> with the <strong>upper-tail</strong> p
+(H₀: diff ≤ L), and <code>t_upper = (diff − U)/SE</code> with the <strong>lower-tail</strong> p
+(H₀: diff ≥ U). The designs: one-sample (<code>diff = mean − test_value</code>,
+df = n−1), paired (<code>diff = mean of case differences</code>, df = n−1), and
+independent with <strong>both rows, pooled and Welch</strong> (df = n₁+n₂−2 and
+Welch–Satterthwaite respectively — the shipped Independent-Samples
+Test's two-row presentation; <code>t_TOST</code>'s default is the Welch row,
+<code>var.equal = FALSE</code>).</li>
+<li><strong>The TOST p is the larger of the two one-sided p's</strong>, and the
+<strong>decision is &quot;equivalent&quot; when TOST p &lt; α</strong> (α from the <code>alpha</code>
+option, default 0.05) — <code>TOSTER</code>'s decision rule verbatim, printed as a
+per-row decision cell, never only implied by the p.</li>
+<li><strong>The interval shown is the 1−2α t confidence interval of the raw
+difference</strong> (90% at the default α, the classical TOST presentation;
+<code>t_TOST</code> reports <code>conf.level = 1 − 2·alpha</code>, verified at α = 0.05 and
+0.01). Equivalence at level α coincides with this CI lying inside the
+bounds.</li>
+<li><strong>Bounds are declared as an explicit pair</strong> (<code>bound_lower</code> &lt;
+<code>bound_upper</code>), in <strong>raw units by default or Cohen's-d units</strong>
+(<code>bound_unit = &quot;cohen_d&quot;</code>). d-unit bounds convert to raw bounds by
+multiplying by the <strong>uncorrected</strong> standardizer of that design —
+verified against <code>eqbound_type = &quot;SMD&quot;</code>: the sample SD (one-sample),
+the SD of the case differences (paired, d_z), the pooled SD
+(independent, pooled row), and <code>√((s₁²+s₂²)/2)</code> (Welch row, d_av).
+With d-unit bounds the independent table's two rows therefore carry
+two (slightly) different raw bounds, each printed. <code>TOSTER</code> itself
+warns that SMD bounds &quot;produce biased results&quot; (the bound becomes
+sample-dependent); the output note carries the same caution.</li>
+<li><strong>One-sample bounds are centered on the test value</strong>: the TOST is on
+<code>mean − test_value</code> with raw bounds meaning <code>test_value + L</code> …
+<code>test_value + U</code>. <strong>Recorded divergence</strong>: <code>TOSTER</code> 0.8.6's one-sample
+<code>t_TOST</code> does <em>not</em> center its bounds on <code>mu</code> (its TOST rows test the
+raw mean against ±bound about zero while its t-test row subtracts
+<code>mu</code> — internally inconsistent, verified by comparing <code>mu = 100</code>
+against the shifted <code>x − 100, mu = 0</code> run). The pins therefore use the
+shifted form, where <code>TOSTER</code> is self-consistent and agrees with our
+convention exactly.</li>
+<li><strong>Degenerate bounds error as data</strong>: <code>bound_lower ≥ bound_upper</code> is an
+error (<code>TOSTER</code> silently sorts reversed bounds and accepts zero-width
+bounds; deliberately not copied — a silently reordered hypothesis is
+the kind of quiet wrongness the suite exists to prevent). Bounds whose
+interval does not include zero are <strong>allowed</strong> with a plain note (the
+<code>t_TOST</code> behaviour) — they state an unusual but coherent hypothesis.</li>
+</ol>
+<h3 id="out-of-scope-for-v1-recorded-cuts-2">Out of scope for v1 (recorded cuts)</h3>
+<ul>
+<li><strong>No minimal-effects test</strong> (<code>TOSTER</code>'s <code>hypothesis = &quot;MET&quot;</code>) and no
+single-bound non-inferiority presentation — asymmetric bounds cover the
+practical need; both are recorded follow-ups in the feature bucket only
+if asked for.</li>
+<li><strong>No TOST effect-size table</strong> — the classic t-test tools already report
+Cohen's d / Hedges' g with noncentral-t CIs; duplicating them under a
+1−2α level would invite misreading (and <code>TOSTER</code>'s SMD CIs are
+themselves approximations, per its own vignette).</li>
+<li><strong>Frequency weights</strong> flow through the shared <code>moments</code> machinery like
+the classic t tests; a declared <strong>survey design is not covered</strong> — the
+tool carries the standard ignores-design note (the item-1 list is
+unchanged).</li>
+</ul>
+<h2 id="blandaltman-method-comparison--the-v1-conventions">Bland–Altman method comparison — the v1 conventions</h2>
+<p><em>Decided 2026-08-18, before any code, as sub-task 3a of
+<code>docs/releases/release_0.19.0.md</code> item 3 (kept private). The Bland–Altman
+analysis quantifies <strong>agreement between two measurement methods</strong> — bias,
+limits of agreement and the mean-vs-difference plot — which correlation
+deliberately cannot (two methods can correlate near 1 while disagreeing by a
+constant or proportional amount). Every convention below was verified against
+<strong>both</strong> reference packages, R <code>blandr</code> 0.6.0 and R <code>BlandAltmanLeh</code> 0.3.1
+(R 4.5.3), by reading their sources and reproducing their output from the
+hand formulas on the original Bland &amp; Altman (1986) PEFR data — not recorded
+from memory. The pinned values live in
+<code>tool/validation/generate_bland_altman_references.R</code> and
+<code>test/validation/bland_altman_reference_values.json</code> (sub-task 3f).</em></p>
+<h3 id="the-shape">The shape</h3>
+<p>A dedicated <strong><code>bland_altman</code> tool</strong> — two numeric method variables, the
+statistics tables plus the mean-vs-difference plot (<code>plot</code> argument, default
+<strong>true</strong>: the figure is what the method exists for) — one <code>bland_altman</code>
+analyze kind with the numeric core in the descriptive family
+(<code>rust/src/analyze/descriptive.rs</code>). Catalog moves 104 → 105. The plot is
+built Dart-side from the result tables (the ROC-curve precedent), <strong>not</strong> as
+a separate <code>graphs.rs</code> chart kind: one engine call produces tables and
+figure together, so the journaled command reproduces both.</p>
+<h3 id="the-statistics">The statistics</h3>
+<ol>
+<li><strong>Differences are method 1 − method 2</strong> (the first variable minus the
+second) and the abscissa is the pair mean, <code>(m₁ + m₂)/2</code> — both
+packages' default (<code>blandr.statistics(method1, method2)</code>;
+<code>bland.altman.stats(group1, group2, mode = 1)</code>). The table title and the
+plot's y-axis name the direction (<code>A − B</code>), so the sign is never
+ambiguous. Only <strong>complete pairs</strong> enter (both packages <code>na.omit</code>); n is
+the number of complete pairs, and fewer than 2 errors as data.</li>
+<li><strong>The limits of agreement are bias ± 1.96 × SD of the differences</strong>,
+with the multiplier <strong>fixed at the literal 1.96</strong> in v1 — the universal
+reporting convention and both packages' default (<code>BlandAltmanLeh</code>'s
+<code>two = 1.96</code>; <code>blandr</code>'s <code>LoA.mode = 1</code>). SD uses the n−1 divisor
+(both). Verified on the 1986 PEFR first-measurement pair (n = 17):
+bias −2.117647, SD 38.76513, LoA −78.0973 / 73.86201 — both packages
+agree to machine precision. No multiplier option (recorded cut).</li>
+<li><strong>Every CI is t-based on n − 1 df</strong> at the <code>confidence</code> level (percent,
+default 95 — the ICC precedent, <code>ci_level</code> engine option). The bias CI
+uses <strong>SE = s/√n</strong> — both packages agree exactly (verified: t(16) CI
+−22.04884 / 17.81354 on the PEFR pair). The LoA CIs use the <strong>Bland &amp;
+Altman (1999) exact variance</strong>, <code>Var(LoA) = s²·(1/n + z²/(2(n−1)))</code>
+with <strong>z the same literal 1.96 as the multiplier</strong> — self-consistency:
+z enters the variance only because the limit is bias ± z·s.</li>
+<li><strong>Two recorded reference divergences on the LoA CI</strong>, one per package:
+<code>blandr</code> uses the same 1999 form but with z = Φ⁻¹(0.975) ≈ 1.959964
+while drawing its lines at the literal 1.96 (internally inconsistent —
+the TOSTER-mu precedent; ~1.2e-5 relative in the SE, so the blandr LoA
+CI pins carry a loosened tolerance naming this); <code>BlandAltmanLeh</code> uses
+the Bland &amp; Altman (1986) approximation <code>√(3s²/n)</code> (≈ 0.7% larger SE —
+1986's own &quot;about&quot; rounding of 1 + z²/2 = 2.92 up to 3; its values are
+pinned in the generator as the recorded alternative, and are not what
+we print). The <code>confidence</code> option moves <strong>only the t quantile</strong>, never
+the 1.96 (verified: exactly <code>BlandAltmanLeh</code>'s <code>conf.int</code> behaviour;
+<code>blandr</code>'s <code>sig.level</code> also moves its variance z — deliberately not
+copied).</li>
+<li><strong>Proportional bias is reported as a table</strong>: the OLS regression of the
+differences on the means — intercept and slope with SE, t and p on
+n − 2 df. <code>blandr</code> fits exactly this regression (it reports only a
+rounded equation string; the pins are against R <code>lm</code> on the same
+pairs). Undefined (n &lt; 3, or no variance in the means) omits the table
+and says so in the statistics-table note rather than printing
+fabricated cells. The fitted line is <strong>not drawn on the plot</strong> in v1
+(the plot keeps the three canonical reference lines); drawing it is a
+recorded follow-up.</li>
+<li><strong>s = 0 (identical measurements) is not an error</strong>: the limits coincide
+with the bias and every interval is zero-width — the correct degenerate
+values, printed as-is.</li>
+<li><strong>Frequency weights</strong> flow through the shared <code>moments</code> machinery
+(weighted bias and SD, n = Σw in the CIs and df; the proportional-bias
+regression is the correspondingly weighted least squares), keeping the
+engine-wide <em>weight ≡ replication</em> identity, asserted by a Rust unit
+test. The plotted points do not move with weights (the scatterplot
+precedent). A declared <strong>survey design is not covered</strong> — the tool
+carries the standard ignores-design note (the item-1 list is
+unchanged).</li>
+</ol>
+<h3 id="the-tables-and-the-plot">The tables and the plot</h3>
+<ul>
+<li><strong>&quot;Bland-Altman Statistics: A − B&quot;</strong> — Measure / Value / Lower / Upper;
+rows Bias (Mean Difference) with CI, Std. Deviation of Differences,
+Lower Limit of Agreement with CI, Upper Limit of Agreement with CI. The
+note carries N (the complete-pair count — a count does not belong in a
+real-formatted Value column), the 1.96 multiplier, the t(n−1) CI forms
+and the direction of the differences.</li>
+<li><strong>&quot;Proportional Bias: A − B on Mean&quot;</strong> — Term / Coefficient /
+Std. Error / t / Sig.; rows Intercept and Slope (Mean).</li>
+<li><strong>&quot;Bland-Altman Points: A vs B&quot;</strong> — Mean / Difference, one row per
+complete pair: the plot's own geometry, printed and exportable like the
+ROC coordinates and the GLM residual panels.</li>
+<li><strong>The plot</strong> draws the points, a solid reference line at the bias and
+dashed lines at both limits, each labelled with its value at the right
+edge; the CI bands are <strong>not shaded</strong> in v1 (recorded follow-up). It is
+a single-color chart: <code>colors</code> (one slot) and <code>title</code> are its journaled
+style arguments, which is what lights up the chart editor.</li>
+</ul>
+<h3 id="out-of-scope-for-v1-recorded-cuts-3">Out of scope for v1 (recorded cuts)</h3>
+<ul>
+<li><strong>No repeated-measures Bland–Altman</strong> (replicate measurements per
+subject, within-subject variance components) — the release plan records
+this cut up front; it stays in the feature bucket.</li>
+<li><strong>No percentage-difference / ratio variant</strong> (Giavarina-style percent
+plots, <code>blandr</code>'s <code>proportion</code>) and <strong>no non-default multiplier</strong> — raw
+differences at 1.96 are the 1986 presentation the audience cites.</li>
+<li><strong>No CI shading on the plot</strong> and <strong>no fitted proportional-bias line</strong>
+(the table carries the test) — both recorded follow-ups if asked for.</li>
+</ul>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../../index.html">Home</a> ·
+        <a href="../../../../quick-start/">Quick Start</a> ·
+        <a href="../../../../privacy-policy/">Privacy Policy</a> ·
+        <a href="../../../../license/">License</a> ·
+        <a href="../../../../cite/">How to Cite</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../../js/main.js"></script>
+</body>
+</html>

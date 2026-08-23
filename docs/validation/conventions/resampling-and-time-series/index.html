@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Resampling and time-series conventions — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/validation/conventions/resampling-and-time-series/">
+  <link rel="icon" type="image/svg+xml" href="../../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Resampling and time-series conventions — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/validation/conventions/resampling-and-time-series/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../../index.html">
+        <img class="brand-mark" src="../../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <!-- One link, not a copy of the site menu. While someone is reading the
+           guide, the sidebar is the navigation that matters; marketing anchors
+           (Features, Screenshots, …) only compete with it and push the reader
+           out of what they came for. All that is owed is a way back. Single
+           link means no mobile collapse either, so there is no hamburger on
+           these pages — main.js guards for its absence. -->
+      <nav id="nav-links" class="nav-links nav-links--single">
+        <a href="../../../../index.html">← Back to chakatastat.app</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../../index.html#download">Download</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">Numerical-validation suite</p>
+        <ul>
+        <li><a href="../../">Overview</a></li>
+        <li><a href="../../nist/">NIST StRD certified datasets</a></li>
+        <li><a href="../../file-formats/">Statistics-package file formats</a></li>
+        <li><a href="../../tolerances/">Tolerances and recorded conventions</a></li>
+        <li class="docs-nav-section">The recorded conventions</li>
+        <li><a href="../regression/">Regression conventions</a></li>
+        <li><a href="../latent-variable/">Latent-variable conventions</a></li>
+        <li><a href="../clinical-and-survey/">Clinical and survey conventions</a></li>
+        <li><a href="./" aria-current="page">Resampling and time-series conventions</a></li>
+        <li class="docs-nav-section">Maintaining the suite</li>
+        <li><a href="../../regenerating/">Regenerating the reference values</a></li>
+        <li class="docs-nav-section">User Guide</li>
+        <li><a href="../../../">Contents</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="resampling-and-time-series-conventions">Resampling and time-series conventions</h1>
+<blockquote>
+<p>Part of the <a href="../../">numerical-validation suite</a>. The recorded conventions behind permutation tests, VAR / Granger causality and the LOESS smoother.</p>
+</blockquote>
+<h2 id="loess-smoother-on-the-scatterplot--the-v1-conventions">LOESS smoother on the scatterplot — the v1 conventions</h2>
+<p><em>Decided 2026-08-18, before any code, as sub-task 6a of
+<code>docs/releases/release_0.19.0.md</code> item 6 (kept private). The smoother gives
+&quot;is this relationship non-linear?&quot; a visual answer the linear-only fit line
+cannot. Every convention below was verified against <strong>R <code>loess</code>
+(<code>stats</code>, R 4.5.3)</strong> by reproducing its predictions from the hand formulas
+at machine precision (≤ 6e-14) on the <code>cars</code> data (n = 50, tied x values,
+spans 0.3–1.0), a 6-level × 4-replicate ties set, an n = 8 set, an
+n = 200 uniform set and n = 4…7 straight lines — not recorded from memory.
+The pinned values live in <code>tool/validation/generate_loess_references.R</code>
+and <code>test/validation/loess_reference_values.json</code> (sub-task 6f).</em></p>
+<h3 id="the-shape">The shape</h3>
+<p>Two new arguments on the existing <code>scatter</code> tool and analyze kind —
+<strong><code>smoother</code></strong> (boolean, default false) and <strong><code>span</code></strong> (number in
+<strong>(0, 1]</strong>, default <strong>0.75</strong>, R's own default) — catalog +0. A <code>span</code>
+outside (0, 1] errors as data, and so does <code>span</code> given without
+<code>smoother=true</code> (an argument that would be silently ignored is an error,
+not a shrug). The curve is computed engine-side (the numeric core beside
+the chart kinds in <code>rust/src/analyze/graphs.rs</code>) and emitted as its own
+result table — internal chart geometry on the violin-density precedent —
+which the scatter painter draws as a curve over the points. One engine
+call produces points and curve together, so the journaled command
+reproduces both.</p>
+<h3 id="the-estimator-the-verified-reference-algorithm">The estimator (the verified reference algorithm)</h3>
+<p>The reference is <strong>R <code>loess(y ~ x, span = s, degree = 1, family = &quot;gaussian&quot;, surface = &quot;direct&quot;)</code> with the default
+<code>loess.control</code></strong> — an <em>exact</em> local-linear tricube fit, no interpolation
+surface. The hand algorithm that reproduces it at machine precision:</p>
+<ol>
+<li><strong>Neighborhood size</strong> <code>q = ⌊span·n + 10⁻⁷⌋</code>, clamped to <code>[2, n]</code>. The
+<code>10⁻⁷</code> is load-bearing and verified: <code>0.6·50</code> is <code>29.999999…</code> in
+binary, and R rounds it <em>up</em> to 30.</li>
+<li>At each evaluation point <code>x₀</code>: distances <code>dᵢ = |xᵢ − x₀|</code>, bandwidth
+<code>h</code> = the q-th smallest distance, <strong>tricube weights over all n points</strong>
+<code>wᵢ = (1 − uᵢ³)³</code> for <code>uᵢ = dᵢ/h &lt; 1</code>, else 0 — with tied distances
+more than q points can fall inside the bandwidth (all are weighted),
+and the q-th-nearest point itself gets weight 0.</li>
+<li><strong>Weighted local line</strong>: fitted <code>= ȳ_w + β̂ (x₀ − x̄_w)</code> with
+<code>β̂ = Σw(x−x̄_w)(y−ȳ_w) / Σw(x−x̄_w)²</code>.</li>
+</ol>
+<p><strong>Degree 1 is deliberate</strong> (R <code>loess</code> defaults to degree 2): the row's
+recorded purpose is a trend-reading aid, and the local-linear fit is the
+Cleveland lowess convention the exploratory-graphics audience knows.
+<code>family = &quot;gaussian&quot;</code> means <strong>no robustness iterations</strong> (a recorded cut).</p>
+<p>The curve is evaluated on a fixed grid of <strong>101 equally spaced points
+over [min x, max x]</strong> of the plotted (complete-pair, filtered) points —
+endpoints included, each split group over its own range — dense enough
+that the polyline is smooth at chart resolution, and the same grid shape
+the pins use.</p>
+<h3 id="degenerate-windows-recorded-divergence">Degenerate windows (recorded divergence)</h3>
+<p>Where the local fit is singular, R's implementation takes a pseudoinverse
+path that <strong>warns and prints artifacts</strong> — verified: on a 10-fold mass of
+ties at x = 5 (neighborhood mean 25.1) <code>loess</code> predicts <strong>0.0</strong>. That is
+deliberately not copied. ChakataStat's recorded behaviour: <strong>h = 0</strong> (the
+q-th nearest distance is zero) fits the unweighted mean of the points at
+distance zero; a <strong>singular window</strong> (weighted x-variance 0, e.g. every
+in-bandwidth point at one x) fits the tricube-weighted local mean. Both
+are well-defined limits of the estimator; the pins avoid singular
+windows, and the parity sweeps above all ran on non-degenerate data.</p>
+<h3 id="the-other-r-smoother-lowess--recorded">The other R smoother (<code>lowess</code>) — recorded</h3>
+<p><code>stats::lowess</code> with <code>iter = 0, delta = 0</code> coincides with the pinned
+algorithm <strong>exactly</strong> (verified: 1.7e-13 on <code>cars</code>) — the two share
+Cleveland's estimator. Its <em>defaults</em> differ twice and are the recorded
+alternative, not what we draw: <code>iter = 3</code> robustness iterations (up to
+4.5 y-units apart on <code>cars</code>) and <code>delta</code> interpolation between anchor
+points. One more reference quirk, recorded so nobody trips on it when
+regenerating: <code>loess.control(statistics = &quot;exact&quot;)</code> changes R's own
+<em>predictions</em> (up to ~1.0 on <code>cars</code>) — the pins are against the
+documented <strong>default</strong> control only.</p>
+<h3 id="small-n-and-the-omission-note">Small n and the omission note</h3>
+<p>The smoother is drawn only when the plotted points have <strong>at least 6
+complete pairs and at least 2 distinct x values</strong>. Below six, R's own
+reference implementation distrusts its fits (it refuses n = 3 — &quot;span too
+small&quot; — and takes the warning pseudoinverse path at n = 4–5, even on a
+straight line); a &quot;curve&quot; through fewer points is decoration. The scatter
+itself still draws: the points table gains a note naming what was
+omitted and why (&quot;LOESS smoother not drawn: …&quot;), the omitted-not-failed
+convention. This is a <strong>data</strong> condition; a bad <code>span</code> <em>argument</em> stays
+an error as data.</p>
+<h3 id="presentation">Presentation</h3>
+<ul>
+<li><strong>The smoother table</strong> — <code>&quot;LOESS Smoother: &lt;points-table title&gt;&quot;</code>,
+columns the x variable's name and <code>Fitted</code>, 101 rows; its note names
+the estimator, the span and the pair count (&quot;Local-linear LOESS
+(tricube), span 0.75, over N complete pairs.&quot;). Like the violin density
+tables it is chart geometry: consumed by the chart layer, not shown as
+an output table.</li>
+<li><strong>The curve keeps the theme accent</strong> and the single-color <code>colors</code>
+override recolors <strong>the points only</strong> — the Bland–Altman rule: the
+annotation keeps its own accent so it stays readable over recolored
+data. The curve participates in the y-axis domain (a local line can
+overshoot the data range slightly; it is never clipped away).</li>
+<li><strong>The chart editor's scatter surface stays <code>{colors, title}</code></strong> —
+<code>smoother</code>/<code>span</code> are data arguments, not style, and the editor's
+re-journaled call preserves them untouched (asserted by test).</li>
+<li><strong>Weights are not applied</strong> — scatter's recorded semantics is that
+weights do not move points, and the smoother summarizes the plotted
+points; a declared <strong>survey design is not covered</strong> (the standard
+ignores-design note; the item-1 list is unchanged).</li>
+</ul>
+<h3 id="out-of-scope-for-v1-recorded-cuts">Out of scope for v1 (recorded cuts)</h3>
+<ul>
+<li><strong>No robustness iterations</strong> (<code>lowess</code>'s <code>iter</code>) and <strong>no degree
+option</strong> (degree 1 only) — both would change every number; revisit only
+if asked.</li>
+<li><strong>No confidence/error band</strong> around the curve.</li>
+<li><strong>Scatter only</strong>: no smoother on the scatterplot matrix or the bubble
+chart in v1.</li>
+<li><strong>The <code>gam</code> tool (stage b of the bucket entry) stays in the bucket</strong> —
+the release plan's own cut, recorded up front.</li>
+</ul>
+<h2 id="permutation-tests--the-v1-conventions">Permutation tests — the v1 conventions</h2>
+<p><em>Decided 2026-08-18, before any code, as sub-task 7a of
+<code>docs/releases/release_0.19.0.md</code> item 7 (kept private). The permutation
+(randomization) test answers &quot;how unusual is this statistic under random
+relabeling?&quot; without distributional assumptions — the methods-course and
+small-sample companion to the t test and the correlation. Every convention
+below was verified against <strong>R <code>coin</code> 1.4-5 and <code>perm</code> 1.0.0.4</strong> (installed
+into the item-1 R env: <code>coin</code> from conda-forge, <code>perm</code> from CRAN) by
+reproducing their p-values from hand enumeration in R — not recorded from
+memory. The pinned values live in
+<code>tool/validation/generate_permutation_references.R</code> and
+<code>test/validation/permutation_reference_values.json</code> (sub-task 7f).</em></p>
+<h3 id="the-shape-2">The shape</h3>
+<p>A <strong><code>permutation</code> boolean</strong> (plus <code>replicates</code> and <code>seed</code>) on the two
+existing tools where the convention is settled — <strong><code>independent_ttest</code></strong>
+(the two-sample mean difference) and <strong><code>correlate</code></strong> (the bivariate
+coefficient) — catalog +0. Engine-side the options ride the existing
+<code>ttest_independent</code> and <code>correlate</code> kinds, which append a <strong>&quot;Permutation
+Test&quot; table</strong> after their standard output; the asymptotic tables are
+unchanged. For <code>correlate</code>, permutation requires <strong>exactly two variables</strong>
+and method <strong>pearson or spearman</strong> — a wider matrix or Kendall errors as
+data (the matrix stays asymptotic; recorded cuts below).</p>
+<h3 id="the-test">The test</h3>
+<ol>
+<li><strong>The reported statistic</strong> is the mean difference (group 1 − group 2,
+the t-table's direction) or the correlation coefficient. Under
+permutation with fixed group sizes these are monotone-equivalent to the
+t statistic and to Σxy respectively, which is why the counts agree with
+<code>coin</code>'s standardized linear statistic — verified, not assumed.</li>
+<li><strong>Two-sided p counts <code>|T_b| ≥ |T_obs|</code></strong>; with the tools' <code>tails = one</code>
+the count is one-sided <strong>in the observed direction</strong> (the existing
+<code>t_significance</code> convention). Verified exactly on a 4 + 4 example:
+two-sided 6/70 ≡ <code>coin</code> <code>oneway_test(distribution = &quot;exact&quot;)</code> ≡
+<code>perm::permTS(method = &quot;exact.ce&quot;)</code>; one-sided 3/70 ≡ <code>coin</code>
+<code>alternative = &quot;greater&quot;</code>.</li>
+<li><strong>Exact enumeration is automatic</strong> when the number of distinct
+arrangements is at most <strong>1,000,000</strong> — <code>C(n, n₁)</code> for the two-sample
+test (balanced designs up to n = 22), <code>n!</code> for correlation (n ≤ 9).
+The exact p is <strong>b/C with the identity arrangement included</strong> (so
+p ≥ 1/C, never 0), no +1 correction — it is the whole distribution —
+and <strong>no CI</strong> (the p is exact). Verified: Pearson |r| enumeration
+12/5040 on an n = 7 pair (an independent hand implementation — <code>coin</code>'s
+exact algorithms refuse the correlation problem, &quot;not a two-sample
+problem&quot;); the Spearman |ρ| enumeration <strong>coincides exactly with
+<code>cor.test(method = &quot;spearman&quot;)</code>'s exact p</strong> (62/5040) on tie-free data.</li>
+<li><strong>Monte Carlo above the threshold</strong>: default <strong>m = 10,000</strong> resamples
+(<code>coin</code>'s <code>nresample</code> default), clamped at 1,000,000 (the bootstrap
+cap, with the same clamp note), and
+<strong>p̂ = (b + 1)/(m + 1)</strong> — the Davison &amp; Hinkley / Phipson &amp; Smyth
+estimator, and exactly <code>perm</code>'s <code>exact.mc</code> (verified: b = 109,
+m = 999 → 0.11). <strong>Recorded divergence</strong>: <code>coin</code> reports the raw b/m
+(verified: p·m integer, p·(m+1) not); the +1 form is used because a
+Monte-Carlo p of exactly zero misstates the evidence.</li>
+<li><strong>The MC confidence interval is 99% Clopper–Pearson on b of m</strong> —
+exactly <code>coin</code>'s <code>conf.int</code> (verified equal to
+<code>binom.test(b, m, conf.level = 0.99)</code> to machine precision). It
+describes simulation uncertainty about the permutation p, not
+sampling uncertainty about the effect — the note says so.</li>
+<li><strong>Reproducibility</strong>: replicates ride the shared SplitMix64 generator
+(<code>resample.rs</code>'s contract; <code>seed</code> option, default 1). A two-sample
+replicate draws a random n₁-subset by partial Fisher–Yates
+(n₁ <code>below</code> draws); a correlation replicate is a full Fisher–Yates
+shuffle of y (n − 1 draws) — fixed draw counts in fixed replicate
+order, so a pinned seed reproduces the table byte-for-byte on every
+platform. Cancellation is polled at replicate boundaries (the
+resampling loops are what the §4 channel is for), exactly like the
+bootstrap.</li>
+<li><strong>Tie counting under floating point</strong>: an arrangement counts as
+extreme when <code>|T_b| ≥ |T_obs| − 10⁻¹² · max(1, |T_obs|)</code> — the
+regenerated observed arrangement must count itself even when summation
+order perturbs the last bits.</li>
+<li><strong>Spearman permutes the midranks</strong>: ranks are computed once on the
+observed y and permuted (a permutation of y permutes its ranks).
+Ties are allowed — the exact p is then over midrank arrangements,
+where <code>cor.test</code> would fall back to asymptotics (recorded; the pins
+use tie-free data so the cross-check stays exact).</li>
+</ol>
+<h3 id="errors-as-data">Errors as data</h3>
+<ul>
+<li><strong>Weight Cases + permutation errors as data</strong>: rearranging weighted
+cases compounds two case multiplicities (the propensity / survey-design
+precedent); the message says to remove the weight.</li>
+<li><code>permutation</code> with one-sample or paired t tests, with Kendall, or with
+a correlation matrix wider than two variables: errors as data, each
+naming the unsupported combination.</li>
+<li>A <strong>degenerate correlation pair</strong> (fewer than two complete pairs, or no
+variation on either variable) errors as data — there is no coefficient
+to permute. A t-test <em>variable</em> with an empty group keeps its row with
+null cells instead (the asymptotic table's own NaN-row convention),
+since the other variables in the same run may be fine.</li>
+</ul>
+<h3 id="the-table">The table</h3>
+<p><strong>&quot;Permutation Test&quot;</strong> — one row per test variable (t test) or the single
+pair (correlate): the statistic, a Method cell naming what actually ran
+(&quot;Exact, C arrangements&quot; or &quot;Monte Carlo, m resamples&quot;), the permutation
+Sig. under the tails label, and Lower/Upper of the 99% CI of Sig. (Monte
+Carlo rows only; empty for exact). The note names the estimator
+((b+1)/(m+1)), the seed when any row is Monte Carlo, and what the CI
+means. Exact-vs-MC is decided per row (missing data can put one variable
+under the threshold and another over it).</p>
+<h3 id="out-of-scope-for-v1-recorded-cuts-2">Out of scope for v1 (recorded cuts)</h3>
+<ul>
+<li><strong>No sign-flip (paired/one-sample) permutation test</strong> — a different
+convention (2ⁿ sign assignments), recorded for a later item if asked.</li>
+<li><strong>No method-force option</strong>: exact-vs-Monte-Carlo is automatic at the
+recorded threshold and named in the output.</li>
+<li><strong>No Kendall permutation</strong> and <strong>no permutation p's for a correlation
+matrix</strong> — the matrix stays asymptotic.</li>
+</ul>
+<h2 id="var--granger-causality--the-v1-conventions">VAR / Granger causality — the v1 conventions</h2>
+<p><em>Decided 2026-08-19, before any code, as sub-task 8a of
+<code>docs/releases/release_0.19.0.md</code> item 8 (kept private). The vector
+autoregression is the standard multi-series companion to the shipped
+single-series tools: K series regressed on p lags of all of them, the
+lag-order criteria that choose p, and the pairwise Granger tests that ask
+&quot;do the lags of one series improve the prediction of another?&quot;. Every
+convention below was verified against <strong>R <code>vars</code> 1.6-1 and <code>lmtest</code>
+0.9-40</strong> (<code>vars</code> installed into the item-1 R env from conda-forge — the
+CRAN source build needs a C toolchain the env does not carry) — the
+<code>VARselect</code> scalings read from its source and every estimation identity
+reproduced numerically to machine precision, not recorded from memory.
+The pinned values live in <code>tool/validation/generate_var_references.R</code> and
+<code>test/validation/var_reference_values.json</code> (sub-task 8g).</em></p>
+<h3 id="the-shape-3">The shape</h3>
+<p>A new <strong><code>var_model</code></strong> tool (catalog +1): <strong>K ≥ 2 numeric series taken in
+case order</strong>, fitted as a VAR(p) by per-equation OLS, with the lag order
+either <strong>fixed (<code>lags</code>, default 1)</strong> or <strong>selected by an information
+criterion (<code>auto</code>, over <code>1..max_lags</code>, default max 10 — <code>VARselect</code>'s
+<code>lag.max</code> default)</strong> under the <code>ic</code> option (<strong>aic</strong> default, or <code>hq</code>,
+<code>bic</code>, <code>fpe</code>). Deterministic terms ride a <strong><code>trend</code></strong> option with the
+stationarity tool's vocabulary extended to vars' four:
+<strong>constant</strong> (default), <strong>trend</strong>, <strong>both</strong>, <strong>none</strong>.</p>
+<ul>
+<li><strong>Alignment is listwise over the K series</strong>: the analyzed sample is the
+included rows where <em>all</em> K series are non-missing, in case order (the
+CCF's <code>aligned_pair</code> convention widened to K), with the aligned count
+named in the output.</li>
+<li>The <strong>trend regressor is the 1-based time index of the aligned series</strong>,
+running <code>p+1..n</code> over the fitted observations — exactly <code>vars::VAR</code> /
+<code>VARselect</code> (<code>seq(lag.max + 1, length = sample)</code>; verified by
+reproducing the trend-model coefficients).</li>
+<li><strong>Deliberately unweighted</strong> — the standing time-series convention (a
+frequency weight has no defined meaning for an ordered series): the
+weight only selects cases, surfaced by the usual unweighted note. Not
+design-covered (the generic design-ignored note applies).</li>
+</ul>
+<h3 id="estimation-verified-identities">Estimation (verified identities)</h3>
+<ol>
+<li><strong>Per-equation OLS on the common regressor matrix</strong>
+<code>[y₁,ₜ₋₁ … y_K,ₜ₋₁, y₁,ₜ₋₂ …, deterministic]</code> — lag-major,
+variable-minor ordering (<code>x.l1, y.l1, x.l2, y.l2, …</code>, R's <code>embed</code>
+layout), deterministic terms last, over the <strong>T = n − p</strong> effective
+observations. Coefficients and standard errors are the equationwise
+OLS ones — <code>s²ⱼ (X'X)⁻¹</code> with <code>s²ⱼ = RSSⱼ/(T − k)</code> and
+<strong>k = pK + d</strong> regressors per equation (d deterministic columns).
+Verified equal to <code>summary(VAR(...))</code> to machine precision, and t
+tests use the Student t on <code>T − k</code> df.</li>
+<li><strong>The residual covariance matrix is the df-adjusted, column-centered
+one</strong>: <code>Σ̂ᵢⱼ = Σₜ(eᵢₜ − ēᵢ)(eⱼₜ − ēⱼ)/(T − k)</code> — read from
+<code>summary.varest</code>'s source (<code>cov(resids)·(obs−1)/(obs−k)</code>) and verified
+on the <code>type = &quot;none&quot;</code> case, where the centering genuinely differs
+(no constant absorbs the residual means; with a constant the two
+forms coincide). The correlation matrix is its <code>cov2cor</code>. The <strong>ML
+covariance <code>Σ̃ = E'E/T</code></strong> (raw cross-products, denominator T) is used
+<em>only</em> inside the criteria and the log-likelihood.</li>
+<li><strong>Log-likelihood</strong> is the Gaussian one at the ML estimate:
+<code>−(TK/2)·ln 2π − (T/2)·ln det Σ̃ − TK/2</code> — verified equal to
+<code>logLik(varest)</code>.</li>
+</ol>
+<h3 id="lag-order-criteria-varselects-scalings-from-source">Lag-order criteria (<code>VARselect</code>'s scalings, from source)</h3>
+<p>With <code>T</code> the estimation sample and <code>d = detint</code> deterministic columns:</p>
+<ul>
+<li><code>AIC(p) = ln det Σ̃ₚ + (2/T)·(pK² + Kd)</code></li>
+<li><code>HQ(p)  = ln det Σ̃ₚ + (2 ln ln T/T)·(pK² + Kd)</code></li>
+<li><code>BIC(p) = ln det Σ̃ₚ + (ln T/T)·(pK² + Kd)</code> — Lütkepohl's SC;
+labeled BIC in the output (the app's name for it), with the note
+naming the equivalence.</li>
+<li><code>FPE(p) = ((T + k)/(T − k))^K · det Σ̃ₚ</code>, <code>k = pK + d</code>.</li>
+</ul>
+<p>Two sample conventions, both recorded:</p>
+<ul>
+<li><strong>The selection table holds the sample fixed at <code>T = n − max_lags</code></strong>
+for every candidate order (each candidate fits on the same
+observations — <code>VARselect</code>'s loop, read from source), so the criteria
+are comparable; the selected order per criterion is the <strong>first
+minimum</strong> (<code>which.min</code>).</li>
+<li><strong>The fitted model's own criteria</strong> (model-summary table) use the same
+formulas on the model's own sample <code>T = n − p</code> — equal to
+<code>VARselect(lag.max = p)</code>'s column p, and <em>deliberately not</em> equal to
+the selection table's row p when <code>max_lags &gt; p</code> (different sample;
+the note says so).</li>
+</ul>
+<h3 id="granger-tests-the-pairwise-convention">Granger tests (the pairwise convention)</h3>
+<p>For every ordered pair <strong>cause → effect</strong> (K(K−1) rows): the <strong>F test
+that all p lag coefficients of the cause are zero in the effect's
+equation of the full fitted system</strong> — the per-equation Wald
+<code>W = (Rβ)'(R V̂ R')⁻¹(Rβ)</code> with <code>V̂</code> the equation's OLS covariance,
+reported as <code>F = W/p</code> on <code>(p, T − k)</code> df. <strong>Verified: in a bivariate
+system this is exactly <code>lmtest::grangertest</code>'s restricted-vs-unrestricted
+F</strong> (equal to machine precision, same df) — which is why the pins use
+<code>grangertest</code> for the pairwise case. <strong>Recorded divergence</strong>:
+<code>vars::causality</code> tests the <em>joint</em> hypothesis cause → all-others with a
+system-wide covariance — a different (blockwise) test, out of scope.</p>
+<h3 id="errors-as-data-2">Errors as data</h3>
+<ul>
+<li>Fewer than two series, a non-numeric series, <code>lags &lt; 1</code>, or
+<code>max_lags &lt; 1</code> — each named plainly.</li>
+<li><strong>Too few observations</strong>: the fit needs <code>T − k ≥ 1</code> (<code>T &gt; pK + d</code>),
+and under <code>auto</code> the fixed selection sample needs
+<code>n − max_lags &gt; max_lags·K + d</code>; the message names the counts.</li>
+<li><strong>Collinear regressors</strong> (a constant series, duplicated series, n too
+small for the lag matrix) surface as the shared singular-matrix error.</li>
+</ul>
+<h3 id="the-tables">The tables</h3>
+<ol>
+<li><strong>&quot;VAR Model Summary&quot;</strong> — Statistic/Value rows (the ARIMA Model Fit
+shape): aligned observations, effective observations T, lag order p,
+parameters per equation k, log-likelihood, AIC, HQ, BIC, FPE (own
+sample). The note names the series, the deterministic terms, and how
+p was chosen (fixed, or selected by which criterion over what range).</li>
+<li><strong>&quot;Lag Order Selection&quot;</strong> (<code>auto</code> only) — one row per candidate order:
+Lag, AIC, HQ, BIC, FPE, on the fixed <code>n − max_lags</code> sample; the note
+names the per-criterion selections and the order actually fitted.</li>
+<li><strong>&quot;VAR Coefficients: 〈series〉&quot;</strong> per equation — Term, Estimate,
+Std. Error, t, Sig.; terms in the verified <code>x.l1, y.l1, …, const, trend</code> order; the note carries the equation's residual SE and R².</li>
+<li><strong>&quot;Residual Covariance Matrix&quot;</strong> and <strong>&quot;Residual Correlation
+Matrix&quot;</strong> — K×K, df-adjusted denominator named in the note.</li>
+<li><strong>&quot;Granger Causality Tests&quot;</strong> — Cause, Effect, F, df1, df2, Sig.;
+the note states the hypothesis form and the bivariate <code>grangertest</code>
+equivalence.</li>
+</ol>
+<h3 id="out-of-scope-for-v1-recorded-cuts-3">Out of scope for v1 (recorded cuts)</h3>
+<ul>
+<li><strong>No IRFs and no FEVD</strong> — deferred until asked (the bucket pointer
+recorded when the queue item moved into the release).</li>
+<li><strong>No forecasting from the fitted VAR</strong> — the single-series tools
+forecast; a VAR <code>predict</code> is a later ask.</li>
+<li><strong>No seasonal dummies and no exogenous regressors</strong> (<code>VARselect</code>'s
+<code>season</code>/<code>exogen</code> arguments).</li>
+<li><strong>No joint or instantaneous causality</strong> (<code>vars::causality</code>'s two
+tests, including its bootstrap option) — the pairwise matrix is the
+v1 answer.</li>
+<li><strong>No stability (companion-root) table</strong> — the companion matrix is not
+symmetric, and the engine carries no general eigensolver; recorded
+rather than approximated.</li>
+<li><strong>No SVAR, no VECM/Johansen, no coefficient restrictions.</strong></li>
+</ul>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../../index.html">Home</a> ·
+        <a href="../../../../quick-start/">Quick Start</a> ·
+        <a href="../../../../privacy-policy/">Privacy Policy</a> ·
+        <a href="../../../../license/">License</a> ·
+        <a href="../../../../cite/">How to Cite</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Regenerating the reference values — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/validation/regenerating/">
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Regenerating the reference values — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/validation/regenerating/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../index.html">
+        <img class="brand-mark" src="../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <!-- One link, not a copy of the site menu. While someone is reading the
+           guide, the sidebar is the navigation that matters; marketing anchors
+           (Features, Screenshots, …) only compete with it and push the reader
+           out of what they came for. All that is owed is a way back. Single
+           link means no mobile collapse either, so there is no hamburger on
+           these pages — main.js guards for its absence. -->
+      <nav id="nav-links" class="nav-links nav-links--single">
+        <a href="../../../index.html">← Back to chakatastat.app</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">Numerical-validation suite</p>
+        <ul>
+        <li><a href="../">Overview</a></li>
+        <li><a href="../nist/">NIST StRD certified datasets</a></li>
+        <li><a href="../file-formats/">Statistics-package file formats</a></li>
+        <li><a href="../tolerances/">Tolerances and recorded conventions</a></li>
+        <li class="docs-nav-section">The recorded conventions</li>
+        <li><a href="../conventions/regression/">Regression conventions</a></li>
+        <li><a href="../conventions/latent-variable/">Latent-variable conventions</a></li>
+        <li><a href="../conventions/clinical-and-survey/">Clinical and survey conventions</a></li>
+        <li><a href="../conventions/resampling-and-time-series/">Resampling and time-series conventions</a></li>
+        <li class="docs-nav-section">Maintaining the suite</li>
+        <li><a href="./" aria-current="page">Regenerating the reference values</a></li>
+        <li class="docs-nav-section">User Guide</li>
+        <li><a href="../../">Contents</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="regenerating-the-reference-values">Regenerating the reference values</h1>
+<blockquote>
+<p>Part of the <a href="../">numerical-validation suite</a>. The generator, the pinned reference environment, and what to do when a reference package changes.</p>
+</blockquote>
+<p>The reference toolchain is needed only to <em>author</em> the values — CI just reads the
+committed JSON (so the suite runs everywhere the Dart suite runs, with no Python
+dependency on the CI machines). To regenerate after adding a procedure or
+changing a number:</p>
+<pre><code class="language-sh">python3 -m venv /tmp/refenv
+/tmp/refenv/bin/pip install scipy statsmodels scikit-learn lifelines pingouin
+/tmp/refenv/bin/python tool/validation/generate_references.py
+dart run tool/cstool.dart test test/numerical_validation_test.dart
+</code></pre>
+<p>The package versions used for the committed values are recorded in the JSON
+header (<code>_versions</code>) — at the time of writing SciPy 1.18, statsmodels 0.14,
+scikit-learn 1.9, lifelines 0.30, pingouin 0.6, NumPy 2.5.</p>
+<p>The <strong>survey-design</strong>, <strong>TOST</strong>, <strong>Bland–Altman</strong>, <strong>LCA</strong>, <strong>IRT</strong>,
+<strong>LOESS</strong>, <strong>permutation</strong>, <strong>CFA follow-up</strong> and <strong>mediation follow-up</strong> references have their own toolchain — R with the <code>survey</code> package (the
+canonical reference implementation for Taylor-linearized design-based
+estimation; none of the pinned Python packages implements it), the
+<code>TOSTER</code> package (the reference for equivalence testing), the <code>blandr</code> +
+<code>BlandAltmanLeh</code> pair (the dual references for method comparison; <code>blandr</code>
+also ships the original Bland &amp; Altman 1986 PEFR data the fixture is
+written from), the <code>poLCA</code> package (the reference for latent class
+analysis; it ships the <code>values</code> and <code>carcinoma</code> example data the fixtures
+are written from), the <code>ltm</code> + <code>mirt</code> pair (the dual references for
+IRT; they ship the LSAT6/LSAT7 data), the <code>coin</code> + <code>perm</code> pair (the dual
+references for permutation tests, with hand enumeration in R where
+<code>coin</code>'s exact algorithms do not reach), and — for the LOESS smoother —
+base R alone (<code>stats::loess</code> is the reference; the <code>cars</code> fixture is a
+base-R dataset), and — for the CFA follow-ups — <code>lavaan</code> (the reference
+SEM package; it ships the Holzinger–Swineford data the fixture is written
+from), and — for the mediation follow-ups — base R <code>lm</code> plus the
+<code>interactions</code> package (the Johnson–Neyman reference). Like the Python
+values, CI only reads the committed JSON:</p>
+<pre><code class="language-sh"># any R ≥ 4 with survey ≥ 4.4, TOSTER ≥ 0.8, blandr ≥ 0.6,
+# BlandAltmanLeh ≥ 0.3, poLCA ≥ 1.6, ltm ≥ 1.2, mirt ≥ 1.4,
+# coin ≥ 1.4 and perm ≥ 1.0; a user-space conda-forge R works:
+#   micromamba create -p ~/micromamba/envs/r-survey -c conda-forge \
+#     r-base r-survey r-toster r-polca r-coin r-lavaan \
+#     c-compiler cxx-compiler gfortran make
+#   # CRAN source builds need the env's bin on PATH for its compilers:
+#   PATH=~/micromamba/envs/r-survey/bin:$PATH Rscript -e \
+#     'install.packages(c(&quot;blandr&quot;,&quot;BlandAltmanLeh&quot;,&quot;ltm&quot;,&quot;mirt&quot;,&quot;perm&quot;,&quot;interactions&quot;),
+#      repos=&quot;https://cloud.r-project.org&quot;)'
+Rscript tool/validation/generate_survey_references.R
+Rscript tool/validation/generate_tost_references.R
+Rscript tool/validation/generate_bland_altman_references.R
+Rscript tool/validation/generate_lca_references.R
+Rscript tool/validation/generate_irt_references.R
+Rscript tool/validation/generate_loess_references.R
+Rscript tool/validation/generate_permutation_references.R
+Rscript tool/validation/generate_cfa_followups_references.R
+Rscript tool/validation/generate_mediation_followups_references.R
+dart run tool/cstool.dart test test/survey_validation_test.dart \
+  test/tost_validation_test.dart test/bland_altman_validation_test.dart \
+  test/lca_validation_test.dart test/irt_validation_test.dart \
+  test/loess_validation_test.dart test/permutation_validation_test.dart \
+  test/cfa_followups_validation_test.dart \
+  test/mediation_followups_validation_test.dart
+</code></pre>
+<p>The R and package versions used for the committed values are recorded in each
+JSON header (<code>_versions</code>).</p>
+<p>The <strong>statistics-package format</strong> artifacts have their own, smaller toolchain
+(<code>pyreadstat</code> + <code>pandas</code>, and <code>xlwt</code>/<code>odfpy</code> for the spreadsheet fixtures):</p>
+<pre><code class="language-sh">python3 -m venv /tmp/fmtenv
+/tmp/fmtenv/bin/pip install pyreadstat pandas
+/tmp/fmtenv/bin/python tool/validation/generate_foreign_fixtures.py   # create-if-absent
+/tmp/fmtenv/bin/python tool/validation/generate_foreign_corpus.py     # rewrites expected.json
+dart run tool/cstool.dart test test/io_test.dart test/foreign_corpus_test.dart
+</code></pre>
+<p>The fixture writer is deliberately <strong>create-if-absent</strong>: <code>.sav</code> files embed a
+creation timestamp, so an unconditional rewrite would churn committed bytes on
+every run. Delete a fixture to genuinely regenerate it.</p>
+<h2 id="adding-a-procedure">Adding a procedure</h2>
+<ol>
+<li>In the generator, add a <code>add(&quot;&lt;family&gt;/&lt;stat&gt;&quot;, value, tol, &quot;&lt;source&gt;&quot;)</code> line
+computing the statistic with a reference package; re-run it.</li>
+<li>In the Dart test, add a <code>Probe</code> (or an entry to an existing one) mapping each
+new <code>id</code> to the engine request and the result cell that holds it.</li>
+<li>Run the test. The orphan-guard will tell you immediately if the two sides are
+not in step.</li>
+</ol>
+<p>When the reference disagrees, decide whether it is a real engine bug or a
+<strong>convention</strong> difference (a different-but-valid definition). If the latter,
+compute the reference in the engine's convention and record the choice in the
+<em>Tolerances and recorded conventions</em> list above — never just loosen the
+tolerance to make a genuine discrepancy pass.</p>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../index.html">Home</a> ·
+        <a href="../../../quick-start/">Quick Start</a> ·
+        <a href="../../../privacy-policy/">Privacy Policy</a> ·
+        <a href="../../../license/">License</a> ·
+        <a href="../../../cite/">How to Cite</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../js/main.js"></script>
+</body>
+</html>

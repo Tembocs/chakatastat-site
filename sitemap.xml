@@ -252,6 +252,46 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://chakatastat.app/docs/validation/conventions/clinical-and-survey/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://chakatastat.app/docs/validation/conventions/latent-variable/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://chakatastat.app/docs/validation/conventions/regression/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://chakatastat.app/docs/validation/conventions/resampling-and-time-series/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://chakatastat.app/docs/validation/file-formats/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://chakatastat.app/docs/validation/nist/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://chakatastat.app/docs/validation/regenerating/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://chakatastat.app/docs/validation/tolerances/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://chakatastat.app/docs/working-with-data/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
