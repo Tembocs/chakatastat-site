@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Privacy Policy — ChakataStat</title>
-  <meta name="description" content="ChakataStat's privacy policy: what data the app and this site collect (nothing, by default), and what happens when you use the optional AI assistant.">
+  <title>How to cite ChakataStat — ChakataStat</title>
+  <meta name="description" content="How to cite ChakataStat: the concept DOI for the software itself, a version DOI for the exact release you ran, with APA and BibTeX examples.">
 
   <link rel="icon" type="image/svg+xml" href="../assets/logo-mark.svg">
   <link rel="alternate icon" href="../assets/favicon-256.png">
   <link rel="apple-touch-icon" href="../assets/favicon-256.png">
-  <link rel="canonical" href="https://chakatastat.app/privacy-policy/">
+  <link rel="canonical" href="https://chakatastat.app/cite/">
 
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
 
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Privacy Policy — ChakataStat">
-  <meta property="og:description" content="What data ChakataStat and this site collect (nothing, by default), and what happens when you use the optional AI assistant.">
-  <meta property="og:url" content="https://chakatastat.app/privacy-policy/">
+  <meta property="og:title" content="How to cite ChakataStat">
+  <meta property="og:description" content="How to cite ChakataStat: the concept DOI for the software itself, a version DOI for the exact release you ran, with APA and BibTeX examples.">
+  <meta property="og:url" content="https://chakatastat.app/cite/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
@@ -82,82 +82,98 @@
   <main id="main">
     <section class="legal">
       <div class="container legal-content">
-        <h1>Privacy Policy</h1>
-        <p class="legal-updated">Last updated: July 15, 2026</p>
+        <h1>How to cite ChakataStat</h1>
+        <p class="legal-updated">Last updated: August 23, 2026</p>
 
         <p>
-          ChakataStat is a desktop application for statistical analysis. This
-          page explains what data the app and this website collect — which,
-          by default, is nothing — and the one case where data leaves your
-          device: if you choose to use the optional AI assistant.
+          ChakataStat is archived on
+          <a href="https://zenodo.org/records/22043444">Zenodo</a>, which
+          gives it two kinds of DOI. Which one you want depends on what you
+          are pointing at: the software, or the exact build that produced
+          your numbers.
         </p>
 
-        <h2>The short version</h2>
-        <ul>
-          <li>No account, sign-up or registration is required to use ChakataStat.</li>
-          <li>No telemetry, analytics or usage tracking is built into the app today.</li>
-          <li>Your datasets stay on your device. ChakataStat never uploads them anywhere on its own.</li>
-          <li>The AI assistant is optional. It only sends data if you turn it on, configure a provider, and use it.</li>
-          <li>This website does not use cookies, analytics scripts, or any third-party tracking.</li>
-        </ul>
-
-        <h2>Your data and datasets</h2>
+        <h2>Citing the software</h2>
         <p>
-          ChakataStat runs entirely on your computer. The files you open,
-          edit and analyze are read from and written back to your own disk.
-          Nothing about your data — its contents, file names, variable
-          names, or the analyses you run — is sent to ChakataStat or anyone
-          else, unless you explicitly use the AI assistant described below.
+          Use the <strong>concept DOI</strong> when you mean ChakataStat
+          itself — in a methods section that names the tool, a
+          bibliography entry, or a link that should keep working after the
+          next release. It never changes, and it always resolves to the
+          newest version with every earlier one listed beneath it.
+        </p>
+        <p class="cite-block">
+          Amani, E. (2026). <em>ChakataStat</em> [Computer software].
+          <a href="https://doi.org/10.5281/zenodo.22043444">https://doi.org/10.5281/zenodo.22043444</a>
         </p>
 
-        <h2>The AI assistant</h2>
+        <h2>Citing the version you ran</h2>
         <p>
-          ChakataStat includes an optional, provider-neutral AI assistant.
-          It does nothing until you configure it with your own API key for
-          a provider — Anthropic, an OpenAI-compatible service, or a local
-          Ollama instance running entirely on your machine.
+          Use a <strong>version DOI</strong> when the result has to be
+          reproducible — a paper reporting statistics ChakataStat
+          computed, a pre-registration, a submitted analysis script. It
+          pins one release and one archived record, so a reader can obtain
+          the same build you used. ChakataStat prints its version under
+          <strong>Help → About</strong> and at the foot of every output
+          document.
         </p>
-        <p>
-          When you use the assistant, your prompt — which may include data
-          you choose to reference from your open dataset — is sent directly
-          to the provider you configured, under that provider's own privacy
-          terms. If you configure a local Ollama backend, nothing leaves
-          your device at all. ChakataStat's own servers are not part of this
-          path today: there is currently no ChakataStat-hosted AI service,
-          so no data is ever sent to us through the assistant.
-        </p>
-
-        <h2>Telemetry and analytics</h2>
-        <p>
-          ChakataStat does not currently collect installation counts, usage
-          statistics, crash reports, or any other telemetry. If anonymous,
-          opt-in usage telemetry is added in the future, it will be
-          disclosed here first, require your explicit consent before
-          anything is sent, and will never include dataset contents, file
-          names, or analysis details.
+        <p class="cite-block">
+          Amani, E. (2026). <em>ChakataStat</em> (Version 0.21.0) [Computer
+          software].
+          <a href="https://doi.org/10.5281/zenodo.22064586">https://doi.org/10.5281/zenodo.22064586</a>
         </p>
 
-        <h2>This website</h2>
+        <h2>Version DOIs</h2>
+        <div class="legal-table-wrap">
+          <table>
+            <thead>
+              <tr><th>Version</th><th>Released</th><th>DOI</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>0.21.0</td>
+                <td>2026-08-23</td>
+                <td><a href="https://doi.org/10.5281/zenodo.22064586">10.5281/zenodo.22064586</a></td>
+              </tr>
+              <tr>
+                <td>0.20.0</td>
+                <td>2026-08-20</td>
+                <td><a href="https://doi.org/10.5281/zenodo.22043445">10.5281/zenodo.22043445</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <p>
-          chakatastat.app is a static site with no cookies, no analytics,
-          and no third-party trackers. It's hosted on GitHub Pages, which
-          may log standard, aggregated web-server access data (such as IP
-          addresses) as part of its own infrastructure — ChakataStat has no
-          access to that data.
+          Releases before 0.20.0 predate the archive and have no DOI; cite
+          those with the concept DOI and the version number. Each version
+          record archives the release's Linux installer, its
+          <code>SHA256SUMS.txt</code> checksums and the license — not
+          the source, which is not public.
         </p>
 
-        <h2>Changes to this policy</h2>
+        <h2>BibTeX</h2>
+        <pre><code>@software{chakatastat,
+  author  = {Amani, Edward},
+  title   = {ChakataStat},
+  year    = {2026},
+  version = {0.21.0},
+  doi     = {10.5281/zenodo.22064586},
+  url     = {https://doi.org/10.5281/zenodo.22064586}
+}</code></pre>
         <p>
-          If ChakataStat's data practices change — for example, if an
-          optional hosted AI service is introduced — this page will be
-          updated before that change takes effect, and any new data
-          collection will be opt-in and clearly disclosed.
+          Drop the <code>version</code> field and swap in
+          <code>10.5281/zenodo.22043444</code> to cite the software rather
+          than one release.
         </p>
 
-        <h2>Contact</h2>
+        <h2>Citing the numbers, not just the tool</h2>
         <p>
-          Questions about this policy can be sent to
-          <a href="mailto:tembocs101@gmail.com">tembocs101@gmail.com</a>.
+          If a reviewer asks how the statistics were verified, the
+          <a href="../docs/validation/">validation report</a> is the citable
+          answer: it lists every statistic pinned to an independently
+          computed reference value, the tolerance recorded for each one, the
+          NIST certified datasets scored by digits of agreement, and the
+          convention chosen wherever a statistic has more than one defensible
+          definition.
         </p>
       </div>
     </section>
@@ -172,7 +188,6 @@
       <p class="footer-cite">
         Cite: Amani, E. (2026). <em>ChakataStat</em> [Computer software].
         <a href="https://doi.org/10.5281/zenodo.22043444">https://doi.org/10.5281/zenodo.22043444</a>
-        — <a href="../cite/">how to cite a specific version</a>
       </p>
     </div>
   </footer>

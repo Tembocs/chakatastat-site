@@ -601,6 +601,10 @@ section h2 {
   margin: 28px 0 0;
 }
 
+.trust-actions {
+  margin: 24px 0 0;
+}
+
 .section-lede {
   color: var(--color-text-muted);
   max-width: 62ch;
@@ -1469,4 +1473,67 @@ section h2 {
 
 .legal-content li {
   margin-bottom: 0.4em;
+}
+
+/* The citation page is the one legal page that shows examples rather than
+   prose: a ready-to-paste reference, a DOI table and a BibTeX block. */
+.cite-block {
+  margin: 1.2em 0 1.6em;
+  padding: 14px 18px;
+  border-left: 3px solid var(--color-primary);
+  border-radius: 0 8px 8px 0;
+  background: var(--color-bg-alt);
+  overflow-wrap: anywhere;
+}
+
+.legal-table-wrap {
+  overflow-x: auto;
+  margin: 1.4em 0;
+}
+
+.legal-content table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.94rem;
+}
+
+.legal-content th,
+.legal-content td {
+  padding: 9px 14px;
+  border: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.legal-content th {
+  background: var(--color-bg-alt);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.legal-content code {
+  padding: 0.12em 0.38em;
+  border-radius: 5px;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo,
+    Consolas, monospace;
+  font-size: 0.88em;
+}
+
+.legal-content pre {
+  margin: 1.4em 0;
+  padding: 16px 18px;
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-bg-alt);
+  line-height: 1.6;
+}
+
+.legal-content pre code {
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: 0.85rem;
 }

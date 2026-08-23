@@ -22,6 +22,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://chakatastat.app/cite/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://chakatastat.app/docs/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
