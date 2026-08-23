@@ -271,6 +271,11 @@ a {
   font-weight: 500;
 }
 
+.nav-links a[aria-current="page"] {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
 .nav-links a:hover {
   color: var(--color-text);
 }

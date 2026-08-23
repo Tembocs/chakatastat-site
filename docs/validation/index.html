@@ -91,9 +91,11 @@ every number it prints. The per-core unit tests
 <code>rust/src/analyze/tests.rs</code>) check a handful
 of known answers by hand; that is good spot-checking, but it only confirms the
 cases we thought to write down. This suite is the complement: it runs the
-procedure catalog <strong>end to end through the real native engine</strong> and checks each
-printed statistic against a value computed independently by an established
-reference package. See production_readness.md gate 4.</p>
+procedure catalog <strong>end to end through the real native engine</strong> and checks,
+for each procedure, the statistics that matter — the test statistic, the
+p-value, the parameter estimates, the effect sizes — against values computed
+independently by an established reference package. Not every printed cell:
+the <em>shape</em> of every result is guarded separately, by <code>analysis_test.dart</code>. See production_readness.md gate 4.</p>
 </blockquote>
 <h2 id="the-pages-of-this-suite">The pages of this suite</h2>
 <p>This page is the entry point: how the suite works, and what it covers. The
