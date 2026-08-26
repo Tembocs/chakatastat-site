@@ -86,6 +86,7 @@
         <li class="docs-nav-section">Reference</li>
         <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
         <li><a href="../../reference/glossary/">Glossary</a></li>
+        <li><a href="../../reference/commands/">Command reference</a></li>
       </ul>
       </aside>
       <article class="docs-content">
@@ -242,6 +243,17 @@ transformations under that reading — an active Weight Cases variable only
 selects cases, and the output says so. Select Cases and Split File are
 honored.</p>
 </blockquote>
+<h2 id="reproducibility">Reproducibility</h2>
+<p>Like every analysis, a run journals a syntax command, e.g.:</p>
+<pre><code>panel_regression dependent=invest, regressors=[value, capital], entity=firm, time=year, estimator=fixed, se=clustered
+</code></pre>
+<p><code>estimator</code> is <code>fixed</code> (the default), <code>random</code> or <code>pooled</code>; <code>se</code> is
+<code>conventional</code> (the default) or <code>clustered</code>; <code>time</code> and <code>confidence</code> are
+recorded only when set. The same tool is available to the AI assistant, MCP
+and batch scripts, and every table it prints carries an <strong>Ask the assistant
+about this</strong> action (0.22.0) that hands the rendered result to the
+<a href="../../advanced/ai-assistant/">AI assistant</a> to interpret — the Hausman table
+is the one people most often ask about.</p>
 <blockquote>
 <p><strong>Scope (v1).</strong> One-way (entity) effects, balanced or unbalanced panels.
 No two-way effects, no dynamic panels (Arellano–Bond), no Driscoll–Kraay

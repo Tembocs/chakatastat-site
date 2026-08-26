@@ -86,6 +86,7 @@
         <li class="docs-nav-section">Reference</li>
         <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
         <li><a href="../../reference/glossary/">Glossary</a></li>
+        <li><a href="../../reference/commands/">Command reference</a></li>
       </ul>
       </aside>
       <article class="docs-content">
@@ -94,7 +95,9 @@
 summarize; pictures reveal shape, outliers and comparisons at a glance.</p>
 <p>Open the sample (<code>Ctrl+Shift+O</code>). Charts land as cards in the Output View,
 interleaved with tables; right-click a card to copy it as an image straight
-into a document.</p>
+into a document, or <strong>Export image…</strong> to save it — see
+<a href="#taking-a-chart-out">Taking a chart out of ChakataStat</a> at the end of this
+module.</p>
 <h2 id="histogram--one-scale-variables-shape">Histogram — one scale variable's shape</h2>
 <p><strong>Graphs → Histogram…</strong> (<code>Ctrl+Shift+H</code>), variable <em>BMI</em>, <strong>Run</strong>.</p>
 <p>A roughly bell-shaped pile centred in the mid-20s with a right tail — real
@@ -121,6 +124,42 @@ a real time series (repeated visits, a stock price, a sensor log). Turn on
 chart type, assign variables to its roles. Rebuild the boxplot above in it,
 then try a <strong>Scatterplot</strong> of <em>BMI</em> (X) against <em>SystolicBP</em> (Y) — the cloud
 should visibly climb, previewing module 7's correlation.</p>
+<p>Beyond the four chart types this module builds, the Graphs menu also offers
+<strong>Bar Chart</strong>, <strong>Error Bar</strong> and <strong>Q-Q Plot</strong>, and analyses draw their own
+charts as part of their output (a forest plot from a meta-analysis, a survival
+curve from Kaplan-Meier). The <a href="../../graphs/">Graphs reference</a> is the full
+catalogue.</p>
+<h2 id="editing-a-chart-after-you-have-drawn-it">Editing a chart after you have drawn it</h2>
+<p>Every chart card has an <strong>Edit chart…</strong> button in its header. Press it on the
+boxplot and the chart editor opens with a live preview beside the controls
+<strong>that chart actually supports</strong> — for a boxplot: the title, the y-axis title
+and range, the colours, gridlines, reference lines and figure height. A line
+chart or a bar chart offers more (legend placement, marker shape and size, bar
+stacking), because those charts have more to set.</p>
+<p>The editor changes how a chart <em>looks</em>, never what it <em>measures</em>: no control in
+it can alter a variable, a filter or a statistic. To change the analysis,
+re-run the command.</p>
+<p>Change the title to something a reader would understand, then press <strong>Apply</strong>.</p>
+<p>Now look at the <strong>Syntax</strong> tab. Your edit is <em>in the command</em>:</p>
+<pre><code>boxplot variable=SystolicBP, category=SmokingStatus, title=&quot;Systolic pressure by smoking status&quot;
+</code></pre>
+<p>That is the part worth pausing on. ChakataStat did not save your styling
+somewhere beside the chart — it rewrote the chart's own line in the journal, so
+re-running the script tomorrow brings the chart back <strong>styled exactly as you
+left it</strong>. Presentation is part of the analysis you recorded, not a layer on
+top of it. <a href="../../chart-editor/">Editing a chart</a> covers the editor in full.</p>
+<h2 id="taking-a-chart-out">Taking a chart out</h2>
+<p>Right-click a card and choose <strong>Export image…</strong>. Three formats:</p>
+<ul>
+<li><strong>PNG</strong> — a picture at a resolution you choose. For a slide or an email.</li>
+<li><strong>SVG</strong> — vector: every line and label still separate and still editable in a
+drawing program. The format most journals prefer.</li>
+<li><strong>PDF</strong> — vector, as a one-page document that opens the same way everywhere.</li>
+</ul>
+<p>The two vector formats have no resolution to set, which is the point of them:
+they redraw sharp at any size, so the resolution control greys out when you
+pick one. <a href="../../graphs/#exporting-one-chart">Exporting one chart</a> has the
+detail.</p>
 <h2 id="exercise">Exercise</h2>
 <ol>
 <li>Histogram of <em>FastingGlucose_mmolL</em>. There is a small second bump well to
@@ -133,10 +172,12 @@ comes out near zero.</li>
 </ol>
 <h2 id="the-syntax-trail">The syntax trail</h2>
 <pre><code>histogram variable=BMI
-boxplot variable=SystolicBP, category=SmokingStatus
+boxplot variable=SystolicBP, category=SmokingStatus, title=&quot;Systolic pressure by smoking status&quot;
 line_chart y=[SystolicBP], x=Age, split=SmokingStatus
 scatter x=BMI, y=SystolicBP
 </code></pre>
+<p>Note the boxplot line: it carries the title you typed in the editor. Every
+chart edit lands in the trail the same way.</p>
       </article>
     </div>
   </main>

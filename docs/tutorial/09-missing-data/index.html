@@ -86,6 +86,7 @@
         <li class="docs-nav-section">Reference</li>
         <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
         <li><a href="../../reference/glossary/">Glossary</a></li>
+        <li><a href="../../reference/commands/">Command reference</a></li>
       </ul>
       </aside>
       <article class="docs-content">
@@ -108,8 +109,9 @@ it, and why <code>99</code> would silently poison a mean if it were undeclared.<
 their own &quot;Missing&quot; block of the table — and <strong>Descriptives</strong> on
 <em>TotalCholesterol_mmolL</em>, whose valid N is below 600.</p>
 <h2 id="missing-value-analysis">Missing Value Analysis</h2>
-<p><strong>Analyze → Missing Value Analysis…</strong>, variables <em>FastingGlucose_mmolL</em>,
-<em>TotalCholesterol_mmolL</em>, <em>PhysicalActivity_minWk</em>, <strong>Run</strong>.</p>
+<p><strong>Analyze → Descriptive Statistics → Missing Value Analysis…</strong>, variables
+<em>FastingGlucose_mmolL</em>, <em>TotalCholesterol_mmolL</em>, <em>PhysicalActivity_minWk</em>,
+<strong>Run</strong>.</p>
 <p>You get per-variable missing counts and pattern summaries, plus <strong>Little's
 MCAR test</strong> — &quot;is the missingness unrelated to the data?&quot; This sample's
 missingness is generated at random, so expect no evidence against MCAR;
@@ -118,8 +120,10 @@ real studies are rarely so lucky, which is exactly why you check.</p>
 <p>Procedures exclude incomplete cases per-analysis (listwise/pairwise —
 correlation's pairwise Ns are why its valid N varies cell by cell). The
 serious upgrade — filling values in a defensible, uncertainty-preserving way
-— is <strong>multiple imputation</strong> (<strong>Analyze → Multiple Imputation…</strong>), beyond
-this course; see <a href="../../analyze/">Analyzing Data</a>.</p>
+— is <strong>multiple imputation</strong> (<strong>Analyze → Descriptive Statistics → Multiple
+Imputation…</strong>), beyond this course; see
+<a href="../../analyze/descriptive-statistics/#multiple-imputation">Descriptive Statistics</a>
+for what its dialog and pooled output contain.</p>
 <h2 id="exercise">Exercise</h2>
 <ol>
 <li>How many of the 600 cases lack a glucose measurement? (Frequencies gives

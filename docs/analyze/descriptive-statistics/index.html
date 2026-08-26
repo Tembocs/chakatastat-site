@@ -86,13 +86,15 @@
         <li class="docs-nav-section">Reference</li>
         <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
         <li><a href="../../reference/glossary/">Glossary</a></li>
+        <li><a href="../../reference/commands/">Command reference</a></li>
       </ul>
       </aside>
       <article class="docs-content">
 <h1 id="descriptive-statistics">Descriptive Statistics</h1>
-<p><strong>Analyze → Descriptive Statistics.</strong> These four procedures summarise a dataset
-before you model it: how each variable is distributed, and how categorical
-variables relate. They are the right first stop for any new dataset.</p>
+<p><strong>Analyze → Descriptive Statistics.</strong> These six procedures summarise a dataset
+before you model it: how each variable is distributed, how categorical
+variables relate, and where the holes in it are. They are the right first stop
+for any new dataset.</p>
 <h2 id="frequencies">Frequencies</h2>
 <p><strong>When to use it.</strong> To see how often each value of a categorical (or
 coarse-numeric) variable occurs.</p>
@@ -149,10 +151,60 @@ of homogeneity.</li>
 <p><strong>Example.</strong> <code>SmokingStatus × Hypertensive</code> tests whether smoking and
 hypertension are associated; adding <code>Sex</code> as a layer asks whether that
 association holds within each sex.</p>
+<h2 id="missing-value-analysis">Missing Value Analysis</h2>
+<p><strong>When to use it.</strong> Before you model anything on a dataset with gaps — to find
+out <em>how much</em> is missing, <em>where</em>, and whether the pattern looks random.</p>
+<p><strong>Dialog.</strong> Move at least two numeric variables into <strong>Variables</strong>.
+<strong>Save EM imputed values</strong> optionally writes single-imputed columns back as
+<code>&lt;variable&gt;_imp</code>.</p>
+<p><strong>Output.</strong></p>
+<ul>
+<li>A <strong>per-variable summary</strong> — valid N, missing count and missing percent.</li>
+<li>The distinct <strong>missingness patterns</strong> across the chosen variables, with how
+many cases follow each.</li>
+<li><strong>Little's MCAR test</strong> — a single test of whether the missingness is
+unrelated to the data (Missing Completely At Random). A non-significant
+result is the reassuring one.</li>
+</ul>
+<p><strong>Example.</strong> <em>FastingGlucose_mmolL</em>, <em>TotalCholesterol_mmolL</em> and
+<em>PhysicalActivity_minWk</em> from the sample data: the summary counts each gap, the
+patterns show whether the same participants are missing all three, and Little's
+test asks whether the gaps carry information.</p>
+<p><strong>A note on single imputation.</strong> The saved EM values fill each hole with one
+number, which understates uncertainty — every later standard error is computed
+as if those values had been <em>measured</em>. Use them for exploration; use Multiple
+Imputation below for anything you will report.</p>
+<h2 id="multiple-imputation">Multiple Imputation</h2>
+<p><strong>When to use it.</strong> When you need estimates and standard errors that account
+honestly for what is missing, rather than dropping incomplete cases or filling
+them with one guess.</p>
+<p><strong>Dialog.</strong></p>
+<ul>
+<li><strong>Variables</strong> — the analysis variables to pool. For a linear regression, the
+outcome first, then the predictors; for a mean, a single variable.</li>
+<li><strong>Analysis</strong> — what is run on each completed dataset and then pooled
+(linear regression by default, or a mean).</li>
+<li><strong>Auxiliary variables</strong> — extra numeric variables used <em>only</em> to help impute.
+They improve the imputations without joining the pooled analysis.</li>
+<li><strong>Imputations</strong> (<em>m</em>, default 5), <strong>iterations</strong> per imputation (default 10),
+<strong>confidence</strong> level and <strong>seed</strong> — the seed makes the whole thing
+reproducible, which matters because imputation is a random procedure.</li>
+</ul>
+<p><strong>Output.</strong> The <strong>pooled estimates</strong> — coefficient, standard error, confidence
+interval and <em>p</em> — combined across the <em>m</em> completed datasets by <strong>Rubin's
+rules</strong>, together with the <strong>fraction of missing information</strong> (FMI) per term:
+how much of what you would like to know was supplied by imputation rather than
+by data.</p>
+<p><strong>Example.</strong> Regress <em>SystolicBP</em> on <em>Age</em> and <em>BMI</em> with
+<em>TotalCholesterol_mmolL</em> as an auxiliary: each of the <em>m</em> datasets is completed
+by chained equations, the regression is run on each, and the results are pooled
+into one table with an FMI column saying how much the gaps cost you.</p>
 <h2 id="see-also">See also</h2>
 <ul>
 <li><a href="../compare-means/">Compare Means</a> — when one variable is a scale outcome.</li>
 <li><a href="../../graphs/">Graphs</a> — histograms and boxplots for these distributions.</li>
+<li><a href="../../tutorial/09-missing-data/">Module 9 of the tutorial</a> — the same two
+procedures taught step by step on the sample data.</li>
 </ul>
       </article>
     </div>

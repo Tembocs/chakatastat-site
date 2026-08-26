@@ -86,6 +86,7 @@
         <li class="docs-nav-section">Reference</li>
         <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
         <li><a href="../../reference/glossary/">Glossary</a></li>
+        <li><a href="../../reference/commands/">Command reference</a></li>
       </ul>
       </aside>
       <article class="docs-content">
@@ -162,11 +163,19 @@ pooled SD) <strong>before</strong> and <strong>after</strong> adjustment, on one
 |SMD| ≤ 0.1 is the common adequate-balance benchmark. A covariate still
 imbalanced after adjustment is a warning to revisit the score model
 (interactions, transformations) — not to proceed regardless.</li>
-<li><strong>Balance Plot</strong> (the <strong>Plot balance</strong> checkbox, on by default) — the same
-numbers as paired points per covariate, with zero (perfect balance) always
-in view. Before → After collapsing toward the zero line is the picture of
-a successful adjustment.</li>
+<li><strong>Balance Plot</strong> (the <strong>Plot balance (before vs after)</strong> checkbox, on by
+default) — the same numbers as paired points per covariate, with zero
+(perfect balance) always in view. Before → After collapsing toward the zero
+line is the picture of a successful adjustment. It exports like any other
+chart — PNG, or SVG/PDF since 0.22.0 (<a href="../../graphs/#exporting-one-chart">Exporting one
+chart</a>); as a chart attached to an
+analysis it takes no <strong>Edit chart…</strong> button.</li>
 </ul>
+<p>Every table and the plot carry an <strong>Ask the assistant about this</strong> action
+(0.22.0), which hands the rendered result to the
+<a href="../../advanced/ai-assistant/">AI assistant</a> to interpret rather than re-run —
+useful on the balance table when a covariate stays imbalanced and you want a
+second reading of what to try.</p>
 <h2 id="using-the-adjusted-sample">Using the adjusted sample</h2>
 <p>This procedure estimates no treatment effect itself — deliberately. The saved
 column feeds the analysis you actually want, with the design question and the
@@ -179,6 +188,19 @@ regression, …) on the matched sample.</li>
 <li><strong>After weighting:</strong> Data → <strong>Weight Cases</strong> by <code>propensity_weight</code>, then
 run the outcome analysis on the weighted sample.</li>
 </ul>
+<h2 id="reproducibility">Reproducibility</h2>
+<p>Like every analysis, a run journals a syntax command, e.g.:</p>
+<pre><code>propensity_score treatment=treated, covariates=[age, bmi, smoker], method=match, caliper=0.2
+</code></pre>
+<p>or, for weighting under the treated-population estimand:</p>
+<pre><code>propensity_score treatment=treated, covariates=[age, bmi, smoker], method=weight, estimand=att
+</code></pre>
+<p><code>ratio</code> (controls per treated), <code>save_score</code>, <code>save_filter</code>, <code>save_weight</code>
+and <code>plot=false</code> are recorded when they differ from the dialog's defaults.
+The same tool is available to the AI assistant, MCP and batch scripts —
+though the saved columns make it a <strong>mutating</strong> tool, so an assistant or
+MCP client running under the read-only profile is refused the save options
+and told why.</p>
 <blockquote>
 <p><strong>Scope (v1).</strong> Greedy nearest-neighbour and IPTW only — no optimal,
 genetic or full matching, and no doubly-robust estimators. And no causal

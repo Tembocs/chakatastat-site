@@ -86,6 +86,7 @@
         <li class="docs-nav-section">Reference</li>
         <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
         <li><a href="../../reference/glossary/">Glossary</a></li>
+        <li><a href="../../reference/commands/">Command reference</a></li>
       </ul>
       </aside>
       <article class="docs-content">
@@ -141,6 +142,56 @@ a local endpoint needs no key. The recognized variables are:</p>
 Environment variables</strong>, each marked set or unset, so you can confirm you set
 the key under the name the app reads. The key is used in memory only — <strong>it is
 never written to disk or into your session</strong>.</p>
+<h3 id="which-model-each-backend-uses">Which model each backend uses</h3>
+<p>Setting a key is enough: each backend comes with a current default model, so
+there is nothing to choose unless you want to.</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Backend</th>
+<th>Default model</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Claude (Anthropic)</td>
+<td><code>claude-opus-5</code></td>
+</tr>
+<tr>
+<td>OpenAI</td>
+<td><code>gpt-5.6</code></td>
+</tr>
+<tr>
+<td>DeepSeek</td>
+<td><code>deepseek-chat</code></td>
+</tr>
+<tr>
+<td>Kimi (Moonshot)</td>
+<td><code>kimi-latest</code></td>
+</tr>
+<tr>
+<td>Ollama (local)</td>
+<td><code>llama3.1</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>To use a different one, set the model id under <strong>Settings → AI Assistant</strong>, or
+the <code>ChakataStat_AI_MODEL</code> environment variable — either overrides the default
+for whichever backend is active.</p>
+<p>Two notes if you do override it. Recent Claude and OpenAI models <strong>no longer
+accept a sampling temperature</strong>; ChakataStat leaves the setting out of the
+request for those models rather than let it fail the whole message, so a
+temperature you set will simply have no effect there. And current models may
+reason before they answer, out of the same <strong>maximum response tokens</strong> budget
+as the reply itself — so if you lower that setting a long answer can run out of
+room mid-sentence.</p>
+<p>One more, for the OpenAI backend specifically: on the GPT-5 family
+ChakataStat asks for <strong>no reasoning pass</strong> on its requests. Those models refuse
+a request that carries function tools together with their default reasoning
+setting, and the assistant's every message carries the tools — so without this
+every message would fail. The model still answers and still runs tools; it
+does so without its private deliberation step. (Found, and fixed, by running
+the assistant against the live service — 0.22.0.)</p>
 <h3 id="choosing-among-several-backends">Choosing among several backends</h3>
 <p>If you have more than one backend configured, you can <strong>pick and switch</strong> the
 active one live from <strong>Settings → AI Assistant</strong>, and your choice is remembered
@@ -159,8 +210,37 @@ environment variable, never in a header.</p>
 </ul>
 <p>The assistant chooses the right procedure, runs it through the engine, and shows
 the <strong>actual result tables and charts</strong> inline in the conversation — the same
-output you would get from the menus. Per-reply <strong>token usage</strong> is shown beneath
-each answer.</p>
+output you would get from the menus.</p>
+<p>Answers <strong>stream in as they are written</strong> rather than appearing all at once, so
+a long reply starts reading immediately. Per-reply <strong>token usage</strong> is shown
+beneath each answer; where the backend was able to reuse a cached copy of the
+unchanging part of the request, the line names that share too (for example
+<em>9,152 tokens · 9,140 in (9,000 cached) / 12 out</em>). Cached input is charged at
+a fraction of the usual rate, so a long conversation on one dataset costs far
+less per message than the raw totals suggest.</p>
+<h2 id="explaining-a-result-you-already-have">Explaining a result you already have</h2>
+<p>The assistant sees your <strong>data</strong>, not your output. A result you ran from the
+menus is invisible to it — so asking &quot;what does that table mean?&quot; in the panel
+would, at best, make it run the analysis again to find out.</p>
+<p>Every card in the <strong>Output</strong> tab therefore carries an <strong>Ask the assistant about
+this</strong> button (the ✨ icon in the card's header, beside <em>Remove</em>). It hands that
+one result to the assistant and opens the panel if it is closed. The
+explanation comes back in plain language, and <strong>nothing is re-run</strong> — the
+numbers you are shown are the numbers you already had.</p>
+<p>It works on charts as well as tables, and charts are where it earns its keep: a
+histogram or a scatterplot cannot be read back off the screen, so this is the
+only way the assistant learns what was drawn.</p>
+<p>Two things worth knowing:</p>
+<ul>
+<li>The button appears <strong>only when a model backend is connected</strong>. If you do not
+see it, no API key was found — see <em>Connecting a model backend</em> above.</li>
+<li>It works the same under <strong>read-only mode</strong> (the default). Asking for an
+explanation grants the assistant nothing new: the result is sent as part of
+your message, rather than by giving it a way to reach into your output.</li>
+</ul>
+<p>A very large result — a frequency table over thousands of distinct values, say
+— is sent as its opening section rather than in full, and the assistant is told
+that is what it is looking at.</p>
 <h2 id="adding-context-about-your-data">Adding context about your data</h2>
 <p>The assistant sees your variable names, types and labels, so well-defined
 variables (see <a href="../../working-with-data/">Working with Data</a>) make it far more

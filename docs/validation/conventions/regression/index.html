@@ -526,6 +526,396 @@ precision leaves at most ~8 of its 16 digits in the coefficients. It is an
 statistical ones — and it is deliberately phrased as a bound (&quot;at least&quot;).
 Pinned by an <code>ffi.rs</code> test (present on degree-9 raw powers over [1, 1.2],
 absent on a plain predictor, exact dependence still refused).</p>
+<h2 id="scale-invariance-of-the-singularity-verdict--the-0220-convention">Scale invariance of the singularity verdict — the 0.22.0 convention</h2>
+<p><em>Recorded 2026-08-24 for release 0.22.0
+item 1a. It governs <code>analyze::correlation::invert</code>, which sits under 76 call
+sites in 31 analyze modules — every GLM family, CFA, IRT, mediation, panel,
+survival, factor and VAR path that forms an information or cross-product
+matrix.</em></p>
+<p><strong>The rule.</strong> Whether a matrix is called singular must not depend on the units
+its variables are measured in. <code>invert</code> therefore <strong>two-sided-equilibrates</strong>
+first — every row and every column rescaled to max-abs 1, as
+<code>m = diag(row) · scaled · diag(col)</code> — runs Gauss-Jordan with partial pivoting
+on <code>scaled</code>, and undoes the scaling on the result. The pivot floor is
+<strong>1e-13</strong> on that equilibrated scale, matching the |R_kk| dependence floor the
+QR solver uses on unit-norm columns (above), and for the same reason: exact
+dependence leaves a pivot at rounding level, 1e-16 … 1e-14.</p>
+<p>Two-sided rather than row-only equilibration is deliberate. Row scaling alone
+makes the verdict invariant under a uniform rescaling of the whole matrix;
+only two-sided scaling makes it invariant under <strong>per-variable</strong> rescaling,
+which is the case that actually arises — a covariance mixing variables in
+micrograms and tonnes.</p>
+<p><strong>What this replaced, and why it was wrong.</strong> Until 0.22.0 the floor was an
+absolute <code>1e-12</code> tested against the <em>raw</em> matrix, so the verdict moved with
+the units in both directions:</p>
+<ul>
+<li>an information matrix with entries near <strong>1e6</strong> was tested at an effective
+<strong>1e-18</strong> relative — accepting matrices with no reliable digits left and
+inverting them into printed statistics;</li>
+<li>one with entries near <strong>1e-7</strong> was tested at an effective <strong>1e-5</strong> relative
+— refusing perfectly well-conditioned matrices as &quot;singular&quot;.</li>
+</ul>
+<p><strong>A statistic this was silently corrupting.</strong> The change was caught by
+<code>multiple_imputation_test.dart</code>, whose FMI fixture regressed a <em>noiseless</em>
+<code>y = 2x + 3</code>. Under the old inverter the twenty imputations' slopes differed
+in the 16th significant digit (1.9999999999999964 … 2.0000000000000018);
+Rubin's rules take the ratio of between- to within-imputation variance, both
+~1e-28 here, and turned that pure rounding noise into a printed <strong>FMI of
+0.638</strong> — &quot;64% of the information is missing&quot;, on data where the predictor
+determines the outcome exactly. The equilibrated inverter returns the slope
+exactly, every imputation is identical, and the FMI is <strong>0</strong>, which is the
+correct answer: when the observed data determine the missing values, no
+information is missing. Both cases are now pinned — a fixture <em>with</em> residual
+scatter for FMI &gt; 0, and the noiseless one for FMI = 0.</p>
+<p><strong>The conditioning bound.</strong> <code>invert_with_condition</code> additionally returns the
+ratio of the largest to the smallest pivot magnitude met during elimination —
+a lower bound on κ₂ of the equilibrated matrix, on the same &quot;never overstates&quot;
+footing as the QR bound above.</p>
+<p><strong>Non-matrices are data, not panics.</strong> A non-square argument, a non-finite
+entry, or an identically zero row or column all return <code>None</code> (the caller's
+existing &quot;singular matrix&quot; error-as-data) rather than propagating NaN into a
+printed statistic, which the old code did.</p>
+<h2 id="the-spd-route-cholesky-for-information-matrices--the-0220-convention">The SPD route: Cholesky for information matrices — the 0.22.0 convention</h2>
+<p><em>Recorded 2026-08-24 for release 0.22.0
+item 1b.</em></p>
+<p>Most of <code>invert</code>'s call sites pass a <strong>symmetric positive-definite</strong> matrix —
+an information matrix, a cross-product <code>XᵀX</code>, a model-implied covariance. For
+those, <code>analyze::correlation::invert_spd</code> is the better route: half the
+arithmetic of Gauss-Jordan, no pivot search (an SPD matrix needs none), and a
+conditioning bound that falls out of the factorization for free.</p>
+<p><strong>The scaling is symmetric</strong>, <code>d_i = 1/√m_ii</code>, so the factored matrix is the
+correlation matrix of whatever <code>m</code> is the covariance of. That is the
+SPD-specific counterpart of the two-sided equilibration above and buys the
+same thing: the positive-definiteness verdict does not depend on the
+variables' units.</p>
+<p><strong>The two routes agree by construction.</strong> The Cholesky pivot at step <code>k</code> is
+<code>L_kk²</code>, which is what Gauss-Jordan's <code>k</code>-th pivot reduces to on an SPD
+matrix, so both test the same <strong>1e-13</strong> floor on the same scale: a matrix one
+route calls singular, the other does too. This is pinned rather than asserted
+— <code>invert_spd_agrees_with_gauss_jordan_on_every_spd_fixture</code> runs both routes
+over an identity, a correlation matrix, a cubic design's <code>XᵀX</code>, Hilbert-5 and
+a badly scaled covariance, and requires agreement to 1e-9 <em>relative to each
+row's largest entry</em> (the small entries of an ill-conditioned inverse carry no
+digits of their own; demanding they agree absolutely would be testing noise).</p>
+<p><strong>The conditioning bound</strong> is the ratio of the largest to the smallest
+Cholesky pivot. For triangular <code>T</code>, <code>σ_max ≥ max|T_kk|</code> and
+<code>σ_min ≤ min|T_kk|</code>, so <code>κ₂(L) ≥ max L_kk / min L_kk</code>; squaring gives a
+rigorous lower bound on <code>κ₂(LLᵀ)</code>. Like the QR bound it never overstates —
+pinned by requiring the identity to report exactly 1 and Hilbert-5 to report
+at or below its true κ₂ of ~4.8 × 10⁵.</p>
+<p><strong>Where it is surfaced.</strong> Cox regression's covariance and standard errors now
+come through this route, and the &quot;Variables in the Equation&quot; note carries the
+accuracy warning at or beyond the same <strong>1e8</strong> threshold the linear model
+uses, worded for its provenance: <em>&quot;The information matrix is ill-conditioned
+(condition number at least κ; from the Cholesky of the unit-scaled
+information): …&quot;</em>. The note text is now produced by one shared
+<code>regression::condition_note(condition, subject, provenance)</code> for both the
+linear and the Cox surfaces, so the two cannot drift apart.</p>
+<p><strong>An absent bound is silent.</strong> A caller whose SPD route declines (a final
+information matrix that is not quite positive definite — a flat likelihood)
+records the bound as NaN, and the note treats NaN as <em>&quot;no bound was computed&quot;</em>
+rather than <em>&quot;infinitely ill-conditioned&quot;</em>. This needs saying because
+<code>NaN &lt; threshold</code> is false in IEEE arithmetic, so the guard has to be
+explicit or the note would print the word NaN at the reader.</p>
+<p><strong>Not yet adopted elsewhere.</strong> The other SPD call sites — CFA, IRT, factor,
+panel, mediation, the multinomial and ordinal families — still go through
+<code>invert</code>. That is a deliberate stopping point, not an oversight: each
+adoption moves the digits of a printed standard error and so needs its own
+pin check, and <code>invert</code> is correct for them (the two routes agree). The GLM
+families are the exception and are handled by item 1c, which takes them
+through the QR path rather than either inverse.</p>
+<h2 id="the-normal-quantile-and-the-far-tail-of-the-p-value--the-0220-conventions">The normal quantile, and the far tail of the p-value — the 0.22.0 conventions</h2>
+<p><em>Recorded 2026-08-24 for release 0.22.0
+item 1d. The second half of this section was not on the plan: it is what
+looking hard at the first half turned up.</em></p>
+<h3 id="the-normal-quantile-">The normal quantile Φ⁻¹</h3>
+<p><code>stats::inverse_normal_cdf</code> is Acklam's rational approximation (absolute error
+~1.2e-9) followed by <strong>one Halley step</strong> against <code>normal_cdf</code>. The step costs
+one CDF and one density evaluation and lifts the result to ~3e-16 relative,
+pinned against <code>scipy.stats.norm.ppf</code> from the pinned reference environment.</p>
+<p><strong>The step is taken in the smaller tail.</strong> Refining <code>p = 0.999…</code> directly
+would form the residual <code>Φ(z) − p</code> by subtracting two numbers agreeing in
+their leading digits, throwing away exactly the precision the step exists to
+gain; the reflected problem <code>Φ(−z) = 1 − p</code> is solved instead. The far tail,
+where the density has underflowed, keeps the unrefined value.</p>
+<p><strong>The pin was 5e-15 at first, not the 1e-15 the plan asked for</strong>, and the
+reason was recorded rather than papered over: the Halley step cannot be more
+accurate than the CDF it reads, and the incomplete-gamma routines then under
+<code>normal_cdf</code> floor at ~1–2e-15 (measured branch by branch against a 50-digit
+<code>mpmath</code> oracle). <code>ln_gamma</code> was tested as the suspect and is not —
+substituting an exact <code>ln Γ(½)</code> moved nothing. Getting below that needed a
+dedicated <code>erfc</code> for the normal case rather than a route through the
+incomplete gamma, which was deferred because it would move every normal
+p-value in the engine and wanted its own pass.</p>
+<p><strong>The floor moved (2026-08-26, item 12).</strong> With <code>normal_cdf</code> on the
+dedicated <code>erfc</code> described in the next section, the observed worst is
+<strong>2.7e-16</strong> relative (at p = 0.05, where the old route was weakest) and the
+pin is now <strong>1e-15</strong> — the figure originally asked for, carrying ~4× headroom
+because <code>exp</code> and <code>ln</code> may differ by an ULP between the three platforms in
+the tier-2 matrix. It is twenty million times tighter than the 1e-6 the old
+unit test asserted, which was itself six orders looser than the unrefined
+function achieved and so could not have caught a regression at all.</p>
+<h3 id="the-far-tail-of-the-p-value">The far tail of the p-value</h3>
+<p><strong><code>upper_gamma(a, x)</code> was computing <code>1 − (1 − Q)</code>.</strong> <code>gamma_continued_fraction</code>
+already returns Q directly; <code>lower_gamma</code> wrapped it as <code>1 − Q</code> for
+<code>x ≥ a + 1</code>; <code>upper_gamma</code> was <code>1 − lower_gamma</code>. The accurate tail was
+computed and then destroyed by the round trip through 1. For Q below ~1e-16
+the inner subtraction rounds to exactly 1.0 and the function returned <strong>exactly
+zero</strong>; above it, Q came back quantized to multiples of machine epsilon.</p>
+<p>Since <code>normal_two_tailed_p(z)</code> is <code>upper_gamma(0.5, z²/2)</code> and
+<code>chi_square_p(χ², df)</code> is <code>upper_gamma(df/2, χ²/2)</code>, that put a floor under
+<strong>every normal and chi-square p-value the engine printed</strong>: zero beyond
+|z| ≈ 8.3, and only ~6 correct digits by |z| ≈ 7. Nothing in the suite
+noticed, because a p-value of 0 and a p-value of 1e-20 both print as
+&quot;&lt; .001&quot; — the defect was invisible at the surface and total underneath.
+<code>upper_gamma</code> now reads the continued fraction directly.</p>
+<p><strong>The crossover is <code>a</code>, not <code>a + 1</code>.</strong> The branch is chosen by which of P and
+Q is the <em>small</em> one, since that is what decides whether a subtraction from 1
+costs digits — and Q becomes the small one once <code>x</code> passes the distribution's
+mean <code>a</code>. <code>lower_gamma</code> keeps <code>a + 1</code> for the mirror-image reason. Sharing
+<code>a + 1</code> would leave the band <code>a ≤ x &lt; a + 1</code> computing a smallish Q as
+<code>1 − P</code>: at <code>a = ½</code> that band holds z ≈ 1.0 … 1.7, so <strong>the 5% two-tailed
+critical value sat inside it</strong>, and Φ⁻¹(0.05) came back with ~9× the rounding
+error of Φ⁻¹(0.025) beside it. That asymmetry is what led to the finding.</p>
+<p>Both are pinned against scipy at <strong>1e-12 relative</strong> from z = 3 out to z = 37
+(p ≈ 1e-299) and for chi-square to df = 20, plus a blunt companion assertion
+that a far-tail p-value is not zero — the shape the regression would take.</p>
+<h3 id="the-normal-tail-a-dedicated-erfc">The normal tail: a dedicated <code>erfc</code></h3>
+<p><em>Recorded 2026-08-26 for release 0.22.0 item 12 — the remainder item 1d
+measured and deferred.</em></p>
+<p><code>normal_cdf(z)</code> is <code>½·erfc(−z/√2)</code> and <code>normal_two_tailed_p(z)</code> is
+<code>erfc(|z|/√2)</code>, over <code>stats::erfc</code> — W. J. Cody's rational Chebyshev
+approximations (<em>Math. Comp.</em> 23, 1969; coefficients as in his SPECFUN
+<code>CALERF</code>), three ranges joined at |x| = 0.46875 and |x| = 4, each rational
+good to better than 1e-18 so that only the arithmetic is left. The
+exponential is formed as <code>exp(−h²)·exp(−(x−h)(x+h))</code> with <code>h = ⌊16x⌋/16</code>, so
+the large exponent is the square of a number with four fractional bits and
+is exact. Before this the normal tail was <code>upper_gamma(½, z²/2)</code> — the same
+quantity through the general incomplete gamma, whose series and continued
+fraction both floor at ~1–2e-15. The chi-square, gamma and Poisson tails keep
+the incomplete gamma; they need it, and its floor is recorded above.</p>
+<p><strong>Pinned against a 50-digit <code>mpmath</code> oracle at 1e-15 relative</strong>, over 413
+points in [−40, 40]: dense on [−6, 6], both tails, the three joins bracketed
+on both sides, and the tiny-argument region. The table
+(<code>rust/src/erfc_mpmath_reference.txt</code>, generated by
+<code>tool/validation/generate_erfc_references.py</code>, <code>mpmath</code> pinned in
+<code>tool/validation/requirements.txt</code>) prints each reference to 20 significant
+digits so the literal's own half-ULP rounding is the only oracle-side error.
+Observed worst on Linux/glibc: <strong>5.2e-16</strong>. Past x ≈ 26.54 the true value is
+below the smallest normal double; those rows stay in the table and assert
+that the underflow is graceful — never negative, never NaN, in the same
+subnormal neighbourhood — rather than skipping the region.</p>
+<p><strong>Nothing moved.</strong> The engine-wide sweep this change was deferred to carry —
+549 Rust tests and the full Dart suite, including every gate-4 reference pin
+under the ~100 call sites of the two functions — passed with <strong>no pin moved
+at any tolerance</strong>. That is the expected outcome, stated so it is not
+mistaken for an untested one: the old route was already correct to ~1e-15,
+and the pins on printed statistics sit at 1e-6 to 1e-12, so a change in the
+16th digit of Φ cannot reach them. What it reaches is the quantile's Halley
+step (above) and the far tail below.</p>
+<p><strong>The far-tail pin tightened 1e-12 → 1e-13, and why not further.</strong> The
+observed worst against scipy is now 2.6e-14 at z = 37. Against the <code>mpmath</code>
+truth it is 8.8e-14 — and <strong>scipy itself is 1.1e-13 from that truth</strong>. The
+residual is not in <code>erfc</code> (a few ULPs) but in its <em>argument</em>: z/√2 rounds by
+half an ULP, and erfc's relative sensitivity to its argument is 2x², which at
+x ≈ 26 is ~1.5e-13. Every double-precision implementation shares that; scipy
+multiplies by 1/√2 rather than dividing by √2, as the engine now does, which
+is why the two agree more closely with each other than either does with the
+truth (the division form was measured at 2.1e-13 against scipy). A pin below
+the argument's own rounding would be pinning noise.</p>
+<h2 id="glm-irls-through-the-qr--the-0220-convention">GLM: IRLS through the QR — the 0.22.0 convention</h2>
+<p><em>Recorded 2026-08-24 for release 0.22.0
+item 1c.</em></p>
+<p><code>fit_glm</code> takes each Fisher-scoring step through <code>wls_qr</code> on the working
+problem, instead of forming <code>XᵀWX</code> and inverting it. The two are the same step
+in exact arithmetic; they are not in double precision, because forming the
+information <strong>squares</strong> the condition number of the working design — and the
+inverse it hands back is what every standard error, Wald statistic and
+confidence interval in the GLM output is built from. The covariance now comes
+off the QR factor as <code>R⁻¹R⁻ᵀ</code>.</p>
+<p><strong>The regressand is the step, not the textbook working response.</strong> Regressing
+<code>(y − μ)/(dμ/dη)</code> gives <code>(XᵀWX)⁻¹·score</code> — the Fisher step — while the
+textbook <code>η + (y − μ)/(dμ/dη)</code> gives the whole of <code>β</code>. Both are correct; the
+step form keeps the accumulated <code>β</code> in the accumulator rather than requiring
+the solve to reproduce its magnitude, which matters most when <code>η</code> has grown
+large, i.e. exactly when the fit is fragile.</p>
+<p><strong>What it bought, measured rather than asserted.</strong> On the well-conditioned
+validation fixtures the two routes are <strong>indistinguishable</strong> — the LRE against
+statsmodels is identical to two decimals for Poisson, negative binomial,
+probit and gamma, and within noise for logistic (14.58 vs 14.94). This is
+recorded because it is the honest result: squaring a small condition number
+costs nothing. The difference appears where the linear case's did — degree-8
+raw powers over [1, 1.1], κ ≈ 6.9 × 10¹², where <strong>the formed information is
+singular to the inverter and the legacy route cannot take a step at all</strong>,
+while the QR takes a finite one
+(<code>glm_qr_step_survives_an_ill_conditioned_design_the_normal_equations_lose</code>).</p>
+<p><strong>The per-family LRE row, and the oracle that does not exist.</strong> NIST StRD
+certifies univariate summaries, linear least squares and nonlinear least
+squares — all 58 datasets are committed under <code>test/validation/data/nist/</code>,
+and <strong>none is a GLM</strong>. No standards body publishes certified logistic or
+Poisson coefficients. The row is therefore a <em>cross-implementation agreement</em>
+against statsmodels, not a certified accuracy, and is labelled as such:</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Family</th>
+<th>Coefficient</th>
+<th>Digits agreed</th>
+<th>Floor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Logistic</td>
+<td><code>reg_logistic/bp_B</code></td>
+<td>14.58</td>
+<td>9</td>
+</tr>
+<tr>
+<td>Poisson</td>
+<td><code>reg_poisson/age_B</code></td>
+<td>10.03</td>
+<td>9</td>
+</tr>
+<tr>
+<td>Negative binomial</td>
+<td><code>reg_negbin/age_B</code></td>
+<td>6.09</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Probit</td>
+<td><code>reg_probit/bp_B</code></td>
+<td>11.48</td>
+<td>7</td>
+</tr>
+<tr>
+<td>Gamma</td>
+<td><code>reg_gamma/age_B</code></td>
+<td>12.04</td>
+<td>7</td>
+</tr>
+</tbody>
+</table></div>
+<p>Negative binomial sits lowest because its dispersion is estimated alongside
+the coefficients and the two implementations do not use the same inner
+criterion — a modelling difference, not a precision one. Floors sit under the
+achieved values with room for cross-platform libm variation.</p>
+<p><strong>A behaviour change this exposed.</strong> Under quasi-complete separation the
+logistic MLE does not exist and β diverges. The old path had an <em>accidental</em>
+brake: as μ saturated, <code>XᵀWX</code> shrank until it tripped the inverter's absolute
+pivot floor, the loop broke, and an arbitrary finite β was returned as though
+it were a fit. The QR route has no such brake, so β now runs to the iteration
+cap and the fitted probabilities saturate — which is what makes the separation
+<em>visible</em> to the guards that look for it. The propensity-score fixture turned
+out to be exactly such a case (<code>2z − x</code> is exactly 1 for all five treated and
+at most 1 for every control); it was replaced with a non-separable one, and
+the separating frame is kept as its own fixture behind
+<code>quasi_separation_is_reported_not_silently_fitted</code>. Reporting separation is
+the correct outcome; returning a truncated β was not.</p>
+<h2 id="tolerances-what-was-tightened-and-what-stays-loose--the-0220-sweep">Tolerances: what was tightened, and what stays loose — the 0.22.0 sweep</h2>
+<p><em>Recorded 2026-08-24 for release 0.22.0
+item 1e. The standing rule for that item is that <strong>no tolerance is ever
+loosened</strong>, and every one that stays loose says why.</em></p>
+<p><strong>Measured first, then tightened.</strong> Every one of the 267 pins was run and its
+<em>achieved</em> error compared with its tolerance, rather than tightening by
+guesswork. Nine were tightened, each to at least 100× above what it actually
+achieves so cross-platform libm variation cannot trip them:</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Pin</th>
+<th>Was</th>
+<th>Now</th>
+<th>Achieved</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>reg_negbin/dispersion</code></td>
+<td>5e-2</td>
+<td>1e-5</td>
+<td>5.8e-8</td>
+</tr>
+<tr>
+<td><code>reg_linear/noint_F</code></td>
+<td>1e-2</td>
+<td>1e-8</td>
+<td>9.1e-13</td>
+</tr>
+<tr>
+<td><code>reg_probit/m2ll</code></td>
+<td>1e-2</td>
+<td>1e-9</td>
+<td>3.6e-15</td>
+</tr>
+<tr>
+<td><code>reg_gamma/m2ll</code></td>
+<td>1e-2</td>
+<td>1e-7</td>
+<td>3.1e-11</td>
+</tr>
+<tr>
+<td><code>ordinal/m2ll</code></td>
+<td>1e-2</td>
+<td>1e-8</td>
+<td>3.0e-12</td>
+</tr>
+<tr>
+<td><code>ets/ses_sse</code></td>
+<td>1e-2</td>
+<td>1e-8</td>
+<td>3.6e-13</td>
+</tr>
+<tr>
+<td><code>nls/sse</code></td>
+<td>1e-2</td>
+<td>1e-3</td>
+<td>1.2e-5</td>
+</tr>
+<tr>
+<td><code>reg_logistic/m2ll</code></td>
+<td>1e-3</td>
+<td>1e-9</td>
+<td>3.6e-15</td>
+</tr>
+<tr>
+<td><code>multinomial/m2ll</code></td>
+<td>1e-3</td>
+<td>1e-9</td>
+<td>2.8e-14</td>
+</tr>
+</tbody>
+</table></div>
+<p>The tolerances are authored in
+generate_references.py
+and mirrored into the committed JSON; both were changed together and <strong>no
+reference <em>value</em> was touched</strong>, which is why the JSON diff is exactly nine
+lines.</p>
+<p><strong>The <code>glm_resid</code> family is not loose — it is not a tolerance.</strong> The plan
+listed &quot;20 pins at <code>tol ≥ 1e-2</code>, <code>glm_resid/logit_case0</code> at 0.46&quot; as loose
+tolerances to tighten. <strong>Twelve of those twenty are containment brackets.</strong>
+For a <em>discrete</em> family the randomized quantile residual only satisfies
+<code>Φ(r) ∈ [F(y⁻), F(y)]</code>, so the generator pins that interval as
+<code>midpoint ± half-width</code> and <code>closeTo</code> tests <strong>containment</strong>.
+<code>logit_case0</code>'s 0.46 is half the width of <code>[1 − μ, 1]</code> at μ = 0.925 — not
+slack, the check itself. Tightening them would not sharpen anything; it would
+break them. (The <em>gamma</em> rows are different: a continuous family gives
+<code>Φ(r) = F(y)</code> exactly, and they are pinned at 1e-9.)</p>
+<p><strong>What stays loose, and why.</strong> <code>nls/b0</code> and <code>nls/b1</code> remain at 1e-2, and it is
+not a precision limit: in <code>b0 + b1·exp(b2·(age−50))</code> the two trade off along a
+valley, so a second optimizer reaches the same minimum at a slightly different
+point — an <em>identifiability</em> property of the model, which no amount of
+arithmetic care removes. The certified nonlinear oracle is not this row at
+all: it is the <a href="../../nist/">NIST StRD suite</a>, which runs all 27 nonlinear
+datasets against certified values (Misra1a LRE 9.3, Thurber 5.7).</p>
+<p><strong>The rule is now enforced, not promised.</strong> <code>every tolerance at or above 1e-2 has a recorded reason</code> fails if any pin sits at <code>tol ≥ 1e-2</code> without an entry,
+and equally if an entry lingers after its pin is tightened. Containment
+brackets are recognised from their own <code>source</code> string rather than by an id
+list — whether a bracket's half-width lands above or below 1e-2 depends on the
+data, so the rule is what is stable — and their count is pinned so a
+regeneration cannot quietly turn them back into what look like sloppy
+tolerances.</p>
       </article>
     </div>
   </main>

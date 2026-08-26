@@ -86,6 +86,7 @@
         <li class="docs-nav-section">Reference</li>
         <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
         <li><a href="../../reference/glossary/">Glossary</a></li>
+        <li><a href="../../reference/commands/">Command reference</a></li>
       </ul>
       </aside>
       <article class="docs-content">
@@ -119,13 +120,31 @@ prompt.</li>
 <em>FastingGlucose_mmolL</em>'s missing code are <strong>gone</strong>. A CSV carries values
 only; the metadata lives in the <code>.ckd</code> document. That is why the last step of
 any session is <strong>File → Save</strong> (<code>Ctrl+S</code>) — it keeps data <em>and</em> definitions.</p>
+<h3 id="not-every-format-loses-the-labels">Not every format loses the labels</h3>
+<p>CSV loses the labels because a CSV has nowhere to put them — not because
+importing does. <strong>File → Import Data…</strong> also reads <strong>SPSS</strong> (<code>.sav</code>, <code>.zsav</code>),
+<strong>Stata</strong> (<code>.dta</code>), <strong>SAS</strong> (<code>.sas7bdat</code>, <code>.xpt</code>), <strong>Parquet</strong> and <strong>Excel</strong>,
+and the statistical formats bring their metadata across with the values:</p>
+<ul>
+<li><strong>SPSS</strong> carries the most — variable labels, value labels, measurement level
+and declared missing values. A <code>.sav</code> opens <em>fully dressed</em>, the way the
+sample did, and module 2's work is already done for you.</li>
+<li><strong>Stata</strong> carries variable labels and value labels.</li>
+<li><strong>SAS</strong> carries variable labels, and value labels too when the <code>.sas7bcat</code>
+catalog sits beside the data file.</li>
+</ul>
+<p>A CSV from the same colleague carries none of it. When you get a choice of
+format, that is the reason to ask for one of these instead.
+<a href="../../working-with-data/#importing-data">Importing data</a> has the full table of
+what each format keeps.</p>
 <p>Re-open the dressed original with <strong>File → Open Sample Dataset</strong> before the
 next module.</p>
 <h2 id="exercise">Exercise</h2>
 <ol>
 <li>In Data View, find participant <code>P1234</code> (<code>Ctrl+F</code>). What is their BMI?</li>
 <li>Export to CSV and re-import. Which columns import as <em>String</em> and which as
-<em>Numeric</em>? Why did the importer decide that way?</li>
+<em>Numeric</em>? Why did the importer decide that way? (The importer has only
+the values to go on — no format that carries types would need to guess.)</li>
 <li>Save your imported copy as <code>mystudy.ckd</code>, close and reopen it. Did it
 remember anything the CSV did not? (Not yet — you have added no metadata.
 Module 2 fixes that.)</li>

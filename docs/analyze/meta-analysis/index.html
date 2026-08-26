@@ -86,6 +86,7 @@
         <li class="docs-nav-section">Reference</li>
         <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
         <li><a href="../../reference/glossary/">Glossary</a></li>
+        <li><a href="../../reference/commands/">Command reference</a></li>
       </ul>
       </aside>
       <article class="docs-content">
@@ -190,7 +191,18 @@ a missing lower corner (small studies only on the favourable side) is the
 visual counterpart of Egger's test.</li>
 </ul>
 <p>Both charts export and copy like any other chart — see
-<a href="../../graphs/#working-with-chart-output">Working with chart output</a>.</p>
+<a href="../../graphs/#working-with-chart-output">Working with chart output</a> — and,
+since 0.22.0, export as <strong>SVG or PDF</strong> as well as PNG
+(<a href="../../graphs/#exporting-one-chart">Exporting one chart</a>), which is the form a
+journal wants a forest plot in. They are charts <em>attached to an analysis</em>, so
+they take no <strong>Edit chart…</strong> button: their styling is the procedure's, not a
+presentation argument on a statistical command (see
+<a href="../../chart-editor/">Editing a chart</a>).</p>
+<p><strong>Asking the assistant.</strong> Every table and chart here carries an <strong>Ask the
+assistant about this</strong> action (0.22.0): it hands the rendered result to the
+<a href="../../advanced/ai-assistant/">AI assistant</a> with a request to interpret it —
+not to re-run it — which is the quickest way to a plain-language reading of
+the heterogeneity block or a funnel's asymmetry.</p>
 <h2 id="reproducibility">Reproducibility</h2>
 <p>Like every analysis, a run journals a syntax command, e.g.:</p>
 <pre><code>meta_analysis effect=logOR, se=se, study=trial, model=random, tau_method=reml

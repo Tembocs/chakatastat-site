@@ -89,7 +89,7 @@
 
         <p>
           ChakataStat is archived on
-          <a href="https://zenodo.org/records/22043444">Zenodo</a>, which
+          <a href="https://zenodo.org/records/22112257">Zenodo</a>, which
           gives it two kinds of DOI. Which one you want depends on what you
           are pointing at: the software, or the exact release that produced
           your numbers.
@@ -105,7 +105,7 @@
         </p>
         <p class="cite-block">
           Amani, E. (2026). <em>ChakataStat</em> [Computer software].
-          <a href="https://doi.org/10.5281/zenodo.22043444">https://doi.org/10.5281/zenodo.22043444</a>
+          <a href="https://doi.org/10.5281/zenodo.22112256">https://doi.org/10.5281/zenodo.22112256</a>
         </p>
 
         <h2>Citing the version you ran</h2>
@@ -119,9 +119,9 @@
           and at the foot of every output document.
         </p>
         <p class="cite-block">
-          Amani, E. (2026). <em>ChakataStat</em> (Version 0.21.0) [Computer
+          Amani, E. (2026). <em>ChakataStat</em> (Version 0.22.0) [Computer
           software].
-          <a href="https://doi.org/10.5281/zenodo.22064586">https://doi.org/10.5281/zenodo.22064586</a>
+          <a href="https://doi.org/10.5281/zenodo.22112257">https://doi.org/10.5281/zenodo.22112257</a>
         </p>
 
         <h2>Version DOIs</h2>
@@ -131,6 +131,11 @@
               <tr><th>Version</th><th>Released</th><th>DOI</th></tr>
             </thead>
             <tbody>
+              <tr>
+                <td>0.22.0</td>
+                <td>2026-08-26</td>
+                <td><a href="https://doi.org/10.5281/zenodo.22112257">10.5281/zenodo.22112257</a></td>
+              </tr>
               <tr>
                 <td>0.21.0</td>
                 <td>2026-08-23</td>
@@ -146,13 +151,16 @@
         </div>
         <p>
           Releases before 0.20.0 predate the archive and have no DOI; cite
-          those with the concept DOI and the version number. Each version
-          record archives the release's Linux installer, its
-          <code>SHA256SUMS.txt</code> checksums and the license — not
-          the source, which is not public. A version DOI therefore identifies
-          the <em>release</em>: a reader who ran the Windows or Snap build of
-          0.21.0 cites the same DOI, and obtains that release from its own
-          official channel.
+          those with the concept DOI and the version number. From 0.22.0 each
+          version record is minted by Zenodo from the release on GitHub and
+          archives that release's public repository snapshot; the Linux
+          installer and its <code>SHA256SUMS.txt</code> checksums sit on the
+          release the record points to. The 0.20.0 and 0.21.0 records were
+          archived by hand with the installer inside them, under the earlier
+          concept DOI <code>10.5281/zenodo.22043444</code>, which still
+          resolves. Either way a version DOI identifies the <em>release</em>:
+          a reader who ran the Windows or Snap build of 0.22.0 cites the same
+          DOI, and obtains that release from its own official channel.
         </p>
 
         <h2>BibTeX</h2>
@@ -160,13 +168,13 @@
   author  = {Amani, Edward},
   title   = {ChakataStat},
   year    = {2026},
-  version = {0.21.0},
-  doi     = {10.5281/zenodo.22064586},
-  url     = {https://doi.org/10.5281/zenodo.22064586}
+  version = {0.22.0},
+  doi     = {10.5281/zenodo.22112257},
+  url     = {https://doi.org/10.5281/zenodo.22112257}
 }</code></pre>
         <p>
           Drop the <code>version</code> field and swap in
-          <code>10.5281/zenodo.22043444</code> to cite the software rather
+          <code>10.5281/zenodo.22112256</code> to cite the software rather
           than one release.
         </p>
 
@@ -192,7 +200,7 @@
       </p>
       <p class="footer-cite">
         Cite: Amani, E. (2026). <em>ChakataStat</em> [Computer software].
-        <a href="https://doi.org/10.5281/zenodo.22043444">https://doi.org/10.5281/zenodo.22043444</a>
+        <a href="https://doi.org/10.5281/zenodo.22112256">https://doi.org/10.5281/zenodo.22112256</a>
       </p>
     </div>
   </footer>

@@ -86,6 +86,7 @@
         <li class="docs-nav-section">Reference</li>
         <li><a href="../reference/choosing-a-procedure/">Choosing a procedure</a></li>
         <li><a href="../reference/glossary/">Glossary</a></li>
+        <li><a href="../reference/commands/">Command reference</a></li>
       </ul>
       </aside>
       <article class="docs-content">
@@ -468,6 +469,67 @@ order you ran them.</li>
 (rendered as their geometry) — see
 <a href="../advanced/reproducibility/#exporting-the-output-log">Reproducibility</a>.</li>
 </ul>
+<h2 id="exporting-one-chart">Exporting one chart</h2>
+<p>Right-click a chart and choose <strong>Export image…</strong> — or <strong>Copy image</strong>, which puts
+a picture straight on the clipboard to paste into a document. The export asks
+for a format first, because that decides the file's extension, and remembers
+what you chose, so a paper's worth of figures is one decision rather than one
+per chart.</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Format</th>
+<th>What it is</th>
+<th>Reach for it when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PNG</strong></td>
+<td>A picture: a fixed grid of pixels, at a resolution you choose</td>
+<td>The figure is going into a slide, an email or a page that wants an image. Enlarging it beyond the resolution you exported at softens it.</td>
+</tr>
+<tr>
+<td><strong>SVG</strong></td>
+<td>Vector: the figure stored as shapes and text</td>
+<td>You want to keep editing it — an SVG opens in any drawing program with every line and every label still separate and still editable. Also the format most journals prefer.</td>
+</tr>
+<tr>
+<td><strong>PDF</strong></td>
+<td>Vector, as a one-page document</td>
+<td>You are attaching the figure to a submission, or want a file that opens the same way everywhere without a drawing program.</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>The two vector formats have no resolution</strong>, which is the point of them: the
+figure is geometry rather than pixels, so it stays sharp printed at any size,
+at a column width or across a page. The resolution control greys out when you
+pick one.</p>
+<p><strong>Labels stay text in both vector formats.</strong> An axis title, a tick label and a
+legend entry are exported as the words themselves, not as drawings of them — so
+they can be selected, searched, copied out and restyled by a typesetter. That is
+usually what an author guideline means when it asks for &quot;editable&quot; or &quot;vector&quot;
+figures.</p>
+<h3 id="choosing-a-resolution-for-a-png">Choosing a resolution for a PNG</h3>
+<p>The resolution is offered in dots per inch, and the dialog shows what each
+choice works out to for the chart in front of you — both the pixel dimensions
+and the printed size, which does <strong>not</strong> change with the resolution. Resolution
+buys detail, not size.</p>
+<p><strong>288 dpi is the default</strong>, and is exactly what ChakataStat rasterised at before
+the choice existed, so leaving it alone reproduces what you have always had.
+<strong>300 dpi</strong> is offered beside it because that is the number journals print in
+their author guidelines. If you are exporting for a journal, though, SVG or PDF
+answers the question outright — a vector figure has no resolution to fall short
+of.</p>
+<h3 id="one-limit-worth-knowing">One limit worth knowing</h3>
+<p>A PDF is written with the fonts every PDF reader already has, which cover the
+Latin alphabet, ordinary punctuation and little else. If a chart's labels use
+characters outside that — Greek, Cyrillic, CJK — the export dialog names them
+and says so <strong>before</strong> you export. Choose SVG, which has no such limit, and the
+labels come through exactly as they appear on screen.</p>
+<p>Everything the <a href="../chart-editor/">chart editor</a> changes — axis titles and ranges,
+reference lines, marker shapes, the gridline toggle, colours — is part of the
+chart, so it is part of every export.</p>
       </article>
     </div>
   </main>

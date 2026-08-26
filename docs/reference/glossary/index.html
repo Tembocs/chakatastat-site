@@ -86,6 +86,7 @@
         <li class="docs-nav-section">Reference</li>
         <li><a href="../choosing-a-procedure/">Choosing a procedure</a></li>
         <li><a href="./" aria-current="page">Glossary</a></li>
+        <li><a href="../commands/">Command reference</a></li>
       </ul>
       </aside>
       <article class="docs-content">
@@ -111,6 +112,22 @@ number), <strong>Ordinal</strong> (ordered categories), <strong>Nominal</strong>
 Split (analyse per group); applied to every analysis.</li>
 <li><strong>Tool / command</strong> — the single named operation behind every menu action,
 shared by the syntax console, the AI assistant and MCP.</li>
+<li><strong>Command journal</strong> — the running record of every command a session has run;
+what the Syntax tab shows and what a <code>.cks</code> file saves.</li>
+<li><strong>Syntax editor</strong> — the Syntax tab: a real editor over the journal, with
+highlighting, <code>Ctrl+Space</code> completion and errors marked before you run.</li>
+<li><strong>Chart editor</strong> — the <strong>Edit chart…</strong> panel on a chart card. It changes how
+a chart looks, never what it measures, and writes the change back into the
+chart's own command — so a restyled chart re-runs restyled.</li>
+<li><strong>User-defined tool</strong> — a saved <code>.cks</code> recipe registered under a name, which
+the syntax console, the AI assistant and MCP can then run like any built-in.</li>
+<li><strong>Concept DOI</strong> — the permanent identifier for citing ChakataStat itself
+(<strong>Help → How to Cite</strong>), stable across releases; each tagged version also
+gets its own version DOI.</li>
+<li><strong>Foreign formats</strong> — the statistical files ChakataStat reads directly:
+SPSS (<code>.sav</code>, <code>.zsav</code>), Stata (<code>.dta</code>), SAS (<code>.sas7bdat</code>, <code>.xpt</code>), plus
+Parquet and Arrow. Unlike CSV they carry variable and value labels with the
+data. See <a href="../../working-with-data/#importing-data">Working with data</a>.</li>
 </ul>
 <h2 id="common-statistics-terms">Common statistics terms</h2>
 <ul>
@@ -139,6 +156,23 @@ odds per unit of a predictor.</li>
 <li><strong>Hazard ratio</strong> — in Cox regression, the multiplicative change in the event
 rate per unit of a predictor.</li>
 <li><strong>R²</strong> — the share of the outcome's variance the model explains.</li>
+<li><strong>Regression diagnostics</strong> — the plots that check a fitted model's
+assumptions: <strong>Residuals vs Fitted</strong>, <strong>Scale-Location</strong> and a <strong>Normal Q-Q</strong>
+of the residuals.</li>
+<li><strong>Leverage / Cook's distance</strong> — per-case measures of how unusual a case's
+predictors are, and how much the fit would move without it.</li>
+<li><strong>Mediation</strong> — decomposing an effect into a <strong>direct</strong> path and an
+<strong>indirect</strong> path through a mediator; <strong>moderated</strong> mediation lets that
+depend on a third variable, and the <strong>Johnson–Neyman</strong> interval reports where
+the effect is significant.</li>
+<li><strong>Fixed vs random effects (panel)</strong> — for repeated observations on the same
+entities: fixed effects use only within-entity variation, random effects also
+use between-entity variation; the <strong>Hausman test</strong> chooses between them.</li>
+<li><strong>Propensity score</strong> — the modelled probability of being treated, used to
+<strong>match</strong> or <strong>weight</strong> cases so treated and control groups become comparable;
+balance is judged on standardised differences.</li>
+<li><strong>ATE / ATT</strong> — the average treatment effect over everyone, versus over the
+treated only.</li>
 </ul>
 <h2 id="group-comparisons">Group comparisons</h2>
 <ul>
@@ -149,6 +183,11 @@ rate per unit of a predictor.</li>
 (Bonferroni, Scheffé, Tukey HSD).</li>
 <li><strong>Chi-square (χ²)</strong> — tests association in a contingency table.</li>
 <li><strong>Nonparametric test</strong> — a test that does not assume normality, using ranks.</li>
+<li><strong>Equivalence test (TOST)</strong> — two one-sided tests asking whether a difference
+is small enough to be practically nil. &quot;No significant difference&quot; is not the
+same claim, which is why this test exists.</li>
+<li><strong>Permutation test</strong> — a <em>p</em> value built by reshuffling the data many times
+rather than from a theoretical distribution.</li>
 </ul>
 <h2 id="multivariate--specialised">Multivariate &amp; specialised</h2>
 <ul>
@@ -166,6 +205,31 @@ compares curves between groups.</li>
 <li><strong>ACF / PACF</strong> — autocorrelation and partial autocorrelation of a time series.</li>
 <li><strong>ARIMA / SARIMA</strong> — Box-Jenkins time-series models; SARIMA adds seasonal
 terms; both can <strong>forecast</strong>.</li>
+<li><strong>VAR / Granger causality</strong> — a vector autoregression models several series
+jointly; a Granger test asks whether one series' past helps predict another's
+future (prediction, not cause).</li>
+<li><strong>Confirmatory factor analysis (CFA)</strong> — tests a factor structure you specify
+in advance; <strong>modification indices</strong> suggest what would improve fit, and
+<strong>measurement invariance</strong> checks the structure means the same thing across
+groups.</li>
+<li><strong>Latent class analysis (LCA)</strong> — finds unobserved subgroups behind
+categorical responses; the cluster analysis of categorical data.</li>
+<li><strong>Item response theory (IRT)</strong> — models each item's <strong>difficulty</strong> and
+<strong>discrimination</strong> separately from the person's ability.</li>
+<li><strong>Meta-analysis</strong> — pools effect sizes across studies; <strong>heterogeneity</strong>
+(Q, I², τ²) says how much they disagree, the <strong>forest plot</strong> shows every
+study, and the <strong>funnel plot</strong> looks for small-study bias.</li>
+<li><strong>Bland-Altman</strong> — a method-comparison plot of the mean of two measurements
+against their difference, with the <strong>limits of agreement</strong>.</li>
+<li><strong>LOESS</strong> — a smooth curve fitted locally through a scatterplot, with no
+global equation assumed.</li>
+<li><strong>Multiple imputation</strong> — filling gaps <em>m</em> times to preserve uncertainty,
+pooling the results by <strong>Rubin's rules</strong>; the <strong>FMI</strong> reports how much of the
+answer came from imputation rather than data.</li>
+<li><strong>Survey design</strong> — telling ChakataStat the sample was not simple random:
+<strong>strata</strong>, <strong>clusters</strong> (PSUs) and <strong>sampling weights</strong>. The everyday
+procedures then estimate design-based, reporting a <strong>design df</strong> and an
+<strong>effective sample size</strong> rather than pretending N independent observations.</li>
 </ul>
       </article>
     </div>

@@ -86,6 +86,7 @@
         <li class="docs-nav-section">Reference</li>
         <li><a href="../reference/choosing-a-procedure/">Choosing a procedure</a></li>
         <li><a href="../reference/glossary/">Glossary</a></li>
+        <li><a href="../reference/commands/">Command reference</a></li>
       </ul>
       </aside>
       <article class="docs-content">
@@ -93,7 +94,8 @@
 <p>Every chart in the Output log has an <strong>Edit chart…</strong> button in its card header.
 It opens the chart editor: a live preview with the presentation controls that
 chart actually supports — legend placement, series colours, line width, bar
-stacking and spacing, and the title.</p>
+stacking and spacing, axis limits and reference lines, text size, logarithmic
+axes, and the title.</p>
 <p>The editor changes how a chart <em>looks</em>. It never changes what it <em>measures</em>: no
 control in it can alter a variable, a filter, a bin count or a statistic. To
 change the analysis, re-run the command.</p>
@@ -162,14 +164,85 @@ the axis instead.</p>
 <td>How much of each category's slot is left empty</td>
 <td>Bar chart</td>
 </tr>
+<tr>
+<td><strong>X axis label</strong> / <strong>Y axis label</strong></td>
+<td>Renames an axis. Clear the field to get the analysis's own label back</td>
+<td>Charts that draw that axis title</td>
+</tr>
+<tr>
+<td><strong>X min</strong> / <strong>X max</strong> / <strong>Y min</strong> / <strong>Y max</strong></td>
+<td>Fixes an axis's limits. Leave a box empty to let that end fit the data</td>
+<td>Charts whose axis is a numeric scale</td>
+</tr>
+<tr>
+<td><strong>Horizontal lines at</strong> / <strong>Vertical lines at</strong></td>
+<td>Dashed reference lines at the values you type — a mean, a threshold, a target. Separate several with commas</td>
+<td>As above, per axis</td>
+</tr>
+<tr>
+<td><strong>Marker</strong> / <strong>Marker size</strong></td>
+<td>The shape and size drawn at each data point: circle, square, triangle, diamond or cross</td>
+<td>Scatter, Q-Q, line chart, item information curves</td>
+</tr>
+<tr>
+<td><strong>Gridlines</strong></td>
+<td>Draws the plot's gridlines, or not</td>
+<td>Every chart the editor opens for</td>
+</tr>
+<tr>
+<td><strong>Height</strong></td>
+<td>The plot's height in pixels</td>
+<td>Every chart the editor opens for</td>
+</tr>
+<tr>
+<td><strong>Text size</strong></td>
+<td>Scales every piece of text on the chart at once — tick labels, axis titles, legend, annotations — from 0.5× to 3×. The gutters grow with it so larger labels still fit</td>
+<td>Every chart the editor opens for</td>
+</tr>
+<tr>
+<td><strong>Logarithmic x axis</strong> / <strong>Logarithmic y axis</strong></td>
+<td>Draws that axis on a base-10 log scale, labelled at the decades with minor ticks between</td>
+<td>Scatterplot (both axes), line chart (both), histogram (x), Kaplan-Meier (the time axis)</td>
+</tr>
 </tbody>
 </table></div>
-<p>Two deliberate gaps, both for the same reason — an option that cannot be stated
-honestly is not offered:</p>
+<p><strong>Why a control appears on some charts and not others.</strong> The right-hand column
+above is not a rule of thumb — each control is offered only where it would
+actually do something:</p>
+<ul>
+<li>An <strong>axis label</strong> appears where that axis has a title to rename. A boxplot
+and a violin plot draw no x-axis title, so they offer only <strong>Y axis label</strong>;
+a dot plot is the mirror image. A scatterplot matrix offers neither, because
+a grid of panels has no single pair of axes.</li>
+<li><strong>Axis limits and reference lines</strong> need a <em>numeric</em> axis. A bar chart's x
+axis lists categories and a histogram's counts bins, so neither takes an
+<strong>X min</strong>; an ECDF's y axis is a proportion that already runs 0 to 1, so it
+takes no <strong>Y min</strong>. Kaplan-Meier is finer still: the cumulative-hazard curve
+takes a y limit, the survival curve does not, because clipping a probability
+axis would misrepresent the estimate rather than reframe the view.</li>
+<li><strong>Markers</strong> appear only where a chart draws a mark at each data point.</li>
+<li>A <strong>logarithmic axis</strong> needs an axis that is a <em>measured quantity</em> — never a
+bar chart's categories, a Q-Q plot's theoretical quantiles or a survival
+curve's probability. It also needs every plotted value on that axis to be
+positive, because zero and negatives have no logarithm. When the chart's
+data includes one, the switch is shown disabled with the offending value
+named beneath it, and the same request typed in the console is refused with
+the same message — the points are <strong>never</strong> silently dropped to make the
+axis fit. An <strong>X min</strong> or <strong>Y min</strong> on a log axis must be positive for the
+same reason. On a Kaplan-Meier plot the curve's start at time 0 does not
+count: it is drawn from the axis edge, and only the event times must be
+positive.</li>
+</ul>
+<p>A reference line outside the axis range is simply not drawn — the axis is not
+stretched to reach it, because that would quietly undo a limit you set.</p>
+<p>Three deliberate gaps, all for the same reason — an option that cannot be
+stated honestly is not offered:</p>
 <ul>
 <li><strong>Kaplan-Meier plots take no title.</strong> One <code>kaplan_meier</code> command can draw two
 different charts (the survival curve and the cumulative hazard), and a single
-title argument cannot name both. Their other controls all work.</li>
+title argument cannot name both. Their other controls all work — including
+the axis labels, because both charts share a time axis and the y label
+follows the curve kind.</li>
 <li><strong>Charts embedded in an analysis's output</strong> — a regression's diagnostic
 panels, a scree plot, a dendrogram — have no Edit button. They are byproducts
 of an analysis command rather than charts you asked for, and styling them
@@ -214,14 +287,21 @@ what you are looking at.</li>
 <p>Either way the journal keeps its meaning: <strong>the script that reproduces the
 current output, styled as seen</strong>.</p>
 <h2 id="what-the-editor-does-not-do">What the editor does not do</h2>
-<p>By design, and recorded rather than merely missing: no axis-range or tick
-overrides, no annotations or free-standing text, no free-pixel legend placement,
-no per-group styling of a split set, and no editing of data or of what is
-plotted. The editor edits what the recorded command can express — exactly that,
-so that everything it can do survives a re-run.</p>
+<p>By design, and recorded rather than merely missing: no annotations or
+free-standing text, no free-pixel legend placement, no per-group styling of a
+split set, no per-element text sizes (one <strong>Text size</strong> scales everything, on
+purpose — a chart with three type sizes chosen by hand rarely reads better
+than one), and no editing of data or of what is plotted. The editor edits what
+the recorded command can express — exactly that, so that everything it can do
+survives a re-run.</p>
+<p>(Axis ranges, tick control, font scaling and a log axis <em>were</em> all on this
+list until 0.22.0, which added axis limits, reference lines, step-aware tick
+labels, <strong>Text size</strong> and the two <strong>Logarithmic axis</strong> switches.)</p>
 <h2 id="see-also">See also</h2>
 <ul>
-<li><a href="../graphs/">Graphs</a> — the chart dialogs and what each chart is for.</li>
+<li><a href="../graphs/">Graphs</a> — the chart dialogs and what each chart is for, and
+<a href="../graphs/#exporting-one-chart">exporting one chart</a> to PNG, SVG or PDF.
+Everything you set here is part of the chart, so it is part of every export.</li>
 <li><a href="../advanced/reproducibility/">Reproducibility</a> — the command journal the
 editor writes into, and the presentation arguments you can type directly.</li>
 <li><a href="../settings/">Settings</a> — the palette every chart starts from.</li>

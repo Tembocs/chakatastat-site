@@ -92,13 +92,26 @@ committed JSON (so the suite runs everywhere the Dart suite runs, with no Python
 dependency on the CI machines). To regenerate after adding a procedure or
 changing a number:</p>
 <pre><code class="language-sh">python3 -m venv /tmp/refenv
-/tmp/refenv/bin/pip install scipy statsmodels scikit-learn lifelines pingouin
+/tmp/refenv/bin/pip install -r tool/validation/requirements.txt
 /tmp/refenv/bin/python tool/validation/generate_references.py
 dart run tool/cstool.dart test test/numerical_validation_test.dart
 </code></pre>
-<p>The package versions used for the committed values are recorded in the JSON
-header (<code>_versions</code>) — at the time of writing SciPy 1.18, statsmodels 0.14,
-scikit-learn 1.9, lifelines 0.30, pingouin 0.6, NumPy 2.5.</p>
+<p><strong>Install from the lockfile, never by name.</strong> Until 2026-08-23 this page said
+<code>pip install scipy statsmodels …</code>, which resolves to whatever is newest that
+day — so the same command on two machines could produce two different reference
+values and neither would be wrong. <code>tool/validation/requirements.txt</code>
+pins the exact versions that produced the committed numbers.</p>
+<p>The versions are <em>also</em> recorded in the JSON header (<code>_versions</code>) by the
+generator itself, and test/validation_environment_test.dart
+asserts that the header and the lockfile agree — so regenerating against a
+newer package without updating the pin fails the bar, and so does bumping the
+pin without regenerating. Two packages (<code>pandas</code>, <code>semopy</code>) were not recorded
+before 2026-08-23 and are therefore not yet pinned; the generator records them
+now, so the next full regen closes that gap.</p>
+<p>For the fixture generators (the foreign-format corpus and the spreadsheet
+fixtures) use <code>requirements-fixtures.txt</code>
+instead — those are deliberately unpinned, because they write committed
+fixtures rather than compute reference values.</p>
 <p>The <strong>survey-design</strong>, <strong>TOST</strong>, <strong>Bland–Altman</strong>, <strong>LCA</strong>, <strong>IRT</strong>,
 <strong>LOESS</strong>, <strong>permutation</strong>, <strong>CFA follow-up</strong> and <strong>mediation follow-up</strong> references have their own toolchain — R with the <code>survey</code> package (the
 canonical reference implementation for Taylor-linearized design-based
@@ -118,7 +131,13 @@ SEM package; it ships the Holzinger–Swineford data the fixture is written
 from), and — for the mediation follow-ups — base R <code>lm</code> plus the
 <code>interactions</code> package (the Johnson–Neyman reference). Like the Python
 values, CI only reads the committed JSON:</p>
-<pre><code class="language-sh"># any R ≥ 4 with survey ≥ 4.4, TOSTER ≥ 0.8, blandr ≥ 0.6,
+<pre><code class="language-sh"># Pin the R side first — Rscript tool/validation/r-packages.R installs the
+# exact package versions the committed values were produced under (R 4.5.3),
+# and the same guard test checks that script against the JSON headers. The
+# floors below are what the scripts *need*; the pins are what they were *run*
+# with, and only the pins reproduce a committed number.
+#
+# any R ≥ 4 with survey ≥ 4.4, TOSTER ≥ 0.8, blandr ≥ 0.6,
 # BlandAltmanLeh ≥ 0.3, poLCA ≥ 1.6, ltm ≥ 1.2, mirt ≥ 1.4,
 # coin ≥ 1.4 and perm ≥ 1.0; a user-space conda-forge R works:
 #   micromamba create -p ~/micromamba/envs/r-survey -c conda-forge \
