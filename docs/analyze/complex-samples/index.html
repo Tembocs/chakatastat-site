@@ -83,6 +83,7 @@
         <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
         <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
         <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li><a href="../../advanced/verify-installation/">Verify this Installation</a></li>
         <li class="docs-nav-section">Reference</li>
         <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
         <li><a href="../../reference/glossary/">Glossary</a></li>
@@ -208,6 +209,14 @@ about.</li>
 </ul>
 <p>Every design-based table names the design (variables, strata, PSUs, df) in
 its note, so output stays self-describing when exported.</p>
+<h2 id="how-this-is-computed">How this is computed</h2>
+<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
+<ul>
+<li><strong>Variance estimation</strong> — Taylor linearization under the declared design (strata, PSUs, weights, finite-population correction), the <code>survey</code> package's estimators; domains are analysed over the full design with zero-filled indicators, never by subsetting (<a href="../../validation/conventions/clinical-and-survey/#the-five-estimation-conventions">the five estimation conventions</a>).</li>
+<li><strong>Descriptives and frequencies</strong> — design-based means, proportions and totals with Taylor SEs, <em>t</em> intervals on the design df, logit-scale intervals for proportions, and the design effect.</li>
+<li><strong>Crosstabs</strong> — the Rao–Scott second-order corrected χ² with the F reference, <code>svychisq</code>'s default (<a href="../../validation/conventions/clinical-and-survey/#complex-survey-designs--the-v1-conventions">survey conventions</a>).</li>
+<li><strong>Regression under a design</strong> — weighted least squares / IRLS with Taylor sandwich SEs, inference on (design df) − p + 1 (<code>summary.svyglm</code>); the classic ANOVA table, standardized β and VIF are suppressed as SRS constructs (<a href="../../validation/conventions/clinical-and-survey/#regression-under-a-design">regression under a design</a>).</li>
+</ul>
 <h2 id="scope-precisely">Scope, precisely</h2>
 <p>This version estimates by <strong>Taylor linearization</strong> only — no
 BRR/jackknife/bootstrap replicate weights, no finite population correction,

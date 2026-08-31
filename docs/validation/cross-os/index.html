@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cross-OS agreement — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/validation/cross-os/">
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Cross-OS agreement — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/validation/cross-os/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../index.html">
+        <img class="brand-mark" src="../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <!-- One link, not a copy of the site menu. While someone is reading the
+           guide, the sidebar is the navigation that matters; marketing anchors
+           (Features, Screenshots, …) only compete with it and push the reader
+           out of what they came for. All that is owed is a way back. Single
+           link means no mobile collapse either, so there is no hamburger on
+           these pages — main.js guards for its absence. -->
+      <nav id="nav-links" class="nav-links nav-links--single">
+        <a href="../../../index.html">← Back to chakatastat.app</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">Numerical-validation suite</p>
+        <ul>
+        <li><a href="../">Overview</a></li>
+        <li><a href="../nist/">NIST StRD certified datasets</a></li>
+        <li><a href="./" aria-current="page">Cross-OS agreement</a></li>
+        <li><a href="../file-formats/">Statistics-package file formats</a></li>
+        <li><a href="../tolerances/">Tolerances and recorded conventions</a></li>
+        <li class="docs-nav-section">The recorded conventions</li>
+        <li><a href="../conventions/README/">The convention inventory</a></li>
+        <li><a href="../conventions/classical/">Descriptives, tests and the classical toolbox — the 0.23.0 conventions</a></li>
+        <li><a href="../conventions/regression/">Regression conventions</a></li>
+        <li><a href="../conventions/latent-variable/">Latent-variable conventions</a></li>
+        <li><a href="../conventions/clinical-and-survey/">Clinical and survey conventions</a></li>
+        <li><a href="../conventions/resampling-and-time-series/">Resampling and time-series conventions</a></li>
+        <li class="docs-nav-section">Maintaining the suite</li>
+        <li><a href="../regenerating/">Regenerating the reference values</a></li>
+        <li class="docs-nav-section">User Guide</li>
+        <li><a href="../../">Contents</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="cross-os-agreement">Cross-OS agreement</h1>
+<blockquote>
+<p>Part of the <a href="../">numerical-validation suite</a>. What the three operating systems' engines compute <strong>relative to each other</strong>, per pinned statistic — the statement the tolerances cannot make.</p>
+</blockquote>
+<!-- Generated by tool/validation/cross_os_agreement.dart from the tier-2 matrix's pin artifacts — do not hand-edit. Regenerate from the release candidate's dispatched run. -->
+<p>The validation suites hold every pin <strong>within its tolerance of the reference</strong> on each OS, and stop there: a pin that passes on one OS at one value and on another at a slightly different value is invisible, because the tolerance swallows the difference. This report makes the difference visible. With <code>VALIDATION_EMIT_PINS</code> set, every suite also writes the value the engine actually computed; the tier-2 matrix uploads one file set per OS and a job after it puts them side by side. Per pin, the score is the number of significant digits on which every OS agrees — <code>−log₁₀(spread / max |value|)</code>, capped at 16, the <code>double</code> limit — so <strong>16 means bit-identical</strong>. A spread wider than the pin's own tolerance is a <strong>finding</strong>: a real platform difference to fix, or a convention to record.</p>
+<h2 id="this-run">This run</h2>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Engine</td>
+<td>ChakataStat 0.23.0+24</td>
+</tr>
+<tr>
+<td>Commit</td>
+<td><code>17da57b</code></td>
+</tr>
+<tr>
+<td>CI run</td>
+<td><code>33361732495</code></td>
+</tr>
+<tr>
+<td>Generated</td>
+<td>2026-08-31</td>
+</tr>
+<tr>
+<td>Linux</td>
+<td>Linux 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026</td>
+</tr>
+<tr>
+<td>Windows</td>
+<td>&quot;Windows Server 2025 Datacenter&quot; 10.0 (Build 26100)</td>
+</tr>
+<tr>
+<td>macOS</td>
+<td>Version 26.5.2 (Build 25F84)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="summary">Summary</h2>
+<ul>
+<li><strong>821 pins compared across 3 operating systems</strong> (821 emitted, of 1088 in the committed reference files — counted from <code>test/validation/*reference_values.json</code>; <strong>the two counts differ</strong>).</li>
+<li><strong>615 bit-identical</strong> on every OS (74.9 %).</li>
+<li><strong>206 differ in the last digits</strong>; the least agreement is <strong>6.1 digits</strong> (<code>cfa_mi/x8_x9/mi</code>).</li>
+<li><strong>0 pins with a cross-OS spread wider than their tolerance</strong> — no findings.</li>
+</ul>
+<h2 id="per-family">Per family</h2>
+<p>The family is the pin id's prefix (the procedure), across all reference files.</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Family</th>
+<th>Pins</th>
+<th>Bit-identical</th>
+<th>Min digits</th>
+<th>Over tolerance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>acf</code></td>
+<td>3</td>
+<td>3</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>adf</code></td>
+<td>2</td>
+<td>2</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>anova</code></td>
+<td>5</td>
+<td>5</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>arima</code></td>
+<td>1</td>
+<td>1</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>ba_pefr1</code></td>
+<td>14</td>
+<td>14</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>ba_pefr1_c90</code></td>
+<td>4</td>
+<td>4</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>ba_pefr1_prop</code></td>
+<td>8</td>
+<td>8</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>ba_pefr2</code></td>
+<td>6</td>
+<td>6</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>ba_synth</code></td>
+<td>14</td>
+<td>14</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>ba_synth_prop</code></td>
+<td>8</td>
+<td>8</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>binomial</code></td>
+<td>1</td>
+<td>1</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>cfa</code></td>
+<td>27</td>
+<td>0</td>
+<td>6.8</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>cfa_mg</code></td>
+<td>58</td>
+<td>7</td>
+<td>6.6</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>cfa_mi</code></td>
+<td>18</td>
+<td>0</td>
+<td>6.1</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>cfa_mi_orth</code></td>
+<td>12</td>
+<td>1</td>
+<td>15.0</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>cfa_wlsmv</code></td>
+<td>25</td>
+<td>7</td>
+<td>6.8</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>correlate</code></td>
+<td>6</td>
+<td>6</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>crosstabs</code></td>
+<td>5</td>
+<td>5</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>discriminant</code></td>
+<td>3</td>
+<td>3</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>ets</code></td>
+<td>2</td>
+<td>2</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>explore</code></td>
+<td>10</td>
+<td>10</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>factor</code></td>
+<td>4</td>
+<td>1</td>
+<td>15.5</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>friedman</code></td>
+<td>2</td>
+<td>2</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>glm</code></td>
+<td>4</td>
+<td>4</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>glm_resid</code></td>
+<td>17</td>
+<td>14</td>
+<td>14.2</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>granger</code></td>
+<td>4</td>
+<td>4</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>hier</code></td>
+<td>1</td>
+<td>1</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>irt_lsat6_2pl</code></td>
+<td>2</td>
+<td>2</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>irt_lsat6_rasch</code></td>
+<td>15</td>
+<td>6</td>
+<td>7.4</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>irt_lsat7_2pl</code></td>
+<td>42</td>
+<td>2</td>
+<td>6.5</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>iv</code></td>
+<td>6</td>
+<td>6</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>kpss</code></td>
+<td>1</td>
+<td>1</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>kruskal</code></td>
+<td>2</td>
+<td>2</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>lca_carcinoma2</code></td>
+<td>1</td>
+<td>1</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>lca_carcinoma3</code></td>
+<td>11</td>
+<td>10</td>
+<td>13.2</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>lca_carcinoma4</code></td>
+<td>1</td>
+<td>0</td>
+<td>15.1</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>lca_values1</code></td>
+<td>2</td>
+<td>2</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>lca_values2</code></td>
+<td>13</td>
+<td>13</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>levene</code></td>
+<td>2</td>
+<td>2</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>loess_cars100</code></td>
+<td>7</td>
+<td>7</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>loess_cars40</code></td>
+<td>7</td>
+<td>7</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>loess_cars75</code></td>
+<td>9</td>
+<td>9</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>loess_sine30</code></td>
+<td>7</td>
+<td>7</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>loess_sine75</code></td>
+<td>9</td>
+<td>9</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>mann_whitney</code></td>
+<td>4</td>
+<td>4</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>manova</code></td>
+<td>3</td>
+<td>3</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>means</code></td>
+<td>2</td>
+<td>2</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>med_3w</code></td>
+<td>11</td>
+<td>11</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>med_jn</code></td>
+<td>8</td>
+<td>8</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>med_serial</code></td>
+<td>11</td>
+<td>11</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>mediation</code></td>
+<td>7</td>
+<td>7</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>mediation_mod</code></td>
+<td>14</td>
+<td>14</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>meta_analysis</code></td>
+<td>15</td>
+<td>15</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>multinomial</code></td>
+<td>3</td>
+<td>0</td>
+<td>15.1</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>nls</code></td>
+<td>5</td>
+<td>0</td>
+<td>8.1</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>normality</code></td>
+<td>3</td>
+<td>3</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>ordinal</code></td>
+<td>2</td>
+<td>1</td>
+<td>15.0</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>pacf</code></td>
+<td>1</td>
+<td>1</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>panel</code></td>
+<td>27</td>
+<td>27</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>partial</code></td>
+<td>1</td>
+<td>1</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>perm_corr_exact</code></td>
+<td>3</td>
+<td>3</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>perm_mc_corr</code></td>
+<td>2</td>
+<td>2</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>perm_mc_ts</code></td>
+<td>2</td>
+<td>2</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>perm_ts_exact</code></td>
+<td>3</td>
+<td>3</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>ph_test</code></td>
+<td>3</td>
+<td>3</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>propensity</code></td>
+<td>8</td>
+<td>8</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>reg_gamma</code></td>
+<td>6</td>
+<td>5</td>
+<td>15.3</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>reg_linear</code></td>
+<td>16</td>
+<td>16</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>reg_logistic</code></td>
+<td>4</td>
+<td>0</td>
+<td>14.3</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>reg_negbin</code></td>
+<td>2</td>
+<td>2</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>reg_poisson</code></td>
+<td>3</td>
+<td>3</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>reg_probit</code></td>
+<td>2</td>
+<td>2</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>reliability</code></td>
+<td>1</td>
+<td>1</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>rm_anova</code></td>
+<td>3</td>
+<td>3</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>runs</code></td>
+<td>2</td>
+<td>2</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>sign</code></td>
+<td>1</td>
+<td>1</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>survey</code></td>
+<td>1</td>
+<td>1</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>survival_cox</code></td>
+<td>2</td>
+<td>2</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>survival_km</code></td>
+<td>2</td>
+<td>2</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>svy_chisq</code></td>
+<td>8</td>
+<td>8</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>svy_explore</code></td>
+<td>14</td>
+<td>14</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>svy_freq</code></td>
+<td>22</td>
+<td>22</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>svy_linreg</code></td>
+<td>11</td>
+<td>11</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>svy_logreg</code></td>
+<td>11</td>
+<td>1</td>
+<td>12.8</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>svy_means</code></td>
+<td>8</td>
+<td>8</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>tost_ind_sleep_a01</code></td>
+<td>2</td>
+<td>2</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>tost_ind_sleep_pooled</code></td>
+<td>7</td>
+<td>7</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>tost_ind_sleep_welch</code></td>
+<td>9</td>
+<td>9</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>tost_ind_y_asym</code></td>
+<td>7</td>
+<td>7</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>tost_ind_y_pooled</code></td>
+<td>7</td>
+<td>7</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>tost_ind_y_smd_pooled</code></td>
+<td>8</td>
+<td>8</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>tost_ind_y_smd_welch</code></td>
+<td>8</td>
+<td>8</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>tost_ind_y_welch</code></td>
+<td>7</td>
+<td>7</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>tost_one_score</code></td>
+<td>9</td>
+<td>9</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>tost_paired_prepost</code></td>
+<td>9</td>
+<td>9</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>tost_paired_prepost_smd</code></td>
+<td>8</td>
+<td>8</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>tost_paired_sleep</code></td>
+<td>9</td>
+<td>9</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>ttest_ind</code></td>
+<td>7</td>
+<td>7</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>ttest_one</code></td>
+<td>4</td>
+<td>4</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>ttest_paired</code></td>
+<td>4</td>
+<td>4</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>var1both</code></td>
+<td>3</td>
+<td>3</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>var2</code></td>
+<td>33</td>
+<td>33</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>varselect</code></td>
+<td>16</td>
+<td>16</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>violin</code></td>
+<td>4</td>
+<td>4</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>wilcoxon</code></td>
+<td>2</td>
+<td>2</td>
+<td>16 (identical)</td>
+<td>—</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="least-agreement--the-30-worst-pins">Least agreement — the 30 worst pins</h2>
+<p>Every pin that is not bit-identical, least agreement first (the full list is in the run's <code>cross-os-agreement</code> artifact).</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Pin</th>
+<th>Linux</th>
+<th>Windows</th>
+<th>macOS</th>
+<th>Digits</th>
+<th>Spread</th>
+<th>Tolerance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cfa_mi/x8_x9/mi</code></td>
+<td>14.946343697690370</td>
+<td>14.946356831920207</td>
+<td>14.946343697690494</td>
+<td>6.1</td>
+<td>0.000013134229837064026</td>
+<td>0.0020000000000000000</td>
+</tr>
+<tr>
+<td><code>cfa_mi/x8_x9/sepc</code></td>
+<td>-0.80520077044417204</td>
+<td>-0.80520122648552750</td>
+<td>-0.80520077044417560</td>
+<td>6.2</td>
+<td>4.5604135545662672e-7</td>
+<td>0.00020000000000000001</td>
+</tr>
+<tr>
+<td><code>cfa_mi/x8_x9/epc</code></td>
+<td>-0.42309501766166863</td>
+<td>-0.42309523645273617</td>
+<td>-0.42309501766167040</td>
+<td>6.3</td>
+<td>2.1879106754107980e-7</td>
+<td>0.00020000000000000001</td>
+</tr>
+<tr>
+<td><code>irt_lsat7_2pl/se_a1_ltm</code></td>
+<td>0.17719757137360106</td>
+<td>0.17719760171457649</td>
+<td>0.17719754859463796</td>
+<td>6.5</td>
+<td>5.3119938531187572e-8</td>
+<td>0.0020000000000000000</td>
+</tr>
+<tr>
+<td><code>irt_lsat7_2pl/se_a1_mirt</code></td>
+<td>0.17719757137360106</td>
+<td>0.17719760171457649</td>
+<td>0.17719754859463796</td>
+<td>6.5</td>
+<td>5.3119938531187572e-8</td>
+<td>0.0020000000000000000</td>
+</tr>
+<tr>
+<td><code>cfa_mi/textual_x3/mi</code></td>
+<td>9.1509138229906455</td>
+<td>9.1509113147593713</td>
+<td>9.1509138229906313</td>
+<td>6.6</td>
+<td>0.0000025082312742341628</td>
+<td>0.0020000000000000000</td>
+</tr>
+<tr>
+<td><code>irt_lsat7_2pl/se_b1_ltm</code></td>
+<td>0.26395969823941617</td>
+<td>0.26395973837821002</td>
+<td>0.26395966627950135</td>
+<td>6.6</td>
+<td>7.2098708669976475e-8</td>
+<td>0.0020000000000000000</td>
+</tr>
+<tr>
+<td><code>irt_lsat7_2pl/se_b1_mirt</code></td>
+<td>0.26395969823941617</td>
+<td>0.26395973837821002</td>
+<td>0.26395966627950135</td>
+<td>6.6</td>
+<td>7.2098708669976475e-8</td>
+<td>0.0020000000000000000</td>
+</tr>
+<tr>
+<td><code>cfa_mg/scalar/mean_visual_g2</code></td>
+<td>0.14770040013931324</td>
+<td>0.14770040013931290</td>
+<td>0.14770036191084618</td>
+<td>6.6</td>
+<td>3.8228467058587512e-8</td>
+<td>0.0010000000000000000</td>
+</tr>
+<tr>
+<td><code>irt_lsat7_2pl/se_a2_ltm</code></td>
+<td>0.16876531801411210</td>
+<td>0.16876535591960456</td>
+<td>0.16876534529576920</td>
+<td>6.6</td>
+<td>3.7905492467071866e-8</td>
+<td>0.0020000000000000000</td>
+</tr>
+<tr>
+<td><code>irt_lsat7_2pl/se_a2_mirt</code></td>
+<td>0.16876531801411210</td>
+<td>0.16876535591960456</td>
+<td>0.16876534529576920</td>
+<td>6.6</td>
+<td>3.7905492467071866e-8</td>
+<td>0.0020000000000000000</td>
+</tr>
+<tr>
+<td><code>irt_lsat7_2pl/se_a5_ltm</code></td>
+<td>0.15113490923265327</td>
+<td>0.15113491177615146</td>
+<td>0.15113488000347852</td>
+<td>6.7</td>
+<td>3.1772672937080415e-8</td>
+<td>0.0020000000000000000</td>
+</tr>
+<tr>
+<td><code>irt_lsat7_2pl/se_a5_mirt</code></td>
+<td>0.15113490923265327</td>
+<td>0.15113491177615146</td>
+<td>0.15113488000347852</td>
+<td>6.7</td>
+<td>3.1772672937080415e-8</td>
+<td>0.0020000000000000000</td>
+</tr>
+<tr>
+<td><code>irt_lsat7_2pl/se_b5_ltm</code></td>
+<td>0.44624770766042177</td>
+<td>0.44624771505661803</td>
+<td>0.44624762925720990</td>
+<td>6.7</td>
+<td>8.5799408133802046e-8</td>
+<td>0.0020000000000000000</td>
+</tr>
+<tr>
+<td><code>irt_lsat7_2pl/se_b5_mirt</code></td>
+<td>0.44624770766042177</td>
+<td>0.44624771505661803</td>
+<td>0.44624762925720990</td>
+<td>6.7</td>
+<td>8.5799408133802046e-8</td>
+<td>0.0020000000000000000</td>
+</tr>
+<tr>
+<td><code>cfa_mi/x7_x8/mi</code></td>
+<td>34.145103772023667</td>
+<td>34.145097398918985</td>
+<td>34.145103772023703</td>
+<td>6.7</td>
+<td>0.0000063731047177384426</td>
+<td>0.0020000000000000000</td>
+</tr>
+<tr>
+<td><code>cfa_mg/scalar/mean_speed_g2</code></td>
+<td>0.17735046158913068</td>
+<td>0.17735046158913062</td>
+<td>0.17735049372484546</td>
+<td>6.7</td>
+<td>3.2135714839176543e-8</td>
+<td>0.0010000000000000000</td>
+</tr>
+<tr>
+<td><code>cfa_mi/textual_x3/epc</code></td>
+<td>-0.27163800620144091</td>
+<td>-0.27163796166546739</td>
+<td>-0.27163800620144046</td>
+<td>6.8</td>
+<td>4.4535973520165584e-8</td>
+<td>0.00020000000000000001</td>
+</tr>
+<tr>
+<td><code>cfa_mi/textual_x3/sepc</code></td>
+<td>-0.23809967934719048</td>
+<td>-0.23809964045977816</td>
+<td>-0.23809967934718998</td>
+<td>6.8</td>
+<td>3.8887412318056036e-8</td>
+<td>0.00020000000000000001</td>
+</tr>
+<tr>
+<td><code>cfa_wlsmv/pvalue</code></td>
+<td>5.0513700217001149e-7</td>
+<td>5.0513697426506437e-7</td>
+<td>5.0513705365208724e-7</td>
+<td>6.8</td>
+<td>7.9387022875062295e-14</td>
+<td>0.000010000000000000001</td>
+</tr>
+<tr>
+<td><code>cfa/se_x9</code></td>
+<td>0.15116740663940953</td>
+<td>0.15116738527322804</td>
+<td>0.15116740663940953</td>
+<td>6.8</td>
+<td>2.1366181490733993e-8</td>
+<td>0.00050000000000000001</td>
+</tr>
+<tr>
+<td><code>cfa_mi/x7_x8/sepc</code></td>
+<td>0.85915053971163624</td>
+<td>0.85915064860832924</td>
+<td>0.85915053971163668</td>
+<td>6.9</td>
+<td>1.0889669299629645e-7</td>
+<td>0.00020000000000000001</td>
+</tr>
+<tr>
+<td><code>cfa/loading_x2</code></td>
+<td>0.55350018387989697</td>
+<td>0.55350024425832622</td>
+<td>0.55350018387989663</td>
+<td>7.0</td>
+<td>6.0378429589391658e-8</td>
+<td>0.00010000000000000000</td>
+</tr>
+<tr>
+<td><code>irt_lsat7_2pl/se_a4_ltm</code></td>
+<td>0.13412180377537150</td>
+<td>0.13412181832283920</td>
+<td>0.13412180852691874</td>
+<td>7.0</td>
+<td>1.4547467702685779e-8</td>
+<td>0.0020000000000000000</td>
+</tr>
+<tr>
+<td><code>irt_lsat7_2pl/se_a4_mirt</code></td>
+<td>0.13412180377537150</td>
+<td>0.13412181832283920</td>
+<td>0.13412180852691874</td>
+<td>7.0</td>
+<td>1.4547467702685779e-8</td>
+<td>0.0020000000000000000</td>
+</tr>
+<tr>
+<td><code>cfa_mi/visual_x7/sepc</code></td>
+<td>-0.34890933073881969</td>
+<td>-0.34890929333236415</td>
+<td>-0.34890933073881908</td>
+<td>7.0</td>
+<td>3.7406455544175543e-8</td>
+<td>0.00020000000000000001</td>
+</tr>
+<tr>
+<td><code>cfa_mi/visual_x7/epc</code></td>
+<td>-0.42186322303520352</td>
+<td>-0.42186318346767709</td>
+<td>-0.42186322303520279</td>
+<td>7.0</td>
+<td>3.9567526421979693e-8</td>
+<td>0.00020000000000000001</td>
+</tr>
+<tr>
+<td><code>cfa_mi/visual_x9/epc</code></td>
+<td>0.57702198573054364</td>
+<td>0.57702193561215742</td>
+<td>0.57702198573054364</td>
+<td>7.1</td>
+<td>5.0118386218933608e-8</td>
+<td>0.00020000000000000001</td>
+</tr>
+<tr>
+<td><code>cfa_mi/visual_x7/mi</code></td>
+<td>18.630678864592728</td>
+<td>18.630677341450930</td>
+<td>18.630678864592696</td>
+<td>7.1</td>
+<td>0.0000015231417975769546</td>
+<td>0.0020000000000000000</td>
+</tr>
+<tr>
+<td><code>cfa_mi/visual_x9/sepc</code></td>
+<td>0.51524928705783413</td>
+<td>0.51524924566101549</td>
+<td>0.51524928705783424</td>
+<td>7.1</td>
+<td>4.1396818750705222e-8</td>
+<td>0.00020000000000000001</td>
+</tr>
+</tbody>
+</table></div>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../index.html">Home</a> ·
+        <a href="../../../quick-start/">Quick Start</a> ·
+        <a href="../../../privacy-policy/">Privacy Policy</a> ·
+        <a href="../../../license/">License</a> ·
+        <a href="../../../cite/">How to Cite</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../js/main.js"></script>
+</body>
+</html>

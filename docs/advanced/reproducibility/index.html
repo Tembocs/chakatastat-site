@@ -83,6 +83,7 @@
         <li><a href="../ai-assistant/">AI Assistant</a></li>
         <li><a href="./" aria-current="page">Reproducibility</a></li>
         <li><a href="../engine-access/">Engine Access</a></li>
+        <li><a href="../verify-installation/">Verify this Installation</a></li>
         <li class="docs-nav-section">Reference</li>
         <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
         <li><a href="../../reference/glossary/">Glossary</a></li>
@@ -106,7 +107,9 @@ compute target=BMI_cat, expr=&quot;IF(BMI &gt;= 30, 1, 0)&quot;
 histogram variable=BMI
 </code></pre>
 <p>The grammar is small and readable: <code>toolname arg=value, arg=[a, b], arg=&quot;text&quot;</code>,
-with <code>#</code> for comments.</p>
+with <code>#</code> for comments. A saved script's first line is one such comment,
+<code># dataset &lt;hash&gt;</code>, naming the data it was recorded against (see
+<a href="#the-dataset-fingerprint--same-data">the dataset fingerprint</a>).</p>
 <h3 id="one-command-per-line">One command per line</h3>
 <p>A command occupies <strong>exactly one line</strong>, however long it gets. There is no
 line-continuation character, and this is deliberate rather than unfinished:
@@ -308,6 +311,82 @@ no window:</p>
 engine, and writes the output log as a report. The output format follows the
 <code>--out</code> extension — <strong>HTML</strong>, <strong>Markdown</strong> or <strong>LaTeX</strong>. It shares the headless
 engine bootstrap with the MCP mode, so batch results match what the GUI produces.</p>
+<p>A third headless mode, <code>--verify</code>, runs the built-in installation check and
+exits 0 only on a full pass — see
+<a href="../verify-installation/">Verify this Installation</a>. Together they close the
+loop: <code>--verify</code> proves the installed engine reproduces independent reference
+values, and <code>--run</code> replays your own script on it.</p>
+<h2 id="the-dataset-fingerprint--same-data">The dataset fingerprint — &quot;same data&quot;</h2>
+<p>Every result's footer carries, beside the engine version, a short <strong>data
+fingerprint</strong>: <code>data 3f2a9c1b7e04</code>. It is the first twelve characters of a
+SHA-256 over the data your dataset holds — every value, in column order,
+with each variable's type and your user-missing definitions applied — so two
+results with the same fingerprint were computed from the same numbers. The
+footer also names the active conditions: <code>filter age &gt; 30</code>,
+<code>weighted by w</code>, <code>split by group</code>.</p>
+<p>The fingerprint deliberately ignores anything that cannot change a result:
+variable names, labels, value labels, measurement levels, column widths.
+Rename or relabel as much as you like — the fingerprint stands. Edit a value,
+change a type, or declare a missing code, and it moves. The same data opened
+from a <code>.ckd</code> file, a CSV or a Parquet file has one fingerprint.</p>
+<p><strong>On a saved script.</strong> When you <strong>Save Syntax…</strong>, the <code>.cks</code> file starts with
+a comment naming the data it was recorded against:</p>
+<pre><code># dataset 3f2a9c1b7e04a1e5…  (the full 64-character hash)
+descriptives variables=[Age, BMI]
+</code></pre>
+<p>It is an ordinary comment — older versions read the script unchanged, and
+you can delete it. When you open that script later and run it — in the
+console, or headless with <code>--run</code> — ChakataStat compares the header with the
+dataset that is open <strong>before the first command runs</strong>, and puts the verdict
+at the top of the output as a <em>Script Provenance</em> entry:</p>
+<ul>
+<li><strong>Same data: yes</strong> — the open dataset is, value for value, what the script
+was recorded against.</li>
+<li><strong>NO — different data</strong> — a warning, with both hashes. The script still
+runs; the results are for the data you have open, and the entry says so.
+Nothing refuses to run on your behalf here: that is the job of the
+reproducibility bundle (a later feature), whose whole point is to refuse.</li>
+</ul>
+<p>The full convention — exactly what is hashed and how — is recorded in the
+developer documentation, so a reader can compute the same hash independently.</p>
+<h2 id="the-reproducibility-bundle-cksb">The reproducibility bundle (<code>.cksb</code>)</h2>
+<p>A bundle is one small file that lets someone else check your results —
+<em>re-run this and compare</em> — without you having to describe what you did.</p>
+<p><strong>As the author.</strong> With your analysis in the output log, choose <strong>File →
+Export Reproducibility Bundle…</strong>. The <code>.cksb</code> file contains:</p>
+<ul>
+<li>your syntax journal (the <code>.cks</code> script);</li>
+<li>the data fingerprint (and the name of the file you had open);</li>
+<li>the ChakataStat version, the engine version and your platform;</li>
+<li>every output in the log, exactly as it was rendered — every table, and
+each chart as the geometry table its CSV export produces.</li>
+</ul>
+<p>It does <strong>not</strong> contain your data. Whether and how to share the data is
+your decision, made separately; the bundle only says what you ran and what
+you saw. For a clean bundle, <strong>Clear All</strong> the output and <strong>Run All</strong> from
+the console first, so the log holds exactly what the journal produces (an
+assistant reply or an installation report in the log has no journal line to
+re-run, and the verifier will say so).</p>
+<p>From a pipeline, <code>--run script.cks data.ckd --bundle analysis.cksb</code> writes
+the same bundle from a headless run.</p>
+<p><strong>As the reader.</strong> Obtain the data from the author, then either <strong>File →
+Verify Reproducibility Bundle…</strong> (pick the bundle, then the data file), or
+headless:</p>
+<pre><code>ChakataStat --verify analysis.cksb data.csv --out report.html
+</code></pre>
+<p>The verifier checks the data first. If its fingerprint is not the bundle's,
+it <strong>refuses</strong> — the report says <code>REFUSED — different data</code> with both hashes,
+and nothing is re-run. This is stricter than the script header's warning on
+purpose: the bundle's whole point is to compare against the author's data.
+With the right data it re-runs the journal and compares every cell of every
+output with the bundle, within the precision the author saw it printed at,
+and reports <strong>PASS</strong> or <strong>FAIL</strong> per output, naming the first cells that
+differ. The exit status is 0 only on a full pass, so a reviewer's script can
+gate on it.</p>
+<p>Where the installation check (<a href="../verify-installation/">Verify this Installation</a>)
+proves the <em>software</em> on a machine, the bundle proves a <em>particular result</em>
+— together with the fingerprint they are the three questions a sceptical
+reader asks, each answered by a report rather than a promise.</p>
 <h2 id="exporting-the-output-log">Exporting the output log</h2>
 <p><strong>File → Export Output…</strong> (or the Output view's <strong>Export…</strong> button) writes your
 whole results log to <strong>HTML</strong>, <strong>Markdown</strong> or <strong>LaTeX</strong> — the format chosen from

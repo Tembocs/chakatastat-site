@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Verify this Installation — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/advanced/verify-installation/">
+  <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Verify this Installation — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/advanced/verify-installation/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../index.html">
+        <img class="brand-mark" src="../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <!-- One link, not a copy of the site menu. While someone is reading the
+           guide, the sidebar is the navigation that matters; marketing anchors
+           (Features, Screenshots, …) only compete with it and push the reader
+           out of what they came for. All that is owed is a way back. Single
+           link means no mobile collapse either, so there is no hamburger on
+           these pages — main.js guards for its absence. -->
+      <nav id="nav-links" class="nav-links nav-links--single">
+        <a href="../../../index.html">← Back to chakatastat.app</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">User Guide</p>
+        <ul>
+        <li><a href="../../">Contents</a></li>
+        <li><a href="../../quick-start/">Quick Start</a></li>
+        <li><a href="../../overview/">Overview</a></li>
+        <li><a href="../../getting-started/">Getting Started</a></li>
+        <li><a href="../../tutorial/">Tutorial Workbook</a></li>
+        <li class="docs-nav-section">Core tasks</li>
+        <li><a href="../../working-with-data/">Working with Data</a></li>
+        <li><a href="../../cases-and-transforms/">Cases &amp; Transforms</a></li>
+        <li><a href="../../analyze/">Analyzing Data</a></li>
+        <li><a href="../../graphs/">Graphs</a></li>
+        <li><a href="../../chart-editor/">Editing a chart</a></li>
+        <li><a href="../../settings/">Settings</a></li>
+        <li class="docs-nav-section">Advanced</li>
+        <li><a href="../ai-assistant/">AI Assistant</a></li>
+        <li><a href="../reproducibility/">Reproducibility</a></li>
+        <li><a href="../engine-access/">Engine Access</a></li>
+        <li><a href="./" aria-current="page">Verify this Installation</a></li>
+        <li class="docs-nav-section">Reference</li>
+        <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
+        <li><a href="../../reference/glossary/">Glossary</a></li>
+        <li><a href="../../reference/commands/">Command reference</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="verify-this-installation">Verify this Installation</h1>
+<p><strong>Help → Verify this Installation</strong> (<code>Ctrl+F1</code>, or <em>Verify this Installation</em>
+in the command palette) runs a built-in check of the copy of ChakataStat you
+are using, and prints a report you can keep, print, export or hand to a
+reviewer. It takes well under a minute and needs no dataset open — you can run
+it on a fresh installation before you load anything.</p>
+<h2 id="what-it-does">What it does</h2>
+<p>ChakataStat ships with a small set of <strong>reference datasets</strong> and, for each, a
+list of statistics whose correct values were computed <strong>independently</strong> —
+by SciPy and statsmodels, by R's <code>survey</code> package, and, for the linear
+regression suite, by the U.S. National Institute of Standards and Technology,
+whose <em>Statistical Reference Datasets</em> publish certified values to fifteen
+significant digits. The check loads each dataset into the engine that is
+actually installed on your computer, runs the analyses exactly as the menus
+would, and compares every result with its reference value.</p>
+<p>This is the same evidence the developers run on every change (see the
+<a href="../../validation/">validation methodology</a>), reduced to a
+subset that covers <strong>every family of tools</strong> — descriptives, comparing means,
+correlation, regression and generalized linear models, nonparametric tests,
+survival analysis, meta-analysis, time series, scale reduction and
+classification, complex samples — plus <strong>all eleven NIST linear
+least-squares datasets</strong>. The difference is <em>where</em> it runs: on your
+machine, your operating system, your build, not on the developer's.</p>
+<h2 id="reading-the-report">Reading the report</h2>
+<p>The report appears in the <strong>Output</strong> view as three ordinary result tables,
+so it prints, copies and exports (<strong>File → Export Output…</strong>) like any other
+result.</p>
+<p><strong>Installation Verification</strong> is the verdict and its provenance: <code>PASS</code> or
+<code>FAIL</code>, how many checks passed, the application and engine versions, the
+operating system, when the run started and how long it took.</p>
+<p><strong>Verification Datasets</strong> lists each bundled dataset with its size and the
+<strong>SHA-256</strong> of the file as shipped, so a reader can tie the report to the
+exact bytes that were checked.</p>
+<p><strong>Verification Checks</strong> has one row per statistic:</p>
+<ul>
+<li><strong>Expected</strong> — the reference value, and <strong>Reference</strong> — where it came from
+(the exact SciPy, statsmodels or R call, or the NIST certification).</li>
+<li><strong>Computed</strong> — what this installation produced, printed at full precision.</li>
+<li><strong>Digits agreed</strong> — the number of significant digits on which the two
+agree (the <em>log relative error</em> of McCullough 1998, the convention used to
+score statistical software against NIST). 15 is the most a
+double-precision reference can show.</li>
+<li><strong>Criterion</strong> — what counts as a pass: for a package-referenced statistic,
+the same tolerance the developer suite pins it to; for a NIST statistic,
+the minimum digits of agreement for that dataset's published difficulty
+grade.</li>
+<li><strong>Result</strong> — <code>pass</code>, or <code>FAIL</code> with both values named.</li>
+</ul>
+<p>A fully passing report says: <em>this installed binary reproduces every
+reference value in the manifest, on this platform, to the recorded
+precision.</em></p>
+<h2 id="from-the-command-line">From the command line</h2>
+<p>The same check runs with no window:</p>
+<pre><code>ChakataStat --verify
+ChakataStat --verify --out verification.html
+</code></pre>
+<p>The report goes to standard output as Markdown, or to <code>--out</code> in the format
+its extension names (<strong>HTML</strong>, <strong>Markdown</strong> or <strong>LaTeX</strong>); progress and the
+verdict go to standard error. The exit status is <strong>0 only on a full pass</strong> —
+1 when any check failed, 2 when the check could not be set up — so a script
+or a deployment pipeline can gate on it. This is how the release process
+qualifies each package before it ships.</p>
+<h2 id="what-it-proves-and-what-it-does-not">What it proves, and what it does not</h2>
+<p>It <strong>does</strong> prove that the copy of ChakataStat installed on this machine —
+this build, this operating system, this processor — computes the checked
+statistics correctly against independent references. In regulated settings
+that is an <em>installation qualification</em>: evidence that the software works
+here, not just where it was built.</p>
+<p>It <strong>does not</strong> validate your own analysis. A passing report says nothing
+about whether the procedure you chose is appropriate for your data, whether
+your variables are coded the way you think, or whether your conclusions
+follow. It also checks the shipped subset, not every statistic the
+application can print; the full suite behind it, and how the subset was
+chosen, are documented in the
+<a href="../../validation/">validation methodology</a>.</p>
+<p>If a check fails on your machine, the row names the statistic and both
+values. That is worth reporting (see <strong>Help → About</strong> for the contact
+address) together with the report, the <em>Platform</em> line in particular: a
+result that passes on the developer's platform and fails on yours is exactly
+the kind of difference this check exists to catch.</p>
+<h2 id="related">Related</h2>
+<ul>
+<li>The <a href="../reproducibility/#the-reproducibility-bundle-cksb">reproducibility bundle</a>
+— the same verifier turned on a <em>particular result</em>: <code>--verify &lt;bundle&gt; &lt;data&gt;</code> re-runs an author's journal and compares every output.</li>
+<li><a href="../reproducibility/">Reproducibility</a> — the syntax console, headless batch
+runs (<code>--run</code>) and exporting the output log.</li>
+<li><a href="../engine-access/">Direct Engine Access</a> — the engine diagnostics panel.</li>
+</ul>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../index.html">Home</a> ·
+        <a href="../../../quick-start/">Quick Start</a> ·
+        <a href="../../../privacy-policy/">Privacy Policy</a> ·
+        <a href="../../../license/">License</a> ·
+        <a href="../../../cite/">How to Cite</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../js/main.js"></script>
+</body>
+</html>

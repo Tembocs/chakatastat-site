@@ -52,6 +52,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://chakatastat.app/docs/advanced/verify-installation/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://chakatastat.app/docs/analyze/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -257,6 +262,16 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://chakatastat.app/docs/validation/conventions/README/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://chakatastat.app/docs/validation/conventions/classical/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://chakatastat.app/docs/validation/conventions/clinical-and-survey/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -273,6 +288,11 @@
   </url>
   <url>
     <loc>https://chakatastat.app/docs/validation/conventions/resampling-and-time-series/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://chakatastat.app/docs/validation/cross-os/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

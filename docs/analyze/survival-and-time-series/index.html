@@ -83,6 +83,7 @@
         <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
         <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
         <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li><a href="../../advanced/verify-installation/">Verify this Installation</a></li>
         <li class="docs-nav-section">Reference</li>
         <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
         <li><a href="../../reference/glossary/">Glossary</a></li>
@@ -119,7 +120,7 @@ curve); membership/survival can be saved.</p>
 <p><strong>When.</strong> Model the hazard from one or more predictors (proportional-hazards
 regression).</p>
 <p><strong>Dialog.</strong> <strong>Time</strong>, <strong>status</strong> (+ event value), and the <strong>covariates</strong>. Options
-include <strong>tie handling</strong> (Breslow / Efron), <strong>strata</strong>, a <strong>(start, stop]</strong>
+include <strong>tie handling</strong> (Efron by default, or Breslow), <strong>strata</strong>, a <strong>(start, stop]</strong>
 counting-process layout, a <strong>baseline</strong> survival table, and <strong>Test proportional
 hazards</strong>.</p>
 <p><strong>Output.</strong> Coefficients with standard errors and Wald tests, <strong>Exp(B) hazard
@@ -216,6 +217,18 @@ cases; the output notes this when one is active.</p>
 <p><strong>When.</strong> Two or more series over time — model them together and test whether
 one's history improves the prediction of another. Its own page:
 <strong><a href="../var-granger/">VAR &amp; Granger Causality</a></strong>.</p>
+<h2 id="how-this-is-computed">How this is computed</h2>
+<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
+<ul>
+<li><strong>Kaplan–Meier</strong> — the product-limit estimate with Greenwood's standard error; the median is the first time S(t) ≤ ½; the log-rank test is Mantel–Cox with the hypergeometric variance (<a href="../../validation/conventions/classical/#kaplanmeier">Kaplan–Meier</a>).</li>
+<li><strong>Cox regression</strong> — the partial likelihood with <strong>Efron's</strong> tie approximation by default (Breslow on request; SPSS and SAS default to Breslow), Wald hazard-ratio intervals exp(B ± z·SE), Breslow's baseline hazard (<a href="../../validation/conventions/classical/#cox-regression-tie-handling-and-intervals">Cox</a>); the proportional-hazards test is the Grambsch–Therneau statistic in its 1994 simplified form — survival ≥ 3.0's <code>cox.zph</code> uses the exact form, recorded (<a href="../../validation/conventions/clinical-and-survey/#the-proportional-hazards-test-statistic--the-0230-convention">PH test</a>).</li>
+<li><strong>Parametric survival / Competing risks</strong> — AFT models by ML on log-time; the cumulative incidence function and Fine–Gray (<a href="../../validation/#coverage">validation</a>).</li>
+<li><strong>Autocorrelation</strong> — the ACF with divisor n, Bartlett's cumulative SE, Box–Ljung on k df; the PACF by Durbin–Levinson (<a href="../../validation/conventions/classical/#autocorrelation">autocorrelation</a>).</li>
+<li><strong>ARIMA / SARIMA</strong> — conditional least squares by default, exact ML (Kalman) on request, a constant for an undifferenced series (<a href="../../validation/conventions/classical/#arima">ARIMA</a> · <a href="../../validation/tolerances/">tolerances</a>).</li>
+<li><strong>Stationarity</strong> — ADF and KPSS with Schwert's lag rule; ADF's <em>p</em> from MacKinnon (1994); KPSS with the Bartlett kernel (<a href="../../validation/conventions/classical/#stationarity-tests">stationarity</a>).</li>
+<li><strong>Exponential smoothing / Seasonal decomposition</strong> — simple smoothing starts at the first observation and minimizes the one-step SSE; trend and seasonal forms are unit-tested at fixed parameters; decomposition is the classical centred moving average (<a href="../../validation/conventions/classical/#exponential-smoothing-and-decomposition">smoothing</a>).</li>
+<li><strong>Cross-correlation</strong> — ±2/√N Bartlett bands. <strong>VAR / Granger</strong> — see <a href="../var-granger/#how-this-is-computed">that page</a>.</li>
+</ul>
 <h2 id="see-also">See also</h2>
 <ul>
 <li><a href="../var-granger/">VAR &amp; Granger Causality</a> — the multi-series companion to

@@ -83,6 +83,7 @@
         <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
         <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
         <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li><a href="../../advanced/verify-installation/">Verify this Installation</a></li>
         <li class="docs-nav-section">Reference</li>
         <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
         <li><a href="../../reference/glossary/">Glossary</a></li>
@@ -170,6 +171,14 @@ individual patient the two meters can disagree by over 70 l/min in either
 direction, far more than a clinician would accept, and the near-zero bias
 (and a correlation of 0.94) would never have revealed it. That is the
 method's whole point.</p>
+<h2 id="how-this-is-computed">How this is computed</h2>
+<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
+<ul>
+<li><strong>Bias and limits of agreement</strong> — the mean difference (method A − method B, the recorded direction), the SD of the differences, limits at bias ± 1.96·SD, and the Bland &amp; Altman (1999) exact standard errors s/√n and s·√(1/n + 1.96²/(2(n − 1))) with <em>t</em> intervals (<a href="../../validation/conventions/clinical-and-survey/#blandaltman-method-comparison--the-v1-conventions">Bland–Altman conventions</a>).</li>
+<li><strong>Proportional bias</strong> — the regression of the differences on the pair means (<a href="../../validation/conventions/clinical-and-survey/#the-statistics">the statistics</a>).</li>
+<li><strong>Weights</strong> — weighted moments keep the weight-as-replication identity; n is the weighted count (<a href="../../validation/tolerances/">case weighting</a>).</li>
+<li>Validated against both <code>blandr</code> and <code>BlandAltmanLeh</code> on the original 1986 peak-flow data.</li>
+</ul>
 <h2 id="relation-to-the-other-agreement-tools">Relation to the other agreement tools</h2>
 <ul>
 <li><strong><a href="../scale-reduction-classify/#scale--intraclass-correlation">Intraclass Correlation</a></strong>

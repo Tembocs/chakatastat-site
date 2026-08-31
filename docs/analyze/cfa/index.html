@@ -83,6 +83,7 @@
         <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
         <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
         <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li><a href="../../advanced/verify-installation/">Verify this Installation</a></li>
         <li class="docs-nav-section">Reference</li>
         <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
         <li><a href="../../reference/glossary/">Glossary</a></li>
@@ -271,6 +272,15 @@ or check the indicators.</li>
 <li>A <strong>singular information matrix</strong> (the model is empirically
 underidentified for these data) is stated plainly, and standard errors
 are withheld rather than printed as nonsense.</li>
+</ul>
+<h2 id="how-this-is-computed">How this is computed</h2>
+<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
+<ul>
+<li><strong>The estimator</strong> — maximum likelihood on the sample covariance with divisor N; each factor's first indicator is the marker (loading fixed at 1), factor variances free; <strong>χ² = N·F</strong> (lavaan's N convention); standard errors from the <strong>expected information</strong>; CFI / TLI against the independence baseline; the RMSEA interval is 90 % from the noncentral χ²; SRMR over the lower triangle including the diagonal (<a href="../../validation/tolerances/">CFA conventions</a> · <a href="../../validation/#the-second-oracle--r-against-python-pin-by-pin">second oracle</a>).</li>
+<li><strong>Modification indices</strong> — the 1-df score test of each fixed parameter, with the expected parameter change (<a href="../../validation/conventions/latent-variable/#modification-indices-4mi">MI</a>).</li>
+<li><strong>Multi-group invariance</strong> — configural, metric, scalar and strict, tested by Δχ² and reported with ΔCFI (<a href="../../validation/conventions/latent-variable/#multi-group-invariance-4mg">multi-group</a>).</li>
+<li><strong>Ordinal indicators (WLSMV)</strong> — polychoric correlations from two-step ML thresholds, the diagonally-weighted fit, the (N − 1)·F statistic lavaan uses for WLS (<a href="../../validation/conventions/latent-variable/#ordinal-indicators--wlsmv-4wlsmv">WLSMV</a>).</li>
+<li><strong>Weights and missing data</strong> — listwise complete cases; a frequency weight enters the covariance as replication (<a href="../../validation/tolerances/">case weighting</a>).</li>
 </ul>
 <h2 id="reproducibility">Reproducibility</h2>
 <p>A run journals a compact syntax command, e.g.:</p>

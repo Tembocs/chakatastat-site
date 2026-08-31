@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Descriptives, tests and the classical toolbox — the 0.23.0 conventions — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/validation/conventions/classical/">
+  <link rel="icon" type="image/svg+xml" href="../../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Descriptives, tests and the classical toolbox — the 0.23.0 conventions — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/validation/conventions/classical/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../../index.html">
+        <img class="brand-mark" src="../../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <!-- One link, not a copy of the site menu. While someone is reading the
+           guide, the sidebar is the navigation that matters; marketing anchors
+           (Features, Screenshots, …) only compete with it and push the reader
+           out of what they came for. All that is owed is a way back. Single
+           link means no mobile collapse either, so there is no hamburger on
+           these pages — main.js guards for its absence. -->
+      <nav id="nav-links" class="nav-links nav-links--single">
+        <a href="../../../../index.html">← Back to chakatastat.app</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../../index.html#download">Download</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">Numerical-validation suite</p>
+        <ul>
+        <li><a href="../../">Overview</a></li>
+        <li><a href="../../nist/">NIST StRD certified datasets</a></li>
+        <li><a href="../../cross-os/">Cross-OS agreement</a></li>
+        <li><a href="../../file-formats/">Statistics-package file formats</a></li>
+        <li><a href="../../tolerances/">Tolerances and recorded conventions</a></li>
+        <li class="docs-nav-section">The recorded conventions</li>
+        <li><a href="../README/">The convention inventory</a></li>
+        <li><a href="./" aria-current="page">Descriptives, tests and the classical toolbox — the 0.23.0 conventions</a></li>
+        <li><a href="../regression/">Regression conventions</a></li>
+        <li><a href="../latent-variable/">Latent-variable conventions</a></li>
+        <li><a href="../clinical-and-survey/">Clinical and survey conventions</a></li>
+        <li><a href="../resampling-and-time-series/">Resampling and time-series conventions</a></li>
+        <li class="docs-nav-section">Maintaining the suite</li>
+        <li><a href="../../regenerating/">Regenerating the reference values</a></li>
+        <li class="docs-nav-section">User Guide</li>
+        <li><a href="../../../">Contents</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="descriptives-tests-and-the-classical-toolbox--the-0230-conventions">Descriptives, tests and the classical toolbox — the 0.23.0 conventions</h1>
+<blockquote>
+<p>Part of the <a href="../../">numerical-validation suite</a>. The
+definitions the <a href="../README/">convention inventory</a> found <em>implicit</em> — chosen
+in the engine, matched by a reference, but never written down as a choice —
+written down once. Each section names the definition ChakataStat prints,
+the reference packages that agree with it, and the alternative a reader may
+meet elsewhere.</p>
+</blockquote>
+<p>Every section here was written on 2026-08-28 for 0.23.0 item 9 from the
+engine source, not from memory: the file and function each cites is where
+the number comes from. Where a pin in the validation suite exercises the
+choice, it is named.</p>
+<h2 id="descriptives">Descriptives</h2>
+<h3 id="skewness-and-kurtosis">Skewness and kurtosis</h3>
+<p>ChakataStat prints the <strong>bias-adjusted</strong> sample skewness and excess kurtosis
+— the <em>G₁</em> and <em>G₂</em> of Joanes &amp; Gill (1998):</p>
+<pre><code>G₁ = √(n(n−1)) / (n−2) · g₁          g₁ = m₃ / m₂^{3/2}
+G₂ = (n−1) / ((n−2)(n−3)) · ((n+1)·g₂ + 6)    g₂ = m₄ / m₂² − 3
+</code></pre>
+<p>with <em>m_k</em> the central moments about the mean with divisor <em>n</em>
+(<code>explore_row</code> in <code>descriptive.rs</code>).
+These are the definitions SPSS, SAS, Excel and R's <code>psych::skew(type = 2)</code>
+print; SciPy's <code>skew(bias = False)</code> / <code>kurtosis(bias = False)</code> are the same
+(pins <code>explore/bp/skewness</code>, <code>explore/bp/kurtosis</code>, both oracles). The
+alternatives — the moment estimators <em>g₁</em>, <em>g₂</em> (R's <code>e1071</code> type 1, SciPy's
+default) and the <em>b₁</em>, <em>b₂</em> forms (type 3, Minitab) — differ by factors of
+order 1/n.</p>
+<h3 id="standard-deviation-variance-and-the-standard-error-of-the-mean">Standard deviation, variance and the standard error of the mean</h3>
+<p>The sample versions with divisor <strong>n − 1</strong>; the standard error of the mean
+is <em>s</em>/√n. Under a frequency weight, <em>n</em> is the sum of the weights
+(the <a href="../../tolerances/">case-weighting convention</a>). The population
+(divisor <em>n</em>) forms are not printed anywhere.</p>
+<h3 id="quantiles">Quantiles</h3>
+<p>Recorded in <a href="../../tolerances/">tolerances.md</a>: the <strong>Hazen</strong> definition,
+plotting position (k − ½)/n — R type 5, NumPy <code>hazen</code>. It is used for every
+percentile the application prints, the median included, the box plot's
+quartiles and fences, and the quantile method of <em>Bin variable</em>. Weighted,
+the same rule runs on cumulative weight, averaging the two adjacent values
+on an exact boundary. Readers of SPSS should note that its default
+(<code>HAVERAGE</code>, R type 6) is a different rule.</p>
+<h3 id="missing-data-policy">Missing-data policy</h3>
+<p>Every procedure is <strong>listwise</strong> on the variables it uses — a case with a
+missing value in any analysis variable is dropped from that analysis — with
+one exception: <strong>bivariate correlations default to pairwise</strong> (each pair uses
+the cases valid on both), with <code>missing: listwise</code> as the option
+(<code>correlation.rs</code>). The
+dataset fingerprint's footer names the filter and weight; it does not name
+the listwise sample, which is the procedure's, and each table's <em>N</em> is that
+sample's.</p>
+<h2 id="tables">Tables</h2>
+<h3 id="pearson-chi-square-no-continuity-correction">Pearson chi-square: no continuity correction</h3>
+<p>The crosstabs χ² is the plain Pearson statistic on every table, <strong>2 × 2
+included</strong> — no Yates correction. The likelihood-ratio χ² is
+2 Σ O ln(O/E). Pins <code>crosstabs/pearson_chisq</code> and <code>lr_chisq</code> (SciPy
+<code>correction = False</code>, R <code>chisq.test(correct = FALSE)</code>). SPSS prints a
+&quot;Continuity Correction&quot; row beside the Pearson row for 2 × 2 tables;
+ChakataStat does not, and the exact alternative for a small 2 × 2 is
+Fisher's test, below.</p>
+<h3 id="fishers-exact-test-the-two-sided-rule">Fisher's exact test: the two-sided rule</h3>
+<p>Two-sided <em>p</em> is the sum of the probabilities of every table with the same
+margins whose probability is <strong>no more likely than the observed table</strong> —
+the rule R's <code>fisher.test</code> and SciPy use
+(<code>fisher_exact</code> in <code>descriptive.rs</code>).
+The alternative, doubling the smaller one-sided tail, can exceed 1 and is
+not used. The test is not defined for fractional weighted counts and is
+omitted then.</p>
+<h3 id="mcnemars-test">McNemar's test</h3>
+<p>For a matched 2 × 2 table with discordant counts <em>b</em>, <em>c</em>: the <strong>exact
+binomial</strong> two-tailed <em>p</em> when <em>b</em> + <em>c</em> ≤ 25 (integer counts), the <strong>continuity-corrected</strong>
+χ² (|b − c| − 1)²/(b + c) on one df otherwise — SPSS's rule
+(<code>mcnemar</code>, same file). The uncorrected form is what Cochran's <em>Q</em> reduces
+to for two treatments (recorded in
+<a href="../../#coverage">validation.md</a>).</p>
+<h3 id="cramrs-v-and-">Cramér's V and φ</h3>
+<p>φ = √(χ²/N) and V = √(χ²/(N·(k − 1))) with <em>k</em> the smaller dimension —
+the classical, <strong>uncorrected</strong> forms. Bergsma's bias-corrected V is not
+printed.</p>
+<h3 id="mantelhaenszel-and-cochrans-tests">Mantel–Haenszel and Cochran's tests</h3>
+<p>The stratified 2 × 2 tests print both: the Mantel–Haenszel statistic <strong>with</strong>
+its continuity correction and Cochran's <strong>without</strong>, as the table note says.</p>
+<h3 id="column-proportion-z-tests-custom-tables">Column-proportion z tests (custom tables)</h3>
+<p>The pairwise column comparisons use the pooled two-proportion <em>z</em> with no
+continuity correction and no multiple-comparison adjustment; a cell with an
+empty column or zero pooled variance prints no test.</p>
+<h2 id="comparing-means">Comparing means</h2>
+<h3 id="the-independent-samples-t-test-both-variances-rows">The independent-samples t test: both variances rows</h3>
+<p>Both rows are always printed — <strong>equal variances assumed</strong> (pooled <em>s²</em>,
+df n₁ + n₂ − 2) and <strong>not assumed</strong> (Welch, with the Welch–Satterthwaite
+df <code>(a + b)² / (a²/(n₁−1) + b²/(n₂−1))</code>, <em>a</em> = s₁²/n₁, <em>b</em> = s₂²/n₂) — with
+Levene's test beside them to guide the choice. No automatic switch is made.
+Pins <code>ttest_ind/*</code> and <code>ttest_ind/welch_*</code>.</p>
+<h3 id="levenes-test-mean-centred">Levene's test: mean-centred</h3>
+<p>The <strong>original Levene</strong> statistic — a one-way ANOVA on |x − group mean| —
+not the Brown–Forsythe median-centred variant (<code>levene_table</code> in
+<code>compare_means.rs</code>; pins
+<code>levene/W</code>, <code>levene/p</code> against SciPy <code>center = &quot;mean&quot;</code> and
+<code>car::leveneTest(center = mean)</code>). R's <code>leveneTest</code> and SciPy default to
+the median form, so a reader reproducing the number there must set the
+centre.</p>
+<h3 id="cohens-d-and-hedges-g">Cohen's d and Hedges' g</h3>
+<ul>
+<li>Independent samples: <strong>pooled SD</strong> with <em>n − 1</em> variances,
+s_p = √(((n₁−1)s₁² + (n₂−1)s₂²)/(n₁+n₂−2)); <em>d</em> = (x̄₁ − x̄₂)/s_p.</li>
+<li>Paired samples: <strong>d_z</strong>, the mean difference over the SD of the
+differences (not Cohen's d_av over the average SD).</li>
+<li>One sample: (x̄ − μ₀)/s.</li>
+<li><strong>Hedges' g</strong> applies the small-sample factor J = 1 − 3/(4·df − 1)
+(the usual approximation to the exact gamma ratio).</li>
+<li>The confidence interval on <em>d</em> is from the <strong>noncentral t</strong> (not the
+large-sample normal approximation).</li>
+</ul>
+<p>Pins <code>ttest_ind/cohen_d</code>, <code>ttest_one/cohen_d</code> (formulas on both oracles).</p>
+<h3 id="one-way-anova-effect-sizes">One-way ANOVA effect sizes</h3>
+<p>η² = SS_between / SS_total; ε² = (SS_between − df_between·MS_within) /
+SS_total; ω² = (SS_between − df_between·MS_within) / (SS_total +
+MS_within) — the Olejnik–Algina forms. Pin <code>anova/eta_squared</code>.</p>
+<h3 id="post-hoc-tests">Post hoc tests</h3>
+<p>After a one-way ANOVA the pairwise table carries three adjusted
+significances on the <strong>pooled within-groups MS</strong>: <strong>Bonferroni</strong>,
+<strong>Scheffé</strong> and <strong>Tukey HSD</strong> (studentized range on df_within), with the
+Bonferroni-adjusted confidence interval of each mean difference. After a
+Kruskal–Wallis test, <strong>Dunn's</strong> pairwise <em>z</em> is adjusted by <strong>Bonferroni</strong>
+(default), <strong>Holm</strong> or none (<code>adjust</code>). Games–Howell, Dunnett and LSD are
+not offered.</p>
+<h3 id="planned-contrasts">Planned contrasts</h3>
+<p>Reported both ways — pooled (the ANOVA's within MS) and Welch–Satterthwaite
+— like the t test; the user's coefficients are not normalized.</p>
+<h2 id="correlation">Correlation</h2>
+<h3 id="spearmans-">Spearman's ρ</h3>
+<p>The Pearson correlation of the <strong>mid-ranks</strong> (tied values share the mean of
+the ranks they span); significance by the <strong>t approximation</strong> on n − 2 df,
+t = ρ√((n−2)/(1−ρ²)) — SciPy's rule and SPSS's. R's <code>cor.test</code> uses the
+exact / AS 89 distribution for n &lt; 1290, which differs in the third digit at
+n = 60 (the second oracle recomputes the t form on R's ρ; pin
+<code>correlate/spearman_age_bp_p</code>).</p>
+<h3 id="kendalls-">Kendall's τ</h3>
+<p><strong>τ-b</strong>, the tie-corrected form; significance by the normal approximation
+with the <strong>no-tie variance</strong> 2(2n + 5)/(9n(n − 1)). Under a weight the
+concordances are weighted by the product of the two cases' weights and the
+effective N is the sum of the weights. τ-a and τ-c are not printed. Pin
+<code>correlate/kendall_age_bp</code>.</p>
+<h3 id="partial-correlation">Partial correlation</h3>
+<p>The first-order partial from the inverse of the correlation matrix over the
+listwise sample, tested on n − 2 − k df, <em>k</em> the number of controls
+(pin <code>partial/age_bp_given_chol</code>, pingouin and <code>psych::partial.r</code>).</p>
+<h3 id="no-confidence-interval-on-r">No confidence interval on r</h3>
+<p>The classical correlation tables print <em>r</em> and its <em>p</em> only; no Fisher-z
+interval. The Bayesian correlation prints a credible interval (recorded in
+<a href="../../#coverage">validation.md</a>).</p>
+<h2 id="regression-and-modelling">Regression and modelling</h2>
+<h3 id="confidence-intervals-on-glm-coefficients-wald-z">Confidence intervals on GLM coefficients: Wald, z</h3>
+<p>Logistic, probit, Poisson, negative-binomial and gamma coefficients carry
+<strong>Wald</strong> intervals B ± z·SE, and Exp(B) the interval exp(B ± z·SE) —
+statsmodels' and SPSS's convention. R's <code>confint.glm</code> defaults to the
+<strong>profile-likelihood</strong> interval, which differs for small samples and for
+coefficients far from zero; <code>confint.default</code> gives the Wald one. Linear
+regression uses <em>t</em> on the residual df. Under a <strong>survey design</strong> every
+model's inference is <em>t</em> on (design df) − p + 1, the <code>summary.svyglm</code>
+convention (recorded in
+<a href="../clinical-and-survey/#regression-under-a-design">clinical-and-survey.md</a>).</p>
+<h3 id="stepwise-selection">Stepwise selection</h3>
+<p>Forward, backward and stepwise linear regression enter a predictor at
+<strong>p ≤ .05</strong> and remove at <strong>p ≥ .10</strong> (<code>p_enter</code>, <code>p_remove</code>) — the SPSS
+defaults, chosen as significance levels rather than F-to-enter values
+(<code>regression.rs</code>). Stepwise discriminant analysis uses Wilks' Λ with
+<strong>F = 3.84</strong> to enter and remove.</p>
+<h3 id="multinomial-and-ordinal-regression-the-reference-and-the-sign">Multinomial and ordinal regression: the reference and the sign</h3>
+<ul>
+<li>Multinomial logistic fits one logit per non-reference category against
+the <strong>lowest category</strong> (by value) as the baseline — R <code>nnet::multinom</code>
+and statsmodels <code>MNLogit</code>. SPSS defaults to the <em>last</em> category.</li>
+<li>Ordinal regression is the proportional-odds cumulative logit
+<strong>logit P(Y ≤ c) = θ_c − β·x</strong>: the thresholds θ_c carry the intercepts and
+the slopes β enter with a <strong>minus</strong> sign, so a positive β means higher
+categories — the parameterization of SPSS PLUM, <code>MASS::polr</code> and
+statsmodels <code>OrderedModel</code> (pins <code>ordinal/*</code>, both oracles). Some
+references (Stata <code>ologit</code> reports the same sign; SAS <code>proc logistic</code>
+models P(Y ≥ c) by default) flip the sign of β.</li>
+</ul>
+<h3 id="robust-regression-the-m-estimator-constants">Robust regression: the M-estimator constants</h3>
+<p>Huber's ψ with <strong>c = 1.345</strong> and Tukey's bisquare with <strong>c = 4.685</strong> (each
+~95 % efficient under normality); the scale is the <strong>MAD / 0.6745</strong>; the
+covariance is the M-estimator sandwich — the statsmodels <code>RLM</code> conventions
+(<code>robust.rs</code>). R's <code>MASS::rlm</code>
+uses the same constants.</p>
+<h3 id="mixed-models-reml-by-default-ml-on-request">Mixed models: REML by default, ML on request</h3>
+<p>The linear mixed model fits by <strong>restricted maximum likelihood</strong> unless
+<code>reml: false</code>; the fit block names which. REML corrects the downward bias
+ML puts on the variance components (the degrees of freedom the fixed
+effects absorb — the n − 1 idea), and it is what <code>lme4::lmer</code>, <code>nlme</code>, SAS
+<code>proc mixed</code>, Stata <code>mixed</code>, SPSS <code>MIXED</code> and statsmodels <code>MixedLM</code> all
+report by default; ML remains the option because a likelihood-ratio test
+between models with different fixed effects is only valid under ML. Until
+0.23.0 the default was ML — switched on 2026-08-28 when this inventory
+surfaced it. The GLMM (random intercept) integrates the
+random effect by fixed <strong>Gauss–Hermite quadrature</strong>
+(<code>glmm.rs</code>); <code>lme4::glmer</code> defaults
+to the Laplace approximation (one quadrature point), which differs for
+binary outcomes with small clusters.</p>
+<h3 id="nonlinear-regression">Nonlinear regression</h3>
+<p><strong>Levenberg–Marquardt</strong> from the user's starting values; standard errors
+from the Gauss–Newton covariance σ̂²(JᵀJ)⁻¹ at the solution
+(<code>nonlinear.rs</code>). The pinned
+SSE and R² are optimizer-invariant; the parameters on a flat objective are
+not (the second oracle's <code>nls/*</code> agree to ~3 digits; recorded in
+<a href="../../#the-second-oracle--r-against-python-pin-by-pin">validation.md</a>).</p>
+<h3 id="regularized-regression">Regularized regression</h3>
+<p>Predictors are <strong>standardized</strong> (and the response centred) before the
+penalty is applied, on each training fold separately; the λ path is 100
+log-spaced values from λ_max down; <strong>10-fold</strong> cross-validation reports
+both the CV-minimum λ and the <strong>1-SE</strong> λ, the glmnet conventions
+(<code>regularized.rs</code>). The
+coefficients are reported on the original scale.</p>
+<h3 id="loglinear-models">Loglinear models</h3>
+<p>Fitted as a <strong>Poisson GLM</strong> on the cell counts (Newton/IRLS), not by
+iterative proportional fitting; the two agree at convergence for
+hierarchical models, and the Poisson route gives standard errors directly
+(<code>regression_ext.rs</code>).</p>
+<h2 id="nonparametric-tests">Nonparametric tests</h2>
+<h3 id="wilcoxon-signed-rank">Wilcoxon signed-rank</h3>
+<p>Zero differences are <strong>dropped</strong> before ranking (n counts the non-zero
+pairs); the asymptotic <em>z</em> carries the <strong>tie correction</strong> and <strong>no
+continuity correction</strong> — the SPSS form (pin <code>wilcoxon/z</code>; R
+<code>wilcox.test(correct = FALSE)</code>). R's default applies the ½ continuity
+correction.</p>
+<h3 id="the-sign-test-and-the-runs-test">The sign test and the runs test</h3>
+<p>Both use the normal approximation <strong>with</strong> the continuity correction
+(SPSS); the runs test cuts at the <strong>median</strong> (values below vs at-or-above)
+and offers an exact significance from the enumerated runs distribution.
+Pins <code>sign/z</code>, <code>runs/*</code>.</p>
+<h3 id="the-binomial-test-which-tail">The binomial test: which tail</h3>
+<p>Exact by default; <strong>two-tailed when the test proportion is ½, one-tailed
+otherwise</strong> — SPSS's rule, kept because it is the one users of the
+classical toolbox expect (<code>binomial</code> in
+<code>nonparametric.rs</code>; pin
+<code>binomial/exact_p</code> at ½). R's <code>binom.test</code> is two-sided at any proportion
+(summing outcomes no more likely than the observed), so for p₀ ≠ ½ the two
+differ by construction; <code>method = &quot;asymptotic&quot;</code> gives the
+continuity-corrected normal.</p>
+<h3 id="normality-tests">Normality tests</h3>
+<p><strong>Shapiro–Wilk</strong> by Royston's (1992) AS R94 algorithm, and the one-sample
+<strong>Kolmogorov–Smirnov against the fitted normal with Lilliefors
+significance</strong> — i.e. the SPSS &quot;Tests of Normality&quot; table. SciPy's
+<code>kstest(z, &quot;norm&quot;)</code> gives the same <em>D</em> (pin <code>normality/ks_D</code>) but its <em>p</em>
+is the plain KS <em>p</em>, which is too conservative when μ and σ are estimated;
+ChakataStat's <em>p</em> is the Lilliefors one.</p>
+<h2 id="survival">Survival</h2>
+<h3 id="kaplanmeier">Kaplan–Meier</h3>
+<p>The survival table prints S(t) with its <strong>Greenwood standard error</strong> and
+no confidence band — a reader who wants one should know that R's <code>survfit</code>
+draws a <strong>log</strong>-transformed band by default and SPSS none, so bands from
+different tools are not comparable without naming the transform. The
+<strong>median survival is the first time at which S(t) ≤ 0.5</strong> (SPSS's rule;
+R's <code>survfit</code> reports the same first crossing, interpolating only when the
+curve sits exactly at 0.5). The log-rank test is
+Mantel–Cox with the hypergeometric variance; Peto and Gehan–Wilcoxon
+weightings are not offered.</p>
+<h3 id="cox-regression-tie-handling-and-intervals">Cox regression: tie handling and intervals</h3>
+<p>Tied event times use <strong>Efron's</strong> approximation by default, <strong>Breslow's</strong> on
+<code>ties: &quot;breslow&quot;</code>; the fit block names the method. Efron is the more
+accurate of the two whenever ties exist (and real event times nearly always
+tie) and is what R's <code>coxph</code>, Stata and lifelines use; SPSS and SAS default
+to Breslow, which is why it stays an option. Until 0.23.0 the default was
+Breslow — the maintainer switched it on 2026-08-28 when this inventory
+surfaced the mismatch with the validation pins, which fit Efron on both
+sides (<code>survival_cox/*</code>). Hazard-ratio intervals are Wald, exp(B ± z·SE);
+the baseline hazard is Breslow's. The proportional-hazards test's form is
+recorded in
+<a href="../clinical-and-survey/#the-proportional-hazards-test-statistic--the-0230-convention">clinical-and-survey.md</a>.</p>
+<h2 id="time-series">Time series</h2>
+<h3 id="autocorrelation">Autocorrelation</h3>
+<p>The ACF uses the <strong>divisor n</strong> at every lag (the biased, positive-definite
+estimator; statsmodels <code>adjusted = False</code>, R <code>acf</code>), Bartlett's
+<strong>cumulative</strong> standard error √((1 + 2Σ_{j&lt;k} r_j²)/n), and the Box–Ljung
+Q on <strong>k df</strong> at lag k (no model-order adjustment — the residual ACF after
+an ARIMA fit subtracts p + q). The PACF is computed by <strong>Durbin–Levinson</strong>
+from the ACF, not by successive OLS regressions; the two agree to ~5 digits
+at n = 120 (pin <code>pacf/lag1</code>).</p>
+<h3 id="arima">ARIMA</h3>
+<p><strong>Conditional sum of squares</strong> by default (<code>method: &quot;css&quot;</code>), exact Gaussian
+maximum likelihood by Kalman filter on <code>&quot;ml&quot;</code> (warm-started from CSS); a
+constant is fitted by default for an undifferenced series. Recorded for the
+AR(1) pin in <a href="../../tolerances/">tolerances.md</a>.</p>
+<h3 id="stationarity-tests">Stationarity tests</h3>
+<p>ADF and KPSS both default their lag / bandwidth to <strong>Schwert's rule</strong>
+⌊12·(n/100)^¼⌋; ADF's <em>p</em> is <strong>MacKinnon's (1994)</strong> polynomial
+approximation as embedded in statsmodels — his 1996 response-surface
+tables, which R's <code>urca::punitroot</code> uses, agree to 2–3 digits (pin <code>adf/p</code>,
+inside 1e-3). KPSS uses the Bartlett kernel. R's <code>tseries::adf.test</code>
+defaults to ⌊(n−1)^⅓⌋ lags, so a default-to-default comparison differs.</p>
+<h3 id="exponential-smoothing-and-decomposition">Exponential smoothing and decomposition</h3>
+<p>Simple exponential smoothing initializes the level at <strong>the first
+observation</strong> and chooses α by minimizing the one-step SSE (statsmodels'
+<code>legacy-heuristic</code>, R <code>HoltWinters</code>); the trended and seasonal forms are
+unit-tested at fixed parameters, not pinned (their optima are flat —
+<a href="../../#coverage">validation.md</a>). Seasonal decomposition is
+the <strong>classical centred moving-average</strong> decomposition, additive or
+multiplicative — not STL. Cross-correlations carry the ±2/√N bands.</p>
+<h2 id="scale-reduction-and-classification">Scale reduction and classification</h2>
+<h3 id="factor-analysis-extraction-retention-rotation">Factor analysis: extraction, retention, rotation</h3>
+<p><strong>Principal components</strong> by default, iterated principal-axis factoring
+(started from the squared multiple correlations) and maximum likelihood
+(Jöreskog's concentrated criterion) on request; components retained by
+<strong>Kaiser's rule (eigenvalue &gt; 1)</strong> unless a count is given; <strong>Varimax with
+Kaiser normalization</strong>, or <strong>Promax</strong> (κ = 4 by convention) on request, no
+rotation by default. SPSS defaults agree; R's <code>psych::fa</code> defaults to
+minres extraction and oblimin rotation, <code>factanal</code> to ML — none of which
+match a default-to-default comparison.</p>
+<h3 id="clustering">Clustering</h3>
+<p>k-means (Lloyd's) on <strong>squared Euclidean</strong> distance over the variables <strong>as
+given</strong> (no automatic standardization — standardize first if the scales
+differ); the initial centres are the deterministic <strong>maximin</strong> (farthest-
+point) rule unless a <code>seed</code> asks for seeded random starts, so an unseeded
+run is reproducible. Hierarchical clustering defaults to <strong>average linkage
+(UPGMA)</strong>; Ward's method works on squared Euclidean distance (the <code>ward.D2</code>
+convention), single and complete on Euclidean; a case weight counts as that
+many coincident objects. Two-step selects the cluster count by a
+BIC-style criterion. Cluster labels and centres are not pinned across
+packages (recorded in <a href="../../#coverage">validation.md</a>).</p>
+<h3 id="discriminant-analysis-prior-probabilities">Discriminant analysis: prior probabilities</h3>
+<p>Classification functions use <strong>priors proportional to the group sizes</strong>
+(ln(n_g/n) in the constant), not equal priors. SPSS defaults to equal
+priors; R's <code>lda</code> to proportional.</p>
+<h3 id="reliability">Reliability</h3>
+<p>Both <strong>Cronbach's α</strong> on the raw covariances and the <strong>standardized α</strong> on
+the correlation matrix are printed (pin <code>reliability/alpha</code> is the raw one).
+The six ICC forms follow Shrout &amp; Fleiss (recorded in
+<a href="../../#coverage">validation.md</a>).</p>
+<h2 id="charts">Charts</h2>
+<h3 id="box-plot">Box plot</h3>
+<p>Tukey's rule: fences at Q₁ − 1.5·IQR and Q₃ + 1.5·IQR, whiskers to the
+last observation <strong>inside</strong> the fences, points past them listed as
+outliers; the quartiles are the Hazen ones above.</p>
+<h3 id="histogram">Histogram</h3>
+<p>Equal-width bins over [min, max], <strong>10 bins</strong> by default (<code>bins</code>); no
+automatic Sturges / Freedman–Diaconis rule.</p>
+<h3 id="qq-plot">Q–Q plot</h3>
+<p><strong>Blom</strong> plotting positions (r − ⅜)/(n + ¼) against the theoretical
+quantiles, the reference line through the first and third quartile pairs
+(R's <code>qqline</code>). SPSS uses Blom by default as well; R's <code>qqnorm</code> uses
+<code>ppoints</code>, which is Blom for n &gt; 10.</p>
+<h2 id="power-analysis">Power analysis</h2>
+<p><strong>Two-tailed</strong> by default (<code>tails: 1</code> for one-sided); every power is a tail
+of the relevant noncentral distribution at the central critical value
+(recorded in <a href="../../#coverage">validation.md</a>).</p>
+<h2 id="degenerate-inputs--the-0230-conventions">Degenerate inputs — the 0.23.0 conventions</h2>
+<p><em>Decided by the adversarial fixture battery (0.23.0 item 6): 84 rows of
+degenerate data, degenerate designs, numeric extremes and case-semantics
+edges, each driven through the tool layer and held to one of three
+outcome classes — a number with a reference, a named error, or an
+undefined cell whose reason is recorded. The battery's list lives beside
+its fixtures in the repository (<code>test/fixtures/battery/README.md</code>); these
+are the choices it forced, stated once.</em></p>
+<h3 id="three-outcome-classes-and-what-is-never-one">Three outcome classes, and what is never one</h3>
+<p>A statistic that exists is printed and pinned; one that cannot be
+computed for the input is either <strong>refused with a named reason</strong> (when
+the whole procedure has no answer — a t test on one case, a regression
+with no residual degrees of freedom) or <strong>left blank</strong> (when one cell is
+undefined while its neighbours are not — skewness on two cases, a
+correlation with a constant). What is never acceptable: a crash, a hang,
+a silent drop of cases, or a plausible-looking number that is not one
+(a negative F, a fitted coefficient of 12,911 with no standard error).</p>
+<h3 id="fewer-than-two-cases-or-a-constant-variable">Fewer than two cases, or a constant variable</h3>
+<p>A t test (one-sample, independent, paired) on fewer than two valid cases
+or pairs, or on a variable with zero variance, is <strong>refused</strong> — R's
+<em>not enough 'x' observations</em> and <em>data are essentially constant</em>. With
+one case in one of two groups the <strong>pooled</strong> t still exists on
+n₁ + n₂ − 2 df and is printed (R's <code>var.equal = TRUE</code>); the Welch row is
+blank. A one-way ANOVA on a constant prints its sums of squares and a
+blank F; on a one-level factor it is refused, as the t test and the
+Kruskal–Wallis test already were. A correlation involving a constant is
+blank; on two points it is ±1 with a blank significance. Normality tests
+need n ≥ 3 and variance, and are blank otherwise. Cronbach's α with a
+constant item is refused (its standardized form is undefined; the raw
+form printed 0.12 beside a standardized 0.95 before this was decided).</p>
+<h3 id="zero-cases-is-an-answer">Zero cases is an answer</h3>
+<p>A filter that selects no case, a split group with no valid case, or a
+variable that is entirely user-missing all report <strong>N = 0</strong> rows, not an
+error: an empty selection is a legitimate description of the data. A
+weighted count that comes to nothing prints 0, never −0.</p>
+<h3 id="weights">Weights</h3>
+<p>Case weights are <strong>frequency weights</strong>: a weight of 10¹² is 10¹²
+replicates, and the inference is at that N. A case whose weight is zero
+or negative is <strong>excluded</strong> — it contributes nothing, and a group left
+empty by exclusion is reported as absent (the t test then refuses for
+want of a second group). R refuses negative weights outright; this
+engine follows the exclusion rule its <code>Weight Cases</code> documentation
+already states. A survey-design weight is different: every case needs a
+positive one, and a non-positive value is refused naming the case.</p>
+<h3 id="regression-collinearity-degrees-of-freedom-separation">Regression: collinearity, degrees of freedom, separation</h3>
+<ul>
+<li><strong>Exact collinearity</strong> is refused with the verdict text <em>the
+predictors are collinear (singular matrix)</em> — a constant predictor
+falls under it (it is collinear with the intercept). R drops the
+aliased column and prints <code>NA</code>; Stata omits it with a note; this
+engine names the condition and leaves the choice of column to the
+analyst.</li>
+<li><strong>No residual degrees of freedom</strong> — weighted N at or below the
+parameter count — is refused, stating both numbers. R fits such a
+model and prints NaN standard errors; a weighted N below p printed a
+negative df and a negative F here before the battery.</li>
+<li><strong>Complete or quasi-complete separation</strong> in logistic regression is
+refused: the maximum-likelihood estimate does not exist (Albert &amp;
+Anderson 1984). The test is R's own — a fitted probability within ten
+machine epsilons of 0 or 1 — but where <code>glm.fit</code> warns and prints the
+diverged fit, this engine stops and names Firth's penalised likelihood
+(Heinze &amp; Schemper 2002) as the remedy. The propensity-score tool
+already refused separation; the two now agree.</li>
+<li>A binary outcome with <strong>one observed level</strong>, or a count outcome that
+is <strong>all zero</strong>, is refused: the intercept's MLE is infinite.</li>
+<li>A <strong>negative survival time</strong> is a data error and is refused naming the
+case, in Kaplan–Meier as in Cox; it was dropped silently before.</li>
+</ul>
+<h3 id="extremes">Extremes</h3>
+<p>Statistics are <strong>scale-invariant</strong>: a variable at 10¹⁵ or 10⁻¹⁵ gives the
+same t, p and R² as at unit scale (the 0.22.0 precision review's
+precedent), and a slope of 10³⁰ is exact. At the limits of a double the
+order statistics (min, max, median) are exact and the moments that
+overflow (mean, SD, sum) are blank. A power analysis with an effect of 0
+reports that no sample size reaches the target; an n below 2 is refused
+in every power tool.</p>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../../index.html">Home</a> ·
+        <a href="../../../../quick-start/">Quick Start</a> ·
+        <a href="../../../../privacy-policy/">Privacy Policy</a> ·
+        <a href="../../../../license/">License</a> ·
+        <a href="../../../../cite/">How to Cite</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../../js/main.js"></script>
+</body>
+</html>

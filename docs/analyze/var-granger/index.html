@@ -83,6 +83,7 @@
         <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
         <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
         <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li><a href="../../advanced/verify-installation/">Verify this Installation</a></li>
         <li class="docs-nav-section">Reference</li>
         <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
         <li><a href="../../reference/glossary/">Glossary</a></li>
@@ -143,6 +144,14 @@ A small Sig. means the cause's history improves the prediction of the
 effect beyond the effect's own history (and the other series' lags).
 <strong>&quot;Causality&quot; here is predictive, not mechanistic</strong> — the note on the
 table says the same.</li>
+</ul>
+<h2 id="how-this-is-computed">How this is computed</h2>
+<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
+<ul>
+<li><strong>Estimation</strong> — equation-by-equation OLS on the lagged levels with a constant (and a trend on request); the residual covariance, log-likelihood and criteria exactly as <code>vars</code> computes them (verified identities) (<a href="../../validation/conventions/resampling-and-time-series/#var--granger-causality--the-v1-conventions">VAR</a>).</li>
+<li><strong>Lag-order criteria</strong> — AIC, HQ, SC and FPE in <code>VARselect</code>'s scalings, taken from its source (<a href="../../validation/conventions/resampling-and-time-series/#lag-order-criteria-varselects-scalings-from-source">lag criteria</a>).</li>
+<li><strong>Granger causality</strong> — the pairwise Wald F of each cause's lags in each effect's equation, the <code>vars::causality</code> convention (<a href="../../validation/conventions/resampling-and-time-series/#granger-tests-the-pairwise-convention">Granger</a>).</li>
+<li><strong>Missing data and weights</strong> — listwise on the series; the series is analysed unweighted, and the output says so.</li>
 </ul>
 <h2 id="practical-notes">Practical notes</h2>
 <ul>

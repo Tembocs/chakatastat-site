@@ -83,6 +83,7 @@
         <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
         <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
         <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li><a href="../../advanced/verify-installation/">Verify this Installation</a></li>
         <li class="docs-nav-section">Reference</li>
         <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
         <li><a href="../../reference/glossary/">Glossary</a></li>
@@ -132,6 +133,12 @@ if it is non-missing on at least one variable in the set.</p>
 <p><strong>Example.</strong> If several columns recorded different reported symptoms as yes/no,
 a dichotomy multiple-response table shows how often each symptom was reported,
 both as a share of all responses and as a share of participants.</p>
+<h2 id="how-this-is-computed">How this is computed</h2>
+<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
+<ul>
+<li><strong>Custom Tables</strong> — counts, percentages and summary statistics over the (value, weight) pairs of the cases, so a frequency weight counts a case that many times (<a href="../../validation/tolerances/">case weighting</a>); the mean, SD and percentiles are the same definitions as Descriptives — n − 1 and Hazen (<a href="../../validation/conventions/classical/#quantiles">quantiles</a>). The <strong>column-proportion z tests</strong> are the pooled two-proportion <em>z</em> with no continuity correction and no multiple-comparison adjustment (<a href="../../validation/conventions/classical/#column-proportion-z-tests-custom-tables">column tests</a>); the χ² rows are Pearson's without a continuity correction (<a href="../../validation/conventions/classical/#pearson-chi-square-no-continuity-correction">Pearson χ²</a>).</li>
+<li><strong>Multiple Response</strong> — the dichotomy and category counting modes are layout rules over the same counts, not new statistics (<a href="../../validation/#coverage">validation</a>); percentages are of cases or of responses as the dialog says.</li>
+</ul>
 <h2 id="see-also">See also</h2>
 <ul>
 <li><a href="../descriptive-statistics/#crosstabs">Crosstabs</a> — for the standard

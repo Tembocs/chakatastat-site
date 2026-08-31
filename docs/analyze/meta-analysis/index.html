@@ -83,6 +83,7 @@
         <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
         <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
         <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li><a href="../../advanced/verify-installation/">Verify this Installation</a></li>
         <li class="docs-nav-section">Reference</li>
         <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
         <li><a href="../../reference/glossary/">Glossary</a></li>
@@ -203,6 +204,14 @@ assistant about this</strong> action (0.22.0): it hands the rendered result to t
 <a href="../../advanced/ai-assistant/">AI assistant</a> with a request to interpret it —
 not to re-run it — which is the quickest way to a plain-language reading of
 the heterogeneity block or a funnel's asymmetry.</p>
+<h2 id="how-this-is-computed">How this is computed</h2>
+<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
+<ul>
+<li><strong>Pooling</strong> — inverse-variance fixed effect; random effects with the <strong>DerSimonian–Laird</strong> τ² (truncated at zero) by default or <strong>REML</strong> on request; Wald (z) intervals on the pooled estimates and per study; no Knapp–Hartung adjustment (<a href="../../validation/tolerances/">meta-analysis conventions</a>).</li>
+<li><strong>Heterogeneity</strong> — Cochran's Q on k − 1 df, Higgins' I² = max(0, (Q − df)/Q) as a percentage.</li>
+<li><strong>Egger's test</strong> — the classic regression of effect/SE on 1/SE, the intercept's <em>t</em> on k − 2 df (<a href="../../validation/#coverage">validation</a> · <a href="../../validation/#the-second-oracle--r-against-python-pin-by-pin">second oracle</a>).</li>
+<li>The pooled estimates agree with <code>metafor</code> and <code>statsmodels</code> to 8–15 digits; the REML iteration to the pinned tolerance.</li>
+</ul>
 <h2 id="reproducibility">Reproducibility</h2>
 <p>Like every analysis, a run journals a syntax command, e.g.:</p>
 <pre><code>meta_analysis effect=logOR, se=se, study=trial, model=random, tau_method=reml

@@ -83,6 +83,7 @@
         <li><a href="../advanced/ai-assistant/">AI Assistant</a></li>
         <li><a href="../advanced/reproducibility/">Reproducibility</a></li>
         <li><a href="../advanced/engine-access/">Engine Access</a></li>
+        <li><a href="../advanced/verify-installation/">Verify this Installation</a></li>
         <li class="docs-nav-section">Reference</li>
         <li><a href="../reference/choosing-a-procedure/">Choosing a procedure</a></li>
         <li><a href="../reference/glossary/">Glossary</a></li>
@@ -322,6 +323,68 @@ requirement for the app to run at all.</li>
 data-about-the-data: timestamps, writer) keeps a clean boundary with the
 session store, which already owns application and session state.</li>
 </ul>
+<h2 id="the-reproducibility-bundle-cksb">The reproducibility bundle (<code>.cksb</code>)</h2>
+<p>A second, much smaller document, specified here because it is a file users
+exchange (0.23.0 item 3; reference implementation
+<code>lib/bundle/reproducibility_bundle.dart</code>,
+exercised by <code>test/bundle_test.dart</code>). It
+packages what a reader needs to check a re-run against what the author saw —
+and deliberately <strong>not</strong> the data, which the author shares on their own
+terms. Version <strong>1</strong>.</p>
+<p>A <code>.cksb</code> file is one UTF-8 JSON object, pretty-printed with two-space
+indentation and keys in this order, so the same bundle is the same bytes:</p>
+<pre><code class="language-json">{
+  &quot;kind&quot;: &quot;chakatastat-reproducibility-bundle&quot;,
+  &quot;format&quot;: 1,
+  &quot;created&quot;: &quot;2026-08-27T12:00:00.000Z&quot;,
+  &quot;app_version&quot;: &quot;0.23.0+24&quot;,
+  &quot;engine&quot;: &quot;ChakataStat engine 0.23.0 (native)&quot;,
+  &quot;platform&quot;: &quot;linux Linux 7.0.0-30-generic …&quot;,
+  &quot;dataset&quot;: { &quot;sha256&quot;: &quot;&lt;64 hex&gt;&quot;, &quot;name&quot;: &quot;clinic.csv&quot; },
+  &quot;journal&quot;: &quot;descriptives variables=[Age, Score]\ncorrelate …&quot;,
+  &quot;outputs&quot;: [
+    {
+      &quot;index&quot;: 0,
+      &quot;title&quot;: &quot;Descriptives&quot;,
+      &quot;kind&quot;: &quot;table&quot;,
+      &quot;headers&quot;: [&quot;Variable&quot;, &quot;N&quot;, &quot;Missing&quot;, &quot;Mean&quot;, &quot;…&quot;],
+      &quot;rows&quot;: [[&quot;Age&quot;, &quot;6&quot;, &quot;0&quot;, &quot;32.500&quot;, &quot;…&quot;]],
+      &quot;note&quot;: &quot;Computed by ChakataStat engine … · data 3f1cc2bc5c3d&quot;
+    }
+  ]
+}
+</code></pre>
+<ul>
+<li><strong><code>kind</code></strong> and <strong><code>format</code></strong> come first so a reader refuses a stray JSON
+file, or a newer format, by name. A bundle whose <code>format</code> this build does
+not read is an error naming both numbers, never a partial read.</li>
+<li><strong><code>dataset.sha256</code></strong> is the full dataset fingerprint (the SHA-256 of the
+engine's stored frame; the encoding is recorded in the developer
+conventions, <code>docs/development/conventions.md</code> § &quot;The dataset fingerprint&quot;);
+<code>name</code> is the file the author had open — a hint for the reader, never a
+promise. The verifier checks the hash and nothing else about the data.</li>
+<li><strong><code>journal</code></strong> is the <code>.cks</code> script verbatim (its own <code># dataset</code> header
+included when it has one).</li>
+<li><strong><code>outputs</code></strong> is the output log as the author saw it, in order: each
+entry's position, title, <code>table</code> or <code>chart</code> (a chart is snapshotted as the
+geometry table its export produces — the same grid Export as CSV writes),
+its column headers and its <strong>rendered cells as strings</strong>. The snapshot is
+at <em>print</em> precision on purpose: it is what the author saw and what a
+paper quotes, and the verifier compares a re-run to it within that
+precision — a numeric cell agrees when it differs by at most half a unit
+in the last printed decimal; every other cell must match exactly.</li>
+</ul>
+<p><strong>Verification</strong> (<code>--verify &lt;bundle&gt; &lt;data&gt;</code>, File → Verify Reproducibility
+Bundle…): the loaded data's fingerprint is compared first, and a mismatch
+<strong>refuses</strong> — nothing is re-run, the report says which two hashes
+disagreed. Then the journal is re-run through the dispatcher and every
+output compared with its snapshot by position; the report is one row per
+output, PASS or FAIL with the first mismatching cells named.</p>
+<p><strong>Determinism and compatibility.</strong> A bundle is written with fixed key
+order and formatting; the <code>created</code> timestamp is the one field that differs
+between two exports of the same session. The format grows by adding keys;
+a reader ignores keys it does not know. A change that alters the meaning of
+an existing key increments <code>format</code>.</p>
 <h2 id="engine-endpoints">Engine endpoints</h2>
 <div class="docs-table-wrap"><table>
 <thead>

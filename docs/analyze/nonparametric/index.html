@@ -83,6 +83,7 @@
         <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
         <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
         <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li><a href="../../advanced/verify-installation/">Verify this Installation</a></li>
         <li class="docs-nav-section">Reference</li>
         <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
         <li><a href="../../reference/glossary/">Glossary</a></li>
@@ -195,6 +196,18 @@ is not normally distributed within groups. Rather than an independent-samples
 t-test of glucose by <em>Diabetic</em>, run <strong>Mann-Whitney U</strong> with <em>FastingGlucose</em> as
 the test variable and <em>Diabetic</em> as the grouping variable — a valid comparison
 that does not assume normality.</p>
+<h2 id="how-this-is-computed">How this is computed</h2>
+<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
+<ul>
+<li><strong>Mann–Whitney U</strong> — the smaller of U₁ / U₂; the asymptotic <em>z</em> is <strong>tie-corrected with no continuity correction</strong>; an exact significance when the samples are untied and small; the rank-biserial <em>r</em> is positive when the first group ranks higher (<a href="../../validation/tolerances/">tolerances</a> · <a href="../../validation/#coverage">validation</a>).</li>
+<li><strong>Wilcoxon signed-rank</strong> — zero differences dropped, tie-corrected <em>z</em>, no continuity correction (R's default adds one) (<a href="../../validation/conventions/classical/#wilcoxon-signed-rank">Wilcoxon</a>).</li>
+<li><strong>Sign test / Runs test</strong> — the continuity-corrected normal approximation; the runs test cuts at the median and offers an exact significance (<a href="../../validation/conventions/classical/#the-sign-test-and-the-runs-test">sign and runs</a>).</li>
+<li><strong>Binomial test</strong> — exact; <strong>two-tailed when the test proportion is ½, one-tailed otherwise</strong> (the SPSS rule — R's <code>binom.test</code> is two-sided at any proportion) (<a href="../../validation/conventions/classical/#the-binomial-test-which-tail">binomial</a>).</li>
+<li><strong>Kruskal–Wallis</strong> — tie-corrected H on k − 1 df, ε² = H/(N − 1), an exact upper-tail significance when untied; <strong>Dunn's</strong> pairwise <em>z</em> adjusted by Bonferroni (default) or Holm (<a href="../../validation/#coverage">validation</a> · <a href="../../validation/conventions/classical/#post-hoc-tests">post hoc</a>).</li>
+<li><strong>Friedman / Kendall's W</strong> — W = χ²/(N(k − 1)); <strong>Cochran's Q</strong> and <strong>Jonckheere–Terpstra</strong> in their standard forms with the tie-corrected null variance (<a href="../../validation/#coverage">validation</a>).</li>
+<li><strong>Tests of Normality</strong> — Shapiro–Wilk (Royston's AS R94) and Kolmogorov–Smirnov with <strong>Lilliefors</strong> significance (<a href="../../validation/conventions/classical/#normality-tests">normality</a>).</li>
+<li>Every test is listwise on its own variables; a frequency weight replicates cases (<a href="../../validation/conventions/classical/#missing-data-policy">missing-data policy</a> · <a href="../../validation/tolerances/">case weighting</a>).</li>
+</ul>
 <h2 id="see-also">See also</h2>
 <ul>
 <li><a href="../compare-means/">Compare Means</a> — the parametric counterparts.</li>

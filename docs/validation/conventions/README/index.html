@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The convention inventory — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/validation/conventions/README/">
+  <link rel="icon" type="image/svg+xml" href="../../../../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../../../../assets/favicon-256.png">
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="The convention inventory — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/validation/conventions/README/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../../css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../../../../index.html">
+        <img class="brand-mark" src="../../../../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <!-- One link, not a copy of the site menu. While someone is reading the
+           guide, the sidebar is the navigation that matters; marketing anchors
+           (Features, Screenshots, …) only compete with it and push the reader
+           out of what they came for. All that is owed is a way back. Single
+           link means no mobile collapse either, so there is no hamburger on
+           these pages — main.js guards for its absence. -->
+      <nav id="nav-links" class="nav-links nav-links--single">
+        <a href="../../../../index.html">← Back to chakatastat.app</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../../../../index.html#download">Download</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs">
+    <div class="container docs-layout">
+      <aside class="docs-sidebar">
+        <p class="docs-sidebar-title">Numerical-validation suite</p>
+        <ul>
+        <li><a href="../../">Overview</a></li>
+        <li><a href="../../nist/">NIST StRD certified datasets</a></li>
+        <li><a href="../../cross-os/">Cross-OS agreement</a></li>
+        <li><a href="../../file-formats/">Statistics-package file formats</a></li>
+        <li><a href="../../tolerances/">Tolerances and recorded conventions</a></li>
+        <li class="docs-nav-section">The recorded conventions</li>
+        <li><a href="./" aria-current="page">The convention inventory</a></li>
+        <li><a href="../classical/">Descriptives, tests and the classical toolbox — the 0.23.0 conventions</a></li>
+        <li><a href="../regression/">Regression conventions</a></li>
+        <li><a href="../latent-variable/">Latent-variable conventions</a></li>
+        <li><a href="../clinical-and-survey/">Clinical and survey conventions</a></li>
+        <li><a href="../resampling-and-time-series/">Resampling and time-series conventions</a></li>
+        <li class="docs-nav-section">Maintaining the suite</li>
+        <li><a href="../../regenerating/">Regenerating the reference values</a></li>
+        <li class="docs-nav-section">User Guide</li>
+        <li><a href="../../../">Contents</a></li>
+      </ul>
+      </aside>
+      <article class="docs-content">
+<h1 id="the-convention-inventory">The convention inventory</h1>
+<blockquote>
+<p>Part of the <a href="../../">numerical-validation suite</a>. Every
+statistic in the catalog with more than one defensible definition, and
+where ChakataStat's choice is written down. Built for 0.23.0 item 9 on
+2026-08-28; maintained with the catalog.</p>
+</blockquote>
+<p>&quot;Validated against package X&quot; says the number matches X. &quot;Defined as&quot;
+says what the number <em>is</em>, so a reader can compare it with any other tool's
+without guessing why they differ. The conventions pages hold the
+definitions; this page is the index that proves nothing was left implicit.</p>
+<p><strong>How to read the Status column</strong></p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Mark</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✅ recorded</td>
+<td>the choice was already written down; the link is the section</td>
+</tr>
+<tr>
+<td>🆕 recorded now</td>
+<td>the choice was implicit until this sweep — chosen in the engine and matched by a reference, but never stated; written in <a href="../classical/">classical.md</a> (or the page linked) on 2026-08-28</td>
+</tr>
+<tr>
+<td>— single</td>
+<td>the sweep considered the statistic and found one definition in practice; nothing to choose, said so here</td>
+</tr>
+<tr>
+<td>⏳ item 6</td>
+<td>the choice was a <em>degenerate-input</em> decision that the adversarial fixture battery (0.23.0 item 6) forced; both such rows were closed on 2026-08-29 and link to <a href="../classical/#degenerate-inputs--the-0230-conventions">degenerate inputs</a> — no row carries this mark now</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>The three feeds</strong> (per the plan): the four prior conventions pages
+(<a href="../regression/">regression</a>, <a href="../latent-variable/">latent-variable</a>,
+<a href="../clinical-and-survey/">clinical-and-survey</a>,
+<a href="../resampling-and-time-series/">resampling-and-time-series</a>) and
+<a href="../../tolerances/">tolerances.md</a>; the between-oracle disagreements item 8
+found (<a href="../../#the-second-oracle--r-against-python-pin-by-pin">validation.md</a>);
+and the decisions item 6 will force. Plus the classics, checked whether or
+not a disagreement surfaced them: quantile type, ANOVA df, tie corrections,
+continuity corrections, CI families, small-sample factors.</p>
+<h2 id="descriptive-statistics-descriptives-frequencies-explore-bin_variable">Descriptive statistics (<code>descriptives</code>, <code>frequencies</code>, <code>explore</code>, <code>bin_variable</code>)</h2>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Statistic</th>
+<th>ChakataStat's definition</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Percentiles, median, quartiles</td>
+<td>Hazen, (k − ½)/n; weighted on cumulative weight</td>
+<td>✅ <a href="../../tolerances/">tolerances</a> · <a href="../classical/#quantiles">quantiles</a></td>
+</tr>
+<tr>
+<td>Skewness, kurtosis</td>
+<td>bias-adjusted G₁, G₂ (SPSS / SAS / Excel / R type 2)</td>
+<td>🆕 <a href="../classical/#skewness-and-kurtosis">skewness and kurtosis</a></td>
+</tr>
+<tr>
+<td>SD, variance, SE of the mean</td>
+<td>divisor n − 1; s/√n</td>
+<td>🆕 <a href="../classical/#standard-deviation-variance-and-the-standard-error-of-the-mean">standard deviation</a></td>
+</tr>
+<tr>
+<td>Case weights</td>
+<td>frequency weight ≡ replication, every procedure</td>
+<td>✅ <a href="../../tolerances/">tolerances</a></td>
+</tr>
+<tr>
+<td>Missing-data policy</td>
+<td>listwise per procedure; correlations pairwise by default</td>
+<td>🆕 <a href="../classical/#missing-data-policy">missing-data policy</a></td>
+</tr>
+<tr>
+<td>Binning (<code>bin_variable</code>)</td>
+<td>equal width, Hazen-quantile, or custom cut points</td>
+<td>— single (the quantile rule is the row above)</td>
+</tr>
+<tr>
+<td>Mean, sum, range, min/max, mode</td>
+<td>—</td>
+<td>— single</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="tables-crosstabs-custom_tables-multiple_response-loglinear">Tables (<code>crosstabs</code>, <code>custom_tables</code>, <code>multiple_response</code>, <code>loglinear</code>)</h2>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Statistic</th>
+<th>ChakataStat's definition</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pearson χ² on 2 × 2</td>
+<td>no Yates continuity correction</td>
+<td>🆕 <a href="../classical/#pearson-chi-square-no-continuity-correction">Pearson chi-square</a></td>
+</tr>
+<tr>
+<td>Likelihood-ratio χ²</td>
+<td>2 Σ O ln(O/E)</td>
+<td>— single</td>
+</tr>
+<tr>
+<td>Fisher's exact test, two-sided</td>
+<td>sum of tables no more likely than the observed</td>
+<td>🆕 <a href="../classical/#fishers-exact-test-the-two-sided-rule">Fisher's exact test</a></td>
+</tr>
+<tr>
+<td>McNemar</td>
+<td>exact binomial for b + c ≤ 25, continuity-corrected χ² otherwise</td>
+<td>🆕 <a href="../classical/#mcnemars-test">McNemar's test</a></td>
+</tr>
+<tr>
+<td>φ, Cramér's V</td>
+<td>uncorrected √(χ²/N), √(χ²/(N(k−1)))</td>
+<td>🆕 <a href="../classical/#cram%C3%A9rs-v-and-%CF%86">Cramér's V and φ</a></td>
+</tr>
+<tr>
+<td>Mantel–Haenszel / Cochran's</td>
+<td>MH continuity-corrected; Cochran's not</td>
+<td>🆕 <a href="../classical/#mantelhaenszel-and-cochrans-tests">Mantel–Haenszel</a></td>
+</tr>
+<tr>
+<td>Gamma, τ-b, τ-c, Somers' d, λ, kappa</td>
+<td>the standard Goodman–Kruskal / Kendall / Cohen forms</td>
+<td>— single (weighted kappa is not offered)</td>
+</tr>
+<tr>
+<td>Column-proportion z tests</td>
+<td>pooled two-proportion z, unadjusted</td>
+<td>🆕 <a href="../classical/#column-proportion-z-tests-custom-tables">column-proportion z tests</a></td>
+</tr>
+<tr>
+<td>Loglinear model</td>
+<td>Poisson GLM on the counts (not IPF)</td>
+<td>🆕 <a href="../classical/#loglinear-models">loglinear models</a></td>
+</tr>
+<tr>
+<td>Multiple-response counting</td>
+<td>dichotomy / category modes</td>
+<td>— single (a layout rule, <a href="../../#coverage">validation.md</a>)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="comparing-means-means-one_sample_ttest-independent_ttest-paired_ttest-equivalence_ttest-anova-levene">Comparing means (<code>means</code>, <code>one_sample_ttest</code>, <code>independent_ttest</code>, <code>paired_ttest</code>, <code>equivalence_ttest</code>, <code>anova</code>, <code>levene</code>)</h2>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Statistic</th>
+<th>ChakataStat's definition</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Independent t: pooled vs Welch</td>
+<td>both rows printed; Welch–Satterthwaite df</td>
+<td>🆕 <a href="../classical/#the-independent-samples-t-test-both-variances-rows">both variances rows</a></td>
+</tr>
+<tr>
+<td>Levene's test</td>
+<td>mean-centred (not Brown–Forsythe)</td>
+<td>🆕 <a href="../classical/#levenes-test-mean-centred">Levene</a></td>
+</tr>
+<tr>
+<td>Cohen's d, Hedges' g, paired d</td>
+<td>pooled n − 1 SD; J = 1 − 3/(4df − 1); d_z; noncentral-t CI</td>
+<td>🆕 <a href="../classical/#cohens-d-and-hedges-g">Cohen's d and Hedges' g</a></td>
+</tr>
+<tr>
+<td>ANOVA df, SS</td>
+<td>between k − 1, within N − k, Type I on a one-way design</td>
+<td>— single</td>
+</tr>
+<tr>
+<td>η², ε², ω²</td>
+<td>SS_b/SS_t; Olejnik–Algina ε² and ω²</td>
+<td>🆕 <a href="../classical/#one-way-anova-effect-sizes">ANOVA effect sizes</a></td>
+</tr>
+<tr>
+<td>Post hoc</td>
+<td>Bonferroni, Scheffé, Tukey HSD on pooled MS</td>
+<td>🆕 <a href="../classical/#post-hoc-tests">post hoc tests</a></td>
+</tr>
+<tr>
+<td>Planned contrasts</td>
+<td>pooled and Welch–Satterthwaite</td>
+<td>🆕 <a href="../classical/#planned-contrasts">planned contrasts</a></td>
+</tr>
+<tr>
+<td>Welch ANOVA</td>
+<td>Welch's F* with its df</td>
+<td>— single</td>
+</tr>
+<tr>
+<td>Equivalence tests (TOST)</td>
+<td>bounds centred on the test value; 1 − 2α CI</td>
+<td>✅ <a href="../clinical-and-survey/#equivalence-tests-tost--the-v1-conventions">clinical-and-survey</a></td>
+</tr>
+<tr>
+<td>n = 1 per group, constant variable, zero-case filter</td>
+<td>pooled t on n₁ + n₂ − 2 df, Welch blank; constants refused; N = 0 is an answer</td>
+<td>✅ <a href="../classical/#degenerate-inputs--the-0230-conventions">degenerate inputs</a> (item 6, 2026-08-29)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="correlation-correlate-partial_correlate-polychoric_correlation-canonical_correlation">Correlation (<code>correlate</code>, <code>partial_correlate</code>, <code>polychoric_correlation</code>, <code>canonical_correlation</code>)</h2>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Statistic</th>
+<th>ChakataStat's definition</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pearson r, p</td>
+<td>t on n − 2 df</td>
+<td>— single</td>
+</tr>
+<tr>
+<td>Spearman ρ</td>
+<td>mid-ranks; t approximation (not exact / AS 89)</td>
+<td>🆕 <a href="../classical/#spearmans-%CF%81">Spearman</a></td>
+</tr>
+<tr>
+<td>Kendall τ</td>
+<td>τ-b; normal approximation, no-tie variance</td>
+<td>🆕 <a href="../classical/#kendalls-%CF%84">Kendall</a></td>
+</tr>
+<tr>
+<td>Partial correlation</td>
+<td>inverse-matrix first-order; n − 2 − k df</td>
+<td>🆕 <a href="../classical/#partial-correlation">partial correlation</a></td>
+</tr>
+<tr>
+<td>CI on r</td>
+<td>none printed (Bayesian credible interval instead)</td>
+<td>🆕 <a href="../classical/#no-confidence-interval-on-r">no CI on r</a></td>
+</tr>
+<tr>
+<td>Missing data</td>
+<td>pairwise default, listwise option</td>
+<td>🆕 <a href="../classical/#missing-data-policy">missing-data policy</a></td>
+</tr>
+<tr>
+<td>Polychoric correlation</td>
+<td>two-step ML on thresholds</td>
+<td>✅ <a href="../latent-variable/#ordinal-indicators--wlsmv-4wlsmv">latent-variable</a></td>
+</tr>
+<tr>
+<td>Canonical correlation</td>
+<td>Bartlett's sequential χ²</td>
+<td>— single</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="regression-and-modelling-linear_regression--mediation">Regression and modelling (<code>linear_regression</code> … <code>mediation</code>)</h2>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Statistic</th>
+<th>ChakataStat's definition</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Linear least squares</td>
+<td>by QR; singularity verdict scale-invariant</td>
+<td>✅ <a href="../regression/#linear-least-squares-by-qr--the-0210-conventions">regression</a> · <a href="../regression/#scale-invariance-of-the-singularity-verdict--the-0220-convention">scale invariance</a></td>
+</tr>
+<tr>
+<td>Regression through the origin</td>
+<td>uncentred R², adjusted R², F</td>
+<td>✅ <a href="../regression/#regression-through-the-origin--the-0210-conventions">regression</a></td>
+</tr>
+<tr>
+<td>Standardized β</td>
+<td>B·sd(x)/sd(y), n − 1 SDs</td>
+<td>— single (pin <code>reg_linear/age_beta</code>)</td>
+</tr>
+<tr>
+<td>Adjusted R², Durbin–Watson, tolerance / VIF</td>
+<td>the textbook forms</td>
+<td>— single</td>
+</tr>
+<tr>
+<td>Stepwise selection</td>
+<td>p-enter .05, p-remove .10</td>
+<td>🆕 <a href="../classical/#stepwise-selection">stepwise</a></td>
+</tr>
+<tr>
+<td>CI on GLM coefficients, Exp(B)</td>
+<td>Wald, z (t under a design); not profile likelihood</td>
+<td>🆕 <a href="../classical/#confidence-intervals-on-glm-coefficients-wald-z">Wald, z</a></td>
+</tr>
+<tr>
+<td>GLM fitting</td>
+<td>IRLS through the QR; Cholesky for information matrices</td>
+<td>✅ <a href="../regression/#glm-irls-through-the-qr--the-0220-convention">regression</a> · <a href="../regression/#the-spd-route-cholesky-for-information-matrices--the-0220-convention">SPD route</a></td>
+</tr>
+<tr>
+<td>Gamma dispersion and likelihood</td>
+<td>Pearson φ̂; likelihood at the Pearson scale</td>
+<td>✅ <a href="../regression/#the-gamma-log-likelihoods-dispersion--the-0230-convention">regression</a> (item 8)</td>
+</tr>
+<tr>
+<td>Negative binomial</td>
+<td>NB2, α by ML</td>
+<td>✅ <a href="../../tolerances/">tolerances</a></td>
+</tr>
+<tr>
+<td>Zero-inflated / hurdle</td>
+<td>joint likelihood; Hessian with α fixed</td>
+<td>✅ <a href="../../#coverage">validation.md</a></td>
+</tr>
+<tr>
+<td>GLM quantile residuals</td>
+<td>randomized, seeded; per-family brackets</td>
+<td>✅ <a href="../regression/#glm-quantile-residuals--the-per-family-definitions">regression</a></td>
+</tr>
+<tr>
+<td>Hosmer–Lemeshow</td>
+<td>10 deciles of risk by rank; g − 2 df</td>
+<td>✅ <a href="../../#coverage">validation.md</a></td>
+</tr>
+<tr>
+<td>Multinomial reference category</td>
+<td>the lowest category</td>
+<td>🆕 <a href="../classical/#multinomial-and-ordinal-regression-the-reference-and-the-sign">multinomial and ordinal</a></td>
+</tr>
+<tr>
+<td>Ordinal parameterization</td>
+<td>logit P(Y ≤ c) = θ_c − β·x</td>
+<td>🆕 same</td>
+</tr>
+<tr>
+<td>Type III SS</td>
+<td>sum-to-zero contrasts</td>
+<td>✅ <a href="../../tolerances/">tolerances</a></td>
+</tr>
+<tr>
+<td>Repeated measures: sphericity</td>
+<td>Mauchly; Greenhouse–Geisser and Huynh–Feldt ε</td>
+<td>— single (the standard definitions)</td>
+</tr>
+<tr>
+<td>MANOVA statistics and partial η²</td>
+<td>Pillai / Wilks / Hotelling–Lawley / Roy; SPSS partial η²</td>
+<td>✅ <a href="../../#coverage">validation.md</a></td>
+</tr>
+<tr>
+<td>Robust regression</td>
+<td>Huber 1.345, Tukey 4.685, MAD/0.6745, sandwich</td>
+<td>🆕 <a href="../classical/#robust-regression-the-m-estimator-constants">robust regression</a></td>
+</tr>
+<tr>
+<td>Quantile regression</td>
+<td>IRLS on the check loss; Koenker iid SE</td>
+<td>✅ <a href="../../#coverage">validation.md</a></td>
+</tr>
+<tr>
+<td>GEE</td>
+<td>working correlations; sandwich covariance</td>
+<td>✅ <a href="../../#coverage">validation.md</a></td>
+</tr>
+<tr>
+<td>Mixed model: ML vs REML</td>
+<td>REML default (changed 2026-08-28), ML option</td>
+<td>🆕 <a href="../classical/#mixed-models-reml-by-default-ml-on-request">mixed models</a></td>
+</tr>
+<tr>
+<td>GLMM integration</td>
+<td>Gauss–Hermite quadrature</td>
+<td>🆕 same</td>
+</tr>
+<tr>
+<td>Nonlinear regression</td>
+<td>Levenberg–Marquardt; Gauss–Newton covariance</td>
+<td>🆕 <a href="../classical/#nonlinear-regression">nonlinear regression</a></td>
+</tr>
+<tr>
+<td>IV / 2SLS</td>
+<td>σ̂² on structural residuals; first-stage F</td>
+<td>— single (pins <code>iv/*</code>)</td>
+</tr>
+<tr>
+<td>Regularized regression</td>
+<td>standardized; 10-fold CV; min and 1-SE λ</td>
+<td>🆕 <a href="../classical/#regularized-regression">regularized regression</a></td>
+</tr>
+<tr>
+<td>Panel: variance components, cluster factor, R²s, Hausman</td>
+<td>Swamy–Arora with harmonic T̄; Stata cluster factor; linearmodels R²s</td>
+<td>✅ <a href="../../tolerances/">tolerances</a> · <a href="../regression/#the-unbalanced-panels-variance-components--the-0230-convention">unbalanced panel</a> (item 8)</td>
+</tr>
+<tr>
+<td>Mediation, moderated mediation, JN regions, serial</td>
+<td>PROCESS shapes; Aiken–West probes; bootstrap CIs</td>
+<td>✅ <a href="../regression/#mediation-follow-ups--the-0210-conventions">regression</a> · <a href="../../tolerances/">tolerances</a></td>
+</tr>
+<tr>
+<td>p-value far tail, normal quantile, erfc</td>
+<td>dedicated erfc; Φ⁻¹ at 1e-15</td>
+<td>✅ <a href="../regression/#the-normal-quantile-and-the-far-tail-of-the-p-value--the-0220-conventions">regression</a></td>
+</tr>
+<tr>
+<td>Complete / quasi-complete separation, exact collinearity verdict text, weights ≤ 0</td>
+<td>separation refused at R's threshold, naming Firth; <em>collinear (singular matrix)</em>; non-positive weights exclude the case</td>
+<td>✅ <a href="../classical/#degenerate-inputs--the-0230-conventions">degenerate inputs</a> (item 6, 2026-08-29)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="nonparametric-tests-mann_whitney--normality">Nonparametric tests (<code>mann_whitney</code> … <code>normality</code>)</h2>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Statistic</th>
+<th>ChakataStat's definition</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mann–Whitney</td>
+<td>smaller U; tie-corrected z; no continuity; exact when untied and small</td>
+<td>✅ <a href="../../tolerances/">tolerances</a> · <a href="../../#coverage">validation.md</a></td>
+</tr>
+<tr>
+<td>Rank-biserial r</td>
+<td>Kerby; positive when the first group ranks higher</td>
+<td>✅ <a href="../../#coverage">validation.md</a></td>
+</tr>
+<tr>
+<td>Wilcoxon signed-rank</td>
+<td>zeros dropped; tie-corrected; no continuity</td>
+<td>🆕 <a href="../classical/#wilcoxon-signed-rank">Wilcoxon</a></td>
+</tr>
+<tr>
+<td>Sign test, runs test</td>
+<td>continuity-corrected normal; runs cut at the median</td>
+<td>🆕 <a href="../classical/#the-sign-test-and-the-runs-test">sign and runs</a></td>
+</tr>
+<tr>
+<td>Binomial test tails</td>
+<td>two-tailed at ½, one-tailed otherwise (SPSS)</td>
+<td>🆕 <a href="../classical/#the-binomial-test-which-tail">binomial test</a></td>
+</tr>
+<tr>
+<td>Kruskal–Wallis</td>
+<td>tie-corrected H; ε² = H/(N − 1); exact upper tail</td>
+<td>✅ <a href="../../#coverage">validation.md</a></td>
+</tr>
+<tr>
+<td>Friedman, Kendall's W</td>
+<td>W = χ²/(N(k − 1))</td>
+<td>✅ <a href="../../#coverage">validation.md</a></td>
+</tr>
+<tr>
+<td>Dunn's test</td>
+<td>tie-corrected z; Bonferroni / Holm / none</td>
+<td>✅ <a href="../../#coverage">validation.md</a> · <a href="../classical/#post-hoc-tests">post hoc tests</a></td>
+</tr>
+<tr>
+<td>Cochran's Q, Jonckheere–Terpstra</td>
+<td>standard forms; exact null variance</td>
+<td>✅ <a href="../../#coverage">validation.md</a></td>
+</tr>
+<tr>
+<td>Normality</td>
+<td>Shapiro–Wilk (Royston); KS with Lilliefors p</td>
+<td>🆕 <a href="../classical/#normality-tests">normality tests</a></td>
+</tr>
+<tr>
+<td>Exact-test caps and tie fallback</td>
+<td>exact only when untied and enumerable</td>
+<td>✅ <a href="../../#coverage">validation.md</a></td>
+</tr>
+<tr>
+<td>Permutation tests</td>
+<td>two-sided / observed-inclusive counting; seeded MC</td>
+<td>✅ <a href="../resampling-and-time-series/#permutation-tests--the-v1-conventions">resampling-and-time-series</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="survival-kaplan_meier-cox_regression-parametric_survival-competing_risks">Survival (<code>kaplan_meier</code>, <code>cox_regression</code>, <code>parametric_survival</code>, <code>competing_risks</code>)</h2>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Statistic</th>
+<th>ChakataStat's definition</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>KM variance, median</td>
+<td>Greenwood SE printed, no band; median = first t with S ≤ ½</td>
+<td>🆕 <a href="../classical/#kaplanmeier">Kaplan–Meier</a></td>
+</tr>
+<tr>
+<td>Log-rank</td>
+<td>Mantel–Cox, hypergeometric variance</td>
+<td>— single (Peto / Gehan not offered)</td>
+</tr>
+<tr>
+<td>Cox ties</td>
+<td>Efron default (changed 2026-08-28), Breslow option</td>
+<td>🆕 <a href="../classical/#cox-regression-tie-handling-and-intervals">Cox regression</a></td>
+</tr>
+<tr>
+<td>Hazard-ratio CI, baseline hazard</td>
+<td>Wald; Breslow</td>
+<td>🆕 same</td>
+</tr>
+<tr>
+<td>Proportional-hazards test form</td>
+<td>1994 simplified statistic (lifelines)</td>
+<td>✅ <a href="../clinical-and-survey/#the-proportional-hazards-test-statistic--the-0230-convention">clinical-and-survey</a> (item 8)</td>
+</tr>
+<tr>
+<td>AFT models, competing risks</td>
+<td>ML on log-time; Fine–Gray / CIF</td>
+<td>✅ <a href="../../#coverage">validation.md</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="meta-analysis-and-resampling-meta_analysis-bootstrap_ci">Meta-analysis and resampling (<code>meta_analysis</code>, <code>bootstrap_ci</code>)</h2>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Statistic</th>
+<th>ChakataStat's definition</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>τ² (DL truncated at 0; REML), I², Egger, Wald CIs, no Knapp–Hartung</td>
+<td>—</td>
+<td>✅ <a href="../../tolerances/">tolerances</a></td>
+</tr>
+<tr>
+<td>Bootstrap CI (percentile / BCa), seed, PRNG</td>
+<td>SplitMix64, seed 1</td>
+<td>✅ <a href="../../#coverage">validation.md</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="time-series-autocorrelation--exponential_smoothing">Time series (<code>autocorrelation</code> … <code>exponential_smoothing</code>)</h2>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Statistic</th>
+<th>ChakataStat's definition</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ACF divisor, Bartlett SE, Box–Ljung df</td>
+<td>n; cumulative; k</td>
+<td>🆕 <a href="../classical/#autocorrelation">autocorrelation</a></td>
+</tr>
+<tr>
+<td>PACF method</td>
+<td>Durbin–Levinson</td>
+<td>🆕 same</td>
+</tr>
+<tr>
+<td>ARIMA estimation</td>
+<td>CSS default, ML option; constant by default</td>
+<td>✅ <a href="../../tolerances/">tolerances</a> · <a href="../classical/#arima">ARIMA</a></td>
+</tr>
+<tr>
+<td>ADF / KPSS lags and p</td>
+<td>Schwert rule; MacKinnon 1994</td>
+<td>🆕 <a href="../classical/#stationarity-tests">stationarity tests</a></td>
+</tr>
+<tr>
+<td>Exponential smoothing init; decomposition</td>
+<td>l₀ = y₁; classical centred MA</td>
+<td>🆕 <a href="../classical/#exponential-smoothing-and-decomposition">exponential smoothing</a></td>
+</tr>
+<tr>
+<td>VAR / Granger</td>
+<td><code>vars</code> scalings; pairwise Granger</td>
+<td>✅ <a href="../resampling-and-time-series/#var--granger-causality--the-v1-conventions">resampling-and-time-series</a></td>
+</tr>
+<tr>
+<td>LOESS</td>
+<td>tricube local-linear; degenerate windows</td>
+<td>✅ <a href="../resampling-and-time-series/#loess-smoother-on-the-scatterplot--the-v1-conventions">resampling-and-time-series</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="scale-reduction-and-classification-reliability--multidimensional_scaling">Scale reduction and classification (<code>reliability</code> … <code>multidimensional_scaling</code>)</h2>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Statistic</th>
+<th>ChakataStat's definition</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cronbach's α (raw and standardized)</td>
+<td>both printed</td>
+<td>🆕 <a href="../classical/#reliability">reliability</a></td>
+</tr>
+<tr>
+<td>ICC forms</td>
+<td>Shrout–Fleiss six</td>
+<td>✅ <a href="../../#coverage">validation.md</a></td>
+</tr>
+<tr>
+<td>Bland–Altman</td>
+<td>direction, 1999 exact LoA SE</td>
+<td>✅ <a href="../clinical-and-survey/#blandaltman-method-comparison--the-v1-conventions">clinical-and-survey</a></td>
+</tr>
+<tr>
+<td>Factor extraction / retention / rotation</td>
+<td>PCA; Kaiser &gt; 1; Varimax (Kaiser-normalized), Promax κ = 4</td>
+<td>🆕 <a href="../classical/#factor-analysis-extraction-retention-rotation">factor analysis</a></td>
+</tr>
+<tr>
+<td>CFA (scale, χ² divisor, information, baseline, RMSEA CI)</td>
+<td>marker; N; expected; independence; 90 %</td>
+<td>✅ <a href="../../tolerances/">tolerances</a> · <a href="../latent-variable/#cfa-follow-ups--the-0210-conventions">latent-variable</a></td>
+</tr>
+<tr>
+<td>IRT, LCA</td>
+<td>recorded per reference</td>
+<td>✅ <a href="../latent-variable/">latent-variable</a></td>
+</tr>
+<tr>
+<td>k-means seeding, distance, standardization</td>
+<td>maximin; squared Euclidean; none</td>
+<td>🆕 <a href="../classical/#clustering">clustering</a></td>
+</tr>
+<tr>
+<td>Hierarchical linkage default; Ward's distance</td>
+<td>average; squared Euclidean</td>
+<td>🆕 same</td>
+</tr>
+<tr>
+<td>Discriminant priors; stepwise F</td>
+<td>proportional; F = 3.84</td>
+<td>🆕 <a href="../classical/#discriminant-analysis-prior-probabilities">discriminant</a> · <a href="../classical/#stepwise-selection">stepwise</a></td>
+</tr>
+<tr>
+<td>Decision tree</td>
+<td>Gini default; CHAID</td>
+<td>— single (documented options)</td>
+</tr>
+<tr>
+<td>ROC</td>
+<td>larger = positive; ties half credit; Hanley–McNeil; Youden</td>
+<td>✅ <a href="../../#coverage">validation.md</a></td>
+</tr>
+<tr>
+<td>Propensity score</td>
+<td>logit-scale distance; greedy 1:k; unadjusted pooled SD</td>
+<td>✅ <a href="../../tolerances/">tolerances</a></td>
+</tr>
+<tr>
+<td>MDS, correspondence, canonical</td>
+<td>classical / Torgerson; standard</td>
+<td>✅ <a href="../../#coverage">validation.md</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="complex-samples-bayesian-power-imputation-charts">Complex samples, Bayesian, power, imputation, charts</h2>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Statistic</th>
+<th>ChakataStat's definition</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Survey designs (five estimation conventions; regression under a design)</td>
+<td>—</td>
+<td>✅ <a href="../clinical-and-survey/#complex-survey-designs--the-v1-conventions">clinical-and-survey</a></td>
+</tr>
+<tr>
+<td>Bayesian t / correlation / ANOVA / regression priors</td>
+<td>JZS r = 0.707; stretched-beta κ = 1; Zellner–Siow</td>
+<td>✅ <a href="../../#coverage">validation.md</a></td>
+</tr>
+<tr>
+<td>Power: tails and noncentral distributions</td>
+<td>two-tailed default</td>
+<td>🆕 <a href="../classical/#power-analysis">power analysis</a></td>
+</tr>
+<tr>
+<td>Multiple imputation</td>
+<td>chained equations, 10 cycles, Rubin + Barnard–Rubin</td>
+<td>✅ <a href="../../#coverage">validation.md</a></td>
+</tr>
+<tr>
+<td>Box plot fences, histogram bins, Q–Q positions</td>
+<td>Tukey 1.5 IQR; 10 equal bins; Blom</td>
+<td>🆕 <a href="../classical/#charts">charts</a></td>
+</tr>
+<tr>
+<td>Violin density</td>
+<td>Silverman factor; 96-point grid; frequency weights</td>
+<td>✅ <a href="../../tolerances/">tolerances</a></td>
+</tr>
+<tr>
+<td>Chart provenance, dataset fingerprint</td>
+<td>—</td>
+<td>✅ recorded app-side in <code>docs/development/conventions.md</code> (outside the guide)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="the-count">The count</h2>
+<p>Of the rows above: <strong>46 recorded before this sweep</strong>, <strong>48 recorded on
+2026-08-28</strong> (all in <a href="../classical/">classical.md</a> unless linked elsewhere),
+<strong>15 single-definition</strong> (said so), and <strong>2 recorded on 2026-08-29 by the
+adversarial fixture battery</strong> (0.23.0 item 6, the
+<a href="../classical/#degenerate-inputs--the-0230-conventions">degenerate inputs</a>
+section) — the two rows this inventory could not close by itself, because
+their definition <em>was</em> the battery's decision. <strong>No row is waiting.</strong></p>
+<h2 id="adding-to-this-page">Adding to this page</h2>
+<p>A new analysis adds its rows here in the same commit (the
+<em>add-an-analysis</em> walkthrough's checklist: record the conventions before
+the pin). A row is never &quot;TBD&quot;: it is recorded, single,
+or pending a named item.</p>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-legal">
+        <a href="../../../../index.html">Home</a> ·
+        <a href="../../../../quick-start/">Quick Start</a> ·
+        <a href="../../../../privacy-policy/">Privacy Policy</a> ·
+        <a href="../../../../license/">License</a> ·
+        <a href="../../../../cite/">How to Cite</a>
+      </p>
+      <p class="footer-docs-licence">
+        The text of this documentation is licensed
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        — you may share and adapt it, including commercially, with attribution.
+        That licence covers the documentation text only. It does
+        <strong>not</strong> cover the ChakataStat software, which is
+        proprietary (free to use for any purpose, but not open source), and it
+        does <strong>not</strong> cover the ChakataStat name or logo, which are
+        trademarks and are not licensed for reuse.
+      </p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+
+  <script src="../../../../js/main.js"></script>
+</body>
+</html>

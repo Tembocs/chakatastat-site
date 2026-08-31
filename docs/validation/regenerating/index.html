@@ -69,9 +69,12 @@
         <ul>
         <li><a href="../">Overview</a></li>
         <li><a href="../nist/">NIST StRD certified datasets</a></li>
+        <li><a href="../cross-os/">Cross-OS agreement</a></li>
         <li><a href="../file-formats/">Statistics-package file formats</a></li>
         <li><a href="../tolerances/">Tolerances and recorded conventions</a></li>
         <li class="docs-nav-section">The recorded conventions</li>
+        <li><a href="../conventions/README/">The convention inventory</a></li>
+        <li><a href="../conventions/classical/">Descriptives, tests and the classical toolbox — the 0.23.0 conventions</a></li>
         <li><a href="../conventions/regression/">Regression conventions</a></li>
         <li><a href="../conventions/latent-variable/">Latent-variable conventions</a></li>
         <li><a href="../conventions/clinical-and-survey/">Clinical and survey conventions</a></li>
@@ -165,6 +168,22 @@ dart run tool/cstool.dart test test/survey_validation_test.dart \
 </code></pre>
 <p>The R and package versions used for the committed values are recorded in each
 JSON header (<code>_versions</code>).</p>
+<p>The <strong>second oracle</strong> for the Python-referenced pins (0.23.0 item 8 — see
+<a href="../#the-second-oracle--r-against-python-pin-by-pin">validation.md</a>)
+runs in the same pinned R environment plus <code>metafor</code>, <code>ivreg</code>, <code>plm</code> and
+<code>MatchIt</code> (installed from CRAN into it; MASS, nnet, survival, car, psych,
+lavaan and urca are already there):</p>
+<pre><code class="language-sh">PATH=~/micromamba/envs/r-survey/bin:$PATH Rscript -e \
+  'install.packages(c(&quot;metafor&quot;,&quot;ivreg&quot;,&quot;plm&quot;,&quot;MatchIt&quot;), repos=&quot;https://cloud.r-project.org&quot;)'
+Rscript tool/validation/generate_second_oracle_references.R
+dart run tool/cstool.dart test test/numerical_validation_test.dart
+</code></pre>
+<p>The generator prints the between-oracle agreement per family and lists any
+disagreement past a pin's tolerance that has no recorded <code>divergence</code>; the
+Dart suite fails on the same condition. <strong>Regenerate it whenever
+<code>reference_values.json</code> changes</strong> — a pin added to a covered family without
+an R value is a pin the second-oracle guard no longer sees, and a pin whose
+Python value moved past its R value fails as an unexplained disagreement.</p>
 <p>The <strong>statistics-package format</strong> artifacts have their own, smaller toolchain
 (<code>pyreadstat</code> + <code>pandas</code>, and <code>xlwt</code>/<code>odfpy</code> for the spreadsheet fixtures):</p>
 <pre><code class="language-sh">python3 -m venv /tmp/fmtenv
@@ -176,6 +195,27 @@ dart run tool/cstool.dart test test/io_test.dart test/foreign_corpus_test.dart
 <p>The fixture writer is deliberately <strong>create-if-absent</strong>: <code>.sav</code> files embed a
 creation timestamp, so an unconditional rewrite would churn committed bytes on
 every run. Delete a fixture to genuinely regenerate it.</p>
+<h2 id="regenerating-the-cross-os-agreement-report">Regenerating the cross-OS agreement report</h2>
+<p>The cross-OS page is generated, never edited: a dispatched tier-2 run
+(<code>gh workflow run ci</code>) has every validation suite emit each pin's
+engine-computed value (<code>VALIDATION_EMIT_PINS</code>, set by the workflow;
+<code>test/validation/pin_emission.dart</code>)
+as one <code>pins-&lt;OS&gt;</code> artifact per leg, and the <code>cross-os-agreement</code> job scores
+them with
+<code>tool/validation/cross_os_agreement.dart</code>
+and uploads the Markdown as the <code>cross-os-agreement</code> artifact. To refresh the
+committed copy from a run:</p>
+<pre><code class="language-sh">gh run download &lt;run-id&gt; --pattern 'pins-*' --dir qa_output/validation/agreement
+dart run tool/validation/cross_os_agreement.dart \
+  --run-id &lt;run-id&gt; --sha &lt;sha&gt; \
+  qa_output/validation/agreement/pins-Linux \
+  qa_output/validation/agreement/pins-Windows \
+  qa_output/validation/agreement/pins-macOS
+</code></pre>
+<p>The script exits non-zero when any pin's cross-OS spread exceeds its
+tolerance — that is a finding to fix or record, not a reason to rerun. The
+committed page must come from the <strong>release candidate's</strong> run, so the
+published table describes the pins that ship.</p>
 <h2 id="adding-a-procedure">Adding a procedure</h2>
 <ol>
 <li>In the generator, add a <code>add(&quot;&lt;family&gt;/&lt;stat&gt;&quot;, value, tol, &quot;&lt;source&gt;&quot;)</code> line

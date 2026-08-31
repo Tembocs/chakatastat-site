@@ -69,9 +69,12 @@
         <ul>
         <li><a href="../../">Overview</a></li>
         <li><a href="../../nist/">NIST StRD certified datasets</a></li>
+        <li><a href="../../cross-os/">Cross-OS agreement</a></li>
         <li><a href="../../file-formats/">Statistics-package file formats</a></li>
         <li><a href="../../tolerances/">Tolerances and recorded conventions</a></li>
         <li class="docs-nav-section">The recorded conventions</li>
+        <li><a href="../README/">The convention inventory</a></li>
+        <li><a href="../classical/">Descriptives, tests and the classical toolbox — the 0.23.0 conventions</a></li>
         <li><a href="./" aria-current="page">Regression conventions</a></li>
         <li><a href="../latent-variable/">Latent-variable conventions</a></li>
         <li><a href="../clinical-and-survey/">Clinical and survey conventions</a></li>
@@ -916,6 +919,55 @@ list — whether a bracket's half-width lands above or below 1e-2 depends on the
 data, so the rule is what is stable — and their count is pinned so a
 regeneration cannot quietly turn them back into what look like sloppy
 tolerances.</p>
+<h2 id="the-gamma-log-likelihoods-dispersion--the-0230-convention">The Gamma log-likelihood's dispersion — the 0.23.0 convention</h2>
+<blockquote>
+<p>Found by the second oracle (0.23.0 item 8): <code>reg_gamma/m2ll</code> is the one
+GLM pin on which R and statsmodels disagree, by 3.6 digits, while the
+coefficients, the deviance and the Pearson dispersion of the same fit
+agree to 10+.</p>
+</blockquote>
+<p>The Gamma family's log-likelihood depends on a dispersion φ that the IRLS
+fit does not estimate, so every implementation has to pick one to evaluate
+the likelihood at, and two are in print:</p>
+<ul>
+<li><strong>The Pearson estimate</strong>, φ̂ = χ²_P / (n − p) — what statsmodels' <code>GLM</code>
+reports as <code>scale</code> and evaluates <code>llf</code> at.</li>
+<li><strong>The deviance estimate</strong>, φ̂ = D / n — what R's <code>logLik.glm</code> uses
+(through the family's <code>aic</code> function, which is documented to do so).</li>
+</ul>
+<p><strong>ChakataStat prints the Pearson form.</strong> The reported dispersion <em>is</em> the
+Pearson estimate (the <code>Dispersion</code> row and the standard errors use it), so
+the −2 log-likelihood, AIC and any likelihood-ratio comparison are evaluated
+at the same φ̂ the rest of the table is built on — one dispersion per fit,
+not two. It is also the number the primary pin holds. R's value is recorded
+beside it as a divergence, not a discrepancy: same fit, a different φ̂ in
+the likelihood.</p>
+<h2 id="the-unbalanced-panels-variance-components--the-0230-convention">The unbalanced panel's variance components — the 0.23.0 convention</h2>
+<blockquote>
+<p>Found by the second oracle (0.23.0 item 8, lane 5): on the balanced
+Grunfeld panel every Swamy–Arora quantity agrees between plm and
+linearmodels to 15 digits; on the unbalanced <code>grunfeld_ub.csv</code> five pins
+— θ's range, the RE slope and its SE, the Hausman statistic — disagree by
+3–4 digits, all downstream of one number.</p>
+</blockquote>
+<p>The random-effects estimator needs σ²ᵤ, the between-entity variance, and
+Swamy &amp; Arora (1972) estimate it from the between regression's residual
+variance minus σ²ₑ divided by the common T. An unbalanced panel has no
+common T, and the literature offers more than one replacement:</p>
+<ul>
+<li><strong>The harmonic-mean T̄</strong> — Stata's <code>xtreg, re</code> and linearmodels: the
+balanced formula with T replaced by the harmonic mean of the entity
+lengths.</li>
+<li><strong>Baltagi &amp; Chang (1994)</strong> — plm's <code>random.method = &quot;swar&quot;</code>: a
+trace-based degrees-of-freedom correction on the between regression
+(Baltagi 2013, §9.2) that reduces to the same formula when the panel is
+balanced.</li>
+</ul>
+<p><strong>ChakataStat uses the harmonic-mean T̄</strong> (recorded in
+<code>rust/src/analyze/panel.rs</code> and
+pinned against linearmodels). Both are legitimate Swamy–Arora estimators;
+the choice is the one a Stata user will reproduce. plm's values are
+recorded beside the five affected pins as a divergence, not a discrepancy.</p>
       </article>
     </div>
   </main>

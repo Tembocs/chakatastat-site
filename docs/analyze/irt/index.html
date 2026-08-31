@@ -83,6 +83,7 @@
         <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
         <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
         <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li><a href="../../advanced/verify-installation/">Verify this Installation</a></li>
         <li class="docs-nav-section">Reference</li>
         <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
         <li><a href="../../reference/glossary/">Glossary</a></li>
@@ -146,6 +147,13 @@ measurement precision profile of the whole test. A tall curve over the
 range you care about (e.g. around a cut score) is the goal; information
 collapsing at the extremes is why extreme scores are always less
 precise.</li>
+</ul>
+<h2 id="how-this-is-computed">How this is computed</h2>
+<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
+<ul>
+<li><strong>Models</strong> — the Rasch, 2PL and 3PL logistic models by marginal maximum likelihood with fixed Gauss–Hermite quadrature (<code>mirt</code>'s default scheme), the latent trait standard normal for identification (<a href="../../validation/conventions/latent-variable/#item-response-theory--the-v1-conventions">IRT conventions</a>).</li>
+<li><strong>Standard errors and information</strong> — standard errors from the observed information (a central-difference Hessian of the marginal likelihood); the item and test information curves I_j(θ) = a²·P(1 − P); validated against both <code>ltm</code> and <code>mirt</code> on the LSAT6 / LSAT7 data (<a href="../../validation/conventions/latent-variable/#item-response-theory--the-v1-conventions">IRT conventions</a>).</li>
+<li><strong>Data</strong> — dichotomous items with the keyed response as the &quot;correct&quot; level; cases with any missing item are dropped; a frequency weight replicates cases (<a href="../../validation/tolerances/">case weighting</a>).</li>
 </ul>
 <h2 id="relation-to-the-other-scale-tools">Relation to the other scale tools</h2>
 <ul>

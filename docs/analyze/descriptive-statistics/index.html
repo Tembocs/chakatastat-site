@@ -83,6 +83,7 @@
         <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
         <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
         <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li><a href="../../advanced/verify-installation/">Verify this Installation</a></li>
         <li class="docs-nav-section">Reference</li>
         <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
         <li><a href="../../reference/glossary/">Glossary</a></li>
@@ -199,6 +200,13 @@ by data.</p>
 <em>TotalCholesterol_mmolL</em> as an auxiliary: each of the <em>m</em> datasets is completed
 by chained equations, the regression is run on each, and the results are pooled
 into one table with an FMI column saying how much the gaps cost you.</p>
+<h2 id="how-this-is-computed">How this is computed</h2>
+<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
+<ul>
+<li><strong>Frequencies / Descriptives / Explore</strong> — mean, SD and variance with divisor n − 1, SE = s/√n; <strong>skewness and kurtosis are the bias-adjusted G₁ / G₂</strong> (SPSS, SAS, R type 2) (<a href="../../validation/conventions/classical/#skewness-and-kurtosis">moments</a>); <strong>percentiles, the median and the quartiles are Hazen's</strong> (k − ½)/n, weighted on cumulative weight (<a href="../../validation/conventions/classical/#quantiles">quantiles</a> · <a href="../../validation/tolerances/">tolerances</a>). A frequency weight counts a case that many times (<a href="../../validation/tolerances/">case weighting</a>). Explore's box plot uses Tukey's 1.5 × IQR fences (<a href="../../validation/conventions/classical/#box-plot">charts</a>); its normality table is Shapiro–Wilk (Royston) and Kolmogorov–Smirnov with Lilliefors significance (<a href="../../validation/conventions/classical/#normality-tests">normality tests</a>).</li>
+<li><strong>Crosstabs</strong> — Pearson χ² <strong>without</strong> a continuity correction on every table, the likelihood-ratio χ², <strong>Fisher's exact test</strong> by the sum-of-less-likely-tables rule, <strong>McNemar</strong> exact for b + c ≤ 25 and continuity-corrected above, φ and Cramér's V uncorrected, Mantel–Haenszel with and Cochran's without the correction (<a href="../../validation/conventions/classical/#tables">tables</a>). Gamma, τ-b/τ-c, Somers' d, λ and κ are the standard forms.</li>
+<li><strong>Missing Value Analysis / Multiple Imputation</strong> — chained equations with 10 cycles, Rubin's rules with the Barnard–Rubin df, a seeded reproducible PRNG (<a href="../../validation/#coverage">validation</a>). Every procedure is listwise on its own variables (<a href="../../validation/conventions/classical/#missing-data-policy">missing-data policy</a>).</li>
+</ul>
 <h2 id="see-also">See also</h2>
 <ul>
 <li><a href="../compare-means/">Compare Means</a> — when one variable is a scale outcome.</li>

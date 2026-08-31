@@ -69,9 +69,12 @@
         <ul>
         <li><a href="../../">Overview</a></li>
         <li><a href="../../nist/">NIST StRD certified datasets</a></li>
+        <li><a href="../../cross-os/">Cross-OS agreement</a></li>
         <li><a href="../../file-formats/">Statistics-package file formats</a></li>
         <li><a href="../../tolerances/">Tolerances and recorded conventions</a></li>
         <li class="docs-nav-section">The recorded conventions</li>
+        <li><a href="../README/">The convention inventory</a></li>
+        <li><a href="../classical/">Descriptives, tests and the classical toolbox — the 0.23.0 conventions</a></li>
         <li><a href="../regression/">Regression conventions</a></li>
         <li><a href="../latent-variable/">Latent-variable conventions</a></li>
         <li><a href="./" aria-current="page">Clinical and survey conventions</a></li>
@@ -402,6 +405,31 @@ differences at 1.96 are the 1986 presentation the audience cites.</li>
 <li><strong>No CI shading on the plot</strong> and <strong>no fitted proportional-bias line</strong>
 (the table carries the test) — both recorded follow-ups if asked for.</li>
 </ul>
+<h2 id="the-proportional-hazards-test-statistic--the-0230-convention">The proportional-hazards test statistic — the 0.23.0 convention</h2>
+<blockquote>
+<p>Found by the second oracle (0.23.0 item 8): the three <code>ph_test/*</code> pins are
+the widest disagreement in the suite — under one digit — between
+lifelines (the primary oracle, which the engine matches to 5e-3) and
+survival's <code>cox.zph</code>. Both are the Grambsch–Therneau (1994) test; they
+are two forms of it.</p>
+</blockquote>
+<p>Grambsch &amp; Therneau (Biometrika 81:515) derive the test of proportional
+hazards from the scaled Schoenfeld residuals regressed on a transform of
+time, g(t). Their paper gives an exact score statistic (its equation 2.2,
+which needs the full information matrix at every event time) and a
+simplification (equation 3.3) that replaces those matrices by the average
+d · I⁻¹ — the form every implementation used for twenty-five years.
+<code>survival</code> 3.0 (2019) switched <code>cox.zph</code> to the exact form; lifelines'
+<code>proportional_hazard_test</code> kept the simplified one. On <code>surv.csv</code> the two
+give χ² of 0.93 against 1.18 for the rank transform — the same residuals,
+the same g(t), a different statistic.</p>
+<p><strong>ChakataStat prints the simplified (1994, equation 3.3) form</strong>, the one
+lifelines computes and the one the published tables of the last two decades
+were produced with. The choice is recorded so the number can be read against
+either package: agreement with lifelines is parity; disagreement with a
+current <code>cox.zph</code> is the form, not an error. Both transforms the engine
+offers (<code>rank</code>, <code>identity</code>) are pinned against lifelines; the R values are
+recorded beside them as a divergence.</p>
       </article>
     </div>
   </main>

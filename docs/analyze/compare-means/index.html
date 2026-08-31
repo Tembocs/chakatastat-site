@@ -83,6 +83,7 @@
         <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
         <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
         <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li><a href="../../advanced/verify-installation/">Verify this Installation</a></li>
         <li class="docs-nav-section">Reference</li>
         <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
         <li><a href="../../reference/glossary/">Glossary</a></li>
@@ -292,6 +293,15 @@ intercept-only null: whether the predictors collectively matter.</li>
 <p>Controls: a <strong>Prior scale r</strong> (the g-prior on the effects; default √2/4 ≈ 0.354)
 and a <strong>Credible %</strong> for the intervals. A BF₁₀ above 1 favours the predictors; a
 BF₀₁ above 1 is evidence that an intercept-only model suffices.</p>
+<h2 id="how-this-is-computed">How this is computed</h2>
+<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
+<ul>
+<li><strong>T tests</strong> — one-sample, paired and independent <em>t</em> with <em>t</em> confidence intervals; the independent test prints <strong>both</strong> the pooled row (df n₁ + n₂ − 2) and the Welch row (Welch–Satterthwaite df) beside Levene's test, and never switches for you (<a href="../../validation/conventions/classical/#the-independent-samples-t-test-both-variances-rows">both rows</a>). <strong>Cohen's d</strong> uses the pooled n − 1 SD (paired: d_z on the SD of the differences), <strong>Hedges' g</strong> the factor 1 − 3/(4df − 1), and the CI on d the noncentral <em>t</em> (<a href="../../validation/conventions/classical/#cohens-d-and-hedges-g">effect sizes</a>).</li>
+<li><strong>Levene's test</strong> — mean-centred, the original form (R and SciPy default to the median-centred Brown–Forsythe; set the centre to reproduce) (<a href="../../validation/conventions/classical/#levenes-test-mean-centred">Levene</a>).</li>
+<li><strong>Equivalence (TOST)</strong> — bounds centred on the test value, the 1 − 2α interval, Welch by default (<a href="../../validation/conventions/clinical-and-survey/#equivalence-tests-tost--the-v1-conventions">TOST</a>).</li>
+<li><strong>One-way ANOVA</strong> — the classic between / within partition (k − 1, N − k df); η², ε² and ω² in the Olejnik–Algina forms (<a href="../../validation/conventions/classical/#one-way-anova-effect-sizes">ANOVA effect sizes</a>); Welch's robust F*; planned contrasts both pooled and Welch–Satterthwaite; <strong>post hoc</strong> Bonferroni, Scheffé and Tukey HSD on the pooled within MS (<a href="../../validation/conventions/classical/#post-hoc-tests">post hoc</a>).</li>
+<li><strong>Bayesian t test / correlation / ANOVA / regression</strong> — JZS Bayes factors with the Cauchy prior scale r = 0.707, the stretched-beta prior width κ = 1 for ρ, the Zellner–Siow g-prior (<a href="../../validation/#coverage">validation</a>).</li>
+</ul>
 <h2 id="choosing-among-them">Choosing among them</h2>
 <div class="docs-table-wrap"><table>
 <thead>

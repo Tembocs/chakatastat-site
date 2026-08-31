@@ -83,6 +83,7 @@
         <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
         <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
         <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li><a href="../../advanced/verify-installation/">Verify this Installation</a></li>
         <li class="docs-nav-section">Reference</li>
         <li><a href="../choosing-a-procedure/">Choosing a procedure</a></li>
         <li><a href="../glossary/">Glossary</a></li>
@@ -2144,7 +2145,7 @@
 </tbody>
 </table></div>
 <h3 id="mixed_model"><code>mixed_model</code></h3>
-<p>A two-level linear mixed model: a numeric dependent on optional predictors with a random intercept (and optional random slopes) for a grouping variable (fixed effects, variance components, the intraclass correlation). Supports ML or REML estimation.</p>
+<p>A two-level linear mixed model: a numeric dependent on optional predictors with a random intercept (and optional random slopes) for a grouping variable (fixed effects, variance components, the intraclass correlation), by REML (default) or ML.</p>
 <pre><code class="language-cks">mixed_model dependent=VarName group=VarName
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -2191,7 +2192,7 @@
 <td><code>reml</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>Use restricted maximum likelihood (less biased variance components) instead of ML.</td>
+<td>Restricted maximum likelihood (default: true — unbiased variance components, the lme4 / SAS / SPSS convention); false fits by ML, needed to compare models with different fixed effects by likelihood ratio.</td>
 </tr>
 <tr>
 <td><code>confidence</code></td>
@@ -3566,7 +3567,7 @@
 </tbody>
 </table></div>
 <h3 id="cox_regression"><code>cox_regression</code></h3>
-<p>A Cox proportional-hazards regression of the event hazard on numeric covariates (right-censored survival data): coefficients with standard errors and Wald tests, the hazard ratios Exp(B) with confidence intervals, and an omnibus likelihood-ratio test of the model. Ties are handled by Breslow's method.</p>
+<p>A Cox proportional-hazards regression of the event hazard on numeric covariates (right-censored survival data): coefficients with standard errors and Wald tests, the hazard ratios Exp(B) with confidence intervals, and an omnibus likelihood-ratio test of the model. Ties are handled by Efron's method unless Breslow's is asked for.</p>
 <pre><code class="language-cks">cox_regression time=VarName status=VarName covariates=[Var1, Var2]
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -3611,9 +3612,9 @@
 </tr>
 <tr>
 <td><code>ties</code></td>
-<td>one of <code>breslow</code>, <code>efron</code></td>
+<td>one of <code>efron</code>, <code>breslow</code></td>
 <td>no</td>
-<td>How tied event times are handled: Breslow (default) or the more accurate Efron approximation.</td>
+<td>How tied event times are handled: the Efron approximation (default; more accurate with ties, the R / Stata convention) or Breslow's (the SPSS / SAS convention).</td>
 </tr>
 <tr>
 <td><code>strata</code></td>

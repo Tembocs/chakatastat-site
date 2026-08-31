@@ -83,6 +83,7 @@
         <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
         <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
         <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li><a href="../../advanced/verify-installation/">Verify this Installation</a></li>
         <li class="docs-nav-section">Reference</li>
         <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
         <li><a href="../../reference/glossary/">Glossary</a></li>
@@ -561,7 +562,8 @@ adjusting for <em>Age</em> as a covariate.</p>
 <h2 id="linear-mixed-model">Linear Mixed Model</h2>
 <p><strong>Analyze → Linear Mixed Model.</strong> For <strong>clustered or repeated</strong> data: a model
 with a <strong>random intercept</strong> and optional <strong>random slopes</strong>, using
-variance-components or unstructured covariance, estimated by <strong>ML or REML</strong>.
+variance-components or unstructured covariance, estimated by <strong>REML</strong> (the
+default) or <strong>ML</strong>.
 Reports fixed effects and the estimated variance components.</p>
 <h2 id="generalized-linear-mixed-model">Generalized Linear Mixed Model</h2>
 <p><strong>Analyze → Generalized Linear Mixed Model.</strong> The mixed-model idea for a
@@ -597,6 +599,18 @@ MANOVA <strong>honour the Weight Cases setting</strong>: the case weight is a fr
 weight, so a weight-2 case counts exactly as two — in the within-subjects sums
 of squares and the error/hypothesis scatter matrices alike.</p>
 </blockquote>
+<h2 id="how-this-is-computed">How this is computed</h2>
+<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
+<ul>
+<li><strong>Correlate</strong> — Pearson <em>r</em> with <em>t</em> on n − 2 df; <strong>Spearman</strong> on mid-ranks with the <em>t</em> approximation (not R's exact form); <strong>Kendall's τ-b</strong> with the normal approximation; <strong>pairwise</strong> deletion by default, listwise on request; no CI on <em>r</em> (<a href="../../validation/conventions/classical/#correlation">correlation</a>). Partial correlation on n − 2 − k df (<a href="../../validation/conventions/classical/#partial-correlation">partial</a>).</li>
+<li><strong>Linear</strong> — least squares by QR, a scale-invariant singularity verdict, <em>t</em> intervals on the residual df, standardized β = B·sd(x)/sd(y), Durbin–Watson on case order, tolerance / VIF (<a href="../../validation/conventions/regression/#linear-least-squares-by-qr--the-0210-conventions">QR</a> · <a href="../../validation/conventions/regression/#scale-invariance-of-the-singularity-verdict--the-0220-convention">scale invariance</a>); <strong>through the origin</strong> reports the uncentred R² and F (<a href="../../validation/conventions/regression/#regression-through-the-origin--the-0210-conventions">origin</a>); <strong>stepwise</strong> enters at p ≤ .05 and removes at p ≥ .10 (<a href="../../validation/conventions/classical/#stepwise-selection">stepwise</a>).</li>
+<li><strong>Regularized</strong> — standardized predictors, a 100-point λ path, 10-fold CV with the minimum and 1-SE λ (<a href="../../validation/conventions/classical/#regularized-regression">regularized</a>). <strong>Robust</strong> — Huber c = 1.345 / Tukey c = 4.685 on the MAD/0.6745 scale, sandwich SEs (<a href="../../validation/conventions/classical/#robust-regression-the-m-estimator-constants">robust</a>). <strong>Nonlinear</strong> — Levenberg–Marquardt, Gauss–Newton covariance (<a href="../../validation/conventions/classical/#nonlinear-regression">nonlinear</a>). <strong>2SLS</strong> — σ̂² on the structural residuals, the first-stage F (<a href="../../validation/#coverage">validation</a>).</li>
+<li><strong>Logistic / Probit / Poisson / Negative binomial / Gamma</strong> — IRLS through the QR (<a href="../../validation/conventions/regression/#glm-irls-through-the-qr--the-0220-convention">IRLS</a>); <strong>Wald z intervals</strong>, Exp(B) = exp(B ± z·SE) (R's <code>confint.glm</code> is profile-likelihood — use <code>confint.default</code>) (<a href="../../validation/conventions/classical/#confidence-intervals-on-glm-coefficients-wald-z">Wald</a>); Hosmer–Lemeshow on ten deciles of risk, g − 2 df (<a href="../../validation/#coverage">validation</a>); NB2 with α by ML (<a href="../../validation/tolerances/">tolerances</a>); the <strong>Gamma</strong> dispersion is the Pearson estimate and the likelihood is evaluated at it (R's <code>logLik</code> uses D/n) (<a href="../../validation/conventions/regression/#the-gamma-log-likelihoods-dispersion--the-0230-convention">Gamma</a>); the diagnostic residuals are randomized quantile residuals, seeded (<a href="../../validation/conventions/regression/#glm-quantile-residuals--the-per-family-definitions">quantile residuals</a>).</li>
+<li><strong>Multinomial / Ordinal</strong> — the lowest category is the baseline; the ordinal model is logit P(Y ≤ c) = θ_c − β·x (SPSS PLUM, <code>polr</code>) (<a href="../../validation/conventions/classical/#multinomial-and-ordinal-regression-the-reference-and-the-sign">reference and sign</a>). <strong>Quantile</strong> — IRLS on the check loss, Koenker iid SEs; <strong>GEE</strong> — sandwich covariance under the chosen working correlation; <strong>Loglinear</strong> — a Poisson GLM on the counts (<a href="../../validation/#coverage">validation</a> · <a href="../../validation/conventions/classical/#loglinear-models">loglinear</a>).</li>
+<li><strong>Mediation</strong> — OLS paths on the PROCESS model shapes, Aiken–West probes at mean ∓ 1 SD, percentile / BCa bootstrap intervals from a seeded PRNG, Johnson–Neyman regions (<a href="../../validation/conventions/regression/#mediation-follow-ups--the-0210-conventions">mediation</a> · <a href="../../validation/tolerances/">tolerances</a>).</li>
+<li><strong>General Linear Model</strong> — Type III sums of squares under sum-to-zero contrasts (<a href="../../validation/tolerances/">Type III</a>); MANOVA's Pillai / Wilks / Hotelling–Lawley / Roy and the SPSS partial η²; repeated measures with Mauchly's test and the Greenhouse–Geisser / Huynh–Feldt ε (<a href="../../validation/#coverage">validation</a>).</li>
+<li><strong>Linear Mixed Model</strong> — <strong>REML by default</strong> (untick for ML when comparing fixed effects by likelihood ratio), Swamy-style variance components, the ICC (<a href="../../validation/conventions/classical/#mixed-models-reml-by-default-ml-on-request">mixed models</a>). <strong>GLMM</strong> — a random intercept integrated by Gauss–Hermite quadrature (same section).</li>
+</ul>
 <h2 id="choosing-among-them">Choosing among them</h2>
 <ul>
 <li>One outcome, continuous → <strong>Linear</strong>.</li>

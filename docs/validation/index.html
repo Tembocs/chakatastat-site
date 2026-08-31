@@ -69,9 +69,12 @@
         <ul>
         <li><a href="./" aria-current="page">Overview</a></li>
         <li><a href="nist/">NIST StRD certified datasets</a></li>
+        <li><a href="cross-os/">Cross-OS agreement</a></li>
         <li><a href="file-formats/">Statistics-package file formats</a></li>
         <li><a href="tolerances/">Tolerances and recorded conventions</a></li>
         <li class="docs-nav-section">The recorded conventions</li>
+        <li><a href="conventions/README/">The convention inventory</a></li>
+        <li><a href="conventions/classical/">Descriptives, tests and the classical toolbox — the 0.23.0 conventions</a></li>
         <li><a href="conventions/regression/">Regression conventions</a></li>
         <li><a href="conventions/latent-variable/">Latent-variable conventions</a></li>
         <li><a href="conventions/clinical-and-survey/">Clinical and survey conventions</a></li>
@@ -104,6 +107,10 @@ detail sits on its own pages so each can be read on its own.</p>
 <li><strong><a href="nist/">NIST StRD certified datasets</a></strong> — the certified-value
 leg: every dataset NIST publishes, run end to end and scored by digits of
 agreement.</li>
+<li><strong><a href="cross-os/">Cross-OS agreement</a></strong> — what the three
+operating systems' engines compute <em>relative to each other</em>, per pin:
+digits of agreement, worst pins first, regenerated from each release
+candidate's tier-2 run. The statement the tolerances cannot make.</li>
 <li><strong><a href="file-formats/">Statistics-package file formats</a></strong> — how the
 SPSS, Stata and SAS readers are proven against the packages that wrote the
 files.</li>
@@ -114,6 +121,15 @@ each tolerance means, and why a number is pinned as tightly as it is.</li>
 definition and ChakataStat's choice is written down rather than hidden behind a
 loose tolerance:</p>
 <ul>
+<li><strong><a href="conventions/README/">The convention inventory</a></strong> — every
+statistic with more than one defensible definition, and where ChakataStat's
+choice is written down: recorded, recorded now, single-definition, or
+pending a named item (0.23.0 item 9). Nothing is left implicit.</li>
+<li><strong><a href="conventions/classical/">Descriptives, tests and the classical toolbox</a></strong>
+— the definitions the inventory found implicit, written once: quantiles
+and moments, continuity corrections, tie handling, effect-size
+denominators, CI families, post hoc tests, ties in Cox, lags in ADF,
+factor rotation, clustering defaults, chart geometry.</li>
 <li><strong><a href="conventions/regression/">Regression</a></strong> — GLM quantile
 residuals per family, mediation follow-ups, regression through the origin,
 least squares by QR.</li>
@@ -218,6 +234,193 @@ never drift the committed inputs out from under the committed references.</p>
 </tr>
 </tbody>
 </table></div>
+<h2 id="the-second-oracle--r-against-python-pin-by-pin">The second oracle — R against Python, pin by pin</h2>
+<p>Until 0.23.0 every pin in <code>reference_values.json</code> had exactly one oracle:
+the Python package that produced it. An engine that shared that package's
+convention — or its mistake — passed without anyone learning anything. The
+second oracle closes that for the families a regulated user leans on most:
+<code>tool/validation/generate_second_oracle_references.R</code>
+recomputes the same statistics in R, from the same committed CSV bytes, with
+implementations that share no code with the Python ones, and writes
+<code>test/validation/second_oracle_reference_values.json</code>
+— the Python file's ids verbatim, the R value and the exact R call. The
+suite asserts the engine against <strong>both</strong> at the pin's own tolerance (the
+second oracle has no tolerance of its own), so the claim for a covered pin is
+<em>two independent implementations agree, and the engine agrees with both</em>.</p>
+<p><strong>267 of the 267 pins in <code>reference_values.json</code> have a second oracle, across
+52 of its 52 families</strong> (asserted by a guard in
+<code>numerical_validation_test.dart</code>,
+like the coverage sentence above). The inventory, by the plan's lanes plus
+the fifth lane the maintainer added on 2026-08-28 so that nothing stays
+single-oracle:</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Lane</th>
+<th>Families</th>
+<th>Pins</th>
+<th>R implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 — linear models and GLMs</td>
+<td><code>reg_linear</code> (16) · <code>nls</code> (5) · <code>iv</code> (6) · <code>reg_logistic</code> (4) · <code>reg_probit</code> (2) · <code>reg_poisson</code> (3) · <code>reg_gamma</code> (6) · <code>reg_negbin</code> (2) · <code>glm_resid</code> (17) · <code>multinomial</code> (3) · <code>ordinal</code> (2) · <code>mediation</code> (7) · <code>mediation_mod</code> (14)</td>
+<td>87</td>
+<td>base <code>lm</code> / <code>glm</code> / <code>nls</code> (partially linear), <code>ivreg</code>, MASS <code>glm.nb</code> / <code>polr</code>, nnet <code>multinom</code>; the quantile-residual brackets from R's <code>ppois</code> / <code>pnbinom</code> / <code>pgamma</code> on R's fitted means</td>
+</tr>
+<tr>
+<td>2 — survival</td>
+<td><code>survival_km</code> (2) · <code>survival_cox</code> (2) · <code>ph_test</code> (3)</td>
+<td>7</td>
+<td>survival <code>survdiff</code>, <code>coxph(ties = &quot;efron&quot;)</code>, <code>cox.zph</code></td>
+</tr>
+<tr>
+<td>3 — meta-analysis</td>
+<td><code>meta_analysis</code> (15)</td>
+<td>15</td>
+<td>metafor <code>rma</code> (FE, DL, REML), <code>regtest(model = &quot;lm&quot;)</code></td>
+</tr>
+<tr>
+<td>4 — classical tests and descriptives</td>
+<td><code>explore</code> (10) · <code>crosstabs</code> (5) · <code>ttest_one</code> (4) · <code>ttest_ind</code> (7) · <code>ttest_paired</code> (4) · <code>anova</code> (5) · <code>levene</code> (2) · <code>means</code> (2) · <code>correlate</code> (6) · <code>partial</code> (1) · <code>glm</code> (4) · <code>manova</code> (3) · <code>rm_anova</code> (3) · <code>mann_whitney</code> (4) · <code>kruskal</code> (2) · <code>normality</code> (3) · <code>wilcoxon</code> (2) · <code>sign</code> (1) · <code>friedman</code> (2) · <code>binomial</code> (1) · <code>runs</code> (2)</td>
+<td>73</td>
+<td>base <code>t.test</code> / <code>cor.test</code> / <code>chisq.test</code> / <code>wilcox.test</code> / <code>kruskal.test</code> / <code>shapiro.test</code> / <code>ks.test</code> / <code>friedman.test</code> / <code>binom.test</code> / <code>manova</code> / <code>quantile(type = 5)</code>, car <code>Anova(type = 3)</code> / <code>leveneTest</code>, psych <code>skew</code> / <code>kurtosi</code> / <code>partial.r</code></td>
+</tr>
+<tr>
+<td>5 — the remainder</td>
+<td><code>cfa</code> (27) · <code>panel</code> (27) · <code>propensity</code> (8) · <code>acf</code> <code>pacf</code> <code>adf</code> <code>kpss</code> <code>arima</code> <code>ets</code> (10) · <code>factor</code> <code>discriminant</code> <code>hier</code> <code>reliability</code> (9) · <code>violin</code> (4)</td>
+<td>85</td>
+<td>lavaan <code>cfa</code>; plm <code>within</code> / <code>random(swar)</code> / <code>pooling</code> / <code>within_intercept</code> / <code>phtest</code> / <code>vcovHC</code>; MatchIt <code>matchit(nearest, linear.logit)</code>; base <code>acf</code> / <code>pacf</code> / <code>Box.test</code> / <code>HoltWinters</code>, urca <code>ur.df</code> / <code>punitroot</code> / <code>ur.kpss</code>; base <code>eigen</code> / <code>dist</code> / <code>manova</code>, psych <code>alpha</code>; the Gaussian KDE as a formula at the engine's grid</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>The rule for a disagreement.</strong> Where the two oracles differ by more than
+the pin's tolerance the R entry carries a <code>divergence</code> naming the convention
+behind it, the engine's choice stays the primary pin's, and the value is
+never averaged. The suite refuses an unexplained disagreement <em>and</em> a
+divergence recorded for a pair that agrees, so the record cannot go stale in
+either direction. Nine pins diverge today, three conventions:</p>
+<ul>
+<li><strong><code>reg_gamma/m2ll</code></strong> — the Gamma log-likelihood is evaluated at a different
+dispersion: R's <code>logLik.glm</code> uses deviance/n (the family's <code>aic</code>),
+statsmodels the Pearson χ²/df scale. Coefficients, deviance and the
+Pearson dispersion agree to 10+ digits. Recorded in
+<a href="conventions/regression/#the-gamma-log-likelihoods-dispersion--the-0230-convention">conventions/regression.md</a>.</li>
+<li><strong><code>ph_test/*</code></strong> (three pins) — two published forms of the
+Grambsch–Therneau test: survival ≥ 3.0's <code>cox.zph</code> uses the exact score
+test, lifelines and the engine the 1994 paper's simplified approximation.
+Recorded in
+<a href="conventions/clinical-and-survey/#the-proportional-hazards-test-statistic--the-0230-convention">conventions/clinical-and-survey.md</a>.</li>
+<li><strong><code>panel/ub_*</code></strong> (five pins) — the unbalanced-panel Swamy–Arora σ²ᵤ:
+linearmodels and the engine use the harmonic-mean T̄ (Stata's
+<code>xtreg, re</code>), plm's <code>swar</code> follows Baltagi &amp; Chang (1994)'s trace-based
+correction; θ, the RE coefficients and SEs and the Hausman statistic all
+move with it, while every balanced-panel pin agrees to 15 digits. Recorded
+in
+<a href="conventions/regression/#the-unbalanced-panels-variance-components--the-0230-convention">conventions/regression.md</a>.</li>
+</ul>
+<p><strong>The agreement, where they agree.</strong> Closed-form statistics agree to 13–16
+digits — including the balanced panel (15.4 median), the propensity block
+(13.8), factor/discriminant (14.3) and the violin density (14.4). The
+iteratively-estimated families are where the digits go — <code>cfa</code> 6.2 (two
+optimizers on F_ML), <code>reg_negbin</code> 6.1 (two estimators of θ), <code>multinomial</code>
+6.4, <code>ordinal</code> 5.7, <code>glm_resid</code> 6.4 (brackets from two IRLS fits),
+<code>survival_cox</code> 7.6, <code>meta_analysis</code> 7.8 (REML), <code>ets</code> 7.1 (a one-parameter
+optimum), <code>pacf</code> 4.8, <code>nls</code> 3.3 on a flat objective where the pinned SSE
+and R² are optimizer-invariant but the parameters are not — and <code>adf/p</code>
+2.3, two published approximations (MacKinnon 1994 and 1996) of the same
+Dickey–Fuller distribution, both inside the pin's 1e-3. The generator
+iterates every R fit to machine precision on purpose (R's default IRLS,
+REML and Holt–Winters thresholds leave 5–8 digits), and the suite's floor
+test is where a regeneration at the defaults would show.</p>
+<h2 id="the-installation-check--the-suites-shipped-subset">The installation check — the suite's shipped subset</h2>
+<p>Everything above runs on the developer's machine and in CI. Since 0.23.0
+(item 1 of that release) a <strong>subset of it ships inside the application</strong> and
+runs on the user's installed binary: <strong>Help → Verify this Installation</strong> in
+the app, <code>ChakataStat --verify</code> headless (exit 0 only on a full pass), the
+report rendered as ordinary output tables. The User Guide page
+<a href="../advanced/verify-installation/">Verify this Installation</a>
+says what it proves and what it does not; this section records how the
+subset is chosen and how it is kept honest.</p>
+<p><strong>The manifest is a strict subset, never a fork.</strong> The shipped files —
+<code>assets/verify/manifest.json</code> and the CSVs under <code>assets/verify/data/</code> — are
+<em>generated</em> from this suite by
+<code>tool/validation/generate_verify_manifest.dart</code>
+(run under <code>flutter test</code>), whose selection lives in
+<code>test/validation/verify_manifest_source.dart</code>.
+Every expected value, tolerance and provenance string is copied from its
+source row — <code>reference_values.json</code>, <code>survey_reference_values.json</code>, or the
+certified block of a NIST <code>.dat</code> — at build time, and
+<code>test/verify_manifest_test.dart</code>
+fails whenever the committed assets differ from a fresh build, so the
+manifest cannot be edited by hand and cannot drift when a reference moves.
+The same guard proves every catalog family is either represented by a check
+or <strong>excused by name with a reason</strong> recorded in the manifest — absence is
+written down, never implied.</p>
+<p><strong>The selection (195 checks over 19 datasets):</strong></p>
+<ul>
+<li><strong>63 pinned statistics</strong> from the package-referenced suites — 60 from the
+Python file, 3 from the R <code>survey</code> file — chosen so that every family with
+a pinned reference is represented and the families a regulated user runs
+weigh most: descriptive statistics (8), comparing means (12), correlation
+(5), regression and modeling (12: linear, logistic, probit, Poisson,
+negative binomial, gamma, IV, mediation), nonparametric tests (6), scale
+reduction and classification (6: reliability, factor, discriminant,
+propensity, CFA), survival (3), time series (4), meta-analysis (4) and
+complex samples (3, through a declared design). Each is judged by the
+<strong>same tolerance this suite pins it to</strong>.</li>
+<li><strong>The whole NIST linear least-squares suite</strong> — all eleven datasets, every
+certified parameter estimate and standard deviation plus R² and the
+residual standard deviation (132 checks), judged by the <strong>same LRE floor
+for the dataset's difficulty grade</strong> that
+<code>nist_strd_test.dart</code> asserts. The data
+ship as named columns generated from the <code>.dat</code> file, with the polynomial
+powers synthesized exactly as the suite synthesizes them.</li>
+<li><strong>Six families excused</strong>, each with its reason in the manifest:
+<em>discovering the dataset</em> and <em>transforms</em> print no statistic; <em>charts</em>
+return geometry rather than result tables; <em>Bayesian tests</em>, <em>power and
+sample size</em> and <em>tables</em> have no pinned reference row in this suite, and
+a subset cannot add one.</li>
+</ul>
+<p>The verifier reads the engine's raw numbers off <code>ToolSuccess.result</code> (the
+seam added for it — printed cells carry three decimals, and digits of
+agreement cannot be counted from those) and scores each with the same
+<code>logRelativeError</code> this suite uses for NIST.
+On the developer's Linux build the shipped manifest passes in full; the
+worst digits are the negative-binomial coefficient (6.1, cross-implementation
+agreement with statsmodels, not a certification) and the Wampler5 estimates
+(6.1–6.5, the exact-fit polynomial family), both well inside their floors.</p>
+<h2 id="the-adversarial-battery--what-every-procedure-does-at-the-edge">The adversarial battery — what every procedure does at the edge</h2>
+<p>Every defect 0.22.0 found was an edge case nobody had asked about. Since
+0.23.0 item 6 the answer is asked and pinned for <strong>84 rows</strong> of degenerate
+input, each driven through <code>ToolDispatcher</code> — the errors-as-data seam, so
+a crash <em>is</em> a failure — by
+<code>test/adversarial_battery_test.dart</code>
+over three small committed fixtures in <code>test/fixtures/battery/</code>, whose
+<code>README.md</code> <strong>is the list</strong>: each row names the fixture, the call, the outcome
+class and the reference or reason. A guard requires the README's row ids
+and the suite's to be the same set.</p>
+<p>The rows cover four groups — <strong>degenerate data</strong> (a constant, n = 1 or 2,
+one case per group, an all-missing column), <strong>degenerate designs</strong> (exact
+collinearity, a one-level factor, complete and quasi-complete separation,
+weights that are zero, negative or huge, weighted N below the parameter
+count), <strong>numeric extremes</strong> (the far tail, 10¹⁵ and 10⁻¹⁵ scales, the
+limits of a double) and <strong>semantics edges</strong> (a filter selecting no case,
+an empty split group) — across every tool family; families with no
+applicable edge say so in the README rather than being skipped.</p>
+<p>Each row lands in one of three classes: a <strong>number</strong> pinned against R,
+a closed form or an invariance; a <strong>named error</strong>; or an <strong>undefined</strong>
+cell whose reason is recorded and whose neighbours are still pinned.
+Ten behaviours were fixed when the battery was first run, because a row
+found a crash-free but wrong answer — a weighted regression printing a
+negative F on −2.2 df, a separated logistic fit printing B = 12,911 with
+blank standard errors, an all-zero Poisson outcome &quot;fitted&quot;, a negative
+survival time dropped silently, a constant reliability item giving a
+standardized α of 0.95, a count of −0. Every decision a row forced is
+stated once in the conventions inventory's
+<a href="conventions/classical/#degenerate-inputs--the-0230-conventions">degenerate inputs</a>
+section, which closed the inventory's last two waiting rows.</p>
 <h2 id="coverage">Coverage</h2>
 <p>267 statistics across 52 procedure families — essentially the full analytic
 catalog. (These two numbers are <strong>asserted</strong>, not transcribed: a guard in

@@ -36,7 +36,7 @@
   "applicationCategory": "https://schema.org/BusinessApplication",
   "applicationSubCategory": "Statistical analysis",
   "operatingSystem": "Windows 10, Windows 11, Linux",
-  "softwareVersion": "0.22.0",
+  "softwareVersion": "0.23.0",
   "url": "https://chakatastat.app/",
   "description": "A desktop application for statistical data analysis: a spreadsheet-style data editor backed by a native Rust engine, with 108 analysis tools, native SPSS, Stata and SAS import, an AI assistant, an MCP server, a headless batch runner and full reproducibility.",
   "image": "https://chakatastat.app/assets/og-image.jpg",
@@ -47,7 +47,8 @@
     "https://chakatastat.app/assets/screenshots/scatterplot-matrix.png",
     "https://chakatastat.app/assets/screenshots/chart-editor.png",
     "https://chakatastat.app/assets/screenshots/bland-altman.png",
-    "https://chakatastat.app/assets/screenshots/johnson-neyman.png"
+    "https://chakatastat.app/assets/screenshots/johnson-neyman.png",
+    "https://chakatastat.app/assets/screenshots/verify-installation.png"
   ],
   "author": {
     "@type": "Person",
@@ -154,7 +155,7 @@
             <a class="btn btn-primary btn-lg" href="#download">Download ChakataStat</a>
             <a class="btn btn-ghost btn-lg" href="#features">See what it does</a>
           </div>
-          <p class="hero-platforms">v0.22.0 · Windows · Linux · free to use</p>
+          <p class="hero-platforms">v0.23.0 · Windows · Linux · free to use</p>
         </div>
         <div class="hero-shot">
           <figure class="app-frame">
@@ -215,7 +216,7 @@
             </p>
           </li>
           <li class="stat-item" data-reveal>
-            <p class="stat-figure">2,912</p>
+            <p class="stat-figure">3,101</p>
             <p class="stat-label">
               automated tests across the engine and the application, run green
               on Windows, macOS and Linux before a release ships.
@@ -391,6 +392,7 @@ ChakataStat --mcp health_study.csv</code></pre>
             <button role="tab" id="shot-tab-blandaltman" aria-controls="shot-panel-blandaltman" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Bland-Altman</button>
             <button role="tab" id="shot-tab-syntax" aria-controls="shot-panel-syntax" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Syntax editor</button>
             <button role="tab" id="shot-tab-jn" aria-controls="shot-panel-jn" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Johnson&ndash;Neyman</button>
+            <button role="tab" id="shot-tab-verify" aria-controls="shot-panel-verify" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Verify</button>
           </div>
 
           <div class="shot-panel" role="tabpanel" id="shot-panel-data" aria-labelledby="shot-tab-data" tabindex="0">
@@ -510,6 +512,15 @@ ChakataStat --mcp health_study.csv</code></pre>
               <figcaption>Johnson&ndash;Neyman regions, added in 0.21.0 &mdash; the conditional effect of a moderated path drawn across the observed moderator range with its confidence band, and the moderator values where it turns significant marked on the plot.</figcaption>
             </figure>
           </div>
+          <div class="shot-panel" role="tabpanel" id="shot-panel-verify" aria-labelledby="shot-tab-verify" tabindex="0" hidden>
+            <figure class="screenshot-card">
+              <button class="shot-trigger" type="button">
+                <img src="assets/screenshots/verify-installation.png" alt="ChakataStat's installation verification report: PASS, 195 of 195 checks on 19 datasets, with the application version, engine version and platform listed" loading="lazy">
+                <span class="visually-hidden"> &mdash; enlarge</span>
+              </button>
+              <figcaption>Help &rarr; Verify this installation, new in 0.23.0 &mdash; the release's pinned reference checks re-run on your own installed copy, so the validation claim is checkable on your machine rather than taken on trust.</figcaption>
+            </figure>
+          </div>
         </div>
       </div>
     </section>
@@ -558,7 +569,7 @@ ChakataStat --mcp health_study.csv</code></pre>
           <a class="btn btn-primary btn-lg" href="https://snapcraft.io/chakatastat" data-platform="linux">Get it from the Snap Store</a>
           <span class="btn btn-disabled btn-lg" aria-disabled="true">macOS — not yet available</span>
         </div>
-        <p class="download-meta">Version 0.22.0 · free to use · no account needed</p>
+        <p class="download-meta">Version 0.23.0 · free to use · no account needed</p>
         <p class="download-note">
           Store installs are signed and update automatically. On Linux you
           can also grab the Debian/Ubuntu .deb from the

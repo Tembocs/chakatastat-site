@@ -83,6 +83,7 @@
         <li><a href="../../advanced/ai-assistant/">AI Assistant</a></li>
         <li><a href="../../advanced/reproducibility/">Reproducibility</a></li>
         <li><a href="../../advanced/engine-access/">Engine Access</a></li>
+        <li><a href="../../advanced/verify-installation/">Verify this Installation</a></li>
         <li class="docs-nav-section">Reference</li>
         <li><a href="../../reference/choosing-a-procedure/">Choosing a procedure</a></li>
         <li><a href="../../reference/glossary/">Glossary</a></li>
@@ -243,6 +244,15 @@ transformations under that reading — an active Weight Cases variable only
 selects cases, and the output says so. Select Cases and Split File are
 honored.</p>
 </blockquote>
+<h2 id="how-this-is-computed">How this is computed</h2>
+<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>. The choices specific to panels are spelled out in
+<a href="#the-conventions-behind-the-numbers">The conventions behind the numbers</a> above.</p>
+<ul>
+<li><strong>Fixed effects</strong> — the within transformation with the grand means added back (a Stata-style constant), residual df N − n − K (<a href="../../validation/tolerances/">panel conventions</a>).</li>
+<li><strong>Random effects</strong> — Swamy–Arora variance components, the harmonic-mean T̄ on unbalanced panels — where plm's Baltagi–Chang correction differs, recorded (<a href="../../validation/conventions/regression/#the-unbalanced-panels-variance-components--the-0230-convention">unbalanced panel</a>).</li>
+<li><strong>Pooled OLS</strong>, the <strong>classic Hausman</strong> on conventional covariances (slopes only), <strong>cluster-robust SEs</strong> with the <code>xtreg</code> factor G/(G − 1)·(N − 1)/(N − K), and the 1 − SSR/TSS family of within / between / overall R² (<a href="../../validation/tolerances/">panel conventions</a>).</li>
+<li><strong>Weights</strong> — computed unweighted by design; an active weight only selects cases and the output says so.</li>
+</ul>
 <h2 id="reproducibility">Reproducibility</h2>
 <p>Like every analysis, a run journals a syntax command, e.g.:</p>
 <pre><code>panel_regression dependent=invest, regressors=[value, capital], entity=firm, time=year, estimator=fixed, se=clustered
