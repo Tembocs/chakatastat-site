@@ -1140,7 +1140,7 @@ section h2 {
 .footer-col li {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .footer-item-icon {
