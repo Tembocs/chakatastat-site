@@ -79,7 +79,9 @@
     "Interactive chart editor: restyle a finished chart in place, every edit written back to its syntax command so styled charts re-run styled",
     "Provider-neutral AI assistant",
     "MCP server and headless batch runner",
-    "Reproducible syntax, plus HTML, Markdown, LaTeX and Python export (pip install chakatastat)"
+    "Reproducible syntax, plus HTML, Markdown, LaTeX and Python export (pip install chakatastat)",
+    "Installation verifier: Help → Verify this installation re-runs pinned reference checks on the installed binary",
+    "Dataset fingerprint in every output footer, and one-step-verifiable reproducibility bundles"
   ]
 }
   </script>
@@ -148,8 +150,10 @@
           <p class="lede">
             ChakataStat is a desktop app for statistical data analysis — a
             fast, spreadsheet-style editor backed by a native Rust engine, with a
-            broad Analyze menu, an in-app AI assistant, and full
-            reproducibility built in.
+            broad Analyze menu, an in-app AI assistant, and reproducibility
+            you can check: every output names the dataset it was computed
+            from, and the release's validation checks re-run on your own
+            installed copy.
           </p>
           <div class="hero-actions">
             <a class="btn btn-primary btn-lg" href="#download">Download ChakataStat</a>
@@ -227,17 +231,35 @@
         <p class="trust-note">
           Reference values are computed with SciPy, statsmodels, scikit-learn,
           lifelines and pingouin, and stored with the tolerance and provenance
-          of each one. Where a statistic has more than one valid definition —
+          of each one. Every pinned value is also re-derived in a second,
+          independent implementation — R, with packages including metafor,
+          plm, MatchIt and survival — and where the two disagree, the cause
+          is a documented difference of convention, not a widened tolerance.
+          Where a statistic has more than one valid definition —
           a quantile method, a continuity correction, a contrast type — the
-          engine's convention is documented rather than hidden behind a loose
-          tolerance.
+          engine's convention is written down, and each procedure's page in
+          the User Guide carries a
+          <a href="docs/validation/conventions/">"How this is computed"</a>
+          section that links to it.
         </p>
 
         <p class="trust-note">
           The suite is published, not summarised: every pinned statistic with
           its reference value, its tolerance and the package that produced it;
-          the NIST datasets scored by digits of agreement; and the convention
+          the NIST datasets scored by digits of agreement; the full pin set
+          <a href="docs/validation/cross-os/">compared across Windows, macOS
+          and Linux</a> on the release build; and the convention
           recorded behind each number where more than one is defensible.
+        </p>
+
+        <p class="trust-note">
+          And since 0.23.0 the checks are not only the developer's to run.
+          <strong>Help → Verify this installation</strong> recomputes pinned
+          reference checks on your own installed copy — the same numbers
+          validated before release, re-run on your machine and your build —
+          and writes a report. The same run works headlessly:
+          <code>chakatastat --verify --out report.html</code> exits non-zero
+          if any check fails.
         </p>
         <p class="trust-actions">
           <a class="btn btn-secondary" href="docs/validation/">Read the validation report</a>
@@ -295,7 +317,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 7.5L4 12l4.5 4.5M15.5 7.5L20 12l-4.5 4.5M13.5 4l-3 16"/></svg>
             </span>
             <h3>Reproducibility</h3>
-            <p>Every action emits an editable, re-runnable command. Export to HTML, Markdown, LaTeX &mdash; or a Python script for the client on PyPI: <code>pip install chakatastat</code>.</p>
+            <p>Every action emits an editable, re-runnable command, and every output footer carries a fingerprint of the dataset it was computed from. An analysis exports as a reproducibility bundle &mdash; journal, fingerprint and versions in one file that ChakataStat re-runs and verifies in one step &mdash; or to HTML, Markdown, LaTeX, or a Python script for the client on PyPI: <code>pip install chakatastat</code>.</p>
           </article>
           <article class="feature-card feature-card--wide" data-reveal>
             <span class="feature-icon" aria-hidden="true">
@@ -392,6 +414,7 @@ ChakataStat --mcp health_study.csv</code></pre>
             <button role="tab" id="shot-tab-blandaltman" aria-controls="shot-panel-blandaltman" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Bland-Altman</button>
             <button role="tab" id="shot-tab-syntax" aria-controls="shot-panel-syntax" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Syntax editor</button>
             <button role="tab" id="shot-tab-jn" aria-controls="shot-panel-jn" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Johnson&ndash;Neyman</button>
+            <button role="tab" id="shot-tab-vector" aria-controls="shot-panel-vector" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Vector export</button>
             <button role="tab" id="shot-tab-verify" aria-controls="shot-panel-verify" aria-selected="false" tabindex="-1" class="shot-tab" type="button">Verify</button>
           </div>
 
@@ -512,6 +535,15 @@ ChakataStat --mcp health_study.csv</code></pre>
               <figcaption>Johnson&ndash;Neyman regions, added in 0.21.0 &mdash; the conditional effect of a moderated path drawn across the observed moderator range with its confidence band, and the moderator values where it turns significant marked on the plot.</figcaption>
             </figure>
           </div>
+          <div class="shot-panel" role="tabpanel" id="shot-panel-vector" aria-labelledby="shot-tab-vector" tabindex="0" hidden>
+            <figure class="screenshot-card">
+              <button class="shot-trigger" type="button">
+                <img src="assets/screenshots/vector-export.png" alt="ChakataStat's chart export dialog over a finished chart, with SVG, PDF and PNG formats and a resolution chooser" loading="lazy">
+                <span class="visually-hidden"> &mdash; enlarge</span>
+              </button>
+              <figcaption>Vector export, added in 0.22.0 &mdash; any chart saves as SVG or PDF with its labels kept as selectable text rather than outlines, or as PNG at a chosen resolution.</figcaption>
+            </figure>
+          </div>
           <div class="shot-panel" role="tabpanel" id="shot-panel-verify" aria-labelledby="shot-tab-verify" tabindex="0" hidden>
             <figure class="screenshot-card">
               <button class="shot-trigger" type="button">
@@ -534,22 +566,32 @@ ChakataStat --mcp health_study.csv</code></pre>
         <div class="analyze-copy">
           <h2>What is in the Analyze menu</h2>
           <p>
-            Descriptive Statistics, Compare Means and Correlate; Regression
-            (linear, logistic, Poisson, regularized, robust, nonlinear,
-            instrumental variables, panel data with fixed and random effects,
-            moderated mediation); General Linear Model, Linear Mixed
-            Models and GLMM; Factor / PCA and confirmatory factor analysis,
+            Descriptive Statistics, Compare Means and Correlate; equivalence
+            tests (TOST); Regression
+            (linear — with or without an intercept — logistic, Poisson,
+            regularized, robust, nonlinear, instrumental variables, panel
+            data with fixed and random effects and the Hausman test, and
+            mediation with moderated, Johnson&ndash;Neyman and serial variants);
+            General Linear Model, Linear Mixed
+            Models and GLMM; complex survey designs — declare strata,
+            clusters and sampling weights, and the everyday procedures
+            estimate design-based; Factor / PCA and confirmatory factor
+            analysis, latent class analysis, item response theory,
             Cluster and Discriminant
             analysis; Survival (Kaplan-Meier, Cox, parametric); Time Series
-            (ARIMA, seasonal decomposition); Meta-Analysis (fixed effects,
+            (ARIMA, seasonal decomposition, vector autoregression with
+            Granger causality); Meta-Analysis (fixed effects,
             DerSimonian&ndash;Laird or REML random effects, with forest and funnel
-            plots); Bayesian tests; and
+            plots); propensity-score matching and weighting with balance
+            diagnostics; Bland-Altman method comparison; Bayesian tests;
+            permutation tests; and
             Nonparametric methods — with the conventional effect sizes
             reported by default beside the tests they describe.
           </p>
           <ul class="tag-list">
             <li>Regression</li>
             <li>Mixed models</li>
+            <li>Survey designs</li>
             <li>Survival</li>
             <li>Time series</li>
             <li>Bayesian</li>
@@ -576,6 +618,13 @@ ChakataStat --mcp health_study.csv</code></pre>
           <a href="https://github.com/Tembocs/chakatastat-releases/releases">releases
           page</a>; Windows is Microsoft Store-only.
         </p>
+        <p class="download-note">
+          The Python client is on PyPI &mdash;
+          <code>pip install chakatastat</code>. It drives an installed
+          ChakataStat over MCP; nothing statistical runs in Python, so its
+          numbers cannot drift from the desktop app's.
+          See <a href="whats-new/">what changed in each release</a>.
+        </p>
       </div>
     </section>
   </main>
@@ -593,9 +642,11 @@ ChakataStat --mcp health_study.csv</code></pre>
       </p>
       <p class="footer-legal">
         <a href="quick-start/">Quick Start</a> ·
+        <a href="whats-new/">What's New</a> ·
         <a href="privacy-policy/">Privacy Policy</a> ·
         <a href="license/">License</a> ·
-        <a href="cite/">How to Cite</a>
+        <a href="cite/">How to Cite</a> ·
+        <a href="mailto:contact@chakatastat.app">contact@chakatastat.app</a>
       </p>
     </div>
   </footer>

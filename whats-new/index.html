@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>What's New — ChakataStat</title>
+  <meta name="description" content="What changed in each ChakataStat release: the release notes, dated, with each version's DOI.">
+
+  <link rel="icon" type="image/svg+xml" href="../assets/logo-mark.svg">
+  <link rel="alternate icon" href="../assets/favicon-256.png">
+  <link rel="apple-touch-icon" href="../assets/favicon-256.png">
+  <link rel="canonical" href="https://chakatastat.app/whats-new/">
+
+  <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="What's New — ChakataStat">
+  <meta property="og:description" content="What changed in each ChakataStat release: the release notes, dated, with each version's DOI.">
+  <meta property="og:url" content="https://chakatastat.app/whats-new/">
+  <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://chakatastat.app/assets/og-image.jpg">
+
+  <link rel="preload" href="../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../css/styles.css">
+
+  <!-- Applied before first paint, so a stored choice never flashes the other
+       theme on the way in. Inline and tiny on purpose: an external file would
+       be a second round trip in front of the render. -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("chakatastat-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../index.html#top">
+        <img class="brand-mark" src="../assets/logo-mark.svg" width="32" height="32" alt="">
+        <span class="brand-name">ChakataStat</span>
+      </a>
+
+      <nav id="nav-links" class="nav-links">
+        <a href="../docs/">User Guide</a>
+        <a href="../docs/validation/">Validation</a>
+        <a href="../cite/">Cite</a>
+        <a href="../index.html#features">Features</a>
+        <a href="../quick-start/">Quick Start</a>
+        <a href="../index.html#screenshots">Screenshots</a>
+        <a href="../index.html#analyze">Analyze</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="legal">
+      <div class="container legal-content">
+        <h1>What's New</h1>
+        <p class="legal-updated">
+          What changed in each release. The notes for the two most recent
+          versions are the same texts shown on the store listings; each
+          version links its own DOI, so a release can be cited exactly.
+          Installed copies update automatically through their store.
+        </p>
+
+        <h2>0.23.0 — 2026-08-31</h2>
+        <p>
+          DOI: <a href="https://doi.org/10.5281/zenodo.22199867">10.5281/zenodo.22199867</a>
+        </p>
+        <p>
+          The catalog stays at 108 validated tools. This release is about
+          trust: check what the app prints rather than believe it.
+        </p>
+        <p>
+          <strong>Help → Verify this installation</strong> recomputes pinned
+          reference checks on your own installed copy — the same numbers
+          validated before release — and writes a report; it runs headlessly
+          too, with <code>--verify</code>.
+        </p>
+        <p>
+          Every result now names its data: a dataset fingerprint in each
+          output's footer, beside the active filter, weight and split.
+          <strong>File → Export Reproducibility Bundle</strong> packs
+          journal, fingerprint and versions into one file; ChakataStat
+          re-runs it against your data and confirms the numbers match in one
+          step.
+        </p>
+        <p>
+          The methods are in print: every procedure page in the guide gains
+          a "How this is computed" section, each line linking its convention
+          — 48 previously implicit definitions written down. Two defaults
+          move to the conventional choice, Cox ties to Efron and mixed
+          models to REML; saved syntax without those options prints slightly
+          different numbers; one option restores the old behaviour.
+        </p>
+        <p>
+          Independent evidence: every Python-referenced pin re-derived in R
+          (267 of 267, each divergence a recorded convention), and the full
+          pin set compared across Windows, macOS and Linux; the agreement
+          report is in the guide.
+        </p>
+        <p>
+          And the file boundary is hardened: a crafted or corrupted SPSS,
+          Stata, SAS, Excel, Parquet or Arrow file reads as an error
+          message, never a crash — proved by continuous fuzzing and an
+          84-case battery of degenerate-data edges, each pinned to a number
+          or a named error.
+        </p>
+
+        <h2>0.22.0 — 2026-08-26</h2>
+        <p>
+          DOI: <a href="https://doi.org/10.5281/zenodo.22112257">10.5281/zenodo.22112257</a>
+        </p>
+        <p>
+          The catalog stays at 108 validated tools. This release deepens
+          what they draw, export and print — and was checked against live
+          services and captured screens before shipping.
+        </p>
+        <p>
+          Finish a chart without leaving the app. The chart editor gains
+          axis titles, axis limits, reference lines, marker shapes and
+          sizes, a gridline toggle, a figure height, a text-size slider that
+          scales every label at once, and logarithmic axes labelled at the
+          decades — a log axis is refused, naming the value, rather than
+          silently dropping a zero. Every edit is written back into the
+          chart's own syntax command, so a styled chart re-runs styled.
+        </p>
+        <p>
+          Then export it for publication. Any chart saves as SVG or PDF —
+          real vector, with labels that stay selectable text — and PNG
+          export gains a resolution chooser.
+        </p>
+        <p>
+          Underneath, accuracy. Normal and chi-square p-values were returned
+          as exactly zero past about eight standard deviations and are now
+          accurate far into the tail, on a dedicated erfc checked against a
+          50-digit reference. Matrix inversion is scale-invariant and the
+          GLM families fit through an orthogonal decomposition.
+        </p>
+        <p>
+          Small things you will see: chart fills clear the 3:1 contrast bar
+          in both themes, Variable View labels end in an ellipsis, scrolling
+          dialogs fade at the edge, and charts repaint when you switch
+          theme.
+        </p>
+        <p>
+          The assistant streams its replies, caches its prompt and shows the
+          cached share; ask it about any result in your output log and it
+          explains what you see, using no tools. Both backends verified
+          live.
+        </p>
+
+        <h2>Earlier releases</h2>
+        <div class="legal-table-wrap">
+          <table>
+            <thead>
+              <tr><th>Version</th><th>Released</th><th>In brief</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>0.21.0</td>
+                <td>2026-08-23</td>
+                <td>CFA gains modification indices, multi-group invariance testing and ordinal (WLSMV) estimation; Johnson&ndash;Neyman regions, a second moderator and serial mediation; SAS <code>.sas7bdat</code> import with <code>.sas7bcat</code> value labels; regression through the origin; a citation DOI; a CSV formula-injection guard on export.</td>
+              </tr>
+              <tr>
+                <td>0.20.0</td>
+                <td>2026-08-20</td>
+                <td>The syntax console becomes a real editor: line numbers, syntax colouring, bracket matching, find &amp; replace, as-you-type diagnostics from the same parser that runs the script, catalog-driven completion, hover help and a run-state gutter.</td>
+              </tr>
+              <tr>
+                <td>0.19.0</td>
+                <td>2026-08-19</td>
+                <td>Eight catalog additions: complex survey designs, equivalence tests (TOST), Bland-Altman method comparison, latent class analysis, item response theory, a LOESS scatterplot smoother, permutation tests, and vector autoregression with Granger causality.</td>
+              </tr>
+              <tr>
+                <td>0.18.0</td>
+                <td>2026-08-14</td>
+                <td>Import robustness: automatic text-encoding detection, a content-based delimiter sniff, Stata strL long strings carried, and fixed-width text import with a column-spec dialog.</td>
+              </tr>
+              <tr>
+                <td>0.17.0</td>
+                <td>2026-08-13</td>
+                <td>The interactive chart editor: restyle a finished chart in place, with every edit written back to the journaled command that drew it.</td>
+              </tr>
+              <tr>
+                <td>0.16.0</td>
+                <td>2026-08-10</td>
+                <td>Quantile-residual diagnostic panels for the GLM regression families; scatterplot matrix, ECDF, Cleveland dot and bubble charts; a colour-blind-safe Okabe&ndash;Ito palette option.</td>
+              </tr>
+              <tr>
+                <td>0.15.0</td>
+                <td>2026-08-09</td>
+                <td>Panel regression — fixed, random and pooled effects with the Hausman test and entity-clustered standard errors — and moderated mediation with its interaction plot.</td>
+              </tr>
+              <tr>
+                <td>0.14.0</td>
+                <td>2026-08-07</td>
+                <td>Native SPSS (<code>.sav</code>), Stata (<code>.dta</code>) and SAS transport (<code>.xpt</code>) import carrying variable and value labels across; NDJSON, gzipped text, Arrow/Feather and legacy <code>.xls</code>/<code>.ods</code>.</td>
+              </tr>
+              <tr>
+                <td>0.13.0</td>
+                <td>2026-08-06</td>
+                <td>Propensity-score matching and inverse-probability weighting, with the before/after balance plot and saved filter and weight columns.</td>
+              </tr>
+              <tr>
+                <td>0.12.0</td>
+                <td>2026-08-04</td>
+                <td>The charts overhaul — a fixed, colour-vision-validated palette, violin plots, the correlation heatmap, regression diagnostics, 100%-stacked bars — and the Python client published to PyPI.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          Releases before 0.12.0 predate this page; their records are in the
+          project's release documents. Versions from 0.20.0 on carry DOIs —
+          the full list is on the <a href="../cite/">How to Cite</a> page.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="cite">
+    <div class="container footer-inner">
+      <p class="footer-copyright">
+        &copy; <span id="year"></span> Edward Amani. ChakataStat is
+        proprietary software — free to use, not open source.
+      </p>
+      <p class="footer-cite">
+        Cite: Amani, E. (2026). <em>ChakataStat</em> [Computer software].
+        <a href="https://doi.org/10.5281/zenodo.22112256">https://doi.org/10.5281/zenodo.22112256</a>
+        — <a href="../cite/">how to cite a specific version</a>
+      </p>
+      <p class="footer-legal">
+        <a href="../quick-start/">Quick Start</a> ·
+        <a href="../whats-new/" aria-current="page">What's New</a> ·
+        <a href="../privacy-policy/">Privacy Policy</a> ·
+        <a href="../license/">License</a> ·
+        <a href="../cite/">How to Cite</a> ·
+        <a href="mailto:contact@chakatastat.app">contact@chakatastat.app</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>
