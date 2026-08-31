@@ -1132,9 +1132,18 @@ section h2 {
 }
 
 .footer-col-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   color: var(--color-text);
   font-weight: 600;
   margin: 0 0 8px;
+}
+
+.footer-col-icon {
+  width: 18px;
+  height: 18px;
+  flex: none;
 }
 
 .footer-col ul {
