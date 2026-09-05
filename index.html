@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ChakataStat — Statistical analysis, done properly</title>
+  <title>ChakataStat — Statistical analysis, validated</title>
   <meta name="description" content="ChakataStat is a desktop app for statistical data analysis: a fast, spreadsheet-style data editor backed by a native Rust engine, with a broad Analyze menu, an AI assistant, and full reproducibility built in.">
 
   <link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg">
@@ -16,7 +16,7 @@
 
   <!-- Open Graph / social preview. -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="ChakataStat — Statistical analysis, done properly">
+  <meta property="og:title" content="ChakataStat — Statistical analysis, validated">
   <meta property="og:description" content="A desktop app for statistical data analysis: a spreadsheet-style editor backed by a native Rust engine, a broad Analyze menu, an AI assistant, and full reproducibility.">
   <meta property="og:url" content="https://chakatastat.app/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
@@ -146,7 +146,7 @@
       <div class="container hero-inner">
         <div class="hero-copy">
           <p class="eyebrow">Desktop statistical analysis</p>
-          <h1>Statistical analysis, done properly.</h1>
+          <h1>Statistical analysis, validated.</h1>
           <p class="lede">
             ChakataStat is a desktop app for statistical data analysis — a
             fast, spreadsheet-style editor backed by a native Rust engine, with a
@@ -189,16 +189,14 @@
 
     <section class="trust" id="validated">
       <div class="container">
-        <p class="eyebrow">Numbers you can defend</p>
-        <h2>The statistics that matter, checked against independent implementations.</h2>
+        <p class="eyebrow">Validation</p>
+        <h2>Results checked against independent implementations.</h2>
         <p class="section-lede">
-          A statistics package is only worth as much as its numbers. For every
-          procedure, the statistics a reader acts on — the test statistic, the
-          p-value, the parameter estimates, the effect sizes — are checked, end
-          to end through the real engine, against values computed independently
-          by established reference packages, and against certified values
-          published by a national metrology institute. Every release, before it
-          ships.
+          For every procedure, the statistics a reader acts on — the test
+          statistic, the p-value, the parameter estimates, the effect sizes —
+          are checked end to end through the shipped engine against values
+          computed independently by established reference packages, and
+          against certified values published by NIST, before each release.
         </p>
 
         <ul class="stat-row">
@@ -233,8 +231,9 @@
           lifelines and pingouin, and stored with the tolerance and provenance
           of each one. Every pinned value is also re-derived in a second,
           independent implementation — R, with packages including metafor,
-          plm, MatchIt and survival — and where the two disagree, the cause
-          is a documented difference of convention, not a widened tolerance.
+          plm, MatchIt and survival — and where the two differ, the
+          difference is traced to a convention and that convention is
+          recorded.
           Where a statistic has more than one valid definition —
           a quantile method, a continuity correction, a contrast type — the
           engine's convention is written down, and each procedure's page in
@@ -244,7 +243,7 @@
         </p>
 
         <p class="trust-note">
-          The suite is published, not summarised: every pinned statistic with
+          The full suite is published: every pinned statistic with
           its reference value, its tolerance and the package that produced it;
           the NIST datasets scored by digits of agreement; the full pin set
           <a href="docs/validation/cross-os/">compared across Windows, macOS
@@ -253,7 +252,7 @@
         </p>
 
         <p class="trust-note">
-          And since 0.23.0 the checks are not only the developer's to run.
+          Since 0.23.0 the checks can also be run on an installed copy.
           <strong>Help → Verify this installation</strong> recomputes pinned
           reference checks on your own installed copy — the same numbers
           validated before release, re-run on your machine and your build —
@@ -296,7 +295,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8zM14 3v5h5M12 18v-7M9 14l3-3 3 3"/></svg>
             </span>
             <h3>Your files open directly</h3>
-            <p>SPSS (<code>.sav</code>), Stata (<code>.dta</code>) and SAS (<code>.sas7bdat</code>, with value labels from a <code>.sas7bcat</code> catalog beside it, and transport <code>.xpt</code>) files import natively &mdash; no detour through CSV &mdash; and bring their metadata with them: variable labels from all of them, value labels from SPSS, Stata and a SAS catalog, and SPSS measure levels and missing-value rules. Plus CSV/TSV (plain or gzipped), Excel (<code>.xlsx</code>, <code>.xls</code>, <code>.ods</code>), Parquet, Arrow/Feather, JSON and NDJSON. Where a detail cannot be carried across, the import says so rather than staying silent.</p>
+            <p>SPSS (<code>.sav</code>), Stata (<code>.dta</code>) and SAS (<code>.sas7bdat</code>, with value labels from a <code>.sas7bcat</code> catalog beside it, and transport <code>.xpt</code>) files import directly and bring their metadata with them: variable labels from all of them, value labels from SPSS, Stata and a SAS catalog, and SPSS measure levels and missing-value rules. Plus CSV/TSV (plain or gzipped), Excel (<code>.xlsx</code>, <code>.xls</code>, <code>.ods</code>), Parquet, Arrow/Feather, JSON and NDJSON. Where a detail cannot be carried across, the import reports it.</p>
           </article>
           <article class="feature-card feature-card--wide" data-reveal>
             <span class="feature-icon" aria-hidden="true">
@@ -310,7 +309,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9zM18 15l.9 2.1L21 18l-2.1.9L18 21l-.9-2.1L15 18l2.1-.9z"/></svg>
             </span>
             <h3>AI assistant</h3>
-            <p>A provider-neutral agent &mdash; Claude, or any OpenAI-compatible backend, including a local Ollama that never leaves your machine &mdash; that runs real analyses on your open dataset in plain language, and renders the resulting tables and charts inline in the reply.</p>
+            <p>A provider-neutral agent &mdash; Claude, any OpenAI-compatible backend, or a local Ollama backend, in which case data stays on your machine &mdash; that runs analyses on your open dataset in plain language, and renders the resulting tables and charts inline in the reply.</p>
           </article>
           <article class="feature-card" data-reveal>
             <span class="feature-icon" aria-hidden="true">
@@ -336,10 +335,9 @@
         <h2>Five ways in. The same analysis underneath.</h2>
         <p class="section-lede">
           The menus, the syntax console, the AI assistant, the MCP server and
-          the headless batch runner are not five integrations &mdash; they are
-          five front doors onto one command layer. Whichever you use, the same
-          engine runs the same call, so a result you got by clicking is a
-          result you can re-run in a script.
+          the headless batch runner share one command layer. Whichever you
+          use, the same engine runs the same call, so a result you got by
+          clicking is a result you can re-run in a script.
         </p>
 
         <ul class="stream-ways" data-reveal>
@@ -396,8 +394,8 @@ ChakataStat --mcp health_study.csv</code></pre>
       <div class="container">
         <h2>See it in action</h2>
         <p class="section-lede">
-          A real dataset, in the real application — not a mock-up. Pick a
-          view; click the shot to enlarge it.
+          Screenshots of the application on the bundled sample dataset. Pick
+          a view; click the shot to enlarge it.
         </p>
 
         <div class="shot-tabs" data-reveal>
@@ -484,7 +482,7 @@ ChakataStat --mcp health_study.csv</code></pre>
                 <img src="assets/screenshots/interaction-plot.png" alt="A moderated-mediation interaction plot in ChakataStat: three fitted simple-slope lines for the moderator at its mean and one standard deviation either side, fanning apart as the predictor increases" loading="lazy">
                 <span class="visually-hidden"> &mdash; enlarge</span>
               </button>
-              <figcaption>Moderated mediation &mdash; the interaction plot draws the simple slopes at each probe value of the moderator, so &ldquo;for whom?&rdquo; is a picture rather than a coefficient.</figcaption>
+              <figcaption>Moderated mediation &mdash; the interaction plot draws the simple slopes at each probe value of the moderator, showing how the effect changes across the moderator&rsquo;s range.</figcaption>
             </figure>
           </div>
 
@@ -550,7 +548,7 @@ ChakataStat --mcp health_study.csv</code></pre>
                 <img src="assets/screenshots/verify-installation.png" alt="ChakataStat's installation verification report: PASS, 195 of 195 checks on 19 datasets, with the application version, engine version and platform listed" loading="lazy">
                 <span class="visually-hidden"> &mdash; enlarge</span>
               </button>
-              <figcaption>Help &rarr; Verify this installation, new in 0.23.0 &mdash; the release's pinned reference checks re-run on your own installed copy, so the validation claim is checkable on your machine rather than taken on trust.</figcaption>
+              <figcaption>Help &rarr; Verify this installation, new in 0.23.0 &mdash; the release's pinned reference checks re-run on your own installed copy, so the validation can be repeated on your own machine.</figcaption>
             </figure>
           </div>
         </div>
@@ -621,8 +619,8 @@ ChakataStat --mcp health_study.csv</code></pre>
         <p class="download-note">
           The Python client is on PyPI &mdash;
           <code>pip install chakatastat</code>. It drives an installed
-          ChakataStat over MCP; nothing statistical runs in Python, so its
-          numbers cannot drift from the desktop app's.
+          ChakataStat over MCP; all computation runs in the installed engine,
+          so the client returns the same numbers as the desktop app.
           See <a href="whats-new/">what changed in each release</a>.
         </p>
       </div>

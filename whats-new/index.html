@@ -86,9 +86,8 @@
       <div class="container legal-content">
         <h1>What's New</h1>
         <p class="legal-updated">
-          What changed in each release. The notes for the two most recent
-          versions are the same texts shown on the store listings; each
-          version links its own DOI, so a release can be cited exactly.
+          What changed in each release. Each version links its own DOI, so a
+          release can be cited exactly.
           Installed copies update automatically through their store.
         </p>
 
@@ -97,8 +96,8 @@
           DOI: <a href="https://doi.org/10.5281/zenodo.22199867">10.5281/zenodo.22199867</a>
         </p>
         <p>
-          The catalog stays at 108 validated tools. This release is about
-          trust: check what the app prints rather than believe it.
+          The catalog stays at 108 validated tools. This release makes
+          results verifiable on an installed copy.
         </p>
         <p>
           <strong>Help → Verify this installation</strong> recomputes pinned
@@ -115,7 +114,7 @@
           step.
         </p>
         <p>
-          The methods are in print: every procedure page in the guide gains
+          The methods are documented: every procedure page in the guide gains
           a "How this is computed" section, each line linking its convention
           — 48 previously implicit definitions written down. Two defaults
           move to the conventional choice, Cox ties to Efron and mixed
@@ -123,15 +122,15 @@
           different numbers; one option restores the old behaviour.
         </p>
         <p>
-          Independent evidence: every Python-referenced pin re-derived in R
+          Cross-checks: every Python-referenced pin re-derived in R
           (267 of 267, each divergence a recorded convention), and the full
           pin set compared across Windows, macOS and Linux; the agreement
           report is in the guide.
         </p>
         <p>
-          And the file boundary is hardened: a crafted or corrupted SPSS,
-          Stata, SAS, Excel, Parquet or Arrow file reads as an error
-          message, never a crash — proved by continuous fuzzing and an
+          The file readers are hardened: a crafted or corrupted SPSS,
+          Stata, SAS, Excel, Parquet or Arrow file is reported as an error.
+          The readers are fuzz-tested continuously and checked against an
           84-case battery of degenerate-data edges, each pinned to a number
           or a named error.
         </p>
@@ -156,11 +155,11 @@
         </p>
         <p>
           Then export it for publication. Any chart saves as SVG or PDF —
-          real vector, with labels that stay selectable text — and PNG
+          vector formats with labels that stay selectable text — and PNG
           export gains a resolution chooser.
         </p>
         <p>
-          Underneath, accuracy. Normal and chi-square p-values were returned
+          Numerical accuracy: normal and chi-square p-values were returned
           as exactly zero past about eight standard deviations and are now
           accurate far into the tail, on a dedicated erfc checked against a
           50-digit reference. Matrix inversion is scale-invariant and the
@@ -175,8 +174,8 @@
         <p>
           The assistant streams its replies, caches its prompt and shows the
           cached share; ask it about any result in your output log and it
-          explains what you see, using no tools. Both backends verified
-          live.
+          explains what you see, using no tools. Both backends were tested
+          against live services.
         </p>
 
         <h2>Earlier releases</h2>

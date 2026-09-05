@@ -88,17 +88,18 @@
       <article class="docs-content">
 <h1 id="numerical-validation-suite">Numerical-validation suite</h1>
 <blockquote>
-<p><strong>Production-readiness gate 4.</strong> A statistics package has to be able to defend
-every number it prints. The per-core unit tests
+<p>Every statistic ChakataStat prints is checked against an independently
+computed reference value before a release. The per-core unit tests
 (<code>rust/src/stats.rs</code>,
 <code>rust/src/analyze/tests.rs</code>) check a handful
-of known answers by hand; that is good spot-checking, but it only confirms the
-cases we thought to write down. This suite is the complement: it runs the
-procedure catalog <strong>end to end through the real native engine</strong> and checks,
-for each procedure, the statistics that matter — the test statistic, the
-p-value, the parameter estimates, the effect sizes — against values computed
-independently by an established reference package. Not every printed cell:
-the <em>shape</em> of every result is guarded separately, by <code>analysis_test.dart</code>. See production_readness.md gate 4.</p>
+of known answers by hand and serve as spot checks. This suite is the
+complement: it runs the procedure catalog <strong>end to end through the shipped
+native engine</strong> and checks, for each procedure, the statistics a reader acts
+on — the test statistic, the p-value, the parameter estimates, the effect
+sizes — against values computed independently by an established reference
+package. Not every printed cell: the <em>shape</em> of every result is guarded
+separately, by <code>analysis_test.dart</code>. This is production-readiness gate 4 in
+production_readness.md.</p>
 </blockquote>
 <h2 id="the-pages-of-this-suite">The pages of this suite</h2>
 <p>This page is the entry point: how the suite works, and what it covers. The
@@ -118,13 +119,12 @@ files.</li>
 each tolerance means, and why a number is pinned as tightly as it is.</li>
 </ul>
 <p><strong>The recorded conventions</strong>, where a statistic has more than one defensible
-definition and ChakataStat's choice is written down rather than hidden behind a
-loose tolerance:</p>
+definition and ChakataStat's choice is recorded:</p>
 <ul>
 <li><strong><a href="conventions/README/">The convention inventory</a></strong> — every
 statistic with more than one defensible definition, and where ChakataStat's
 choice is written down: recorded, recorded now, single-definition, or
-pending a named item (0.23.0 item 9). Nothing is left implicit.</li>
+pending a named item (0.23.0 item 9).</li>
 <li><strong><a href="conventions/classical/">Descriptives, tests and the classical toolbox</a></strong>
 — the definitions the inventory found implicit, written once: quantiles
 and moments, continuity corrections, tie handling, effect-size
