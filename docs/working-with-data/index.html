@@ -97,10 +97,19 @@ in and out, the two ways you look at a dataset (Data View and Variable View),
 the native <code>.ckd</code> document, and the tools for tidying a dataset up.</p>
 <h2 id="the-shape-of-a-dataset">The shape of a dataset</h2>
 <p>A dataset is a rectangle: <strong>rows are cases</strong>, <strong>columns are variables</strong>. Behind
-the scenes a variable holds one of just two storage types:</p>
+the scenes a variable holds one of three storage types:</p>
 <ul>
 <li><strong>Numeric</strong> — numbers; a blank or non-number is <em>missing</em>.</li>
-<li><strong>String</strong> — text (and dates are entered as text in ISO <code>YYYY-MM-DD</code> form).</li>
+<li><strong>String</strong> — text (imported timestamps stay here, as ISO text).</li>
+<li><strong>Date</strong> — a calendar date, stored as ISO <code>YYYY-MM-DD</code> text. Typing into a
+date column is validated: <code>2024-02-29</code> and the compact <code>20240229</code> are
+accepted (and stored in the dashed form), while <code>1/2/2024</code>, an impossible
+date like <code>2023-02-29</code>, or a time-of-day is refused — dates are never
+guessed from a regional format. Because the stored form is fixed-width ISO
+text, sorting and Select Cases comparisons on a date variable are
+chronological. Cells that don't conform (for example after re-typing a text
+column to Date) are never rewritten: the Variable View marks the variable
+with a warning badge and analyses over it carry a one-line note.</li>
 </ul>
 <p>On top of storage sits each variable's <strong>definition</strong> (label, value labels,
 measurement level, missing rules) — that lives in the Variable View and travels
@@ -211,6 +220,21 @@ as CSV's do. Headless (batch or MCP) passes the same spec with
 <strong><code>.xls</code></strong> and OpenDocument <strong><code>.ods</code></strong> read the first sheet through the
 native engine, with the same header prompt and type inference.</li>
 <li><strong>Parquet / Arrow</strong> — typed columns read directly by the native engine.</li>
+</ul>
+<blockquote>
+<p><strong>Big integer identifiers stay exact.</strong> An integer column holding values
+beyond what double precision can represent exactly (IDs beyond about
+9 × 10¹⁵ — adjacent identifiers there can collapse into the same number)
+imports as a <strong>String</strong> variable holding the exact digits, and the import
+summary says so. That keeps every ID distinct for grouping, joins and
+saving; the trade is that such a column sorts as text and is refused by
+numeric analyses (which is what you want for an identifier). The same rule
+applies to CSV/JSON type inference, and a <code>.ckd</code> save preserves such
+values exactly. If a number really was a <em>measurement</em>, not an ID, retype
+the variable to Numeric in the Variable View — analyses will then note
+that the values were rounded to double precision.</p>
+</blockquote>
+<ul>
 <li><strong>JSON</strong> — either an array of records (<code>[{&quot;age&quot;: 30, …}, …]</code>, one object per
 case) or a columnar object (<code>{&quot;age&quot;: [30, 31, …], …}</code>); newline-delimited
 <strong><code>.ndjson</code>/<code>.jsonl</code></strong> has one object per line. The column names come from
@@ -305,7 +329,25 @@ display preference, not a data change: the variable still exists, still
 appears in every dialog's variable list, and stays valid in <code>.cks</code> syntax —
 it just isn't shown in the grid.</li>
 </ul>
-<p>Edits are undoable (<code>Ctrl+Z</code> / <code>Ctrl+Y</code>).</p>
+<p><strong>With a screen reader</strong>, the grid reads like a grid: each visible cell
+announces its variable, row number, value and selection state, moving the
+selection (arrow keys, Tab, Enter, or the reader's own navigation)
+announces the newly active cell, and every cell offers an <strong>Edit cell</strong>
+action alongside its activate action. Only what is on screen is exposed —
+scrolling brings the next window of cells into the reader's view — so
+large datasets stay responsive.</p>
+<p>Edits are undoable (<code>Ctrl+Z</code> / <code>Ctrl+Y</code>) — and undo works on the whole
+dataset, not just cells: deleting a variable and undoing it brings back its
+data <strong>and</strong> its full definition (name, labels, value labels, missing
+values, type, measure) at its place, with any Select Cases / Weight Cases /
+Split File reference that pointed at it restored too. Transforms
+(Compute, Recode, Rank, a merge, a sort) undo as one step; metadata edits
+in the Variable View are undoable as well, with consecutive keystrokes on
+one field counting as a single step. Undoing a transform also removes its
+command from the <a href="../advanced/reproducibility/">Syntax console</a>'s journal
+(and redo puts it back), so the journal keeps describing what was actually
+done. Transpose is the one exception: it replaces the whole dataset and
+cannot be undone — the dialog says so.</p>
 <h2 id="the-variable-view">The Variable View</h2>
 <p>The Variable View (<code>Ctrl+2</code>) shows <strong>one row per variable</strong>. The columns are the
 variable's metadata; click a cell to edit it:</p>

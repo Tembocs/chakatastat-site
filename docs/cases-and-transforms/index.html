@@ -103,7 +103,12 @@ status bar shows when any of them is active.</p>
 <p><strong>Data → Select Cases…</strong> (<code>Ctrl+Alt+S</code>). Restrict the analysis to a subset of
 cases — for example, only participants where <code>Age &gt;= 60</code>, or a random sample.
 Unselected cases are filtered out of every subsequent statistic until you clear
-the selection. You can choose to filter (hide) or to mark unselected cases.</p>
+the selection. You can choose to filter (hide) or to mark unselected cases.
+The comparison value is checked against the variable's type: a numeric
+variable needs a number, and a date variable needs a calendar date in
+<code>YYYY-MM-DD</code> form (compact <code>YYYYMMDD</code> is accepted and canonicalized), compared
+chronologically — <code>visit_date &gt;= 2024-01-15</code> selects that day and everything
+after it.</p>
 <h3 id="weight-cases">Weight Cases</h3>
 <p><strong>Data → Weight Cases…</strong> (<code>Ctrl+Alt+W</code>). Give each case a <strong>frequency weight</strong>
 from a variable, so a case with weight 3 counts as three observations. Used for
@@ -197,15 +202,25 @@ dataset, matched by a key.</li>
 Sets</strong> — covered in <a href="../working-with-data/#tidying-a-dataset">Working with Data</a>.</li>
 </ul>
 <h2 id="reproducibility-note">Reproducibility note</h2>
-<p>Compute, Rank, Sort and Bin Variable are <strong>journalled</strong> — they appear in the
-<a href="../advanced/reproducibility/">Syntax console</a> as commands, so a data-preparation
-pipeline can be saved and replayed on fresh data exactly. Bin Variable's
-journaled command always records the <em>resolved</em> cutpoints, even for the
-Equal width/Equal count methods — so replaying it later reproduces the same
-groups rather than silently re-deriving different ones from changed data.
-Recode is the deliberate exception: its ordered rule list does not reduce to a
-one-line command, so it stays a dialog transform — the recoded variable itself
-is preserved by saving the <code>.ckd</code>.</p>
+<p>Every transform on this page is <strong>journalled</strong> — it appears in the
+<a href="../advanced/reproducibility/">Syntax console</a> as a command, so a
+data-preparation pipeline can be saved and replayed on fresh data exactly.
+That includes the case-semantics settings (Select Cases, Weight Cases,
+Split File — as <code>select_cases</code>, <code>weight_cases</code>, <code>split_file</code>), Recode
+(its ordered rules ride the <code>recode</code> command as one rule string each, in
+order), Transpose, and both Merge Files modes (<code>merge_add_cases</code>,
+<code>merge_add_variables</code> — the journaled command records the file's path
+<em>and</em> the SHA-256 of its bytes, so a replay proves it merged the same
+file). Bin Variable's journaled command always records the <em>resolved</em>
+cutpoints, even for the Equal width/Equal count methods — so replaying it
+later reproduces the same groups rather than silently re-deriving
+different ones from changed data. A failed or cancelled dialog writes no
+journal line.</p>
+<p>Three operations remain outside the journal — Bulk Rename, Import Data
+Dictionary and Define Variable Properties. If a session used one, the
+saved syntax and any exported reproducibility bundle say so explicitly
+(a <code># not replayable:</code> note), rather than implying the journal
+reconstructs the whole session.</p>
       </article>
     </div>
   </main>

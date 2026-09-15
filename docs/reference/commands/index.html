@@ -96,7 +96,7 @@
 <blockquote>
 <p><strong>Generated from the catalog.</strong> This page is produced by <code>dart run tool/gen_command_reference.dart</code> from <code>lib/tools/tool_catalog.dart</code>, the single source of truth for the tool surface, and a test fails if the two drift — so an argument listed here is an argument the engine accepts. Do not edit it by hand.</p>
 </blockquote>
-<p><strong>108 commands</strong>, by family.</p>
+<p><strong>115 commands</strong>, by family.</p>
 <ul>
 <li><a href="#discovering-the-dataset">Discovering the dataset</a></li>
 <li><a href="#descriptive-statistics">Descriptive statistics</a></li>
@@ -6159,6 +6159,253 @@
 <td>text list</td>
 <td>no</td>
 <td>One label per group, in order (default: generated from the boundaries, e.g. &quot;&lt; 25&quot;, &quot;25 – 30&quot;, &quot;≥ 30&quot;).</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="select_cases"><code>select_cases</code></h3>
+<p>Select which cases participate in analyses: only those satisfying a condition on one variable (or clear=true for all cases again). Unselected cases are excluded from analyses but stay in the data; cases with a missing value never satisfy the condition. Changes every subsequent analysis, so it mutates the session.</p>
+<blockquote>
+<p><strong>Changes your data.</strong> This is a transform, not an analysis; a read-only session cannot run it.</p>
+</blockquote>
+<pre><code class="language-cks">select_cases
+</code></pre>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Accepts</th>
+<th>Required</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>variable</code></td>
+<td>variable</td>
+<td>no</td>
+<td>The variable the condition tests. Required unless clear=true.</td>
+</tr>
+<tr>
+<td><code>op</code></td>
+<td>one of <code>eq</code>, <code>ne</code>, <code>lt</code>, <code>le</code>, <code>gt</code>, <code>ge</code></td>
+<td>no</td>
+<td>The comparison: eq (=), ne (≠), lt (&lt;), le (≤), gt (&gt;), ge (≥). Default: eq.</td>
+</tr>
+<tr>
+<td><code>value</code></td>
+<td>text</td>
+<td>no</td>
+<td>The literal to compare against — a number for a numeric variable, a calendar date in yyyy-MM-dd form for a date variable (compared chronologically), text otherwise. Required unless clear=true.</td>
+</tr>
+<tr>
+<td><code>clear</code></td>
+<td>true / false</td>
+<td>no</td>
+<td>Select all cases again instead of setting a condition.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="weight_cases"><code>weight_cases</code></h3>
+<p>Weight every analysis by a numeric variable (or clear=true to stop weighting): counts become sums of weights and statistics are weighted. Cases with a missing, zero or negative weight are excluded. Mutually exclusive with a declared survey design (weighting clears it). Changes every subsequent analysis, so it mutates the session.</p>
+<blockquote>
+<p><strong>Changes your data.</strong> This is a transform, not an analysis; a read-only session cannot run it.</p>
+</blockquote>
+<pre><code class="language-cks">weight_cases
+</code></pre>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Accepts</th>
+<th>Required</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>variable</code></td>
+<td>variable</td>
+<td>no</td>
+<td>The numeric frequency-weight variable. Required unless clear=true.</td>
+</tr>
+<tr>
+<td><code>clear</code></td>
+<td>true / false</td>
+<td>no</td>
+<td>Stop weighting instead of setting a weight variable.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="split_file"><code>split_file</code></h3>
+<p>Partition analyses by the values of one variable (or clear=true to analyze all cases together): every analysis reports one result set per group, ascending, missing values last. Changes every subsequent analysis, so it mutates the session.</p>
+<blockquote>
+<p><strong>Changes your data.</strong> This is a transform, not an analysis; a read-only session cannot run it.</p>
+</blockquote>
+<pre><code class="language-cks">split_file
+</code></pre>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Accepts</th>
+<th>Required</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>variable</code></td>
+<td>variable</td>
+<td>no</td>
+<td>The variable whose values define the groups. Required unless clear=true.</td>
+</tr>
+<tr>
+<td><code>clear</code></td>
+<td>true / false</td>
+<td>no</td>
+<td>Analyze all cases together again instead of by group.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="recode"><code>recode</code></h3>
+<p>Recode a variable with ordered old-value → new-value rules; the first matching rule wins. In place by default, or into a new variable with &quot;into&quot; (numeric when every new value is numeric; unmatched cells stay blank there, and keep their value in place). Mutates the dataset.</p>
+<blockquote>
+<p><strong>Changes your data.</strong> This is a transform, not an analysis; a read-only session cannot run it.</p>
+</blockquote>
+<pre><code class="language-cks">recode variable=VarName rules=[&quot;a&quot;, &quot;b&quot;]
+</code></pre>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Accepts</th>
+<th>Required</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>variable</code></td>
+<td>variable</td>
+<td>yes</td>
+<td>The variable whose values the rules match.</td>
+</tr>
+<tr>
+<td><code>rules</code></td>
+<td>text list</td>
+<td>yes</td>
+<td>The rules, in order, one string each: &quot;old=new&quot; (a value; numeric variables compare numerically), &quot;1 thru 5=new&quot; (an inclusive numeric range), &quot;missing=new&quot; (blank and user-missing cells), &quot;else=new&quot; (everything no earlier rule matched). An empty new value blanks the cell. Double-quote an old or new value to keep it literal (e.g. &quot;&quot;else&quot;=x&quot; for the text else).</td>
+</tr>
+<tr>
+<td><code>into</code></td>
+<td>text</td>
+<td>no</td>
+<td>The name of a new variable to write the result into (recode into different variables). Omitted: the variable is recoded in place.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="transpose"><code>transpose</code></h3>
+<p>Transpose the dataset: the chosen variables become cases and the existing cases become variables (named from &quot;names&quot;, or case_1, case_2, …), with a leading CASE_LBL variable holding the old variable names. This replaces the whole dataset and starts a fresh session (like opening a file). Mutates the dataset.</p>
+<blockquote>
+<p><strong>Changes your data.</strong> This is a transform, not an analysis; a read-only session cannot run it.</p>
+</blockquote>
+<pre><code class="language-cks">transpose variables=[Var1, Var2]
+</code></pre>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Accepts</th>
+<th>Required</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>variables</code></td>
+<td>variable list</td>
+<td>yes</td>
+<td>The variables to transpose into cases.</td>
+</tr>
+<tr>
+<td><code>names</code></td>
+<td>variable</td>
+<td>no</td>
+<td>A variable whose values name the resulting variables (one per existing case).</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="merge_add_cases"><code>merge_add_cases</code></h3>
+<p>Merge Files, Add Cases: append another dataset file's cases to the open dataset. Columns are matched by variable name; columns only in the other file become new variables, blank for existing cases. Reads a .ckd or .csv file from disk; the file is read and (when &quot;sha256&quot; is given) verified before anything mutates. Mutates the dataset.</p>
+<blockquote>
+<p><strong>Changes your data.</strong> This is a transform, not an analysis; a read-only session cannot run it.</p>
+</blockquote>
+<pre><code class="language-cks">merge_add_cases file=&quot;text&quot;
+</code></pre>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Accepts</th>
+<th>Required</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>file</code></td>
+<td>text</td>
+<td>yes</td>
+<td>The dataset file whose cases to append (.ckd or .csv path).</td>
+</tr>
+<tr>
+<td><code>sha256</code></td>
+<td>text</td>
+<td>no</td>
+<td>The expected SHA-256 of the file's bytes. When given, a file that hashes differently fails by name before any mutation — this is what makes a journaled merge verifiable.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="merge_add_variables"><code>merge_add_variables</code></h3>
+<p>Merge Files, Add Variables: join another dataset file's columns onto the current cases — by a key variable in each dataset (the first other row with the same key wins; the other key column is not duplicated), or by row position when no keys are given. Every other column becomes a new variable, filled only where a case matched. Reads a .ckd or .csv file from disk; the file is read and (when &quot;sha256&quot; is given) verified before anything mutates. Mutates the dataset.</p>
+<blockquote>
+<p><strong>Changes your data.</strong> This is a transform, not an analysis; a read-only session cannot run it.</p>
+</blockquote>
+<pre><code class="language-cks">merge_add_variables file=&quot;text&quot;
+</code></pre>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Accepts</th>
+<th>Required</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>file</code></td>
+<td>text</td>
+<td>yes</td>
+<td>The dataset file whose variables to join (.ckd or .csv path).</td>
+</tr>
+<tr>
+<td><code>key</code></td>
+<td>variable</td>
+<td>no</td>
+<td>The open dataset's key variable. Give both keys or neither (neither: cases join by row position).</td>
+</tr>
+<tr>
+<td><code>file_key</code></td>
+<td>text</td>
+<td>no</td>
+<td>The name of the other file's key variable. Give both keys or neither.</td>
+</tr>
+<tr>
+<td><code>sha256</code></td>
+<td>text</td>
+<td>no</td>
+<td>The expected SHA-256 of the file's bytes. When given, a file that hashes differently fails by name before any mutation — this is what makes a journaled merge verifiable.</td>
 </tr>
 </tbody>
 </table></div>

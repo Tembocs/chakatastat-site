@@ -154,12 +154,15 @@ bands?</li>
 </ol>
 <h2 id="the-syntax-trail">The syntax trail</h2>
 <pre><code>compute target=PulsePressure, expression=&quot;SystolicBP - DiastolicBP&quot;
+recode variable=BMI, rules=[&quot;10 thru 18.4=1&quot;, &quot;18.5 thru 24.9=2&quot;, &quot;25 thru 29.9=3&quot;, &quot;30 thru 60=4&quot;], into=&quot;BMIGroup&quot;
 compute target=MAP, expression=&quot;DiastolicBP + PulsePressure / 3&quot;
 crosstabs row=BMIGroup, column=Hypertensive, chi_square=true
 </code></pre>
-<p>Recode is dialog-only (its ordered rules don't reduce to a one-line
-command), so it does not appear in the trail — one more reason the labelled
-<code>.ckd</code> you <strong>Save</strong> is part of the reproducible record.</p>
+<p>The Recode is in the trail too: a <code>recode</code> command carrying its ordered
+rules, one rule string each, first match wins — so the whole preparation
+pipeline on this page replays from the raw file. The labelled <code>.ckd</code> you
+<strong>Save</strong> is still part of the reproducible record: it carries the metadata
+(labels, missing values) that no transform command sets.</p>
       </article>
     </div>
   </main>

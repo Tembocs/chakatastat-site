@@ -134,8 +134,10 @@ agree (the <em>log relative error</em> of McCullough 1998, the convention used t
 score statistical software against NIST). 15 is the most a
 double-precision reference can show.</li>
 <li><strong>Criterion</strong> — what counts as a pass: for a package-referenced statistic,
-the same tolerance the developer suite pins it to; for a NIST statistic,
-the minimum digits of agreement for that dataset's published difficulty
+the same criterion the developer suite pins it to — an absolute tolerance,
+or, for a value too small for one (a very small p-value), agreement on the
+log₁₀ scale within a stated number of decades; for a NIST statistic, the
+minimum digits of agreement for that dataset's published difficulty
 grade.</li>
 <li><strong>Result</strong> — <code>pass</code>, or <code>FAIL</code> with both values named.</li>
 </ul>

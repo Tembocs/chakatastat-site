@@ -178,6 +178,31 @@ table layout, and the test never hard-codes a reference number.</p>
 <p>A guard test — <em>&quot;every reference value is checked (no orphans either way)&quot;</em> —
 asserts the set of ids in the JSON and the set exercised by the probes are
 <strong>equal</strong>, so coverage cannot silently drift as either side changes.</p>
+<h3 id="the-pin-rule">The pin rule</h3>
+<p>Two rules, both enforced on every push by
+<code>test/validation_pin_guard_test.dart</code>
+(0.24.0 item 1; code review 2026-09-02, finding A7):</p>
+<ol>
+<li><strong>Every pin can fail.</strong> A linear pin's tolerance must be smaller than
+the value it pins. The alternative shapes are explicit, never implied:
+a value too small for an absolute tolerance (a tiny p-value) is pinned
+on the <strong>log10 scale</strong> (<code>&quot;scale&quot;: &quot;log10&quot;</code>, tolerance in decades, at
+most 1), and an interval claim (a quantile-residual bracket, a
+boundary-zero MLE) is a <strong>containment bracket</strong> — midpoint ±
+half-width, with the word <code>containment</code> in its <code>source</code>. The guard
+sweeps every reference file, family files included; a pin that a zero
+from the engine would satisfy fails the suite. The scale-aware
+comparison lives in one place,
+<code>test/validation/reference_loader.dart</code>,
+and every validation suite asserts through it.</li>
+<li><strong>A new analysis kind ships with a pinned deterministic reference
+value.</strong> The guard parses the engine's <code>analyze</code> dispatch from source
+and requires every kind to be exercised by a probe in a
+reference-pinned validation suite. Kinds that predate this rule are
+listed in the guard's legacy map with the location of their inline
+pins; the map is closed to new entries and only shrinks — a legacy
+kind that gains a reference-file probe is forced out of the map.</li>
+</ol>
 <h3 id="shared-byte-identical-inputs">Shared, byte-identical inputs</h3>
 <p>The reference tools and the engine must see <em>exactly</em> the same data, or a
 disagreement could be an input difference rather than a numeric one. So the four

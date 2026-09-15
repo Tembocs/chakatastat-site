@@ -260,7 +260,14 @@ it names one anyway — a safe way to let it explore. To let it transform
 your dataset, click the <strong>Read-only</strong> chip in the panel's header (it becomes
 <strong>Full access</strong>; click again to go back) or use the switch under
 Settings → AI Assistant. Every change it then makes is an ordinary command
-— journaled, undoable and visible in the Syntax console.</li>
+— undoable like your own edits (the assistant's commands are not written
+into the Syntax journal; its results appear in the Output log, and the
+reproducibility bundle will note when a session's journal cannot replay
+everything that happened).</li>
+<li>One boundary holds even under full access: the assistant is never offered
+the two tools that read a <strong>file from disk</strong> (the Merge Files commands) —
+its reach ends at the open dataset. Merging stays a menu action you take
+yourself.</li>
 </ul>
 <h2 id="reproducibility">Reproducibility</h2>
 <p>The assistant's actions are commands like any other, so they appear in the

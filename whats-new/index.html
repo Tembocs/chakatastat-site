@@ -91,6 +91,43 @@
           Installed copies update automatically through their store.
         </p>
 
+        <h2>0.24.0 — 2026-09-15</h2>
+        <p>
+          The catalog grows from 108 to 115 tools: Select Cases, Weight
+          Cases, Split File, Recode, Transpose and both dataset merges are
+          now first-class commands. With that, every transform made in the
+          GUI enters the command journal, so a point-and-click session
+          replays from the original data to identical numbers — merges
+          record a fingerprint of their second input, verified before
+          anything changes.
+        </p>
+        <p>
+          Undo is now a dataset transaction: deleting a column, recoding,
+          or editing cells undoes atomically, with variable identity
+          preserved — no silent column shifts.
+        </p>
+        <p>
+          Data integrity on the way in: integers too large for exact
+          numeric storage import exactly, kept as text with a note; values
+          that fail numeric conversion are counted, badged in Variable
+          View, and noted on any analysis that uses them; date columns
+          validate on entry and canonicalize to ISO, with chronological
+          sorting and filtering — the policy documented and pinned.
+        </p>
+        <p>
+          Rejected input says why: unknown or misspelled arguments are
+          refused by name on every front, the AI assistant and MCP
+          included; oversized requests are capped with a visible note,
+          never silently truncated.
+        </p>
+        <p>
+          Large text imports now parse off the interface thread. And the
+          app speaks to screen readers: the data grid announces cells and
+          selection, every chart carries a spoken summary and an
+          accessible data view — manually verified with Orca on Linux and
+          Narrator on Windows.
+        </p>
+
         <h2>0.23.0 — 2026-08-31</h2>
         <p>
           DOI: <a href="https://doi.org/10.5281/zenodo.22199867">10.5281/zenodo.22199867</a>

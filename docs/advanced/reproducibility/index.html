@@ -357,13 +357,17 @@ Export Reproducibility Bundle…</strong>. The <code>.cksb</code> file contains:
 <ul>
 <li>your syntax journal (the <code>.cks</code> script);</li>
 <li>the data fingerprint (and the name of the file you had open);</li>
+<li>the name and byte hash of every file your session merged (Data → Merge
+Files), so a reader can be given those too and prove they are the same;</li>
+<li>a note naming any operation the journal cannot replay (a bulk rename, a
+dictionary import, a variable-properties edit), if your session used one;</li>
 <li>the ChakataStat version, the engine version and your platform;</li>
 <li>every output in the log, exactly as it was rendered — every table, and
 each chart as the geometry table its CSV export produces.</li>
 </ul>
-<p>It does <strong>not</strong> contain your data. Whether and how to share the data is
-your decision, made separately; the bundle only says what you ran and what
-you saw. For a clean bundle, <strong>Clear All</strong> the output and <strong>Run All</strong> from
+<p>It does <strong>not</strong> contain your data — nor any merged file's data. Whether
+and how to share the data is your decision, made separately; the bundle
+only says what you ran and what you saw. For a clean bundle, <strong>Clear All</strong> the output and <strong>Run All</strong> from
 the console first, so the log holds exactly what the journal produces (an
 assistant reply or an installation report in the log has no journal line to
 re-run, and the verifier will say so).</p>
@@ -378,11 +382,14 @@ headless:</p>
 it <strong>refuses</strong> — the report says <code>REFUSED — different data</code> with both hashes,
 and nothing is re-run. This is stricter than the script header's warning on
 purpose: the bundle's whole point is to compare against the author's data.
-With the right data it re-runs the journal and compares every cell of every
-output with the bundle, within the precision the author saw it printed at,
-and reports <strong>PASS</strong> or <strong>FAIL</strong> per output, naming the first cells that
-differ. The exit status is 0 only on a full pass, so a reviewer's script can
-gate on it.</p>
+If the bundle's journal merged other files, the verifier looks for each by
+its recorded name <strong>next to the data file you picked</strong> and checks its byte
+hash the same way — a missing or changed merge input also refuses by name
+before anything runs. With the right data it re-runs the journal and
+compares every cell of every output with the bundle, within the precision
+the author saw it printed at, and reports <strong>PASS</strong> or <strong>FAIL</strong> per output,
+naming the first cells that differ. The exit status is 0 only on a full
+pass, so a reviewer's script can gate on it.</p>
 <p>Where the installation check (<a href="../verify-installation/">Verify this Installation</a>)
 proves the <em>software</em> on a machine, the bundle proves a <em>particular result</em>
 — together with the fingerprint they are the three questions a sceptical

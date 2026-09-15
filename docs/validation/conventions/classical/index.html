@@ -123,10 +123,29 @@ is <em>s</em>/√n. Under a frequency weight, <em>n</em> is the sum of the weigh
 <p>Recorded in <a href="../../tolerances/">tolerances.md</a>: the <strong>Hazen</strong> definition,
 plotting position (k − ½)/n — R type 5, NumPy <code>hazen</code>. It is used for every
 percentile the application prints, the median included, the box plot's
-quartiles and fences, and the quantile method of <em>Bin variable</em>. Weighted,
-the same rule runs on cumulative weight, averaging the two adjacent values
-on an exact boundary. Readers of SPSS should note that its default
-(<code>HAVERAGE</code>, R type 6) is a different rule.</p>
+quartiles and fences, and the quantile method of <em>Bin variable</em>. Readers
+of SPSS should note that its default (<code>HAVERAGE</code>, R type 6) is a different
+rule.</p>
+<p><strong>Weighted quantiles</strong> (0.24.0 item 7) have <strong>one</strong> implementation,
+<code>stats::weighted_quantile</code>, used by every
+weighted percentile the application prints — Frequencies/Explore/
+Descriptives, the box plot, Bin variable, custom tables — and by the
+quantile regression's pseudo-R¹ null-model quantile. The rule: the first
+value whose cumulative weight reaches <code>p × total</code>, <strong>averaging the two
+adjacent values when the target lands on a boundary</strong> (the standard
+even-<code>n</code> median when the weights are all 1). The boundary is decided with
+a tolerance relative to the total weight, never float equality: with
+fractional weights the running sum reaches &quot;exactly half&quot; only up to
+rounding, and an equality test silently skipped the averaging exactly
+there. The quantile regression's coefficients themselves, the intercept
+included, are computed by IRLS, not by this function, and agree with the
+sample quantile only to iteration tolerance; a quantile regression with
+no predictors is rejected (&quot;needs at least one predictor&quot;). Before the
+unification, the regression-side copy skipped the averaging entirely, so
+its null-model quantile could disagree with Frequencies' median on the
+same weighted data (review 2026-09-02, B2). Corrected 2026-09-05: an
+earlier version of this note claimed the regression's intercept-only fit
+itself used the shared function — it does not.</p>
 <h3 id="missing-data-policy">Missing-data policy</h3>
 <p>Every procedure is <strong>listwise</strong> on the variables it uses — a case with a
 missing value in any analysis variable is dropped from that analysis — with
