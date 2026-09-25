@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ChakataStat User Guide — ChakataStat User Guide</title>
+  <title>ChakataStat User Guide · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/">
   <link rel="icon" type="image/svg+xml" href="../assets/logo-mark.svg">
   <link rel="alternate icon" href="../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="ChakataStat User Guide — ChakataStat User Guide">
+  <meta property="og:title" content="ChakataStat User Guide · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../index.html#features">Features</a>
+        <a href="../index.html#validation">Validation</a>
+        <a href="../docs/" aria-current="page">User Guide</a>
+        <a href="../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -92,8 +96,8 @@
       </aside>
       <article class="docs-content">
 <h1 id="chakatastat-user-guide">ChakataStat User Guide</h1>
-<p>A task-oriented manual for <strong>people running analyses</strong> — the companion to the
-product overview at <a href="https://chakatastat.app/">chakatastat.app</a>, which describes
+<p>A task-oriented manual for <strong>people running analyses</strong>. It is the companion to
+the product overview at <a href="https://chakatastat.app/">chakatastat.app</a>, which describes
 what ChakataStat is. The goal: you can learn ChakataStat end to end from this
 guide alone.</p>
 <p>The pages are ordered so a brand-new user can read one short page for the whole
@@ -103,28 +107,28 @@ sample dataset (<strong>File → Open Sample Dataset</strong>), so you can follo
 the same numbers.</p>
 <h2 id="start-here">Start here</h2>
 <ul>
-<li><strong><a href="quick-start/">Quick Start</a></strong> — install to your first result in about
+<li><strong><a href="quick-start/">Quick Start</a></strong>: install to your first result in about
 ten minutes, on the bundled sample dataset. <strong>The fastest way in.</strong></li>
-<li><strong><a href="overview/">ChakataStat at a glance</a></strong> — the whole application in one
+<li><strong><a href="overview/">ChakataStat at a glance</a></strong>: the whole application in one
 read: what it is, every part of the window, and what each menu does.</li>
-<li><strong><a href="getting-started/">Getting Started</a></strong> — install, the workbench tour, and
+<li><strong><a href="getting-started/">Getting Started</a></strong>: install, the workbench tour, and
 your first analysis in five minutes.</li>
-<li><strong><a href="tutorial/">Tutorial Workbook</a></strong> — a ten-module course on the
+<li><strong><a href="tutorial/">Tutorial Workbook</a></strong>: a ten-module course on the
 bundled sample health study (see its <a href="tutorial/codebook/">codebook</a>), for
 self-study or classroom training, with exercises and the reproducible
 syntax for every module.</li>
 </ul>
 <h2 id="core-tasks-the-detail">Core tasks (the detail)</h2>
 <ul>
-<li><strong><a href="working-with-data/">Working with Data</a></strong> — importing SPSS, Stata, SAS, CSV,
+<li><strong><a href="working-with-data/">Working with Data</a></strong>: importing SPSS, Stata, SAS, CSV,
 Excel, Parquet and fixed-width text (encodings detected, delimiters
 sniffed); the Data View and Variable View; value labels, missing values and
 measurement levels; the <code>.ckd</code> document; find &amp; replace; the data dictionary;
 bulk rename and variable sets.</li>
-<li><strong><a href="cases-and-transforms/">Case Semantics &amp; Transforms</a></strong> — Select / Weight /
+<li><strong><a href="cases-and-transforms/">Case Semantics &amp; Transforms</a></strong>: Select / Weight /
 Split cases, and the Compute / Recode / Rank / Sort / Merge / Transpose
 transforms.</li>
-<li><strong><a href="analyze/">Analyzing Data</a></strong> — every procedure, grouped as the menu
+<li><strong><a href="analyze/">Analyzing Data</a></strong>: every procedure, grouped as the menu
 is. When to use it, how to fill the dialog, how to read the output:
 <ul>
 <li><a href="analyze/descriptive-statistics/">Descriptive Statistics</a></li>
@@ -145,37 +149,37 @@ is. When to use it, how to fill the dialog, how to read the output:
 <li><a href="analyze/tables/">Custom Tables</a></li>
 </ul>
 </li>
-<li><strong><a href="graphs/">Graphs</a></strong> — Histogram, Scatterplot, Boxplot, the Chart Builder
+<li><strong><a href="graphs/">Graphs</a></strong>: Histogram, Scatterplot, Boxplot, the Chart Builder
 (violin, scatterplot matrix, ECDF, dot plot, bubble) and analysis-attached
 plots.</li>
-<li><strong><a href="chart-editor/">Editing a chart</a></strong> — restyle a finished chart in place:
-title, legend, colours, line width, bar stacking — every edit recorded as a
+<li><strong><a href="chart-editor/">Editing a chart</a></strong>: restyle a finished chart in place:
+title, legend, colours, line width, bar stacking. Every edit is recorded as a
 command amendment, so a styled chart re-runs styled.</li>
-<li><strong><a href="settings/">Settings</a></strong> — appearance, connectivity, the AI assistant and
+<li><strong><a href="settings/">Settings</a></strong>: appearance, connectivity, the AI assistant and
 Advanced mode.</li>
 </ul>
 <h2 id="advanced-features-their-own-section">Advanced features (their own section)</h2>
 <p>Optional power-user and developer features, in <strong><a href="advanced/">advanced/</a></strong>:</p>
 <ul>
-<li><strong><a href="advanced/ai-assistant/">The AI Assistant</a></strong> — connect a model backend and
+<li><strong><a href="advanced/ai-assistant/">The AI Assistant</a></strong>: connect a model backend and
 ask for analyses in plain language.</li>
-<li><strong><a href="advanced/reproducibility/">Reproducibility</a></strong> — the <code>.cks</code> syntax console
+<li><strong><a href="advanced/reproducibility/">Reproducibility</a></strong>: the <code>.cks</code> syntax console
 and its editor (line numbers, syntax colours, find &amp; replace, run keys,
 as-you-type checking, completion and hover help), the command palette,
 headless batch runs (<code>--run</code>), output export to HTML/Markdown/LaTeX, and
 Export as Python.</li>
-<li><strong><a href="advanced/engine-access/">Direct Engine Access</a></strong> — Advanced mode, the
+<li><strong><a href="advanced/engine-access/">Direct Engine Access</a></strong>: Advanced mode, the
 engine diagnostics panel, and driving ChakataStat over MCP.</li>
-<li><strong><a href="advanced/verify-installation/">Verify this Installation</a></strong> — the
+<li><strong><a href="advanced/verify-installation/">Verify this Installation</a></strong>: the
 built-in check of the installed copy against independent reference values,
 from the Help menu or <code>--verify</code>.</li>
 </ul>
 <h2 id="reference">Reference</h2>
 <ul>
-<li><strong><a href="reference/choosing-a-procedure/">Choosing a procedure</a></strong> — &quot;what do I
+<li><strong><a href="reference/choosing-a-procedure/">Choosing a procedure</a></strong>: &quot;what do I
 have, what do I want to know?&quot; → which analysis.</li>
-<li><strong><a href="reference/glossary/">Glossary</a></strong> — ChakataStat and statistics terms.</li>
-<li><strong><a href="reference/commands/">Command reference</a></strong> — every command and its
+<li><strong><a href="reference/glossary/">Glossary</a></strong>: ChakataStat and statistics terms.</li>
+<li><strong><a href="reference/commands/">Command reference</a></strong>: every command and its
 arguments, for writing syntax by hand, scripting a <code>.cks</code> file, or driving
 ChakataStat from the Python client or an MCP agent.</li>
 </ul>
@@ -186,29 +190,51 @@ first-run welcome / empty-state surfaces.</p>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../index.html">Home</a> ·
-        <a href="../quick-start/">Quick Start</a> ·
-        <a href="../privacy-policy/">Privacy Policy</a> ·
-        <a href="../license/">License</a> ·
-        <a href="../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../index.html">
+            <img class="brand-mark" src="../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../index.html#features">Features</a>
+          <a href="../index.html#screenshots">Screenshots</a>
+          <a href="../index.html#download">Download</a>
+          <a href="../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../docs/">User Guide</a>
+          <a href="../quick-start/">Quick Start</a>
+          <a href="../docs/validation/">Validation</a>
+          <a href="../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../cite/">How to cite</a>
+          <a href="../license/">License</a>
+          <a href="../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sample health study — codebook — ChakataStat User Guide</title>
+  <title>Sample health study: codebook · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/tutorial/codebook/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Sample health study — codebook — ChakataStat User Guide">
+  <meta property="og:title" content="Sample health study: codebook · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/tutorial/codebook/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#validation">Validation</a>
+        <a href="../../../docs/" aria-current="page">User Guide</a>
+        <a href="../../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -91,17 +95,17 @@
       </ul>
       </aside>
       <article class="docs-content">
-<h1 id="sample-health-study--codebook">Sample health study — codebook</h1>
+<h1 id="sample-health-study-codebook">Sample health study: codebook</h1>
 <p>The dataset behind <strong>File → Open Sample Dataset</strong>: a <strong>synthetic</strong> cross-
 sectional health study of <strong>600 participants</strong>, 21 variables. It is generated
 (deterministically, by <code>tool/generate_health_study.dart</code> in the project
-repository) purely for training — <strong>no value in it describes any real person
+repository) purely for training: <strong>no value in it describes any real person
 or population</strong>. Zone names are deliberately abstract for the same reason.</p>
 <p>The same data ship in two forms:</p>
 <ul>
-<li>the dressed <code>.ckd</code> document the app opens — all the metadata below already
+<li>the dressed <code>.ckd</code> document the app opens, with all the metadata below already
 set;</li>
-<li>a raw CSV (<code>sample_test_data/health_study.csv</code> in the repository) — the
+<li>a raw CSV (<code>sample_test_data/health_study.csv</code> in the repository): the
 same values with <em>no</em> metadata, which is what
 <a href="../01-open-and-views/">module 1</a>'s import exercise recreates.</li>
 </ul>
@@ -174,7 +178,7 @@ same values with <em>no</em> metadata, which is what
 <td>BMI</td>
 <td>Numeric</td>
 <td>Scale</td>
-<td>kg/m² — the classic recode-into-categories candidate</td>
+<td>kg/m²; the classic recode-into-categories candidate</td>
 </tr>
 <tr>
 <td>SystolicBP</td>
@@ -245,7 +249,7 @@ same values with <em>no</em> metadata, which is what
 </tbody>
 </table></div>
 <h2 id="the-planted-structure-instructors-key">The planted structure (instructor's key)</h2>
-<p>Because the data are generated, we can say exactly what is in them — which is
+<p>Because the data are generated, we can say exactly what is in them, which is
 what makes exercises checkable:</p>
 <p><strong>Real effects</strong> (students should find these):</p>
 <ul>
@@ -254,53 +258,75 @@ smokers; DiastolicBP tracks SystolicBP. Correlation, regression and the
 smoking group comparisons all show it.</li>
 <li><strong>FastingGlucose rises with BMI and with a family history of diabetes</strong>; a
 small cluster of diabetic-range values makes the <code>Diabetic</code> outcome real.</li>
-<li><strong>Hypertensive prevalence differs by SmokingStatus</strong> (via the SBP effect) —
+<li><strong>Hypertensive prevalence differs by SmokingStatus</strong> (via the SBP effect):
 the module 5 crosstab's chi-square is significant.</li>
 <li>The outcome labels carry <strong>~3% classification noise</strong>, so
 Hypertensive/Diabetic agree strongly with their thresholds without being
 tautologies.</li>
 </ul>
-<p><strong>Deliberate nulls</strong> (students should find <em>nothing</em> — and learn to say so):</p>
+<p><strong>Deliberate nulls</strong> (students should find <em>nothing</em>, and learn to say so):</p>
 <ul>
-<li><strong>HeartRate relates to nothing</strong> — it is pure noise around 72 bpm.</li>
-<li><strong>PhysicalActivity_minWk is independent of TotalCholesterol_mmolL</strong> — the
+<li><strong>HeartRate relates to nothing</strong>: it is pure noise around 72 bpm.</li>
+<li><strong>PhysicalActivity_minWk is independent of TotalCholesterol_mmolL</strong>: the
 workbook's standing example of a plausible hypothesis the data do not
 support.</li>
 </ul>
 <p><strong>Missingness</strong>, for module 9:</p>
 <ul>
-<li><code>FastingGlucose_mmolL</code> — the <em>declared code</em> pattern: <code>99</code> is a real stored
+<li><code>FastingGlucose_mmolL</code>: the <em>declared code</em> pattern. <code>99</code> is a real stored
 value, flagged user-missing in the metadata, labelled &quot;Not measured&quot;.</li>
-<li><code>TotalCholesterol_mmolL</code>, <code>PhysicalActivity_minWk</code> — plain blank cells
+<li><code>TotalCholesterol_mmolL</code>, <code>PhysicalActivity_minWk</code>: plain blank cells
 (system-missing).</li>
 </ul>
       </article>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../../index.html">Home</a> ·
-        <a href="../../../quick-start/">Quick Start</a> ·
-        <a href="../../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../../license/">License</a> ·
-        <a href="../../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../../index.html">
+            <img class="brand-mark" src="../../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../../index.html#features">Features</a>
+          <a href="../../../index.html#screenshots">Screenshots</a>
+          <a href="../../../index.html#download">Download</a>
+          <a href="../../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../../docs/">User Guide</a>
+          <a href="../../../quick-start/">Quick Start</a>
+          <a href="../../../docs/validation/">Validation</a>
+          <a href="../../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../../cite/">How to cite</a>
+          <a href="../../../license/">License</a>
+          <a href="../../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>VAR &amp; Granger Causality — ChakataStat User Guide</title>
+  <title>VAR &amp; Granger Causality · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/analyze/var-granger/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="VAR &amp; Granger Causality — ChakataStat User Guide">
+  <meta property="og:title" content="VAR &amp; Granger Causality · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/analyze/var-granger/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#validation">Validation</a>
+        <a href="../../../docs/" aria-current="page">User Guide</a>
+        <a href="../../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -96,62 +100,62 @@
 model one series at a time; a <strong>vector autoregression (VAR)</strong> models two or
 more series <em>together</em>, regressing each one on <strong>p lags of all of them</strong>.
 That answers the standard multi-series questions in one fit: how the series
-move together over time, which lag order the data support, and — the
-headline — whether one series's history <strong>improves the prediction</strong> of
+move together over time, which lag order the data support, and (the
+headline) whether one series's history <strong>improves the prediction</strong> of
 another (<strong>Granger causality</strong>).</p>
 <h2 id="the-data-layout">The data layout</h2>
 <p>One column per series, cases in <strong>time order</strong>. The analyzed sample is the
 rows where <strong>all</strong> selected series are non-missing (a row missing any one is
 dropped, and the output names the aligned count). Like every time-series
-tool the estimate is <strong>unweighted by design</strong> — a frequency weight has no
+tool the estimate is <strong>unweighted by design</strong>: a frequency weight has no
 defined meaning for an ordered series; an active weight only selects cases,
 and the output says so.</p>
 <h2 id="the-dialog">The dialog</h2>
 <p>Tick two or more <strong>Series</strong>, then choose how the lag order is set:</p>
 <ul>
-<li><strong>Lag order (p)</strong> — a fixed order (default 1). Each equation regresses its
+<li><strong>Lag order (p)</strong>: a fixed order (default 1). Each equation regresses its
 series on lags 1..p of every series.</li>
-<li><strong>Choose the lag order automatically</strong> — compares orders 1..<strong>maximum</strong>
+<li><strong>Choose the lag order automatically</strong>: compares orders 1..<strong>maximum</strong>
 with the four standard information criteria and fits the one your chosen
 <strong>criterion</strong> picks. Every candidate is scored on the <em>same</em> trimmed
 sample, so the criteria are comparable across orders.</li>
-<li><strong>Deterministic terms</strong> — a <strong>constant</strong> (default), a <strong>linear trend</strong>,
+<li><strong>Deterministic terms</strong>: a <strong>constant</strong> (default), a <strong>linear trend</strong>,
 <strong>both</strong>, or <strong>none</strong>.</li>
 </ul>
 <h2 id="reading-the-output">Reading the output</h2>
 <ul>
-<li><strong>VAR Model Summary</strong> — the aligned and effective observation counts, the
+<li><strong>VAR Model Summary</strong>: the aligned and effective observation counts, the
 fitted order and how it was chosen, parameters per equation, the
 log-likelihood, and AIC / HQ / BIC / FPE for the fitted model. (BIC is
 Lütkepohl's SC; under automatic selection these values use the model's own
 sample and so can differ from the selection table's row.)</li>
-<li><strong>Lag Order Selection</strong> (automatic mode) — one row per candidate order
+<li><strong>Lag Order Selection</strong> (automatic mode): one row per candidate order
 with all four criteria; the note names each criterion's minimum and the
 order actually fitted. Criteria often disagree (BIC is the most
-parsimonious) — that disagreement is information, not a malfunction.</li>
-<li><strong>VAR Coefficients</strong> — one table per series: each lag term (<code>x.l1</code> is
+parsimonious); that disagreement is information, not a malfunction.</li>
+<li><strong>VAR Coefficients</strong>: one table per series, listing each lag term (<code>x.l1</code> is
 series x at lag 1), the deterministic terms, with standard errors, t and
 Sig.; the note carries the equation's residual SE and R². Individual lag
-coefficients are hard to read in isolation — the Granger table below tests
+coefficients are hard to read in isolation; the Granger table below tests
 them in meaningful blocks.</li>
-<li><strong>Residual Covariance / Correlation Matrix</strong> — how the equations'
+<li><strong>Residual Covariance / Correlation Matrix</strong>: how the equations'
 <em>surprises</em> co-move at the same time point. A large residual correlation
-means shocks hit the series together (contemporaneously) — something the
+means shocks hit the series together (contemporaneously), something the
 lag structure deliberately does not model.</li>
-<li><strong>Granger Causality Tests</strong> — for every ordered pair, an F test that
+<li><strong>Granger Causality Tests</strong>: for every ordered pair, an F test that
 <strong>all p lag coefficients of the Cause are zero in the Effect's equation</strong>.
 A small Sig. means the cause's history improves the prediction of the
 effect beyond the effect's own history (and the other series' lags).
-<strong>&quot;Causality&quot; here is predictive, not mechanistic</strong> — the note on the
+<strong>&quot;Causality&quot; here is predictive, not mechanistic</strong>; the note on the
 table says the same.</li>
 </ul>
 <h2 id="how-this-is-computed">How this is computed</h2>
-<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
+<p>This section names <em>which</em> method each procedure prints: the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules. Each line links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
 <ul>
-<li><strong>Estimation</strong> — equation-by-equation OLS on the lagged levels with a constant (and a trend on request); the residual covariance, log-likelihood and criteria exactly as <code>vars</code> computes them (verified identities) (<a href="../../validation/conventions/resampling-and-time-series/#var--granger-causality--the-v1-conventions">VAR</a>).</li>
-<li><strong>Lag-order criteria</strong> — AIC, HQ, SC and FPE in <code>VARselect</code>'s scalings, taken from its source (<a href="../../validation/conventions/resampling-and-time-series/#lag-order-criteria-varselects-scalings-from-source">lag criteria</a>).</li>
-<li><strong>Granger causality</strong> — the pairwise Wald F of each cause's lags in each effect's equation, the <code>vars::causality</code> convention (<a href="../../validation/conventions/resampling-and-time-series/#granger-tests-the-pairwise-convention">Granger</a>).</li>
-<li><strong>Missing data and weights</strong> — listwise on the series; the series is analysed unweighted, and the output says so.</li>
+<li><strong>Estimation</strong>: equation-by-equation OLS on the lagged levels with a constant (and a trend on request); the residual covariance, log-likelihood and criteria exactly as <code>vars</code> computes them (verified identities) (<a href="../../validation/conventions/resampling-and-time-series/#var--granger-causality--the-v1-conventions">VAR</a>).</li>
+<li><strong>Lag-order criteria</strong>: AIC, HQ, SC and FPE in <code>VARselect</code>'s scalings, taken from its source (<a href="../../validation/conventions/resampling-and-time-series/#lag-order-criteria-varselects-scalings-from-source">lag criteria</a>).</li>
+<li><strong>Granger causality</strong>: the pairwise Wald F of each cause's lags in each effect's equation, the <code>vars::causality</code> convention (<a href="../../validation/conventions/resampling-and-time-series/#granger-tests-the-pairwise-convention">Granger</a>).</li>
+<li><strong>Missing data and weights</strong>: listwise on the series; the series is analysed unweighted, and the output says so.</li>
 </ul>
 <h2 id="practical-notes">Practical notes</h2>
 <ul>
@@ -172,7 +176,7 @@ exactly the classical Granger test (R's <code>lmtest::grangertest</code>).</li>
 tests: no impulse-response functions or forecast-error variance
 decompositions, no forecasting from the fitted VAR, no seasonal dummies
 or exogenous regressors, no joint (&quot;cause → all others&quot;) or instantaneous
-causality, no stability (companion-root) table, and no SVAR / VECM —
+causality, no stability (companion-root) table, and no SVAR / VECM;
 cointegration analysis is a different tool. A declared survey design is
 not covered and the output says so.</p>
 </blockquote>
@@ -180,29 +184,51 @@ not covered and the output says so.</p>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../../index.html">Home</a> ·
-        <a href="../../../quick-start/">Quick Start</a> ·
-        <a href="../../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../../license/">License</a> ·
-        <a href="../../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../../index.html">
+            <img class="brand-mark" src="../../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../../index.html#features">Features</a>
+          <a href="../../../index.html#screenshots">Screenshots</a>
+          <a href="../../../index.html#download">Download</a>
+          <a href="../../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../../docs/">User Guide</a>
+          <a href="../../../quick-start/">Quick Start</a>
+          <a href="../../../docs/validation/">Validation</a>
+          <a href="../../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../../cite/">How to cite</a>
+          <a href="../../../license/">License</a>
+          <a href="../../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

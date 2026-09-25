@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Correlation &amp; Regression — ChakataStat User Guide</title>
+  <title>Correlation &amp; Regression · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/analyze/correlation-and-regression/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Correlation &amp; Regression — ChakataStat User Guide">
+  <meta property="og:title" content="Correlation &amp; Regression · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/analyze/correlation-and-regression/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#validation">Validation</a>
+        <a href="../../../docs/" aria-current="page">User Guide</a>
+        <a href="../../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -93,13 +97,13 @@
       <article class="docs-content">
 <h1 id="correlation--regression">Correlation &amp; Regression</h1>
 <p>This page covers the <strong>Correlate</strong>, <strong>Regression</strong>, <strong>General Linear Model</strong> and
-<strong>Linear Mixed Model</strong> menu groups — everything for measuring association between
+<strong>Linear Mixed Model</strong> menu groups: everything for measuring association between
 variables and modelling an outcome from predictors.</p>
 <h2 id="correlate">Correlate</h2>
 <p><strong>Analyze → Correlate.</strong></p>
 <h3 id="bivariate">Bivariate</h3>
 <p><strong>When.</strong> Measure the strength and direction of association between scale (or
-ordinal) variables. Pearson's r summarises a <em>linear</em> relationship — when in
+ordinal) variables. Pearson's r summarises a <em>linear</em> relationship. When in
 doubt, look first with a
 <a href="../../graphs/#loess-smoother">scatterplot and its LOESS smoother</a>: a curved
 trend says a single linear coefficient will under-describe the association.</p>
@@ -111,47 +115,47 @@ The Options section sets <strong>one- vs two-tailed</strong> significance, the
 <p><strong>Output.</strong> A correlation matrix of coefficients with significance and the N
 behind each cell.</p>
 <p>With <strong>Plot heatmap</strong> ticked, the coefficient matrix is also drawn as coloured
-cells on a diverging scale — one hue for negative, one for positive, neutral at
-zero — which is how you see the <em>shape</em> of a matrix too big to read cell by
+cells on a diverging scale (one hue for negative, one for positive, neutral at
+zero), which is how you see the <em>shape</em> of a matrix too big to read cell by
 cell: a block of variables that move together, one that relates to nothing, a
 sign that flips. The scale is fixed at −1…+1, not stretched to the strongest
 correlation present, so a matrix of weak associations looks weak and two
 matrices can be compared. See <a href="../../graphs/">Graphs</a>.</p>
-<p><strong>Example.</strong> <em>BMI</em>, <em>SystolicBP</em>, <em>FastingGlucose_mmolL</em> — do they move together?</p>
+<p><strong>Example.</strong> <em>BMI</em>, <em>SystolicBP</em>, <em>FastingGlucose_mmolL</em>: do they move together?</p>
 <h4 id="permutation-test">Permutation test</h4>
 <p>With <strong>exactly two variables</strong> selected (Pearson or Spearman), tick
 <strong>Permutation test</strong> in the Options section to also test the coefficient by
 randomization: one variable's values are reshuffled against the other's, and
 the permutation p is the share of arrangements with a coefficient at least
-as extreme as the observed one — no normality assumption behind the p. Small
+as extreme as the observed one, with no normality assumption behind the p. Small
 samples (n ≤ 9, where every arrangement can be enumerated) report an
 <strong>Exact</strong> p; larger ones report a <strong>Monte Carlo</strong> estimate at the dialog's
 replicate count with a 99% interval for its <em>simulation</em> uncertainty, made
 exactly <a href="../../advanced/reproducibility/">reproducible</a> by the <strong>Seed</strong>
-field. The asymptotic matrix above it is unchanged — the permutation row is
-an addition, not a replacement — and the option follows the dialog's tails
+field. The asymptotic matrix above it is unchanged (the permutation row is
+an addition, not a replacement), and the option follows the dialog's tails
 setting. It is not available under Weight Cases, for Kendall's tau-b, or
 for a matrix of three or more variables (those stay asymptotic).</p>
 <h3 id="partial">Partial</h3>
 <p><strong>When.</strong> Measure the association between two variables <strong>controlling for</strong> one or
 more others.</p>
 <p><strong>Dialog.</strong> The two variables plus the <strong>controlling</strong> variables. (Partial
-correlation is inherently listwise — it needs cases complete on all variables.)</p>
+correlation is inherently listwise: it needs cases complete on all variables.)</p>
 <p><strong>Output.</strong> The partial correlation coefficient(s) with significance.</p>
 <h3 id="polychoric--tetrachoric">Polychoric / Tetrachoric</h3>
 <p><strong>When.</strong> <strong>Ordinal or binary items</strong> (Likert responses, yes/no answers), each
 taken as a coarsened reading of an underlying normal variable: the polychoric
-correlation is the correlation those latent variables would have — the right
+correlation is the correlation those latent variables would have. It is the right
 input to a factor analysis of ordinal items. Tetrachoric is the 2×2 case.</p>
-<p><strong>Dialog.</strong> Tick two or more <strong>Variables</strong> — integer-coded items, each distinct
-value an ordered category, at least two per variable — and pick the
+<p><strong>Dialog.</strong> Tick two or more <strong>Variables</strong> (integer-coded items, each distinct
+value an ordered category, at least two per variable) and pick the
 <strong>Method</strong>: <em>Polychoric</em> (the default) or <em>Tetrachoric</em>, which is refused for
 a pair in which either variable has more than two categories. The same
 analysis is the <code>polychoric_correlation</code> tool.</p>
 <p><strong>Output.</strong> A <strong>Polychoric Correlation</strong> matrix and a <strong>Polychoric Estimates</strong>
 table (both titled <em>Tetrachoric</em> under that method) with, per pair, <strong>ρ</strong>,
 <strong>S.E.</strong>, <strong>Sig. (2-tailed)</strong> (ρ/S.E. against the normal) and <strong>N</strong>. The
-estimate is two-step maximum likelihood — thresholds fixed at the inverse
+estimate is two-step maximum likelihood: thresholds fixed at the inverse
 normal of each margin's cumulative proportions, then the ρ that maximizes the
 likelihood of the pair's cross-table; the S.E. comes from that likelihood's
 curvature and is blank at the ±1 boundary. Missing values are deleted
@@ -200,18 +204,18 @@ variables. Options include:</p>
 <ul>
 <li><strong>Robust standard errors</strong> (HC0/HC1/HC3 sandwich estimators);</li>
 <li><strong>Forward / backward stepwise</strong> variable selection;</li>
-<li><strong>Include the intercept (constant)</strong> — on by default. Off fits <strong>regression
+<li><strong>Include the intercept (constant)</strong>, on by default. Off fits <strong>regression
 through the origin</strong> (<code>y = b·x</code>, no constant), for calibration and
 physical-science models where a zero input must give a zero response. R²
 and the ANOVA total are then <em>uncentred</em> (about zero, with <em>n</em> total
-degrees of freedom) — the form NIST, R and statsmodels report for a
-no-intercept fit, and <strong>not comparable</strong> with an intercept model's R² — and
-the standardized Beta, Partial and Part columns are left blank;</li>
-<li><strong>casewise influence diagnostics</strong> — Cook's distance and leverage;</li>
-<li><strong>diagnostic plots</strong> — the classic three-plot assumption panel: a
+degrees of freedom). That is the form NIST, R and statsmodels report for a
+no-intercept fit, and it is <strong>not comparable</strong> with an intercept model's R².
+The standardized Beta, Partial and Part columns are left blank;</li>
+<li><strong>casewise influence diagnostics</strong>: Cook's distance and leverage;</li>
+<li><strong>diagnostic plots</strong>, the classic three-plot assumption panel: a
 <strong>Residuals vs Fitted</strong> scatter (a random band around zero supports
 linearity; a curve says the linear form is wrong), a <strong>Scale-Location</strong> plot
-(√|standardized residual| against fitted — a flat band supports constant
+(√|standardized residual| against fitted; a flat band supports constant
 error variance, a rising wedge is the variance-grows-with-the-mean
 signature), and a <strong>Normal Q-Q</strong> of the standardized residuals (points on
 the reference line support the normality behind the significance tests);</li>
@@ -222,27 +226,27 @@ regression, and the coefficients table (B, standard error, beta, t,
 significance, and confidence intervals). Through the origin the coefficients
 table has no constant row and the model summary notes that R² is uncentred.
 If the predictors are severely ill-conditioned (raw polynomial powers of one
-variable, say), the model summary carries an accuracy note — the fit is
+variable, say), the model summary carries an accuracy note: the fit is
 still solved by an orthogonal (QR) decomposition, but centring or rescaling
 the predictors will give you more reliable digits.</p>
 <p><strong>Example.</strong> Predict <em>SystolicBP</em> from <em>Age</em>, <em>BMI</em> and <em>Weight_kg</em>.</p>
 <h3 id="regularized-ridge--lasso--elastic-net">Regularized (Ridge / Lasso / Elastic net)</h3>
 <p><strong>When.</strong> Many or collinear predictors, and the goal is <strong>prediction</strong> rather
-than inference — or you want the model to <strong>choose</strong> its predictors. The
+than inference, or you want the model to <strong>choose</strong> its predictors. The
 penalty shrinks coefficients toward zero (ridge), sets some exactly to zero
-(lasso — automatic variable selection), or both (elastic net).</p>
+(lasso: automatic variable selection), or both (elastic net).</p>
 <p><strong>Dialog.</strong> A <strong>Dependent</strong> and at least two <strong>Predictors</strong> (each is
 standardized before penalization, so the penalty treats them alike). <strong>Penalty</strong>:
-<em>Lasso (L1, variable selection)</em> — the default — <em>Ridge (L2, shrinkage)</em> or
+<em>Lasso (L1, variable selection)</em> (the default), <em>Ridge (L2, shrinkage)</em> or
 <em>Elastic net (½ L1 + ½ L2)</em>. The penalty strength λ is chosen by <strong>10-fold
 cross-validation</strong> (the syntax/AI argument <code>lambda</code> fixes it instead; <code>folds</code>
 and <code>seed</code> control the CV).</p>
 <p><strong>Output.</strong> The <strong>Coefficients</strong> at the selected λ, on the original and the
-standardized scale (a lasso zero means &quot;dropped&quot;); the <strong>Regularization Path</strong>
-— for each λ on the path, how many coefficients are nonzero and the
+standardized scale (a lasso zero means &quot;dropped&quot;); the <strong>Regularization Path</strong>,
+showing for each λ on the path how many coefficients are nonzero and the
 cross-validated error with its standard error (the selected λ is the error
 minimum); and a <strong>Model Summary</strong>. Penalized estimates
-carry <strong>no standard errors or p-values</strong> by design — use Linear regression on
+carry <strong>no standard errors or p-values</strong> by design. Use Linear regression on
 the selected predictors if you need inference, knowing the selection was
 data-driven.</p>
 <p><strong>Example.</strong> <em>SystolicBP</em> on <em>Age</em>, <em>BMI</em>, <em>Weight_kg</em>,
@@ -254,20 +258,20 @@ penalty relaxes.</p>
 outliers</strong> dragging the line. M-estimation down-weights large residuals <em>in the
 fit itself</em>, so the coefficients describe the bulk of the data.</p>
 <p><strong>Dialog.</strong> <strong>Dependent</strong>, <strong>Predictors</strong>, and the <strong>Estimator</strong>: <em>Huber
-(clip)</em> — the default — clips the influence of far residuals; <em>Tukey bisquare
+(clip)</em>, the default, clips the influence of far residuals; <em>Tukey bisquare
 (redescending)</em> rejects gross outliers entirely. The syntax/AI argument
 <code>tuning</code> sets the constant c (defaults 1.345 and 4.685, each ~95% efficient
 under normality; smaller is more resistant, larger is closer to OLS).</p>
 <p><strong>Output.</strong> The robust <strong>Coefficients</strong> with sandwich (H1) standard errors,
 t tests and confidence intervals; a <strong>Model Summary</strong> with the robust scale
-estimate and iterations; and <strong>Down-Weighted Cases</strong> — the cases the fit
+estimate and iterations; and <strong>Down-Weighted Cases</strong>: the cases the fit
 trusted least, with their weights, which is where to look first.</p>
 <p><strong>Example.</strong> <em>SystolicBP</em> on <em>Age</em> and <em>BMI</em> when a handful of implausible
 blood-pressure entries pull the OLS slope; compare the robust slope with the
 Linear one.</p>
 <h3 id="nonlinear">Nonlinear</h3>
 <p><strong>When.</strong> The relationship has a <strong>known functional form that is not linear in
-its parameters</strong> — a growth or decay curve, a dose–response, a
+its parameters</strong>: a growth or decay curve, a dose–response, a
 Michaelis–Menten saturation, a sum of exponentials. (If the curve is a
 polynomial or a transform makes it linear, Linear regression on computed
 variables is simpler and exact.)</p>
@@ -275,13 +279,13 @@ variables is simpler and exact.)</p>
 the <strong>Model</strong> expression (for example <code>b0 + b1*exp(b2*x)</code>; operators <code>+ - * / ^</code>, functions <code>exp</code>, <code>ln</code>, <code>log10</code>, <code>sqrt</code>, <code>sin</code>, <code>cos</code>, <code>abs</code>, <code>pow</code>, …; a
 name that matches a predictor is that case's value, every other name is a
 parameter) and the <strong>Start values</strong> as <code>name=value</code> pairs (<code>b0=1, b1=1, b2=0.1</code>). Every parameter in the model must have a start value; their order
-is the order of the output. Good starts matter — a least-squares surface can
+is the order of the output. Good starts matter: a least-squares surface can
 have several valleys, and the fit finds the one your starts lead to. When a fit
 fails to converge, try starts nearer plausible values, or a rescaled predictor.</p>
 <p><strong>Output.</strong> <strong>Parameter Estimates</strong> (estimate, asymptotic Gauss–Newton
 standard error, t, significance, confidence interval) and a <strong>Model Summary</strong>
 (residual sum of squares, residual standard error, a descriptive 1 − SSE/SST
-pseudo-R² that need not lie in [0, 1], iterations, and <strong>Converged</strong> — <em>No</em>
+pseudo-R² that need not lie in [0, 1], iterations, and <strong>Converged</strong>, where <em>No</em>
 means the 1000-iteration cap was reached before the fit settled; the
 Levenberg–Marquardt fit is certified against all 27 NIST StRD nonlinear
 datasets, so a <em>No</em> points at the model or the starts, not the optimizer).</p>
@@ -290,14 +294,14 @@ datasets, so a <em>No</em> points at the model or the starts, not the optimizer)
 (generated data, or a model that reproduces every point to rounding), the
 fit reaches the floor of double precision: the parameter estimates are
 right, but the residual sum of squares and hence the standard errors are
-not meaningful beyond a few digits — there is no noise left to estimate. Real
+not meaningful beyond a few digits. There is no noise left to estimate. Real
 measurements never do this; textbook or simulated data sometimes do.</p>
 </blockquote>
 <p><strong>Example.</strong> <em>FastingGlucose_mmolL</em> as an exponential in <em>Age</em>, model
 <code>b0 + b1*exp(b2*Age)</code>, start <code>b0=4, b1=0.1, b2=0.03</code>.</p>
 <h3 id="instrumental-variables-2sls">Instrumental Variables (2SLS)</h3>
-<p><strong>When.</strong> A regressor is <strong>endogenous</strong> — correlated with the error through
-simultaneity, an omitted confounder or measurement error — so its OLS
+<p><strong>When.</strong> A regressor is <strong>endogenous</strong> (correlated with the error through
+simultaneity, an omitted confounder or measurement error), so its OLS
 coefficient is biased, and you have <strong>instruments</strong>: variables that move the
 endogenous regressor but affect the outcome only through it.</p>
 <p><strong>Dialog.</strong> A <strong>Dependent</strong>; the <strong>Endogenous</strong> regressor(s) being
@@ -308,20 +312,20 @@ endogenous regressors onto the instruments and regresses the outcome on the
 projection.</p>
 <p><strong>Output.</strong> The <strong>Coefficients</strong> with 2SLS-corrected standard errors, t tests
 and confidence intervals; a <strong>Model Summary</strong>; and <strong>First-Stage
-Diagnostics</strong> — the weak-instrument F for each endogenous regressor (the rule
+Diagnostics</strong>: the weak-instrument F for each endogenous regressor (the rule
 of thumb: F below 10 is weak, and weak instruments make 2SLS unreliable).</p>
 <p><strong>Example.</strong> <em>SystolicBP</em> on <em>BMI</em> treated as endogenous, instrumented by
-<em>PhysicalActivity_minWk</em>, with <em>Age</em> exogenous — illustratively; whether an
+<em>PhysicalActivity_minWk</em>, with <em>Age</em> exogenous, illustratively; whether an
 instrument is valid is a subject-matter argument, not a statistical test.</p>
 <h3 id="binary-logistic">Binary Logistic</h3>
 <p>For a yes/no outcome (e.g. <em>Hypertensive</em>). A <strong>Link</strong> option chooses how the
-probability relates to the predictors: <strong>Logit</strong> (the default — coefficients are
+probability relates to the predictors: <strong>Logit</strong> (the default; coefficients are
 log-odds and report <strong>Exp(B) odds ratios</strong> with confidence intervals), <strong>Probit</strong>
 (a normal latent variable) or <strong>Complementary log-log</strong> (an asymmetric link
 suited to rare events). Logit reports odds ratios; probit and cloglog report
 coefficients on the link scale with a Wald interval. Optional robust standard
 errors and forward/backward selection. <strong>Diagnostic plots</strong> are available and
-work differently from the Linear ones — see
+work differently from the Linear ones; see
 <a href="#diagnostic-plots-for-the-other-families">Diagnostic plots for the other families</a>.</p>
 <h3 id="poisson--negative-binomial">Poisson / Negative Binomial</h3>
 <p>For counts (e.g. a count of events). Negative Binomial adds an estimated
@@ -347,9 +351,9 @@ fixed. <strong>Diagnostic plots</strong> draw the mixture's
 linear predictor. <strong>Weight Cases is honoured</strong>: the case weight is a
 frequency weight in every part of the fit.</p>
 <h3 id="gamma">Gamma</h3>
-<p>For a <strong>strictly positive, right-skewed continuous</strong> outcome — costs, durations,
-concentrations — where the spread grows with the mean. A <strong>Link</strong> option offers
-the <strong>Log</strong> link (the default — a multiplicative model whose <strong>Exp(B)</strong> is the
+<p>For a <strong>strictly positive, right-skewed continuous</strong> outcome (costs, durations,
+concentrations), where the spread grows with the mean. A <strong>Link</strong> option offers
+the <strong>Log</strong> link (the default: a multiplicative model whose <strong>Exp(B)</strong> is the
 factor change in the mean per unit predictor) or the canonical <strong>Inverse</strong> link.
 Reports the coefficients, an estimated dispersion φ (so the standard errors
 account for the scale), and a deviance / Pearson goodness-of-fit table.
@@ -357,20 +361,20 @@ account for the scale), and a deviance / Pearson goodness-of-fit table.
 the outcome is continuous, Gamma's are exact rather than randomised.</p>
 <h3 id="diagnostic-plots-for-the-other-families">Diagnostic plots for the other families</h3>
 <p>The <strong>Diagnostic plots</strong> checkbox is offered on Binary Logistic, Poisson,
-Negative Binomial, Gamma and the zero-inflated / hurdle count models too — but
+Negative Binomial, Gamma and the zero-inflated / hurdle count models too, but
 what it draws is <em>not</em> the Linear panel above, and the difference is worth
 understanding before you compare a plot against one from another package.</p>
 <p><strong>Why not the same three plots.</strong> A residual is &quot;observed minus expected&quot;, and
 for a yes/no outcome the observed value is only ever 0 or 1. So at any given
 fitted probability there are just two possible residuals, and a
 Residuals-vs-Fitted scatter of a logistic model collapses into <strong>two curved
-bands</strong> — one for the yeses, one for the noes. Those bands are a property of
+bands</strong>: one for the yeses, one for the noes. Those bands are a property of
 the outcome being binary; they say nothing about whether the model fits. Read
 as though they were the OLS panel, they invite you to see structure that is not
 there. Count models band the same way when the counts are small.</p>
 <p><strong>What is drawn instead: quantile residuals.</strong> Each case is put through its own
 fitted distribution and back through the normal curve. The result is a residual
-that, if the model is right, behaves like a <strong>standard normal</strong> value —
+that, if the model is right, behaves like a <strong>standard normal</strong> value,
 whatever the family. That gives you two plots that read the same way for every
 model on this page:</p>
 <div class="docs-table-wrap"><table>
@@ -393,7 +397,7 @@ model on this page:</p>
 </table></div>
 <p>Two details that matter if you are checking someone else's numbers:</p>
 <ul>
-<li><strong>The x axis is the linear predictor</strong>, not the fitted mean — the same
+<li><strong>The x axis is the linear predictor</strong>, not the fitted mean, the same
 convention R's <code>plot.glm</code> uses. On the response scale the fitted values of a
 logistic or count model bunch up against 0 or 1 and the plot loses its
 resolution.</li>
@@ -404,8 +408,8 @@ Q-Q fits its line through the quartiles, because standardized residuals have
 no such guarantee.) A fitted line here would quietly absorb the very misfit
 the plot exists to show.</li>
 </ul>
-<p><strong>Randomised, but reproducible.</strong> For a <strong>discrete</strong> outcome — yes/no, or a
-count — there is a range of residual values consistent with each observation
+<p><strong>Randomised, but reproducible.</strong> For a <strong>discrete</strong> outcome (yes/no, or a
+count), there is a range of residual values consistent with each observation
 rather than a single one, so ChakataStat draws one at random from that range.
 This is the standard method (Dunn &amp; Smyth) and it is what removes the banding.
 It means two things for you:</p>
@@ -423,12 +427,12 @@ realisations is the recommended practice.</li>
 draw from and the residual is exact. Its plots carry no seed and never change
 between runs.</p>
 <h3 id="multinomial--ordinal">Multinomial / Ordinal</h3>
-<p>For categorical outcomes with three or more levels — unordered (Multinomial,
+<p>For categorical outcomes with three or more levels: unordered (Multinomial,
 baseline-category logit) or ordered (Ordinal, proportional-odds). Both report the
 per-category/threshold coefficients and significance.</p>
 <h3 id="quantile">Quantile</h3>
 <p><strong>When.</strong> The question is about a <strong>conditional quantile</strong> rather than the
-mean — the median as an outlier-resistant centre, or an upper/lower quantile
+mean: the median as an outlier-resistant centre, or an upper/lower quantile
 because the effect of a predictor differs across the response distribution
 (what raises the 90th percentile of blood pressure may not be what raises its
 median).</p>
@@ -439,44 +443,44 @@ loss.</p>
 standard errors (iid sparsity estimate), t and significance, and a pseudo-R¹
 goodness of fit in the note. Run it at several τ and compare the slopes to see
 whether an effect is uniform across the distribution.</p>
-<p><strong>Example.</strong> <em>SystolicBP</em> on <em>Age</em> and <em>BMI</em> at τ = 0.9 — what predicts the
+<p><strong>Example.</strong> <em>SystolicBP</em> on <em>Age</em> and <em>BMI</em> at τ = 0.9: what predicts the
 high end.</p>
 <h3 id="generalized-estimating-equations">Generalized Estimating Equations</h3>
-<p><strong>When.</strong> <strong>Correlated or clustered</strong> observations — repeated measures on a
-subject, patients within clinics — and the target is the <strong>population-averaged</strong>
+<p><strong>When.</strong> <strong>Correlated or clustered</strong> observations (repeated measures on a
+subject, patients within clinics), and the target is the <strong>population-averaged</strong>
 (marginal) effect of the predictors. (For subject-specific effects with a
 random intercept, see the <a href="#generalized-linear-mixed-model">Generalized Linear Mixed
 Model</a>.)</p>
 <p><strong>Dialog.</strong> <strong>Dependent</strong>, <strong>Predictors</strong>, the <strong>Subject (cluster)</strong> variable
-that groups correlated observations, the <strong>Family</strong> — <em>Gaussian</em> (identity
-link, the default), <em>Binomial</em> (logit) or <em>Poisson</em> (log) — and the
+that groups correlated observations, the <strong>Family</strong>, which is <em>Gaussian</em> (identity
+link, the default), <em>Binomial</em> (logit) or <em>Poisson</em> (log), and the
 <strong>working correlation</strong>: <em>Exchangeable</em> (the default), <em>Independence</em> or
 <em>AR(1)</em>.</p>
-<p><strong>Output.</strong> <strong>GEE Parameter Estimates</strong> — B with <strong>robust (sandwich)
-standard errors</strong>, z, significance and confidence intervals — and, in the
-note, the estimated correlation parameter α, the cluster and observation
+<p><strong>Output.</strong> <strong>GEE Parameter Estimates</strong>: B with <strong>robust (sandwich)
+standard errors</strong>, z, significance and confidence intervals. The note gives
+the estimated correlation parameter α, the cluster and observation
 counts. The sandwich errors are valid even if the working correlation is
 misspecified; the choice of structure mainly affects efficiency.</p>
 <p><strong>Example.</strong> <em>Hypertensive</em> (binomial) on <em>Age</em> and <em>BMI</em>, subjects clustered
 by <em>StudyZone</em>, exchangeable correlation.</p>
 <h3 id="loglinear">Loglinear</h3>
 <p><strong>When.</strong> Two or more <strong>categorical</strong> variables and the question is about the
-<strong>association structure of their cross-classification</strong> — a multi-way
+<strong>association structure of their cross-classification</strong>: a multi-way
 contingency table modelled as Poisson counts. The main-effects model is the
 test of mutual independence; the saturated model reproduces the table and
 shows every interaction.</p>
 <p><strong>Dialog.</strong> The <strong>Factors</strong> (two or more categorical variables) and the
-<strong>Model</strong>: <em>Independence (main effects)</em> — the default — or <em>Saturated (all
+<strong>Model</strong>: <em>Independence (main effects)</em> (the default) or <em>Saturated (all
 interactions)</em>.</p>
 <p><strong>Output.</strong> <strong>Loglinear Parameter Estimates</strong> (B, standard error, Wald, df,
 significance, confidence interval; Exp(B) is the multiplicative effect on the
-cell count) and <strong>Goodness-of-Fit</strong> — the deviance and Pearson χ² with df
-and significance: a small significance rejects the model (for the
+cell count) and <strong>Goodness-of-Fit</strong> (the deviance and Pearson χ² with df
+and significance): a small significance rejects the model (for the
 main-effects model, it rejects independence of the factors).</p>
 <p><strong>Example.</strong> <em>SmokingStatus</em> × <em>Sex</em> × <em>Residence</em>: does the independence
 model fit, or do the factors interact?</p>
 <h3 id="mediation">Mediation</h3>
-<p>Asks <strong>how</strong> an independent variable <strong>X</strong> affects an outcome <strong>Y</strong> — how much of
+<p>Asks <strong>how</strong> an independent variable <strong>X</strong> affects an outcome <strong>Y</strong>: how much of
 its effect runs <em>through</em> one or more <strong>mediators M</strong> (the path X → M → Y) versus
 directly. Pick the <strong>Outcome (Y)</strong>, the <strong>Independent (X)</strong>, one or more parallel
 <strong>Mediators</strong>, and any <strong>Covariates</strong> entered into every model. It fits, by OLS,
@@ -484,88 +488,88 @@ the mediator model(s) <code>M ~ X</code> for the <strong>a</strong> path, the ou
 <code>Y ~ X + M</code> for the <strong>b</strong> paths and the <strong>direct</strong> effect <strong>c′</strong>, and the total
 model <code>Y ~ X</code> for the <strong>total</strong> effect <strong>c</strong> (with <code>c = c′ + Σ a·b</code>).</p>
 <p>Two tables come back: the <strong>path coefficients</strong> with standard errors, <em>t</em> and
-confidence intervals; and the <strong>indirect effect(s)</strong> — each <code>a·b</code>, plus a total
-indirect when there is more than one mediator. Because the indirect effect is a
+confidence intervals; and the <strong>indirect effect(s)</strong> (each <code>a·b</code>, plus a total
+indirect when there is more than one mediator). Because the indirect effect is a
 <em>product</em> of coefficients (its sampling distribution is skewed), its interval
-comes from a <strong>nonparametric bootstrap</strong> — Percentile or <strong>BCa</strong> — over
+comes from a <strong>nonparametric bootstrap</strong> (Percentile or <strong>BCa</strong>) over
 <strong>B</strong> resamples, reproducible for a fixed <strong>Seed</strong>. <em>An indirect interval that
 excludes zero is the evidence of mediation.</em> The bootstrap is unweighted (a
 Weight Cases variable is noted, not applied); Select Cases and Split File are
 honored.</p>
 <h4 id="moderated-mediation">Moderated mediation</h4>
 <p>Mediation answers &quot;does X affect Y <em>through</em> M?&quot;; the question that follows in
-practice is &quot;<strong>for whom?</strong>&quot; — does the indirect effect differ by group, by
+practice is &quot;<strong>for whom?</strong>&quot;: does the indirect effect differ by group, by
 severity, by dose. Pick an optional <strong>Moderator (W)</strong> and the analysis becomes
 moderated mediation, following the PROCESS (Hayes) model shapes. The
 <strong>Moderated path</strong> choice decides where W acts:</p>
 <ul>
-<li><strong>a: X → M</strong> (PROCESS model 7) — W changes how strongly X moves the
+<li><strong>a: X → M</strong> (PROCESS model 7): W changes how strongly X moves the
 mediator. The mediator model gains <code>W</code> and <code>X×W</code>.</li>
-<li><strong>b: M → Y</strong> (model 14) — W changes how strongly the mediator moves the
+<li><strong>b: M → Y</strong> (model 14): W changes how strongly the mediator moves the
 outcome. The outcome model gains <code>W</code> and <code>M×W</code>.</li>
-<li><strong>Both paths</strong> (model 58) — both of the above.</li>
+<li><strong>Both paths</strong> (model 58): both of the above.</li>
 </ul>
 <p>The output changes accordingly:</p>
 <ul>
 <li>
 <p><strong>Path coefficients</strong> now include the moderated model's <code>W</code> and interaction
-terms (<code>a1/a2/a3</code>, <code>b1/b2/b3</code>), and the <strong>total-effect row disappears</strong> —
+terms (<code>a1/a2/a3</code>, <code>b1/b2/b3</code>), and the <strong>total-effect row disappears</strong>:
 with a moderator, <code>c = c′ + a·b</code> no longer holds unconditionally, so a
 &quot;total&quot; row would misreport.</p>
 </li>
 <li>
-<p><strong>Conditional Effects</strong> — the moderated path's <strong>simple slope</strong> at each
+<p><strong>Conditional Effects</strong>: the moderated path's <strong>simple slope</strong> at each
 probe value of W, with normal-theory inference. A moderator with at most
 five distinct values is treated as categorical and probed <strong>at each
 value</strong>; otherwise at its <strong>mean − 1 SD, mean, and mean + 1 SD</strong>.</p>
 </li>
 <li>
-<p><strong>Conditional Indirect Effects</strong> — the indirect effect at each probe value,
+<p><strong>Conditional Indirect Effects</strong>: the indirect effect at each probe value,
 each with a bootstrap interval. <em>A conditional indirect interval that
 excludes zero is evidence of mediation at that level of W.</em></p>
 </li>
 <li>
-<p><strong>Index of Moderated Mediation</strong> — the slope of the indirect effect as a
+<p><strong>Index of Moderated Mediation</strong> is the slope of the indirect effect as a
 linear function of W (<code>a3·b</code> or <code>a·b3</code>), with a bootstrap interval: <em>an
 index interval that excludes zero is evidence the mediation itself is
 moderated.</em> With <strong>both</strong> paths moderated the indirect effect is quadratic
 in W, no single index exists, and the output says so instead.</p>
 </li>
 <li>
-<p><strong>Interaction Plot</strong> (the <strong>Interaction plot</strong> checkbox, on by default) —
+<p><strong>Interaction Plot</strong> (the <strong>Interaction plot</strong> checkbox, on by default):
 the moderated path's fitted simple-slope lines, one per probe level of W,
 every other predictor held at its mean. Lines that fan apart <em>are</em> the
 moderation; parallel lines mean W changes nothing.</p>
 </li>
 <li>
-<p><strong>Johnson–Neyman Regions</strong> (the <strong>Johnson–Neyman regions</strong> checkbox) —
-probing at three values answers &quot;is the effect significant <em>here</em>?&quot;;
+<p><strong>Johnson–Neyman Regions</strong> (the <strong>Johnson–Neyman regions</strong> checkbox).
+Probing at three values answers &quot;is the effect significant <em>here</em>?&quot;;
 Johnson–Neyman answers &quot;<strong>where</strong> along W is it significant?&quot; For each
 moderated path the table lists the <strong>boundary</strong> values of W at which the
 path's conditional effect crosses significance (at the interval's level,
-on the model's residual df) — the effect there equals ±t·SE, shown beside
-it — with the percent of cases below and above each boundary, and the
+on the model's residual df). The effect there equals ±t·SE, shown beside
+it, with the percent of cases below and above each boundary, and the
 note states the region in words (&quot;significant for W &lt; a and for W &gt; b&quot;,
 &quot;for W &gt; a&quot;, &quot;over the whole observed range&quot;, &quot;nowhere&quot;). Only boundaries
 inside the observed range of W are listed; a non-significant interaction
 usually yields none. The <strong>Johnson–Neyman Plot</strong> draws the conditional
 effect with its confidence band across the observed range, the zero line,
-and the boundaries as vertical markers — where the band clears zero is the
+and the boundaries as vertical markers; where the band clears zero is the
 region. The regions are for the path's conditional effect, not for the
 conditional <em>indirect</em> effect (whose inference is bootstrap-only), the
 same choice PROCESS makes.</p>
 </li>
 <li>
-<p><strong>Moderator 2 (Z) — a three-way interaction.</strong> Sometimes the question is
-&quot;does the moderation itself depend on something else?&quot; — W's effect on the
-mediation differs by group, say. Pick a second moderator and Z joins W in
+<p><strong>Moderator 2 (Z): a three-way interaction.</strong> Sometimes the question is
+&quot;does the moderation itself depend on something else?&quot; (W's effect on the
+mediation differs by group, say). Pick a second moderator and Z joins W in
 the moderated model with every product up to X×W×Z (the coefficients are
 labelled a1…a7 / b1…b7). The conditional effects and conditional indirect
 effects are then probed on the <strong>W × Z grid</strong> (each moderator by its own
-rule — every level of a categorical one, mean ± 1 SD of a continuous one —
+rule [every level of a categorical one, mean ± 1 SD of a continuous one],
 listed Z by Z), the interaction plot is drawn <strong>once per Z level</strong>, and two
 new tables appear when one path is moderated: the <strong>Index of Moderated
-Moderated Mediation</strong> (a7·b or a·b7 — <em>how much W's moderation of the
+Moderated Mediation</strong> (a7·b or a·b7: <em>how much W's moderation of the
 indirect effect changes per unit of Z</em>; an interval excluding zero says Z
 moderates the moderation) and the <strong>Conditional Index of Moderated
 Mediation</strong> (the W-moderation index at each Z level). Johnson–Neyman
@@ -574,13 +578,13 @@ regions, if requested, are solved for W at each Z level.</p>
 </ul>
 <h4 id="serial-mediation">Serial mediation</h4>
 <p>Parallel mediators are assumed not to affect each other. When the theory
-says the first mediator causes the second — X raises <em>self-efficacy</em>, which
-raises <em>effort</em>, which raises <em>performance</em> — tick <strong>Serial mediation
+says the first mediator causes the second (X raises <em>self-efficacy</em>, which
+raises <em>effort</em>, which raises <em>performance</em>), tick <strong>Serial mediation
 (M1 → M2)</strong> with exactly two mediators; the first in variable order is M1.
 The models become <code>M1 ~ X</code>, <code>M2 ~ X + M1</code> and <code>Y ~ X + M1 + M2</code>, the path
 table gains <strong>d21</strong> (M1 → M2), and the indirect table reports three
-<strong>specific</strong> indirect effects — through M1 alone (a1·b1), through M2 alone
-(a2·b2) and <strong>through both in sequence</strong> (a1·d21·b2) — plus their total,
+<strong>specific</strong> indirect effects, namely through M1 alone (a1·b1), through M2 alone
+(a2·b2) and <strong>through both in sequence</strong> (a1·d21·b2), plus their total,
 each with a bootstrap interval; <code>c = c′ + total indirect</code> still holds
 exactly. A moderator W may enter both a-paths, both b-paths or both (d21
 itself is not moderated); each specific indirect effect, the serial one
@@ -605,48 +609,48 @@ Reports fixed effects and the estimated variance components.</p>
 <h2 id="generalized-linear-mixed-model">Generalized Linear Mixed Model</h2>
 <p><strong>Analyze → Generalized Linear Mixed Model.</strong> The mixed-model idea for a
 <strong>binary or count outcome</strong>: a random-intercept logistic (0/1) or Poisson
-(count) regression for clustered or repeated data — patients within clinics,
-repeated yes/no measures — estimated by adaptive Gauss–Hermite quadrature.
+(count) regression for clustered or repeated data (patients within clinics,
+repeated yes/no measures), estimated by adaptive Gauss–Hermite quadrature.
 The effects are <strong>subject-specific</strong> (conditional on the cluster); for
 population-averaged effects use <a href="#generalized-estimating-equations">GEE</a>.</p>
 <p><strong>Dialog.</strong> The <strong>Outcome</strong> (0/1 for binomial, a non-negative count for
 Poisson), the <strong>Predictors</strong> (fixed effects), the <strong>Grouping</strong> variable that
-gets the random intercept, and the <strong>Family</strong> — <em>Binomial — logistic (0/1)</em> or
+gets the random intercept, and the <strong>Family</strong>: <em>Binomial — logistic (0/1)</em> or
 <em>Poisson — counts (log)</em>.</p>
-<p><strong>Output.</strong> <strong>Fixed Effects</strong> (B, S.E., Wald, df, significance, <strong>Exp(B)</strong> —
-the conditional odds or rate ratio — with its Wald interval), <strong>Random
+<p><strong>Output.</strong> <strong>Fixed Effects</strong> (B, S.E., Wald, df, significance, <strong>Exp(B)</strong>
+[the conditional odds or rate ratio] with its Wald interval), <strong>Random
 Effects</strong> (the intercept variance between groups, its SD and the SD's
 standard error) and <strong>Model Fit</strong> (−2 log-likelihood, AIC, BIC; the note gives
 the group and observation counts).</p>
 <p><strong>Example.</strong> <em>Hypertensive</em> on <em>Age</em> and <em>BMI</em> with a random intercept for
-<em>StudyZone</em> — how much does the odds of hypertension vary between zones
+<em>StudyZone</em>: how much does the odds of hypertension vary between zones
 after the individual predictors?</p>
 <h2 id="the-within-subjects--multivariate-family">The within-subjects / multivariate family</h2>
 <p>Also under the modelling menus:</p>
 <ul>
-<li><strong>Repeated Measures ANOVA</strong> — for a factor measured several times on the same
+<li><strong>Repeated Measures ANOVA</strong>: for a factor measured several times on the same
 cases, with <strong>Mauchly's test</strong> of sphericity and the
 <strong>Greenhouse-Geisser / Huynh-Feldt</strong> corrections.</li>
-<li><strong>One-Way MANOVA</strong> — several dependent variables at once, reporting <strong>Pillai's
+<li><strong>One-Way MANOVA</strong>: several dependent variables at once, reporting <strong>Pillai's
 trace, Wilks' lambda, Hotelling-Lawley and Roy's largest root</strong>.</li>
 </ul>
 <blockquote>
 <p><strong>Weighting.</strong> Repeated Measures ANOVA (its within-subjects partition) and
 MANOVA <strong>honour the Weight Cases setting</strong>: the case weight is a frequency
-weight, so a weight-2 case counts exactly as two — in the within-subjects sums
+weight, so a weight-2 case counts exactly as two, in the within-subjects sums
 of squares and the error/hypothesis scatter matrices alike.</p>
 </blockquote>
 <h2 id="how-this-is-computed">How this is computed</h2>
-<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
+<p>This section names <em>which</em> method each procedure prints: the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules. Each line links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
 <ul>
-<li><strong>Correlate</strong> — Pearson <em>r</em> with <em>t</em> on n − 2 df; <strong>Spearman</strong> on mid-ranks with the <em>t</em> approximation (not R's exact form); <strong>Kendall's τ-b</strong> with the normal approximation; <strong>pairwise</strong> deletion by default, listwise on request; no CI on <em>r</em> (<a href="../../validation/conventions/classical/#correlation">correlation</a>). Partial correlation on n − 2 − k df (<a href="../../validation/conventions/classical/#partial-correlation">partial</a>).</li>
-<li><strong>Linear</strong> — least squares by QR, a scale-invariant singularity verdict, <em>t</em> intervals on the residual df, standardized β = B·sd(x)/sd(y), Durbin–Watson on case order, tolerance / VIF (<a href="../../validation/conventions/regression/#linear-least-squares-by-qr--the-0210-conventions">QR</a> · <a href="../../validation/conventions/regression/#scale-invariance-of-the-singularity-verdict--the-0220-convention">scale invariance</a>); <strong>through the origin</strong> reports the uncentred R² and F (<a href="../../validation/conventions/regression/#regression-through-the-origin--the-0210-conventions">origin</a>); <strong>stepwise</strong> enters at p ≤ .05 and removes at p ≥ .10 (<a href="../../validation/conventions/classical/#stepwise-selection">stepwise</a>).</li>
-<li><strong>Regularized</strong> — standardized predictors, a 100-point λ path, 10-fold CV with the minimum and 1-SE λ (<a href="../../validation/conventions/classical/#regularized-regression">regularized</a>). <strong>Robust</strong> — Huber c = 1.345 / Tukey c = 4.685 on the MAD/0.6745 scale, sandwich SEs (<a href="../../validation/conventions/classical/#robust-regression-the-m-estimator-constants">robust</a>). <strong>Nonlinear</strong> — Levenberg–Marquardt, Gauss–Newton covariance (<a href="../../validation/conventions/classical/#nonlinear-regression">nonlinear</a>). <strong>2SLS</strong> — σ̂² on the structural residuals, the first-stage F (<a href="../../validation/#coverage">validation</a>).</li>
-<li><strong>Logistic / Probit / Poisson / Negative binomial / Gamma</strong> — IRLS through the QR (<a href="../../validation/conventions/regression/#glm-irls-through-the-qr--the-0220-convention">IRLS</a>); <strong>Wald z intervals</strong>, Exp(B) = exp(B ± z·SE) (R's <code>confint.glm</code> is profile-likelihood — use <code>confint.default</code>) (<a href="../../validation/conventions/classical/#confidence-intervals-on-glm-coefficients-wald-z">Wald</a>); Hosmer–Lemeshow on ten deciles of risk, g − 2 df (<a href="../../validation/#coverage">validation</a>); NB2 with α by ML (<a href="../../validation/tolerances/">tolerances</a>); the <strong>Gamma</strong> dispersion is the Pearson estimate and the likelihood is evaluated at it (R's <code>logLik</code> uses D/n) (<a href="../../validation/conventions/regression/#the-gamma-log-likelihoods-dispersion--the-0230-convention">Gamma</a>); the diagnostic residuals are randomized quantile residuals, seeded (<a href="../../validation/conventions/regression/#glm-quantile-residuals--the-per-family-definitions">quantile residuals</a>).</li>
-<li><strong>Multinomial / Ordinal</strong> — the lowest category is the baseline; the ordinal model is logit P(Y ≤ c) = θ_c − β·x (SPSS PLUM, <code>polr</code>) (<a href="../../validation/conventions/classical/#multinomial-and-ordinal-regression-the-reference-and-the-sign">reference and sign</a>). <strong>Quantile</strong> — IRLS on the check loss, Koenker iid SEs; <strong>GEE</strong> — sandwich covariance under the chosen working correlation; <strong>Loglinear</strong> — a Poisson GLM on the counts (<a href="../../validation/#coverage">validation</a> · <a href="../../validation/conventions/classical/#loglinear-models">loglinear</a>).</li>
-<li><strong>Mediation</strong> — OLS paths on the PROCESS model shapes, Aiken–West probes at mean ∓ 1 SD, percentile / BCa bootstrap intervals from a seeded PRNG, Johnson–Neyman regions (<a href="../../validation/conventions/regression/#mediation-follow-ups--the-0210-conventions">mediation</a> · <a href="../../validation/tolerances/">tolerances</a>).</li>
-<li><strong>General Linear Model</strong> — Type III sums of squares under sum-to-zero contrasts (<a href="../../validation/tolerances/">Type III</a>); MANOVA's Pillai / Wilks / Hotelling–Lawley / Roy and the SPSS partial η²; repeated measures with Mauchly's test and the Greenhouse–Geisser / Huynh–Feldt ε (<a href="../../validation/#coverage">validation</a>).</li>
-<li><strong>Linear Mixed Model</strong> — <strong>REML by default</strong> (untick for ML when comparing fixed effects by likelihood ratio), Swamy-style variance components, the ICC (<a href="../../validation/conventions/classical/#mixed-models-reml-by-default-ml-on-request">mixed models</a>). <strong>GLMM</strong> — a random intercept integrated by Gauss–Hermite quadrature (same section).</li>
+<li><strong>Correlate</strong>: Pearson <em>r</em> with <em>t</em> on n − 2 df; <strong>Spearman</strong> on mid-ranks with the <em>t</em> approximation (not R's exact form); <strong>Kendall's τ-b</strong> with the normal approximation; <strong>pairwise</strong> deletion by default, listwise on request; no CI on <em>r</em> (<a href="../../validation/conventions/classical/#correlation">correlation</a>). Partial correlation on n − 2 − k df (<a href="../../validation/conventions/classical/#partial-correlation">partial</a>).</li>
+<li><strong>Linear</strong>: least squares by QR, a scale-invariant singularity verdict, <em>t</em> intervals on the residual df, standardized β = B·sd(x)/sd(y), Durbin–Watson on case order, tolerance / VIF (<a href="../../validation/conventions/regression/#linear-least-squares-by-qr--the-0210-conventions">QR</a> · <a href="../../validation/conventions/regression/#scale-invariance-of-the-singularity-verdict--the-0220-convention">scale invariance</a>); <strong>through the origin</strong> reports the uncentred R² and F (<a href="../../validation/conventions/regression/#regression-through-the-origin--the-0210-conventions">origin</a>); <strong>stepwise</strong> enters at p ≤ .05 and removes at p ≥ .10 (<a href="../../validation/conventions/classical/#stepwise-selection">stepwise</a>).</li>
+<li><strong>Regularized</strong>: standardized predictors, a 100-point λ path, 10-fold CV with the minimum and 1-SE λ (<a href="../../validation/conventions/classical/#regularized-regression">regularized</a>). <strong>Robust</strong>: Huber c = 1.345 / Tukey c = 4.685 on the MAD/0.6745 scale, sandwich SEs (<a href="../../validation/conventions/classical/#robust-regression-the-m-estimator-constants">robust</a>). <strong>Nonlinear</strong>: Levenberg–Marquardt, Gauss–Newton covariance (<a href="../../validation/conventions/classical/#nonlinear-regression">nonlinear</a>). <strong>2SLS</strong>: σ̂² on the structural residuals, the first-stage F (<a href="../../validation/#coverage">validation</a>).</li>
+<li><strong>Logistic / Probit / Poisson / Negative binomial / Gamma</strong>: IRLS through the QR (<a href="../../validation/conventions/regression/#glm-irls-through-the-qr--the-0220-convention">IRLS</a>); <strong>Wald z intervals</strong>, Exp(B) = exp(B ± z·SE) (R's <code>confint.glm</code> is profile-likelihood; use <code>confint.default</code>) (<a href="../../validation/conventions/classical/#confidence-intervals-on-glm-coefficients-wald-z">Wald</a>); Hosmer–Lemeshow on ten deciles of risk, g − 2 df (<a href="../../validation/#coverage">validation</a>); NB2 with α by ML (<a href="../../validation/tolerances/">tolerances</a>); the <strong>Gamma</strong> dispersion is the Pearson estimate and the likelihood is evaluated at it (R's <code>logLik</code> uses D/n) (<a href="../../validation/conventions/regression/#the-gamma-log-likelihoods-dispersion--the-0230-convention">Gamma</a>); the diagnostic residuals are randomized quantile residuals, seeded (<a href="../../validation/conventions/regression/#glm-quantile-residuals--the-per-family-definitions">quantile residuals</a>).</li>
+<li><strong>Multinomial / Ordinal</strong>: the lowest category is the baseline; the ordinal model is logit P(Y ≤ c) = θ_c − β·x (SPSS PLUM, <code>polr</code>) (<a href="../../validation/conventions/classical/#multinomial-and-ordinal-regression-the-reference-and-the-sign">reference and sign</a>). <strong>Quantile</strong>: IRLS on the check loss, Koenker iid SEs; <strong>GEE</strong>: sandwich covariance under the chosen working correlation; <strong>Loglinear</strong>: a Poisson GLM on the counts (<a href="../../validation/#coverage">validation</a> · <a href="../../validation/conventions/classical/#loglinear-models">loglinear</a>).</li>
+<li><strong>Mediation</strong>: OLS paths on the PROCESS model shapes, Aiken–West probes at mean ∓ 1 SD, percentile / BCa bootstrap intervals from a seeded PRNG, Johnson–Neyman regions (<a href="../../validation/conventions/regression/#mediation-follow-ups--the-0210-conventions">mediation</a> · <a href="../../validation/tolerances/">tolerances</a>).</li>
+<li><strong>General Linear Model</strong>: Type III sums of squares under sum-to-zero contrasts (<a href="../../validation/tolerances/">Type III</a>); MANOVA's Pillai / Wilks / Hotelling–Lawley / Roy and the SPSS partial η²; repeated measures with Mauchly's test and the Greenhouse–Geisser / Huynh–Feldt ε (<a href="../../validation/#coverage">validation</a>).</li>
+<li><strong>Linear Mixed Model</strong>: <strong>REML by default</strong> (untick for ML when comparing fixed effects by likelihood ratio), Swamy-style variance components, the ICC (<a href="../../validation/conventions/classical/#mixed-models-reml-by-default-ml-on-request">mixed models</a>). <strong>GLMM</strong>: a random intercept integrated by Gauss–Hermite quadrature (same section).</li>
 </ul>
 <h2 id="choosing-among-them">Choosing among them</h2>
 <ul>
@@ -663,29 +667,51 @@ unsure whether you want association or prediction.</p>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../../index.html">Home</a> ·
-        <a href="../../../quick-start/">Quick Start</a> ·
-        <a href="../../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../../license/">License</a> ·
-        <a href="../../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../../index.html">
+            <img class="brand-mark" src="../../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../../index.html#features">Features</a>
+          <a href="../../../index.html#screenshots">Screenshots</a>
+          <a href="../../../index.html#download">Download</a>
+          <a href="../../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../../docs/">User Guide</a>
+          <a href="../../../quick-start/">Quick Start</a>
+          <a href="../../../docs/validation/">Validation</a>
+          <a href="../../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../../cite/">How to cite</a>
+          <a href="../../../license/">License</a>
+          <a href="../../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

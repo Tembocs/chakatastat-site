@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Propensity Score — ChakataStat User Guide</title>
+  <title>Propensity Score · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/analyze/propensity/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Propensity Score — ChakataStat User Guide">
+  <meta property="og:title" content="Propensity Score · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/analyze/propensity/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#validation">Validation</a>
+        <a href="../../../docs/" aria-current="page">User Guide</a>
+        <a href="../../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -97,7 +101,7 @@
 drive the outcome, so comparing them directly confounds the treatment's effect
 with who happened to receive it. The propensity score is each case's
 probability of treatment given its covariates; matching or weighting on it
-builds a comparison where the groups look alike on those covariates — closer
+builds a comparison where the groups look alike on those covariates, closer
 to what a randomized design would have produced.</p>
 <p>The workflow is three steps in one procedure: <strong>estimate</strong> the score,
 <strong>adjust</strong> (match or weight), and <strong>check balance</strong>. The adjusted sample is
@@ -105,16 +109,16 @@ then handed back to you as an ordinary variable, so <em>any</em> analysis in the
 application can run on it.</p>
 <h2 id="the-data-layout">The data layout</h2>
 <ul>
-<li><strong>Treatment</strong> — a numeric variable coded <strong>0/1</strong>, with 1 = treated. Any
+<li><strong>Treatment</strong>: a numeric variable coded <strong>0/1</strong>, with 1 = treated. Any
 other value stops the analysis with a message (recode first if your groups
 are labelled differently).</li>
-<li><strong>Covariates</strong> — numeric pre-treatment characteristics that may drive both
+<li><strong>Covariates</strong>: numeric pre-treatment characteristics that may drive both
 treatment and outcome. Choose them for what they <em>are</em>, not for
 significance: the score model is a means to balance, not a model to
 interpret.</li>
 </ul>
 <blockquote>
-<p><strong>Weighting.</strong> The Weight Cases setting does <strong>not</strong> apply here — pairing
+<p><strong>Weighting.</strong> The Weight Cases setting does <strong>not</strong> apply here. Pairing
 weighted cases is not well defined, and layering the IPTW weight this
 procedure <em>produces</em> on top of another weight would compound two case
 multiplicities. An active weight variable only selects cases, and the
@@ -124,61 +128,61 @@ output says so.</p>
 <p>Pick the <strong>Treatment</strong> and tick the <strong>Covariates</strong>. Then choose the
 <strong>Method</strong>:</p>
 <ul>
-<li><strong>Match nearest controls (ATT)</strong> — each treated case takes its nearest
+<li><strong>Match nearest controls (ATT)</strong>: each treated case takes its nearest
 control(s) by propensity score, greedily, without replacement (a control is
 used once), hardest-to-match first. The estimand is the average effect
 <strong>on the treated</strong>: the matched sample resembles the treated group by
 construction.
 <ul>
-<li><strong>Controls per treated (k)</strong> — 1:k matching (default 1). A treated case
+<li><strong>Controls per treated (k)</strong>: 1:k matching (default 1). A treated case
 keeps a partial set if the control pool runs out.</li>
-<li><strong>Caliper</strong> — the widest acceptable match distance, in standard
+<li><strong>Caliper</strong>: the widest acceptable match distance, in standard
 deviations of the <strong>logit</strong> of the score (0.2 is the common
 recommendation). A treated case with no control inside the caliper is
-left <strong>unmatched and counted</strong> in the summary — better an honest smaller
+left <strong>unmatched and counted</strong> in the summary: better an honest smaller
 sample than a forced bad pair. Blank means no caliper.</li>
 </ul>
 </li>
-<li><strong>Weight by inverse probability (IPTW)</strong> — every case is kept and weighted:
-under the default <strong>ATE</strong> estimand, treated cases by 1/e and controls by
-1/(1−e), where e is the score; under <strong>ATT</strong>, treated cases keep weight 1
-and controls get e/(1−e). Check the summary's <strong>maximum weight</strong>: a huge
+<li><strong>Weight by inverse probability (IPTW)</strong>: every case is kept and weighted.
+Under the default <strong>ATE</strong> estimand, treated cases are weighted by 1/e and
+controls by 1/(1−e), where e is the score; under <strong>ATT</strong>, treated cases keep
+weight 1 and controls get e/(1−e). Check the summary's <strong>maximum weight</strong>: a huge
 weight means one case with a score near 0 or 1 dominates the weighted
 sample.</li>
 </ul>
 <p><strong>Save</strong> options: the matched-sample <strong>filter</strong> (<code>propensity_matched</code>, a 1/0
-variable — on by default for matching), the IPTW <strong>weight</strong>
-(<code>propensity_weight</code> — on by default for weighting), and optionally the
+variable, on by default for matching), the IPTW <strong>weight</strong>
+(<code>propensity_weight</code>, on by default for weighting), and optionally the
 <strong>score</strong> itself (<code>propensity_score</code>).</p>
 <h2 id="reading-the-output">Reading the output</h2>
 <ul>
-<li><strong>Propensity Score Model</strong> — the logistic model behind the score
+<li><strong>Propensity Score Model</strong>: the logistic model behind the score
 (coefficients, Wald tests, odds ratios). It is diagnostics, not findings:
 a &quot;significant&quot; covariate here is not a treatment effect.</li>
-<li><strong>Propensity Match Summary</strong> / <strong>Propensity Weight Summary</strong> — how many
+<li><strong>Propensity Match Summary</strong> / <strong>Propensity Weight Summary</strong>: how many
 cases matched (and how many treated found no in-caliper control), or the
 weight distribution per group.</li>
-<li><strong>Propensity Balance</strong> — the point of the exercise: each covariate's
+<li><strong>Propensity Balance</strong> (the point of the exercise): each covariate's
 <strong>standardized mean difference</strong> (treated − control, over the unadjusted
 pooled SD) <strong>before</strong> and <strong>after</strong> adjustment, on one shared scale.
 |SMD| ≤ 0.1 is the common adequate-balance benchmark. A covariate still
 imbalanced after adjustment is a warning to revisit the score model
-(interactions, transformations) — not to proceed regardless.</li>
+(interactions, transformations), not to proceed regardless.</li>
 <li><strong>Balance Plot</strong> (the <strong>Plot balance (before vs after)</strong> checkbox, on by
-default) — the same numbers as paired points per covariate, with zero
+default): the same numbers as paired points per covariate, with zero
 (perfect balance) always in view. Before → After collapsing toward the zero
 line is the picture of a successful adjustment. It exports like any other
-chart — PNG, or SVG/PDF since 0.22.0 (<a href="../../graphs/#exporting-one-chart">Exporting one
+chart: PNG, or SVG/PDF since 0.22.0 (<a href="../../graphs/#exporting-one-chart">Exporting one
 chart</a>); as a chart attached to an
 analysis it takes no <strong>Edit chart…</strong> button.</li>
 </ul>
 <p>Every table and the plot carry an <strong>Ask the assistant about this</strong> action
 (0.22.0), which hands the rendered result to the
-<a href="../../advanced/ai-assistant/">AI assistant</a> to interpret rather than re-run —
+<a href="../../advanced/ai-assistant/">AI assistant</a> to interpret rather than re-run,
 useful on the balance table when a covariate stays imbalanced and you want a
 second reading of what to try.</p>
 <h2 id="using-the-adjusted-sample">Using the adjusted sample</h2>
-<p>This procedure estimates no treatment effect itself — deliberately. The saved
+<p>This procedure estimates no treatment effect itself; that is deliberate. The saved
 column feeds the analysis you actually want, with the design question and the
 outcome question kept separate (decide the adjustment <em>before</em> looking at
 outcomes):</p>
@@ -190,12 +194,12 @@ regression, …) on the matched sample.</li>
 run the outcome analysis on the weighted sample.</li>
 </ul>
 <h2 id="how-this-is-computed">How this is computed</h2>
-<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
+<p>This section names <em>which</em> method each procedure prints: the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules. Each line links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
 <ul>
-<li><strong>The score</strong> — a binary logistic regression (IRLS, Wald z intervals) (<a href="../../validation/conventions/classical/#confidence-intervals-on-glm-coefficients-wald-z">Wald</a>).</li>
-<li><strong>Matching</strong> — greedy 1:k nearest-neighbour without replacement, ATT, on the <strong>logit</strong> of the score, treated cases in descending score order, ties by dataset order; the caliper is a multiple of the SD of the logit (<a href="../../validation/tolerances/">propensity conventions</a>).</li>
-<li><strong>Balance</strong> — standardized mean differences over the <strong>unadjusted pooled SD</strong> √((s²_T + s²_C)/2) before and after, so both columns share one scale; IPTW weights 1/e and 1/(1 − e) for the ATE (<a href="../../validation/tolerances/">propensity conventions</a> · <a href="../../validation/#coverage">validation</a>).</li>
-<li><strong>Reproducibility</strong> — deterministic: no random tie-breaking, so the same data gives the same match on every platform.</li>
+<li><strong>The score</strong>: a binary logistic regression (IRLS, Wald z intervals) (<a href="../../validation/conventions/classical/#confidence-intervals-on-glm-coefficients-wald-z">Wald</a>).</li>
+<li><strong>Matching</strong>: greedy 1:k nearest-neighbour without replacement, ATT, on the <strong>logit</strong> of the score, treated cases in descending score order, ties by dataset order; the caliper is a multiple of the SD of the logit (<a href="../../validation/tolerances/">propensity conventions</a>).</li>
+<li><strong>Balance</strong>: standardized mean differences over the <strong>unadjusted pooled SD</strong> √((s²_T + s²_C)/2) before and after, so both columns share one scale; IPTW weights 1/e and 1/(1 − e) for the ATE (<a href="../../validation/tolerances/">propensity conventions</a> · <a href="../../validation/#coverage">validation</a>).</li>
+<li><strong>Reproducibility</strong>: deterministic. There is no random tie-breaking, so the same data gives the same match on every platform.</li>
 </ul>
 <h2 id="reproducibility">Reproducibility</h2>
 <p>Like every analysis, a run journals a syntax command, e.g.:</p>
@@ -206,12 +210,12 @@ run the outcome analysis on the weighted sample.</li>
 </code></pre>
 <p><code>ratio</code> (controls per treated), <code>save_score</code>, <code>save_filter</code>, <code>save_weight</code>
 and <code>plot=false</code> are recorded when they differ from the dialog's defaults.
-The same tool is available to the AI assistant, MCP and batch scripts —
+The same tool is available to the AI assistant, MCP and batch scripts,
 though the saved columns make it a <strong>mutating</strong> tool, so an assistant or
 MCP client running under the read-only profile is refused the save options
 and told why.</p>
 <blockquote>
-<p><strong>Scope (v1).</strong> Greedy nearest-neighbour and IPTW only — no optimal,
+<p><strong>Scope (v1).</strong> Greedy nearest-neighbour and IPTW only: no optimal,
 genetic or full matching, and no doubly-robust estimators. And no causal
 magic: matching and weighting adjust only for the covariates you supplied.
 An unmeasured confounder passes straight through.</p>
@@ -220,29 +224,51 @@ An unmeasured confounder passes straight through.</p>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../../index.html">Home</a> ·
-        <a href="../../../quick-start/">Quick Start</a> ·
-        <a href="../../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../../license/">License</a> ·
-        <a href="../../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../../index.html">
+            <img class="brand-mark" src="../../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../../index.html#features">Features</a>
+          <a href="../../../index.html#screenshots">Screenshots</a>
+          <a href="../../../index.html#download">Download</a>
+          <a href="../../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../../docs/">User Guide</a>
+          <a href="../../../quick-start/">Quick Start</a>
+          <a href="../../../docs/validation/">Validation</a>
+          <a href="../../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../../cite/">How to cite</a>
+          <a href="../../../license/">License</a>
+          <a href="../../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Case Semantics &amp; Transforms — ChakataStat User Guide</title>
+  <title>Case Semantics &amp; Transforms · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/cases-and-transforms/">
   <link rel="icon" type="image/svg+xml" href="../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Case Semantics &amp; Transforms — ChakataStat User Guide">
+  <meta property="og:title" content="Case Semantics &amp; Transforms · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/cases-and-transforms/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../index.html#features">Features</a>
+        <a href="../../index.html#validation">Validation</a>
+        <a href="../../docs/" aria-current="page">User Guide</a>
+        <a href="../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -101,25 +105,25 @@ analysis automatically.</p>
 status bar shows when any of them is active.</p>
 <h3 id="select-cases">Select Cases</h3>
 <p><strong>Data → Select Cases…</strong> (<code>Ctrl+Alt+S</code>). Restrict the analysis to a subset of
-cases — for example, only participants where <code>Age &gt;= 60</code>, or a random sample.
+cases, for example, only participants where <code>Age &gt;= 60</code>, or a random sample.
 Unselected cases are filtered out of every subsequent statistic until you clear
 the selection. You can choose to filter (hide) or to mark unselected cases.
 The comparison value is checked against the variable's type: a numeric
 variable needs a number, and a date variable needs a calendar date in
 <code>YYYY-MM-DD</code> form (compact <code>YYYYMMDD</code> is accepted and canonicalized), compared
-chronologically — <code>visit_date &gt;= 2024-01-15</code> selects that day and everything
+chronologically, so <code>visit_date &gt;= 2024-01-15</code> selects that day and everything
 after it.</p>
 <h3 id="weight-cases">Weight Cases</h3>
 <p><strong>Data → Weight Cases…</strong> (<code>Ctrl+Alt+W</code>). Give each case a <strong>frequency weight</strong>
 from a variable, so a case with weight 3 counts as three observations. Used for
 data stored as a frequency table. Counts, means and tests all honour the
 weight. For <strong>survey (sampling) weights</strong> use
-<a href="../analyze/complex-samples/">Survey Design</a> instead — a frequency weight
+<a href="../analyze/complex-samples/">Survey Design</a> instead. A frequency weight
 reproduces cases, which is the wrong model for a sampling weight and
 understates survey standard errors; the two settings are mutually exclusive.</p>
 <h3 id="survey-design">Survey Design</h3>
-<p><strong>Data → Survey Design…</strong> Declare the dataset's complex-survey structure —
-strata, clusters (PSUs) and sampling weights — so the covered procedures
+<p><strong>Data → Survey Design…</strong> Declare the dataset's complex-survey structure:
+strata, clusters (PSUs) and sampling weights. The covered procedures then
 report design-based estimates with correct standard errors, and every other
 analysis says plainly that it ignored the design. The full story is on its
 own page: <a href="../analyze/complex-samples/">Complex Samples (Survey Designs)</a>.
@@ -127,11 +131,11 @@ Under a declared design, Select Cases and Split File become <strong>domain
 estimation</strong> automatically (the design-correct way to analyze subgroups).</p>
 <h3 id="split-file">Split File</h3>
 <p><strong>Data → Split File…</strong> (<code>Ctrl+Alt+T</code>). Repeat every analysis <strong>separately for
-each group</strong> of a categorical variable — e.g. run all your descriptives once per
-<em>StudyZone</em>. Output is produced per split group until you turn the split off.</p>
+each group</strong> of a categorical variable (e.g. run all your descriptives once per
+<em>StudyZone</em>). Output is produced per split group until you turn the split off.</p>
 <blockquote>
 <p><strong>Order of operations.</strong> Select narrows the cases, Weight scales their counts,
-and Split partitions the result into groups — and every analysis you run sees
+and Split partitions the result into groups, and every analysis you run sees
 all three at once.</p>
 </blockquote>
 <h2 id="transforms-transform--data-menus">Transforms (Transform &amp; Data menus)</h2>
@@ -140,28 +144,28 @@ all three at once.</p>
 overwrite one) from an <strong>expression</strong>. The expression language is missing-aware
 and typed (number, string or date):</p>
 <ul>
-<li><strong>Arithmetic</strong> — <code>+ - * /</code>, parentheses, <code>MOD</code>.</li>
-<li><strong>Numeric functions</strong> — <code>SQRT</code>, <code>LN</code>, <code>LOG10</code>, <code>EXP</code>, <code>ABS</code>, <code>MIN</code>, <code>MAX</code>,
+<li><strong>Arithmetic</strong>: <code>+ - * /</code>, parentheses, <code>MOD</code>.</li>
+<li><strong>Numeric functions</strong>: <code>SQRT</code>, <code>LN</code>, <code>LOG10</code>, <code>EXP</code>, <code>ABS</code>, <code>MIN</code>, <code>MAX</code>,
 the trig family, <code>ROUND(x[, digits])</code>, and the <code>SD</code> / <code>VARIANCE</code> aggregates.</li>
-<li><strong>Logic</strong> — comparisons (<code>&lt; &lt;= &gt; &gt;= = ~=</code>), <code>AND OR NOT</code>, and
+<li><strong>Logic</strong>: comparisons (<code>&lt; &lt;= &gt; &gt;= = ~=</code>), <code>AND OR NOT</code>, and
 <code>IF(cond, then, else)</code>.</li>
-<li><strong>String</strong> — <code>CONCAT</code>, <code>LENGTH</code>, <code>UPCASE</code>, <code>LOWCASE</code>, <code>LTRIM</code>, <code>RTRIM</code>,
+<li><strong>String</strong>: <code>CONCAT</code>, <code>LENGTH</code>, <code>UPCASE</code>, <code>LOWCASE</code>, <code>LTRIM</code>, <code>RTRIM</code>,
 <code>SUBSTR</code>, <code>INDEX</code>, <code>REPLACE</code>, <code>STRING</code>, <code>NUMBER</code>, and quoted literals.</li>
-<li><strong>Date</strong> (ISO <code>YYYY-MM-DD</code>) — <code>DATE.DMY</code>, <code>DATE.MDY</code>, <code>YEAR</code>, <code>MONTH</code>, <code>DAY</code>,
+<li><strong>Date</strong> (ISO <code>YYYY-MM-DD</code>): <code>DATE.DMY</code>, <code>DATE.MDY</code>, <code>YEAR</code>, <code>MONTH</code>, <code>DAY</code>,
 <code>DATEDIFF</code>.</li>
 </ul>
-<p>The new variable takes the <strong>type of its expression</strong> — a string expression makes
+<p>The new variable takes the <strong>type of its expression</strong>: a string expression makes
 a string variable, a date expression a date variable.</p>
 <p><strong>Example.</strong> <code>BMI_category = IF(BMI &gt;= 30, &quot;Obese&quot;, IF(BMI &gt;= 25, &quot;Overweight&quot;, &quot;Normal&quot;))</code>.</p>
 <h3 id="recode">Recode</h3>
-<p><strong>Transform → Recode…</strong> (<code>Ctrl+Shift+R</code>). Map a variable's values into new ones —
+<p><strong>Transform → Recode…</strong> (<code>Ctrl+Shift+R</code>). Map a variable's values into new ones,
 into the same variable or a new one. Use it to collapse categories (e.g. five
 education levels into three) or to band a scale variable.</p>
 <h4 id="grouping-a-scale-variable-vs-histogram-bins">Grouping a scale variable vs. histogram bins</h4>
 <p>Two things look alike but do different jobs:</p>
 <ul>
 <li>The <a href="../graphs/#histogram">histogram</a>'s <strong>bins</strong> slider groups a scale
-variable <em>in the picture only</em> — display, no data change. Use it to explore
+variable <em>in the picture only</em> (display, no data change). Use it to explore
 shape.</li>
 <li>A <strong>Recode into Different Variables</strong> (or <strong>Bin Variable</strong>, below, for the
 common numeric-cutpoints case) makes a <em>real</em> categorical variable (BMI →
@@ -176,27 +180,27 @@ this exact recode end to end.</p>
 case's rank on a chosen variable, with the usual tie-handling options.</p>
 <h3 id="bin-variable">Bin Variable</h3>
 <p><strong>Transform → Bin Variable…</strong> (<code>Ctrl+Shift+N</code>). The purpose-built front end for
-grouping a scale variable into a new ordinal one — Recode works for this too,
+grouping a scale variable into a new ordinal one. Recode works for this too,
 but means typing every cutpoint and label by hand. Pick a variable and a
 method:</p>
 <ul>
-<li><strong>Equal width</strong> — <em>N</em> groups of equal size along the value range (e.g. four
+<li><strong>Equal width</strong>: <em>N</em> groups of equal size along the value range (e.g. four
 10-point-wide BMI bands).</li>
-<li><strong>Equal count (quantiles)</strong> — <em>N</em> groups with (about) the same number of
+<li><strong>Equal count (quantiles)</strong>: <em>N</em> groups with (about) the same number of
 cases in each, e.g. splitting into quartiles.</li>
-<li><strong>Custom</strong> — your own ascending cutpoints (e.g. <code>18.5, 25, 30</code> for the
+<li><strong>Custom</strong>: your own ascending cutpoints (e.g. <code>18.5, 25, 30</code> for the
 standard BMI categories).</li>
 </ul>
 <p>A live preview shows the resolved boundaries as cut lines over a histogram of
 the variable, and the generated group labels (<code>&lt; 18.5</code>, <code>18.5 – 25</code>, …), before
 you commit. The new variable is numeric with Ordinal measure and value labels
-already set — nothing left to finish in Variable View. Cutpoints are resolved
+already set: nothing left to finish in Variable View. Cutpoints are resolved
 against the currently active Select Cases/Weight Cases, like every analysis.</p>
 <h3 id="reshaping-the-dataset-data-menu">Reshaping the dataset (Data menu)</h3>
 <ul>
-<li><strong>Sort Cases</strong> (<code>Ctrl+Shift+D</code>) — reorder rows by one or more variables.</li>
-<li><strong>Transpose</strong> (<code>Ctrl+Alt+P</code>) — swap rows and columns.</li>
-<li><strong>Merge Files</strong> (<code>Ctrl+Alt+M</code>) — add cases or add variables from another
+<li><strong>Sort Cases</strong> (<code>Ctrl+Shift+D</code>): reorder rows by one or more variables.</li>
+<li><strong>Transpose</strong> (<code>Ctrl+Alt+P</code>): swap rows and columns.</li>
+<li><strong>Merge Files</strong> (<code>Ctrl+Alt+M</code>): add cases or add variables from another
 dataset, matched by a key (or by row position). A key that is numeric in
 both datasets matches by value, so <code>1</code> in one file meets <code>1.0</code> in the
 other; any other key matches its exact text. Each case takes the first
@@ -205,24 +209,24 @@ and how many of the file's rows matched no case (an unknown key, a blank
 key, a repeated key, or rows past the end of a positional join), so a
 join that misses is never silent.</li>
 <li><strong>Define Variable Properties</strong> (<code>Ctrl+Alt+D</code>), <strong>Bulk Rename</strong> and <strong>Variable
-Sets</strong> — covered in <a href="../working-with-data/#tidying-a-dataset">Working with Data</a>.</li>
+Sets</strong>: covered in <a href="../working-with-data/#tidying-a-dataset">Working with Data</a>.</li>
 </ul>
 <h2 id="reproducibility-note">Reproducibility note</h2>
-<p>Every transform on this page is <strong>journalled</strong> — it appears in the
+<p>Every transform on this page is <strong>journalled</strong>: it appears in the
 <a href="../advanced/reproducibility/">Syntax console</a> as a command, so a
 data-preparation pipeline can be saved and replayed on fresh data exactly.
 That includes the case-semantics settings (Select Cases, Weight Cases,
-Split File — as <code>select_cases</code>, <code>weight_cases</code>, <code>split_file</code>), Recode
+Split File, as <code>select_cases</code>, <code>weight_cases</code>, <code>split_file</code>), Recode
 (its ordered rules ride the <code>recode</code> command as one rule string each, in
 order), Transpose, and both Merge Files modes (<code>merge_add_cases</code>,
-<code>merge_add_variables</code> — the journaled command records the file's path
+<code>merge_add_variables</code>; the journaled command records the file's path
 <em>and</em> the SHA-256 of its bytes, so a replay proves it merged the same
 file). Bin Variable's journaled command always records the <em>resolved</em>
-cutpoints, even for the Equal width/Equal count methods — so replaying it
+cutpoints, even for the Equal width/Equal count methods, so replaying it
 later reproduces the same groups rather than silently re-deriving
 different ones from changed data. A failed or cancelled dialog writes no
 journal line.</p>
-<p>Three operations remain outside the journal — Bulk Rename, Import Data
+<p>Three operations remain outside the journal: Bulk Rename, Import Data
 Dictionary and Define Variable Properties. If a session used one, the
 saved syntax and any exported reproducibility bundle say so explicitly
 (a <code># not replayable:</code> note), rather than implying the journal
@@ -231,29 +235,51 @@ reconstructs the whole session.</p>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../index.html">Home</a> ·
-        <a href="../../quick-start/">Quick Start</a> ·
-        <a href="../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../license/">License</a> ·
-        <a href="../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../index.html">
+            <img class="brand-mark" src="../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../index.html#features">Features</a>
+          <a href="../../index.html#screenshots">Screenshots</a>
+          <a href="../../index.html#download">Download</a>
+          <a href="../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../docs/">User Guide</a>
+          <a href="../../quick-start/">Quick Start</a>
+          <a href="../../docs/validation/">Validation</a>
+          <a href="../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../cite/">How to cite</a>
+          <a href="../../license/">License</a>
+          <a href="../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

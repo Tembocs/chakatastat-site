@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Reproducibility — ChakataStat User Guide</title>
+  <title>Reproducibility · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/advanced/reproducibility/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Reproducibility — ChakataStat User Guide">
+  <meta property="og:title" content="Reproducibility · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/advanced/reproducibility/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#validation">Validation</a>
+        <a href="../../../docs/" aria-current="page">User Guide</a>
+        <a href="../../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -92,14 +96,14 @@
       </aside>
       <article class="docs-content">
 <h1 id="reproducibility">Reproducibility</h1>
-<p>Reproducible analysis means you can re-run exactly what you did — on the same data
-or on new data — and get the same result, and that someone else can read and
+<p>Reproducible analysis means you can re-run exactly what you did, on the same data
+or on new data, and get the same result, and that someone else can read and
 verify your steps. ChakataStat is built around this: every menu action is also a
 <strong>command</strong>, and the commands form a stream you can read, edit, save, replay,
 batch and export.</p>
 <h2 id="the-syntax-console-cks">The syntax console (<code>.cks</code>)</h2>
 <p>Open it with <strong>View → Syntax</strong> (<code>Ctrl+4</code>). It shows your session as an editable
-<strong>ChakataStat syntax</strong> script — the <code>.cks</code> language. Every analysis, chart and
+<strong>ChakataStat syntax</strong> script, the <code>.cks</code> language. Every analysis, chart and
 journalable transform you run from the menus appends a line here automatically:</p>
 <pre><code>descriptives variables=[Age, BMI, SystolicBP]
 correlate variables=[BMI, SystolicBP], method=pearson
@@ -109,25 +113,25 @@ histogram variable=BMI
 <p>The grammar is small and readable: <code>toolname arg=value, arg=[a, b], arg=&quot;text&quot;</code>,
 with <code>#</code> for comments. A saved script's first line is one such comment,
 <code># dataset &lt;hash&gt;</code>, naming the data it was recorded against (see
-<a href="#the-dataset-fingerprint--same-data">the dataset fingerprint</a>).</p>
+<a href="#the-dataset-fingerprint-same-data">the dataset fingerprint</a>).</p>
 <h3 id="one-command-per-line">One command per line</h3>
 <p>A command occupies <strong>exactly one line</strong>, however long it gets. There is no
 line-continuation character, and this is deliberate rather than unfinished:
 the journal's contract is one line per output, which is what lets the
 <a href="../../chart-editor/">chart editor</a> amend the line that produced a chart
 instead of appending a new one.</p>
-<p>So if you paste a command that has been wrapped across two lines — out of a
-document, an email, or this guide before it was corrected — the second line
+<p>So if you paste a command that has been wrapped across two lines (out of a
+document, an email, or this guide before it was corrected), the second line
 is read as a new command and you get errors like <code>Trailing &quot;,&quot; with no argument</code> and <code>Unknown tool &quot;colors&quot;</code>. Both say the same thing: join the
 lines. The console names that cause when it can see it, and offers a
 <strong>Join wrapped lines</strong> button beside the errors that does it for you. The
 button appears only when joining actually makes the script parse, so it is
-never a guess — if it is not there, the problem is something else.</p>
+never a guess. If it is not there, the problem is something else.</p>
 <p>Long lines are normal here. The console wraps them for display; the stored
 script keeps them as one line.</p>
 <h3 id="the-editor">The editor</h3>
 <p>The console is a real syntax editor, built so that a researcher who has
-never programmed can read it immediately — and so that editing never
+never programmed can read it immediately, and so that editing never
 changes what a script means:</p>
 <ul>
 <li><strong>Line numbers</strong> in a gutter on the left. Long commands soft-wrap for
@@ -135,7 +139,7 @@ display; the wrapped rows are not numbered, because they are still one
 line (and one command).</li>
 <li><strong>Syntax colours</strong>, muted and theme-derived in both light and dark
 themes: comments, tool names, argument names, strings and numbers each
-get a quiet distinction. Colouring is display-only — it never alters
+get a quiet distinction. Colouring is display-only; it never alters
 the text.</li>
 <li><strong>The current line</strong> carries a subtle full-width band, so the caret is
 easy to find in a long script.</li>
@@ -146,7 +150,7 @@ bracket, and stays quiet.</li>
 compact bar under the editor with a live match count, next/previous
 that wrap around, a match-case toggle (<code>Aa</code>), and highlighted matches
 with the current one emphasised. <strong>Replace</strong> changes the current match
-and moves on; <strong>All</strong> changes every match — and either way one
+and moves on; <strong>All</strong> changes every match. Either way, one
 <code>Ctrl+Z</code> takes it back in a single step. <code>Esc</code> closes the bar and
 clears the highlights.</li>
 </ul>
@@ -161,7 +165,7 @@ clears the highlights.</li>
 <tbody>
 <tr>
 <td><code>Ctrl+Enter</code></td>
-<td>Run the selected lines — or the caret's line when nothing is selected</td>
+<td>Run the selected lines, or the caret's line when nothing is selected</td>
 </tr>
 <tr>
 <td><code>Ctrl+Shift+Enter</code></td>
@@ -185,37 +189,37 @@ clears the highlights.</li>
 </tr>
 <tr>
 <td><code>Ctrl+Z</code></td>
-<td>Undo — typing, a comment toggle, a replace-all, an accepted completion or a <strong>Join wrapped lines</strong> repair each undo as one step</td>
+<td>Undo: typing, a comment toggle, a replace-all, an accepted completion or a <strong>Join wrapped lines</strong> repair each undo as one step</td>
 </tr>
 </tbody>
 </table></div>
 <p>(In the find bar, <code>Enter</code> and <code>Shift+Enter</code> step to the next and previous
 match, and <code>Esc</code> closes it. While the completion list is open, <code>↑</code>/<code>↓</code>
-move through it, <code>Enter</code> or <code>Tab</code> accepts, and <code>Esc</code> closes it — <code>Tab</code>
+move through it, <code>Enter</code> or <code>Tab</code> accepts, and <code>Esc</code> closes it; <code>Tab</code>
 goes back to moving focus the moment the list is closed. On keyboard
 layouts where <code>/</code> is not a plain key, the <code>Ctrl+/</code> chord may not be
 available.)</p>
 <h3 id="as-you-type-checking-completion-and-hover-help">As you type: checking, completion and hover help</h3>
 <p>The console checks your commands as you type. Shortly after you pause, each
-line is parsed — the same parse that would run it — and a broken line gets a
+line is parsed (the same parse that would run it), and a broken line gets a
 wavy underline over its text and a dot in the gutter. Hover either one and
 the tooltip shows exactly what the parser will say if you press Run; for a
 misspelled tool or argument name it adds a suggestion when something in the
 catalog is close (<em>Did you mean &quot;variables&quot;?</em>). Fix the line and the marks
-disappear. Nothing is highlighted mid-word while you are still typing — the
+disappear. Nothing is highlighted mid-word while you are still typing. The
 check waits for your pause, and the status panel under the editor reports
 the same errors when a run is blocked, so the two never disagree.</p>
 <p>Completion offers what the command needs next, and only when it has
 something real to offer:</p>
 <ul>
-<li>at the start of a line — the <strong>tool names</strong>, each with its one-line
+<li>at the start of a line, the <strong>tool names</strong>, each with its one-line
 description;</li>
-<li>after a tool — its remaining <strong>argument names</strong>, completed as <code>name=</code>
+<li>after a tool, its remaining <strong>argument names</strong>, completed as <code>name=</code>
 (arguments the line already has are not offered again);</li>
 <li>after the <code>=</code> of an argument that takes variables, or inside its
-<code>[...]</code> list — <strong>your dataset's variables</strong>, each with its type,
+<code>[...]</code> list, <strong>your dataset's variables</strong>, each with its type,
 measurement level and label;</li>
-<li>for an option with a fixed set of values (like <code>method=</code>) — the
+<li>for an option with a fixed set of values (like <code>method=</code>), the
 <strong>allowed values</strong>.</li>
 </ul>
 <p>The list opens as you type a name (or on <code>Ctrl+Space</code> anywhere), narrows
@@ -226,7 +230,7 @@ half-typed word, and one <code>Ctrl+Z</code> undoes it.</p>
 <p>Hover help is the same knowledge at rest: hold the pointer over a tool
 name to see what it does, over an argument name for what it accepts, or
 over a variable in a command to see its type, measurement level and label.
-It reads only what is already known — nothing is computed or analyzed by
+It reads only what is already known; nothing is computed or analyzed by
 pointing at things.</p>
 <h3 id="running-and-editing">Running and editing</h3>
 <ul>
@@ -235,12 +239,12 @@ the Output log. Replaying does <strong>not</strong> re-record the commands.</li>
 <li><strong>Run all replays from the data you started with.</strong> The script is a
 recipe <em>from</em> your starting data, so once its transforms (Compute,
 Recode, Merge, Transpose, Select Cases, …) have changed the open data,
-running the whole script again would apply them a second time — a merge
+running the whole script again would apply them a second time: a merge
 would duplicate its rows. Run all then refuses, before running
 anything, and says why. Open your original data file first (the script
-stays in the console) and Run all there — or select just the new lines
+stays in the console) and Run all there, or select just the new lines
 and use <strong>Run selection</strong>.</li>
-<li>Parse errors and failed commands are reported in a status panel as data — a bad
+<li>Parse errors and failed commands are reported in a status panel as data; a bad
 line never crashes the run. Drag the panel's top edge to make it taller
 (double-click the edge to reset); its text follows the <strong>Content text
 size</strong> setting.</li>
@@ -258,12 +262,12 @@ chart. They are journaled, so a styled chart re-runs styled:</p>
 <pre><code>kaplan_meier time=Months, status=Event, factor=Treatment, plot=true, legend=bottom, colors=[&quot;#1f77b4&quot;, &quot;#d62728&quot;], line_width=2.5
 </code></pre>
 <p>This is also the per-chart override for the palette chosen in
-<a href="../../settings/">Settings</a> — use it for a one-off (matching a house style in a
+<a href="../../settings/">Settings</a>. Use it for a one-off (matching a house style in a
 report) without changing every other chart.</p>
 <p>You rarely have to type any of it: the <a href="../../chart-editor/">chart editor</a> sets
 the same arguments from a preview, and writes them back into this same line.</p>
 <p><strong>Randomisation seeds.</strong> Anything that draws random numbers takes a <code>seed</code>, and
-defaults to <code>1</code> so that a command is reproducible unless you say otherwise —
+defaults to <code>1</code> so that a command is reproducible unless you say otherwise:
 the bootstrap, multiple imputation, the Monte-Carlo
 <a href="../../analyze/compare-means/#permutation-test">permutation tests</a>, and the
 <a href="../../analyze/correlation-and-regression/#diagnostic-plots-for-the-other-families">quantile residuals</a>
@@ -276,10 +280,10 @@ result is not an artefact of one particular draw:</p>
 middle of your script rather than appending to it. Applying an edit finds the
 line that produced the chart, replaces it with the same command carrying the
 style you chose, and swaps the restyled chart into the same place in the Output
-log — same position, same timestamp. If you ran the same command twice, each
+log: same position, same timestamp. If you ran the same command twice, each
 chart tracks its own line, so editing the second one leaves the first alone.</p>
-<p>If that line is not there any more — you rewrote or deleted it, or the chart
-came from the AI assistant, which runs tools without recording them — the
+<p>If that line is not there any more (you rewrote or deleted it, or the chart
+came from the AI assistant, which runs tools without recording them), the
 styled command is <strong>appended</strong> instead, and the chart's note says so. Nothing
 is guessed at, and either way the script still reproduces the output you are
 looking at, styled as you see it.</p>
@@ -292,13 +296,13 @@ start typing the name of any analysis, chart, transform, file or view command an
 run it without hunting through menus. It is built from the same tool catalog the
 menus, the AI and MCP use, so it can never drift out of sync.</p>
 <h3 id="direct-dispatch">Direct dispatch</h3>
-<p>The palette also speaks <code>.cks</code>. Type a <strong>fully-specified command</strong> — the same
-one-line grammar as the syntax console:</p>
+<p>The palette also speaks <code>.cks</code>. Type a <strong>fully-specified command</strong> (the same
+one-line grammar as the syntax console):</p>
 <pre><code>frequencies variables=[Age, BMI]
 </code></pre>
 <p>and a <strong>Run</strong> row appears at the top. Enter dispatches the call straight
 through the engine, bypassing the dialog, and journals <strong>exactly the line the
-dialog would have journaled</strong> — so a palette-run analysis replays like any
+dialog would have journaled</strong>, so a palette-run analysis replays like any
 other. This is for the moment you already know the call you want: the same
 user who edits the console should not have to re-enter it through a form.</p>
 <ul>
@@ -307,7 +311,7 @@ the row offers to <strong>open the tool's dialog</strong> instead, and names wha
 missing.</li>
 <li>A call that fails (a mistyped variable, a bad argument value) shows the
 engine's message <strong>in the palette</strong>, with your text still editable.</li>
-<li>A plain word never triggers any of this — the fuzzy search only yields to
+<li>A plain word never triggers any of this; the fuzzy search only yields to
 the parser once the query contains an <code>=</code>.</li>
 </ul>
 <h2 id="headless-batch-mode---run">Headless batch mode (<code>--run</code>)</h2>
@@ -317,24 +321,24 @@ no window:</p>
 </code></pre>
 <p>This loads the dataset, runs every command in the <code>.cks</code> script through the same
 engine, and writes the output log as a report. The output format follows the
-<code>--out</code> extension — <strong>HTML</strong>, <strong>Markdown</strong> or <strong>LaTeX</strong>. It shares the headless
+<code>--out</code> extension: <strong>HTML</strong>, <strong>Markdown</strong> or <strong>LaTeX</strong>. It shares the headless
 engine bootstrap with the MCP mode, so batch results match what the GUI produces.</p>
 <p>A third headless mode, <code>--verify</code>, runs the built-in installation check and
-exits 0 only on a full pass — see
-<a href="../verify-installation/">Verify this Installation</a>. Together they close the
+exits 0 only on a full pass (see
+<a href="../verify-installation/">Verify this Installation</a>). Together they close the
 loop: <code>--verify</code> proves the installed engine reproduces independent reference
 values, and <code>--run</code> replays your own script on it.</p>
-<h2 id="the-dataset-fingerprint--same-data">The dataset fingerprint — &quot;same data&quot;</h2>
+<h2 id="the-dataset-fingerprint-same-data">The dataset fingerprint: &quot;same data&quot;</h2>
 <p>Every result's footer carries, beside the engine version, a short <strong>data
 fingerprint</strong>: <code>data 3f2a9c1b7e04</code>. It is the first twelve characters of a
-SHA-256 over the data your dataset holds — every value, in column order,
-with each variable's type and your user-missing definitions applied — so two
+SHA-256 over the data your dataset holds (every value, in column order,
+with each variable's type and your user-missing definitions applied), so two
 results with the same fingerprint were computed from the same numbers. The
 footer also names the active conditions: <code>filter age &gt; 30</code>,
 <code>weighted by w</code>, <code>split by group</code>.</p>
 <p>The fingerprint deliberately ignores anything that cannot change a result:
 variable names, labels, value labels, measurement levels, column widths.
-Rename or relabel as much as you like — the fingerprint stands. Edit a value,
+Rename or relabel as much as you like; the fingerprint stands. Edit a value,
 change a type, or declare a missing code, and it moves. The same data opened
 from a <code>.ckd</code> file, a CSV or a Parquet file has one fingerprint.</p>
 <p><strong>On a saved script.</strong> When you <strong>Save Syntax…</strong>, the <code>.cks</code> file starts with
@@ -342,24 +346,24 @@ a comment naming the data it was recorded against:</p>
 <pre><code># dataset 3f2a9c1b7e04a1e5…  (the full 64-character hash)
 descriptives variables=[Age, BMI]
 </code></pre>
-<p>It is an ordinary comment — older versions read the script unchanged, and
-you can delete it. When you open that script later and run it — in the
-console, or headless with <code>--run</code> — ChakataStat compares the header with the
+<p>It is an ordinary comment: older versions read the script unchanged, and
+you can delete it. When you open that script later and run it (in the
+console, or headless with <code>--run</code>), ChakataStat compares the header with the
 dataset that is open <strong>before the first command runs</strong>, and puts the verdict
 at the top of the output as a <em>Script Provenance</em> entry:</p>
 <ul>
-<li><strong>Same data: yes</strong> — the open dataset is, value for value, what the script
+<li><strong>Same data: yes</strong> means the open dataset is, value for value, what the script
 was recorded against.</li>
-<li><strong>NO — different data</strong> — a warning, with both hashes. The script still
+<li><strong>NO — different data</strong> is a warning, with both hashes. The script still
 runs; the results are for the data you have open, and the entry says so.
 Nothing refuses to run on your behalf here: that is the job of the
 reproducibility bundle (a later feature), whose whole point is to refuse.</li>
 </ul>
-<p>The full convention — exactly what is hashed and how — is recorded in the
+<p>The full convention (exactly what is hashed and how) is recorded in the
 developer documentation, so a reader can compute the same hash independently.</p>
 <h2 id="the-reproducibility-bundle-cksb">The reproducibility bundle (<code>.cksb</code>)</h2>
-<p>A bundle is one small file that lets someone else check your results —
-<em>re-run this and compare</em> — without you having to describe what you did.</p>
+<p>A bundle is one small file that lets someone else check your results
+(<em>re-run this and compare</em>) without you having to describe what you did.</p>
 <p><strong>As the author.</strong> With your analysis in the output log, choose <strong>File →
 Export Reproducibility Bundle…</strong>. The <code>.cksb</code> file contains:</p>
 <ul>
@@ -367,7 +371,7 @@ Export Reproducibility Bundle…</strong>. The <code>.cksb</code> file contains:
 <li>the data fingerprint (and the name of the file you had open);</li>
 <li>the name and byte hash of every file your journal merges (Data → Merge
 Files), so a reader can be given those too and prove they are the same.
-A merge you undid is not listed — its line left the journal. Two
+A merge you undid is not listed; its line left the journal. Two
 different files with the same name (say <code>2023/site.csv</code> and
 <code>2024/site.csv</code>) are listed with their hash in the name,
 <code>site.3f2a9c1b.csv</code>, so both can sit next to the data;</li>
@@ -376,23 +380,23 @@ your session made one: Data View cell edits, Variable View edits, a bulk
 rename, a dictionary import, a variable-properties edit, a data change
 the assistant made, or a transform run more often than the journal
 records (a line re-run from the console). An edit you undid is not
-listed — it is no longer in the data. These notes, and the fingerprint
+listed; it is no longer in the data. These notes, and the fingerprint
 of the data your session started from, survive closing and reopening
 ChakataStat. Opening a different data file starts them afresh; if the
 script you keep holds data-changing commands run on the earlier data,
 the bundle says so until you <strong>Run all</strong> on the new data;</li>
 <li>the ChakataStat version, the engine version and your platform;</li>
-<li>every output in the log, exactly as it was rendered — every table, and
+<li>every output in the log, exactly as it was rendered: every table, and
 each chart as the geometry table its CSV export produces.</li>
 </ul>
-<p>It does <strong>not</strong> contain your data — nor any merged file's data. Whether
+<p>It does <strong>not</strong> contain your data, nor any merged file's data. Whether
 and how to share the data is your decision, made separately; the bundle
 only says what you ran and what you saw. For a clean bundle, open the data
 you started from, <strong>Clear All</strong> the output and <strong>Run All</strong> from the console,
 so the log holds exactly what the journal produces (an assistant reply or an
 installation report in the log has no journal line to re-run, and the
 verifier will say so). Run All refuses to replay a script whose transforms
-are already in the open data — they would apply twice — which is why the
+are already in the open data (they would apply twice), which is why the
 starting data comes first.</p>
 <p>From a pipeline, <code>--run script.cks data.ckd --bundle analysis.cksb</code> writes
 the same bundle from a headless run.</p>
@@ -402,12 +406,12 @@ headless:</p>
 <pre><code>ChakataStat --verify analysis.cksb data.csv --out report.html
 </code></pre>
 <p>The verifier checks the data first. If its fingerprint is not the bundle's,
-it <strong>refuses</strong> — the report says <code>REFUSED — different data</code> with both hashes,
+it <strong>refuses</strong>: the report says <code>REFUSED — different data</code> with both hashes,
 and nothing is re-run. This is stricter than the script header's warning on
 purpose: the bundle's whole point is to compare against the author's data.
 If the bundle's journal merged other files, the verifier looks for each by
 its recorded name <strong>next to the data file you picked</strong> and checks its byte
-hash the same way — a missing or changed merge input also refuses by name
+hash the same way. A missing or changed merge input also refuses by name
 before anything runs. Each merge in the journal then reads the input whose
 hash its line records, so same-named inputs never mix. With the right data it re-runs the journal and
 compares every cell of every output with the bundle, within the precision
@@ -415,18 +419,18 @@ the author saw it printed at, and reports <strong>PASS</strong> or <strong>FAIL<
 naming the first cells that differ. The exit status is 0 only on a full
 pass, so a reviewer's script can gate on it.</p>
 <p>Where the installation check (<a href="../verify-installation/">Verify this Installation</a>)
-proves the <em>software</em> on a machine, the bundle proves a <em>particular result</em>
-— together with the fingerprint they are the three questions a sceptical
+proves the <em>software</em> on a machine, the bundle proves a <em>particular result</em>.
+Together with the fingerprint they are the three questions a sceptical
 reader asks, each answered by a report rather than a promise.</p>
 <h2 id="exporting-the-output-log">Exporting the output log</h2>
 <p><strong>File → Export Output…</strong> (or the Output view's <strong>Export…</strong> button) writes your
-whole results log to <strong>HTML</strong>, <strong>Markdown</strong> or <strong>LaTeX</strong> — the format chosen from
-the file extension. Tables are escaped per format and charts are rendered as their
+whole results log to <strong>HTML</strong>, <strong>Markdown</strong> or <strong>LaTeX</strong> (the format chosen from
+the file extension). Tables are escaped per format and charts are rendered as their
 geometry. For a single result, right-click its card and choose <strong>Export as
 CSV…</strong> to drop it straight into a spreadsheet (or use copy-to-clipboard).</p>
 <h2 id="exporting-a-session-as-python">Exporting a session as Python</h2>
 <p><strong>Export as Python…</strong> (from the syntax console) renders your recorded session as a
-runnable <strong>Python script</strong> for the ChakataStat Python client — installable from
+runnable <strong>Python script</strong> for the ChakataStat Python client, installable from
 PyPI:</p>
 <pre><code class="language-sh">pip install chakatastat
 </code></pre>
@@ -447,44 +451,66 @@ df = ds.to_polars()                   # escape hatch into the Polars ecosystem
 </code></pre>
 <p>This gives you full programmatic control and the whole Python data ecosystem
 (<code>polars</code>, <code>numpy</code>, <code>scipy</code>, <code>statsmodels</code>) without ChakataStat embedding any of
-it — Python is an external client over the same seam the AI and MCP use, so the
+it. Python is an external client over the same seam the AI and MCP use, so the
 single engine and the errors-as-data discipline are preserved.</p>
 <h2 id="why-this-matters">Why this matters</h2>
 <p>The flat command stream is the one canonical record of an analysis. Because the
 GUI both <em>emits</em> it and can <em>reconstruct itself</em> from it, &quot;what I clicked&quot; and
-&quot;what I can replay&quot; are the same thing — the foundation that the batch mode, the
+&quot;what I can replay&quot; are the same thing: the foundation that the batch mode, the
 command palette, user-defined tools and the Python export all build on.</p>
 <h2 id="see-also">See also</h2>
 <ul>
-<li><a href="../engine-access/">Direct Engine Access</a> — engine diagnostics and MCP.</li>
+<li><a href="../engine-access/">Direct Engine Access</a>: engine diagnostics and MCP.</li>
 </ul>
       </article>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../../index.html">Home</a> ·
-        <a href="../../../quick-start/">Quick Start</a> ·
-        <a href="../../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../../license/">License</a> ·
-        <a href="../../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../../index.html">
+            <img class="brand-mark" src="../../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../../index.html#features">Features</a>
+          <a href="../../../index.html#screenshots">Screenshots</a>
+          <a href="../../../index.html#download">Download</a>
+          <a href="../../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../../docs/">User Guide</a>
+          <a href="../../../quick-start/">Quick Start</a>
+          <a href="../../../docs/validation/">Validation</a>
+          <a href="../../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../../cite/">How to cite</a>
+          <a href="../../../license/">License</a>
+          <a href="../../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

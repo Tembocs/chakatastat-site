@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bootstrap Confidence Intervals — ChakataStat User Guide</title>
+  <title>Bootstrap Confidence Intervals · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/analyze/bootstrap/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Bootstrap Confidence Intervals — ChakataStat User Guide">
+  <meta property="og:title" content="Bootstrap Confidence Intervals · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/analyze/bootstrap/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#validation">Validation</a>
+        <a href="../../../docs/" aria-current="page">User Guide</a>
+        <a href="../../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -100,19 +104,19 @@ values. Use it for a median, a coefficient of variation, or any statistic whose
 textbook interval assumes more than you are willing to.</p>
 <h2 id="filling-the-dialog">Filling the dialog</h2>
 <ul>
-<li><strong>Statistic</strong> — one of <strong>Mean</strong>, <strong>Median</strong>, <strong>Standard deviation</strong>,
+<li><strong>Statistic</strong>: one of <strong>Mean</strong>, <strong>Median</strong>, <strong>Standard deviation</strong>,
 <strong>Variance</strong> or <strong>Coefficient of variation</strong> of one variable; the
 <strong>Pearson</strong> or <strong>Spearman correlation</strong> of two (<strong>Variable (X)</strong> and
 <strong>Variable (Y)</strong>); or the <strong>Mean difference (2 groups)</strong> of a variable
-across a <strong>Grouping factor (2 levels)</strong> — the second level minus the first.</li>
-<li><strong>Resamples (B)</strong> — how many resamples to draw (default 1,000; capped at
+across a <strong>Grouping factor (2 levels)</strong> (the second level minus the first).</li>
+<li><strong>Resamples (B)</strong>: how many resamples to draw (default 1,000; capped at
 1,000,000). More resamples steady the interval's ends; BCa in particular
 wants 1,000 or more.</li>
-<li><strong>Interval method</strong> — <strong>Percentile</strong> (default) or <strong>BCa</strong> (bias-corrected
+<li><strong>Interval method</strong>: <strong>Percentile</strong> (default) or <strong>BCa</strong> (bias-corrected
 and accelerated), which adjusts for a skewed or biased bootstrap
 distribution.</li>
-<li><strong>Confidence (0–1)</strong> — default 0.95.</li>
-<li><strong>Seed</strong> — the random seed (default 1). The same data, statistic, seed,
+<li><strong>Confidence (0–1)</strong>: default 0.95.</li>
+<li><strong>Seed</strong>: the random seed (default 1). The same data, statistic, seed,
 resample count and method give <strong>the same interval, digit for digit</strong>, on
 every run and every platform.</li>
 </ul>
@@ -125,48 +129,70 @@ count, the seed and <em>n</em>. A resample on which the statistic is undefined (
 correlation of a constant column; a mean difference with one group empty) is
 <strong>degenerate</strong>: it is excluded, and the note says how many were.</p>
 <h2 id="how-this-is-computed">How this is computed</h2>
-<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
+<p>This section names <em>which</em> method each procedure prints: the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules. Each line links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
 <ul>
-<li><strong>Resampling</strong> — <em>n</em> cases drawn with replacement per resample, all cases together (a mean difference is not resampled within groups); the SplitMix64 generator seeded by <strong>Seed</strong>, drawn in a fixed order, so results are reproducible (<a href="../../validation/conventions/README/#meta-analysis-and-resampling-meta_analysis-bootstrap_ci">resampling conventions</a>).</li>
-<li><strong>Statistics</strong> — the standard deviation and variance use the <em>n</em> − 1 divisor; the coefficient of variation is SD / mean (a ratio, not a percentage; undefined at a zero mean).</li>
-<li><strong>Intervals</strong> — <strong>Percentile</strong>: the resamples' quantiles at (1 − level)/2 and (1 + level)/2. <strong>BCa</strong>: those quantiles shifted by the bias correction <em>z</em>₀ (from the share of resamples below the observed value) and the acceleration <em>a</em>, which is the <strong>jackknife</strong> of the same statistic (deterministic).</li>
-<li><strong>Missing values</strong> — listwise over the variables the statistic uses; cases an active Select Cases filter excludes are left out.</li>
-<li><strong>Weights</strong> — the bootstrap is <strong>unweighted</strong>: with Weight Cases on it resamples cases equally and says so in a note.</li>
+<li><strong>Resampling</strong>: <em>n</em> cases drawn with replacement per resample, all cases together (a mean difference is not resampled within groups); the SplitMix64 generator seeded by <strong>Seed</strong>, drawn in a fixed order, so results are reproducible (<a href="../../validation/conventions/README/#meta-analysis-and-resampling-meta_analysis-bootstrap_ci">resampling conventions</a>).</li>
+<li><strong>Statistics</strong>: the standard deviation and variance use the <em>n</em> − 1 divisor; the coefficient of variation is SD / mean (a ratio, not a percentage; undefined at a zero mean).</li>
+<li><strong>Intervals</strong>. <strong>Percentile</strong>: the resamples' quantiles at (1 − level)/2 and (1 + level)/2. <strong>BCa</strong>: those quantiles shifted by the bias correction <em>z</em>₀ (from the share of resamples below the observed value) and the acceleration <em>a</em>, which is the <strong>jackknife</strong> of the same statistic (deterministic).</li>
+<li><strong>Missing values</strong>: listwise over the variables the statistic uses; cases an active Select Cases filter excludes are left out.</li>
+<li><strong>Weights</strong>: the bootstrap is <strong>unweighted</strong>: with Weight Cases on it resamples cases equally and says so in a note.</li>
 </ul>
 <h2 id="reproducibility">Reproducibility</h2>
 <p>Each run journals a syntax command, for example:</p>
 <pre><code>bootstrap_ci variable=income, statistic=median, ci_method=bca, replicates=2000
 </code></pre>
-<p>— the tool <code>bootstrap_ci</code>, available to the AI assistant, MCP and batch
+<p>This is the tool <code>bootstrap_ci</code>, available to the AI assistant, MCP and batch
 scripts like every analysis. See the <a href="../../reference/commands/">command reference</a>
 for every argument.</p>
       </article>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../../index.html">Home</a> ·
-        <a href="../../../quick-start/">Quick Start</a> ·
-        <a href="../../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../../license/">License</a> ·
-        <a href="../../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../../index.html">
+            <img class="brand-mark" src="../../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../../index.html#features">Features</a>
+          <a href="../../../index.html#screenshots">Screenshots</a>
+          <a href="../../../index.html#download">Download</a>
+          <a href="../../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../../docs/">User Guide</a>
+          <a href="../../../quick-start/">Quick Start</a>
+          <a href="../../../docs/validation/">Validation</a>
+          <a href="../../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../../cite/">How to cite</a>
+          <a href="../../../license/">License</a>
+          <a href="../../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

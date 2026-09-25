@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Privacy Policy — ChakataStat</title>
+  <title>Privacy Policy · ChakataStat</title>
   <meta name="description" content="ChakataStat's privacy policy: what data the app and this site collect (nothing, by default), and what happens when you use the optional AI assistant.">
 
   <link rel="icon" type="image/svg+xml" href="../assets/logo-mark.svg">
@@ -15,7 +15,7 @@
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
 
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Privacy Policy — ChakataStat">
+  <meta property="og:title" content="Privacy Policy · ChakataStat">
   <meta property="og:description" content="What data ChakataStat and this site collect (nothing, by default), and what happens when you use the optional AI assistant.">
   <meta property="og:url" content="https://chakatastat.app/privacy-policy/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
@@ -48,19 +48,16 @@
 
   <header class="site-header">
     <div class="container nav">
-      <a class="brand" href="../index.html#top">
+      <a class="brand" href="../#top">
         <img class="brand-mark" src="../assets/logo-mark.svg" width="32" height="32" alt="">
         <span class="brand-name">ChakataStat</span>
       </a>
 
       <nav id="nav-links" class="nav-links">
+        <a href="../#features">Features</a>
+        <a href="../#validation">Validation</a>
         <a href="../docs/">User Guide</a>
-        <a href="../docs/validation/">Validation</a>
-        <a href="../cite/">Cite</a>
-        <a href="../index.html#features">Features</a>
         <a href="../quick-start/">Quick Start</a>
-        <a href="../index.html#screenshots">Screenshots</a>
-        <a href="../index.html#analyze">Analyze</a>
       </nav>
 
       <div class="nav-actions">
@@ -73,7 +70,7 @@
             <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
           </svg>
         </button>
-        <a class="btn btn-primary nav-cta" href="../index.html#download">Download</a>
+        <a class="btn btn-primary nav-cta" href="../#download">Download</a>
         <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
           <span></span><span></span><span></span>
         </button>
@@ -167,17 +164,45 @@
     </section>
   </main>
 
-  <footer class="site-footer" id="cite">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-cite">
-        Cite: Amani, E. (2026). <em>ChakataStat</em> [Computer software].
-        <a href="https://doi.org/10.5281/zenodo.22112256">https://doi.org/10.5281/zenodo.22112256</a>
-        — <a href="../cite/">how to cite a specific version</a>
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../">
+            <img class="brand-mark" src="../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../#features">Features</a>
+          <a href="../#screenshots">Screenshots</a>
+          <a href="../#download">Download</a>
+          <a href="../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../docs/">User Guide</a>
+          <a href="../quick-start/">Quick Start</a>
+          <a href="../docs/validation/">Validation</a>
+          <a href="../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../cite/">How to cite</a>
+          <a href="../license/">License</a>
+          <a href="../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p>
+          Cite as: Amani, E. (2026). <em>ChakataStat</em> [Computer software].
+          <a href="https://doi.org/10.5281/zenodo.22112256">doi.org/10.5281/zenodo.22112256</a>
+        </p>
+      </div>
     </div>
   </footer>
 

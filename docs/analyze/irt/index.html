@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Item Response Theory — ChakataStat User Guide</title>
+  <title>Item Response Theory · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/analyze/irt/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Item Response Theory — ChakataStat User Guide">
+  <meta property="og:title" content="Item Response Theory · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/analyze/irt/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#validation">Validation</a>
+        <a href="../../../docs/" aria-current="page">User Guide</a>
+        <a href="../../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -95,84 +99,84 @@
 <p><strong>Analyze → Scale → Item Response Theory.</strong> Reliability analysis tells you
 how well a set of items hangs together as one score; IRT opens the items
 themselves. Each binary item (right/wrong, yes/no, symptom present/absent)
-is modeled as a function of a latent trait θ — ability, severity, attitude —
+is modeled as a function of a latent trait θ (ability, severity, attitude)
 with its own <strong>difficulty</strong> (where on the trait the item starts being
 passed) and, in the 2PL model, its own <strong>discrimination</strong> (how sharply it
 separates people just below from just above that point). The payoff is a
 question no reliability coefficient can answer: <strong>where on the trait does
 this test measure well, and which items do the work?</strong></p>
 <h2 id="the-data-layout">The data layout</h2>
-<p>One row per person, one column per item — each item <strong>binary</strong> (exactly two
+<p>One row per person, one column per item, each item <strong>binary</strong> (exactly two
 observed values; numeric or string). <strong>The higher observed value is treated
-as the keyed — correct or endorsed — response</strong>, and the output names it per
+as the keyed (correct or endorsed) response</strong>, and the output names it per
 item, so a 0/1 coding needs no preparation. Cases incomplete on any item
 are dropped; anything non-binary is refused by name.</p>
 <h2 id="the-dialog">The dialog</h2>
 <p>Tick the <strong>Items</strong>, choose the <strong>Model</strong>, and keep <strong>Plot information
 curves</strong> on for the figures:</p>
 <ul>
-<li><strong>2PL</strong> (the default) — each item gets its own discrimination and
+<li><strong>2PL</strong> (the default): each item gets its own discrimination and
 difficulty. The general-purpose choice.</li>
-<li><strong>Rasch</strong> — one shared discrimination, per-item difficulties. Fewer
+<li><strong>Rasch</strong>: one shared discrimination, per-item difficulties. Fewer
 parameters, item difficulties on one common yardstick, and the model of
 choice when items are meant to differ only in difficulty. (Fit both and
 compare AIC/BIC: if Rasch fits comparably, its simplicity wins.)</li>
 </ul>
 <p>Estimation is marginal maximum likelihood (Bock–Aitkin EM) with the latent
-trait fixed to N(0,1) — deterministic, so the same run always reproduces
-the same tables.</p>
+trait fixed to N(0,1). It is deterministic, so the same run always
+reproduces the same tables.</p>
 <h2 id="reading-the-output">Reading the output</h2>
 <ul>
-<li><strong>IRT Model Summary</strong> — N, items, parameters, the marginal
+<li><strong>IRT Model Summary</strong>: N, items, parameters, the marginal
 log-likelihood, AIC/BIC (for comparing Rasch vs 2PL on the same items),
 and the EM convergence.</li>
-<li><strong>IRT Item Parameters</strong> — per item, with standard errors:
+<li><strong>IRT Item Parameters</strong>: per item, with standard errors:
 <ul>
-<li><strong>Difficulty (b)</strong> — the trait level at which a person has a 50%
+<li><strong>Difficulty (b)</strong>: the trait level at which a person has a 50%
 chance of the keyed response. Items spread across a range of b cover
 the trait; a test whose difficulties bunch together measures only one
 narrow band.</li>
-<li><strong>Discrimination (a)</strong> — how steeply the response probability rises at
+<li><strong>Discrimination (a)</strong>: how steeply the response probability rises at
 b. Higher discriminates better <em>near its difficulty</em>; a very low a
-(say below ~0.5) marks an item barely related to the trait — a
+(say below ~0.5) marks an item barely related to the trait, a
 candidate for revision. The parameterization is the classical
 <code>P(keyed) = logistic(a·(θ − b))</code>.</li>
 </ul>
 </li>
-<li><strong>Item Information Curves</strong> — each item's Fisher information over θ: a
-peak at its difficulty, higher and narrower the more discriminating the
+<li><strong>Item Information Curves</strong>: each item's Fisher information over θ, with
+a peak at its difficulty, higher and narrower the more discriminating the
 item. Read it as a map of <strong>which items work where</strong>.</li>
-<li><strong>Test Information Curve</strong> — the sum, with <strong>SE(θ) = 1/√I(θ)</strong>: the
+<li><strong>Test Information Curve</strong>: the sum, with <strong>SE(θ) = 1/√I(θ)</strong>. It is the
 measurement precision profile of the whole test. A tall curve over the
 range you care about (e.g. around a cut score) is the goal; information
 collapsing at the extremes is why extreme scores are always less
 precise.</li>
 </ul>
 <h2 id="how-this-is-computed">How this is computed</h2>
-<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
+<p>This section names <em>which</em> method each procedure prints: the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules. Each line links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
 <ul>
-<li><strong>Models</strong> — the Rasch, 2PL and 3PL logistic models by marginal maximum likelihood with fixed Gauss–Hermite quadrature (<code>mirt</code>'s default scheme), the latent trait standard normal for identification (<a href="../../validation/conventions/latent-variable/#item-response-theory--the-v1-conventions">IRT conventions</a>).</li>
-<li><strong>Standard errors and information</strong> — standard errors from the observed information (a central-difference Hessian of the marginal likelihood); the item and test information curves I_j(θ) = a²·P(1 − P); validated against both <code>ltm</code> and <code>mirt</code> on the LSAT6 / LSAT7 data (<a href="../../validation/conventions/latent-variable/#item-response-theory--the-v1-conventions">IRT conventions</a>).</li>
-<li><strong>Data</strong> — dichotomous items with the keyed response as the &quot;correct&quot; level; cases with any missing item are dropped; a frequency weight replicates cases (<a href="../../validation/tolerances/">case weighting</a>).</li>
+<li><strong>Models</strong>: the Rasch, 2PL and 3PL logistic models by marginal maximum likelihood with fixed Gauss–Hermite quadrature (<code>mirt</code>'s default scheme), the latent trait standard normal for identification (<a href="../../validation/conventions/latent-variable/#item-response-theory--the-v1-conventions">IRT conventions</a>).</li>
+<li><strong>Standard errors and information</strong>: standard errors from the observed information (a central-difference Hessian of the marginal likelihood); the item and test information curves I_j(θ) = a²·P(1 − P); validated against both <code>ltm</code> and <code>mirt</code> on the LSAT6 / LSAT7 data (<a href="../../validation/conventions/latent-variable/#item-response-theory--the-v1-conventions">IRT conventions</a>).</li>
+<li><strong>Data</strong>: dichotomous items with the keyed response as the &quot;correct&quot; level; cases with any missing item are dropped; a frequency weight replicates cases (<a href="../../validation/tolerances/">case weighting</a>).</li>
 </ul>
 <h2 id="relation-to-the-other-scale-tools">Relation to the other scale tools</h2>
 <ul>
-<li><strong><a href="../scale-reduction-classify/#scale--reliability-analysis">Reliability (alpha)</a></strong>
-— one number for the whole scale, assuming items are interchangeable.
+<li><strong><a href="../scale-reduction-classify/#scale--reliability-analysis">Reliability (alpha)</a></strong>:
+one number for the whole scale, assuming items are interchangeable.
 IRT replaces it with item-level parameters and a precision <em>curve</em>.</li>
-<li><strong><a href="../cfa/">Confirmatory Factor Analysis</a></strong> — tests a hypothesized factor
+<li><strong><a href="../cfa/">Confirmatory Factor Analysis</a></strong>: tests a hypothesized factor
 structure for continuous-ish indicators; a one-factor CFA of binary
 items is the rough cousin of the 2PL. Use CFA for structure questions
 across many constructs, IRT for measurement questions within one.</li>
-<li><strong><a href="../latent-class/">Latent Class Analysis</a></strong> — also models categorical
+<li><strong><a href="../latent-class/">Latent Class Analysis</a></strong>: also models categorical
 items, but with a <em>categorical</em> latent variable (subgroups) instead of a
 continuous trait.</li>
 </ul>
 <blockquote>
 <p><strong>Scope (v1).</strong> Rasch and 2PL for binary items only: no 3PL (guessing
-parameter — its estimation is notoriously fragile), no polytomous models
+parameter; its estimation is notoriously fragile), no polytomous models
 (graded response / partial credit), no saved ability (EAP) scores, no
-item-fit statistics, and no item characteristic (trace-line) plots — the
+item-fit statistics, and no item characteristic (trace-line) plots. The
 information curves are the v1 figures. A frequency weight (Weight Cases)
 is honored as case replication; a declared survey design is not covered
 and the output says so.</p>
@@ -181,29 +185,51 @@ and the output says so.</p>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../../index.html">Home</a> ·
-        <a href="../../../quick-start/">Quick Start</a> ·
-        <a href="../../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../../license/">License</a> ·
-        <a href="../../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../../index.html">
+            <img class="brand-mark" src="../../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../../index.html#features">Features</a>
+          <a href="../../../index.html#screenshots">Screenshots</a>
+          <a href="../../../index.html#download">Download</a>
+          <a href="../../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../../docs/">User Guide</a>
+          <a href="../../../quick-start/">Quick Start</a>
+          <a href="../../../docs/validation/">Validation</a>
+          <a href="../../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../../cite/">How to cite</a>
+          <a href="../../../license/">License</a>
+          <a href="../../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

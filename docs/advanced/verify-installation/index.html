@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Verify this Installation — ChakataStat User Guide</title>
+  <title>Verify this Installation · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/advanced/verify-installation/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Verify this Installation — ChakataStat User Guide">
+  <meta property="og:title" content="Verify this Installation · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/advanced/verify-installation/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#validation">Validation</a>
+        <a href="../../../docs/" aria-current="page">User Guide</a>
+        <a href="../../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -95,11 +99,11 @@
 <p><strong>Help → Verify this Installation</strong> (<code>Ctrl+F1</code>, or <em>Verify this Installation</em>
 in the command palette) runs a built-in check of the copy of ChakataStat you
 are using, and prints a report you can keep, print, export or hand to a
-reviewer. It takes well under a minute and needs no dataset open — you can run
+reviewer. It takes well under a minute and needs no dataset open, so you can run
 it on a fresh installation before you load anything.</p>
 <h2 id="what-it-does">What it does</h2>
 <p>ChakataStat ships with a small set of <strong>reference datasets</strong> and, for each, a
-list of statistics whose correct values were computed <strong>independently</strong> —
+list of statistics whose correct values were computed <strong>independently</strong>:
 by SciPy and statsmodels, by R's <code>survey</code> package, and, for the linear
 regression suite, by the U.S. National Institute of Standards and Technology,
 whose <em>Statistical Reference Datasets</em> publish certified values to fifteen
@@ -108,10 +112,10 @@ actually installed on your computer, runs the analyses exactly as the menus
 would, and compares every result with its reference value.</p>
 <p>This is the same evidence the developers run on every change (see the
 <a href="../../validation/">validation methodology</a>), reduced to a
-subset that covers <strong>every family of tools</strong> — descriptives, comparing means,
+subset that covers <strong>every family of tools</strong> (descriptives, comparing means,
 correlation, regression and generalized linear models, nonparametric tests,
 survival analysis, meta-analysis, time series, scale reduction and
-classification, complex samples — plus <strong>all eleven NIST linear
+classification, complex samples), plus <strong>all eleven NIST linear
 least-squares datasets</strong>. The difference is <em>where</em> it runs: on your
 machine, your operating system, your build, not on the developer's.</p>
 <h2 id="reading-the-report">Reading the report</h2>
@@ -126,20 +130,20 @@ operating system, when the run started and how long it took.</p>
 exact bytes that were checked.</p>
 <p><strong>Verification Checks</strong> has one row per statistic:</p>
 <ul>
-<li><strong>Expected</strong> — the reference value, and <strong>Reference</strong> — where it came from
+<li><strong>Expected</strong> is the reference value, and <strong>Reference</strong> is where it came from
 (the exact SciPy, statsmodels or R call, or the NIST certification).</li>
-<li><strong>Computed</strong> — what this installation produced, printed at full precision.</li>
-<li><strong>Digits agreed</strong> — the number of significant digits on which the two
+<li><strong>Computed</strong>: what this installation produced, printed at full precision.</li>
+<li><strong>Digits agreed</strong>: the number of significant digits on which the two
 agree (the <em>log relative error</em> of McCullough 1998, the convention used to
 score statistical software against NIST). 15 is the most a
 double-precision reference can show.</li>
-<li><strong>Criterion</strong> — what counts as a pass: for a package-referenced statistic,
-the same criterion the developer suite pins it to — an absolute tolerance,
+<li><strong>Criterion</strong>: what counts as a pass. For a package-referenced statistic,
+it is the same criterion the developer suite pins it to: an absolute tolerance,
 or, for a value too small for one (a very small p-value), agreement on the
-log₁₀ scale within a stated number of decades; for a NIST statistic, the
+log₁₀ scale within a stated number of decades. For a NIST statistic, it is the
 minimum digits of agreement for that dataset's published difficulty
 grade.</li>
-<li><strong>Result</strong> — <code>pass</code>, or <code>FAIL</code> with both values named.</li>
+<li><strong>Result</strong>: <code>pass</code>, or <code>FAIL</code> with both values named.</li>
 </ul>
 <p>A fully passing report says: <em>this installed binary reproduces every
 reference value in the manifest, on this platform, to the recorded
@@ -151,13 +155,13 @@ ChakataStat --verify --out verification.html
 </code></pre>
 <p>The report goes to standard output as Markdown, or to <code>--out</code> in the format
 its extension names (<strong>HTML</strong>, <strong>Markdown</strong> or <strong>LaTeX</strong>); progress and the
-verdict go to standard error. The exit status is <strong>0 only on a full pass</strong> —
-1 when any check failed, 2 when the check could not be set up — so a script
+verdict go to standard error. The exit status is <strong>0 only on a full pass</strong>
+(1 when any check failed, 2 when the check could not be set up), so a script
 or a deployment pipeline can gate on it. This is how the release process
 qualifies each package before it ships.</p>
 <h2 id="what-it-proves-and-what-it-does-not">What it proves, and what it does not</h2>
-<p>It <strong>does</strong> prove that the copy of ChakataStat installed on this machine —
-this build, this operating system, this processor — computes the checked
+<p>It <strong>does</strong> prove that the copy of ChakataStat installed on this machine
+(this build, this operating system, this processor) computes the checked
 statistics correctly against independent references. In regulated settings
 that is an <em>installation qualification</em>: evidence that the software works
 here, not just where it was built.</p>
@@ -175,39 +179,61 @@ result that passes on the developer's platform and fails on yours is exactly
 the kind of difference this check exists to catch.</p>
 <h2 id="related">Related</h2>
 <ul>
-<li>The <a href="../reproducibility/#the-reproducibility-bundle-cksb">reproducibility bundle</a>
-— the same verifier turned on a <em>particular result</em>: <code>--verify &lt;bundle&gt; &lt;data&gt;</code> re-runs an author's journal and compares every output.</li>
-<li><a href="../reproducibility/">Reproducibility</a> — the syntax console, headless batch
+<li>The <a href="../reproducibility/#the-reproducibility-bundle-cksb">reproducibility bundle</a>:
+the same verifier turned on a <em>particular result</em>. <code>--verify &lt;bundle&gt; &lt;data&gt;</code> re-runs an author's journal and compares every output.</li>
+<li><a href="../reproducibility/">Reproducibility</a>: the syntax console, headless batch
 runs (<code>--run</code>) and exporting the output log.</li>
-<li><a href="../engine-access/">Direct Engine Access</a> — the engine diagnostics panel.</li>
+<li><a href="../engine-access/">Direct Engine Access</a>: the engine diagnostics panel.</li>
 </ul>
       </article>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../../index.html">Home</a> ·
-        <a href="../../../quick-start/">Quick Start</a> ·
-        <a href="../../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../../license/">License</a> ·
-        <a href="../../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../../index.html">
+            <img class="brand-mark" src="../../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../../index.html#features">Features</a>
+          <a href="../../../index.html#screenshots">Screenshots</a>
+          <a href="../../../index.html#download">Download</a>
+          <a href="../../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../../docs/">User Guide</a>
+          <a href="../../../quick-start/">Quick Start</a>
+          <a href="../../../docs/validation/">Validation</a>
+          <a href="../../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../../cite/">How to cite</a>
+          <a href="../../../license/">License</a>
+          <a href="../../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

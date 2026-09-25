@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Direct Engine Access — ChakataStat User Guide</title>
+  <title>Direct Engine Access · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/advanced/engine-access/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Direct Engine Access — ChakataStat User Guide">
+  <meta property="og:title" content="Direct Engine Access · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/advanced/engine-access/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#validation">Validation</a>
+        <a href="../../../docs/" aria-current="page">User Guide</a>
+        <a href="../../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -111,15 +115,15 @@ or use the Python client's <code>to_polars()</code>.</p>
 <p><strong>View → Engine Diagnostics</strong> (Advanced mode only) opens a panel showing:</p>
 <ul>
 <li>the engine's <strong>description</strong> (which native library is loaded);</li>
-<li>the <strong>frame schema</strong> exactly as the engine sees it — every column and its
+<li>the <strong>frame schema</strong> exactly as the engine sees it: every column and its
 storage type;</li>
 <li>a live, timed <strong>log of recent engine operations</strong>, each expandable to the raw
 JSON request that crossed the FFI boundary.</li>
 </ul>
-<p>This turns the opaque native seam into something you can inspect and debug — handy
+<p>This turns the opaque native seam into something you can inspect and debug. It is handy
 when an analysis behaves unexpectedly and you want to see precisely what was sent.</p>
 <h2 id="driving-chakatastat-from-another-program-mcp">Driving ChakataStat from another program (MCP)</h2>
-<p>ChakataStat can run as an <strong>MCP server</strong> — a headless host that exposes its
+<p>ChakataStat can run as an <strong>MCP server</strong>, a headless host that exposes its
 analysis tools over JSON-RPC so an external agent or program can drive it:</p>
 <pre><code>ChakataStat --mcp dataset.ckd
 </code></pre>
@@ -132,7 +136,7 @@ read the rows without spending a tool call.</li>
 and blocks everything that would change data: the transforms, and an
 analysis's <em>save columns</em> options (withheld from <code>tools/list</code> and refused in
 <code>tools/call</code>). The same profile applies to a headless <code>--run --read-only</code>.</li>
-<li><strong>User-defined tools</strong> — a saved <code>.cks</code> script registered as a named tool — are
+<li><strong>User-defined tools</strong> (a saved <code>.cks</code> script registered as a named tool) are
 advertised to MCP clients (and the AI assistant) too.</li>
 <li><strong>A long analysis does not block the connection</strong>: <code>ping</code> is answered while
 a tool call runs, and <code>notifications/cancelled</code> stops the call it names (a
@@ -144,36 +148,58 @@ Python client (see <a href="../reproducibility/#exporting-a-session-as-python">R
 drives. One caveat: <code>--mcp</code> opens its <em>own</em> dataset headless; it is not attached
 to a separately running GUI window's live data.</p>
 <h2 id="where-the-design-is-written-down">Where the design is written down</h2>
-<p>The full rationale — why Python is an external client rather than embedded, and
-how tool allowlisting works — is in the project's design notes, which ship with
+<p>The full rationale (why Python is an external client rather than embedded, and
+how tool allowlisting works) is in the project's design notes, which ship with
 the source rather than with the application.</p>
       </article>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../../index.html">Home</a> ·
-        <a href="../../../quick-start/">Quick Start</a> ·
-        <a href="../../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../../license/">License</a> ·
-        <a href="../../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../../index.html">
+            <img class="brand-mark" src="../../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../../index.html#features">Features</a>
+          <a href="../../../index.html#screenshots">Screenshots</a>
+          <a href="../../../index.html#download">Download</a>
+          <a href="../../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../../docs/">User Guide</a>
+          <a href="../../../quick-start/">Quick Start</a>
+          <a href="../../../docs/validation/">Validation</a>
+          <a href="../../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../../cite/">How to cite</a>
+          <a href="../../../license/">License</a>
+          <a href="../../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

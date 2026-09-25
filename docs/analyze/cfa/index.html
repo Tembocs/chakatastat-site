@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Confirmatory Factor Analysis (CFA) — ChakataStat User Guide</title>
+  <title>Confirmatory Factor Analysis (CFA) · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/analyze/cfa/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Confirmatory Factor Analysis (CFA) — ChakataStat User Guide">
+  <meta property="og:title" content="Confirmatory Factor Analysis (CFA) · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/analyze/cfa/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#validation">Validation</a>
+        <a href="../../../docs/" aria-current="page">User Guide</a>
+        <a href="../../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -97,7 +101,7 @@
 belong to which latent factors, and CFA tells you how well that structure
 fits your data. It is the confirmatory complement of
 <a href="../scale-reduction-classify/#dimension-reduction--factor">Factor</a>, which
-<em>finds</em> a structure — use Factor to explore, CFA to test what you (or the
+<em>finds</em> a structure. Use Factor to explore, CFA to test what you (or the
 literature) already claim.</p>
 <p>Typical uses: validating a questionnaire's subscales, checking that a
 published factor structure holds in your sample, or testing a measurement
@@ -108,31 +112,31 @@ theory before building on it.</p>
 <li><strong>Add factor</strong> creates a factor; give each a meaningful <strong>name</strong> (the
 names appear throughout the output).</li>
 <li>Tick each factor's <strong>indicators</strong> in its checklist. An indicator can
-belong to <strong>one</strong> factor only — once ticked in one factor it disappears
+belong to <strong>one</strong> factor only. Once ticked in one factor it disappears
 from the others' lists. A factor needs at least <strong>two</strong> indicators
 (<strong>three</strong> when the model has only one factor).</li>
 <li>Each factor's <strong>first indicator sets its scale</strong>: its loading is fixed at
 1, so it is the yardstick the factor is measured in. Pick a good, central
 indicator first per factor.</li>
 <li><strong>Orthogonal factors</strong> (visible with two or more factors) forces the
-factor correlations to zero. Leave it off in most applications — real
+factor correlations to zero. Leave it off in most applications: real
 constructs correlate, and the correlated model reports how much.</li>
 <li><strong>Modification indices</strong> adds a table of what would most improve the
-fit (below). The field beneath it sets the listing floor — by default
+fit (below). The field beneath it sets the listing floor: by default
 <strong>3.84</strong>, the χ² value with 1 df at the 5% level, so only indices that
 would be &quot;significant&quot; if freed are listed; enter 0 to see every
 candidate.</li>
 <li><strong>Indicators: Continuous (ML) / Ordinal (WLSMV)</strong> chooses the
 estimator. Leave <em>Continuous</em> for measured scales; choose <strong>Ordinal</strong> for
 Likert-type items (integer-coded, each distinct value an ordered
-category, a dozen at most) — see <em>Ordinal indicators</em> below. The ordinal
+category, a dozen at most); see <em>Ordinal indicators</em> below. The ordinal
 estimator is single-group and has no modification indices, so those
 controls step aside while it is selected.</li>
 <li><strong>Group</strong> turns the run into a <strong>multi-group CFA</strong>: the same model is
 fitted in every group of the chosen variable (each distinct value is a
 group, in ascending order) with a mean structure, and <strong>measurement
 invariance</strong> is tested up the classic ladder. <strong>Invariance</strong> picks the
-highest level to fit — configural (same pattern, everything free), metric
+highest level to fit: configural (same pattern, everything free), metric
 (equal loadings), scalar (equal loadings <em>and</em> intercepts; the default)
 or strict (equal residual variances too). Every level up to the chosen
 one is fitted and compared; the parameter tables then show the chosen
@@ -142,9 +146,9 @@ model.</li>
 </ul>
 <h2 id="reading-the-output">Reading the output</h2>
 <ul>
-<li><strong>CFA Model Fit</strong> — the headline table. The <strong>χ² test</strong> asks whether the
+<li><strong>CFA Model Fit</strong>: the headline table. The <strong>χ² test</strong> asks whether the
 model reproduces the observed covariances exactly (a significant result
-says it does not — but with large samples χ² flags even trivial misfit,
+says it does not, but with large samples χ² flags even trivial misfit,
 which is why the descriptive indices beside it matter). Conventional
 rules of thumb, <em>guides not laws</em>: <strong>CFI/TLI ≥ 0.95</strong> good, ≥ 0.90
 acceptable; <strong>RMSEA ≤ 0.06</strong> good, ≤ 0.08 acceptable (read its 90% CI,
@@ -152,26 +156,26 @@ not just the point value); <strong>SRMR ≤ 0.08</strong>. Judge the set togethe
 against your field's standards, not any single index against a cliff.
 The note beneath records how the model was estimated and how many
 iterations it took.</li>
-<li><strong>CFA Loadings</strong> — each indicator's loading on its factor, with a
+<li><strong>CFA Loadings</strong>: each indicator's loading on its factor, with a
 standard error, z and significance for the free ones (the reference
-indicator shows its fixed 1 and dashes — it was not estimated). The
+indicator shows its fixed 1 and dashes; it was not estimated). The
 <strong>Standardized</strong> column is the completely standardized solution:
 roughly, the indicator-factor correlation. Standardized loadings around
 0.7+ mean the factor explains about half the indicator's variance;
 clearly weak loadings suggest the indicator does not measure that
 factor.</li>
-<li><strong>CFA Factor Correlations</strong> — how strongly the latent factors correlate
+<li><strong>CFA Factor Correlations</strong>: how strongly the latent factors correlate
 (only with two or more correlated factors). Correlations near ±1 are a
 warning: two &quot;factors&quot; may really be one.</li>
-<li><strong>CFA Variances</strong> — the factor variances and each indicator's residual
+<li><strong>CFA Variances</strong>: the factor variances and each indicator's residual
 (unique) variance, with standard errors.</li>
-<li><strong>CFA Modification Indices</strong> (on request) — one row per <em>fixed</em>
+<li><strong>CFA Modification Indices</strong> (on request) has one row per <em>fixed</em>
 parameter that could be freed: a <strong>cross-loading</strong> (<code>visual → x9</code>: an
 indicator on a factor it does not belong to), a <strong>residual covariance</strong>
 (<code>x7 ↔ x8</code>: two indicators sharing something beyond their factors) or,
 with orthogonal factors, a <strong>factor covariance</strong>. <strong>MI</strong> is the expected
-drop in the model χ² (1 df) from freeing that one parameter — the
-larger, the more that restriction is costing the fit — with its
+drop in the model χ² (1 df) from freeing that one parameter (the
+larger, the more that restriction is costing the fit), with its
 significance; <strong>EPC</strong> is the value the parameter is expected to take if
 freed, and <strong>Std. EPC</strong> the same in standardized units (a standardized
 loading, a residual correlation or a factor correlation), which tells
@@ -183,39 +187,39 @@ hints, not instructions</strong>: the indices are computed one at a time from
 the current model, they capitalize on chance in your sample, and a
 cross-loading or correlated residual should only be freed when it makes
 theoretical sense (two items with near-identical wording, say). A model
-respecified from its modification indices is exploratory — confirm it on
+respecified from its modification indices is exploratory. Confirm it on
 new data.</li>
 </ul>
 <h2 id="multi-group-models-and-measurement-invariance">Multi-group models and measurement invariance</h2>
-<p>Before comparing factor means or loadings between groups — two schools,
-two countries, men and women — you have to show that the instrument
+<p>Before comparing factor means or loadings between groups (two schools,
+two countries, men and women), you have to show that the instrument
 <strong>measures the same thing the same way</strong> in each group; otherwise a
 difference in means may be a difference in what the items mean. The
 multi-group run answers this with the nested sequence of models in
 <strong>CFA Invariance Tests</strong>, one row each:</p>
 <ul>
-<li><strong>Configural</strong> — the same pattern of loadings in every group, all
+<li><strong>Configural</strong>: the same pattern of loadings in every group, all
 parameters free. If this already fits poorly, the groups do not share a
 structure and the ladder stops here.</li>
-<li><strong>Metric</strong> (+ equal loadings) — the factors are measured on the same
+<li><strong>Metric</strong> (+ equal loadings): the factors are measured on the same
 scale in each group. Required before comparing relationships (factor
 correlations, regressions) across groups.</li>
-<li><strong>Scalar</strong> (+ equal intercepts) — the items have the same origin too,
+<li><strong>Scalar</strong> (+ equal intercepts): the items have the same origin too,
 so <strong>latent means can be compared</strong>. The first group (lowest value) is
 the reference with means fixed at 0; the <strong>CFA Latent Means</strong> table gives
 the other groups' means relative to it, with standard errors and tests.</li>
-<li><strong>Strict</strong> (+ equal residual variances) — the items are equally precise
+<li><strong>Strict</strong> (+ equal residual variances): the items are equally precise
 in each group; rarely required in practice, reported for completeness.</li>
 </ul>
 <p>Each row carries the full fit block and, from the second row on, the
 <strong>Δ columns</strong> against the model one step up: the <strong>Δχ²</strong> test of the added
 constraints (a significant value says the constraint hurts) and <strong>ΔCFI</strong>
-and <strong>ΔRMSEA</strong>. The common rule of thumb — a CFI drop of more than about
-<strong>.01</strong> signals that invariance fails at that level — is guidance, not a
+and <strong>ΔRMSEA</strong>. The common rule of thumb (a CFI drop of more than about
+<strong>.01</strong> signals that invariance fails at that level) is guidance, not a
 law; χ² is sample-size sensitive, so read the two together. If invariance
 fails at a level, the honest report is the last level that held (and the
 comparisons it licenses), or a <em>partial</em> invariance model freeing the
-offending item — which is outside this dialog's scope.</p>
+offending item. That is outside this dialog's scope.</p>
 <p>The parameter tables (<strong>Loadings</strong>, <strong>Factor Correlations</strong>, <strong>Variances</strong>,
 <strong>Intercepts</strong> and, from scalar on, <strong>Latent Means</strong>) show the chosen level
 <strong>per group</strong>; a parameter constrained equal shows the same estimate and
@@ -229,26 +233,26 @@ read the same way as lavaan's.</p>
 <p>Likert items are not continuous: a 1–5 response is a coarsened slice of an
 underlying continuous agreement, and fitting the ML model to the items'
 ordinary covariances pulls the loadings toward zero and distorts the fit.
-<strong>Ordinal (WLSMV)</strong> — lavaan's and Mplus's default for ordered items —
+<strong>Ordinal (WLSMV)</strong>, lavaan's and Mplus's default for ordered items,
 fits the model to the items' <strong>polychoric correlations</strong> instead:</p>
 <ul>
-<li><strong>Thresholds</strong> — each item's cut points on its underlying standard-normal
+<li><strong>Thresholds</strong>: each item's cut points on its underlying standard-normal
 response, estimated from the cumulative proportions in each category
 (<strong>CFA Thresholds</strong>: <code>t1 (1 | 2)</code> separates category 1 from 2, and so
 on), with standard errors.</li>
-<li><strong>Polychoric correlations</strong> — the correlations the underlying continuous
+<li><strong>Polychoric correlations</strong>: the correlations the underlying continuous
 responses would have (<strong>CFA Polychoric Correlations</strong>, the matrix the
 model was fitted to).</li>
-<li><strong>Estimation</strong> — diagonally weighted least squares on that correlation
+<li><strong>Estimation</strong>: diagonally weighted least squares on that correlation
 structure; the <strong>loadings</strong> are on the underlying responses (each with
 unit variance, so the standardized loading is the loading times the
 factor's standard deviation), with <strong>robust standard errors</strong>; the
 <strong>residual variances</strong> are implied (1 minus the item's communality) and
 carry no standard error.</li>
-<li><strong>Fit</strong> — the <strong>Model Fit</strong> row shows the <em>mean-and-variance-adjusted</em>
+<li><strong>Fit</strong>: the <strong>Model Fit</strong> row shows the <em>mean-and-variance-adjusted</em>
 (scaled-shifted) χ², the statistic whose p-value is trustworthy under
-this estimator, and the CFI, TLI and RMSEA computed from it — lavaan's
-&quot;scaled&quot; column — plus SRMR. The note records the unscaled statistic and
+this estimator, and the CFI, TLI and RMSEA computed from it (lavaan's
+&quot;scaled&quot; column), plus SRMR. The note records the unscaled statistic and
 the scaling constants, so the result can be matched against other
 software line by line. The usual cut-offs are read the same way as for
 ML, with the usual caveats.</li>
@@ -263,7 +267,7 @@ as information, never as silent numbers:</p>
 <li><strong>Identification errors</strong> stop the analysis with a message naming the
 offending factor (too few indicators, an impossible parameter count).
 Fix the model rather than the data.</li>
-<li>A <strong>Heywood case</strong> — a residual variance driven to its lower bound — is
+<li>A <strong>Heywood case</strong> (a residual variance driven to its lower bound) is
 flagged by name in the notes. It usually signals a misspecified model,
 a weak factor, or too small a sample.</li>
 <li><strong>Non-convergence</strong> and <strong>suspected local optima</strong> are reported in the
@@ -274,13 +278,13 @@ underidentified for these data) is stated plainly, and standard errors
 are withheld rather than printed as nonsense.</li>
 </ul>
 <h2 id="how-this-is-computed">How this is computed</h2>
-<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
+<p>This section names <em>which</em> method each procedure prints: the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules. Each line links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
 <ul>
-<li><strong>The estimator</strong> — maximum likelihood on the sample covariance with divisor N; each factor's first indicator is the marker (loading fixed at 1), factor variances free; <strong>χ² = N·F</strong> (lavaan's N convention); standard errors from the <strong>expected information</strong>; CFI / TLI against the independence baseline; the RMSEA interval is 90 % from the noncentral χ²; SRMR over the lower triangle including the diagonal (<a href="../../validation/tolerances/">CFA conventions</a> · <a href="../../validation/#the-second-oracle--r-against-python-pin-by-pin">second oracle</a>).</li>
-<li><strong>Modification indices</strong> — the 1-df score test of each fixed parameter, with the expected parameter change (<a href="../../validation/conventions/latent-variable/#modification-indices-4mi">MI</a>).</li>
-<li><strong>Multi-group invariance</strong> — configural, metric, scalar and strict, tested by Δχ² and reported with ΔCFI (<a href="../../validation/conventions/latent-variable/#multi-group-invariance-4mg">multi-group</a>).</li>
-<li><strong>Ordinal indicators (WLSMV)</strong> — polychoric correlations from two-step ML thresholds, the diagonally-weighted fit, the (N − 1)·F statistic lavaan uses for WLS (<a href="../../validation/conventions/latent-variable/#ordinal-indicators--wlsmv-4wlsmv">WLSMV</a>).</li>
-<li><strong>Weights and missing data</strong> — listwise complete cases; a frequency weight enters the covariance as replication (<a href="../../validation/tolerances/">case weighting</a>).</li>
+<li><strong>The estimator</strong>: maximum likelihood on the sample covariance with divisor N; each factor's first indicator is the marker (loading fixed at 1), factor variances free; <strong>χ² = N·F</strong> (lavaan's N convention); standard errors from the <strong>expected information</strong>; CFI / TLI against the independence baseline; the RMSEA interval is 90 % from the noncentral χ²; SRMR over the lower triangle including the diagonal (<a href="../../validation/tolerances/">CFA conventions</a> · <a href="../../validation/#the-second-oracle--r-against-python-pin-by-pin">second oracle</a>).</li>
+<li><strong>Modification indices</strong>: the 1-df score test of each fixed parameter, with the expected parameter change (<a href="../../validation/conventions/latent-variable/#modification-indices-4mi">MI</a>).</li>
+<li><strong>Multi-group invariance</strong>: configural, metric, scalar and strict, tested by Δχ² and reported with ΔCFI (<a href="../../validation/conventions/latent-variable/#multi-group-invariance-4mg">multi-group</a>).</li>
+<li><strong>Ordinal indicators (WLSMV)</strong>: polychoric correlations from two-step ML thresholds, the diagonally-weighted fit, the (N − 1)·F statistic lavaan uses for WLS (<a href="../../validation/conventions/latent-variable/#ordinal-indicators--wlsmv-4wlsmv">WLSMV</a>).</li>
+<li><strong>Weights and missing data</strong>: listwise complete cases; a frequency weight enters the covariance as replication (<a href="../../validation/tolerances/">case weighting</a>).</li>
 </ul>
 <h2 id="reproducibility">Reproducibility</h2>
 <p>A run journals a compact syntax command, e.g.:</p>
@@ -290,44 +294,66 @@ are withheld rather than printed as nonsense.</li>
 (plus <code>mi_minimum=…</code> when the floor was changed from 3.84) when the table
 was requested, <code>group=site</code> (plus <code>invariance=metric</code> or another level
 when changed from the scalar default) for a multi-group run, and
-<code>estimator=wlsmv</code> for ordinal indicators — re-running reproduces the same
+<code>estimator=wlsmv</code> for ordinal indicators. Re-running reproduces the same
 tables. The same tool is available to the AI
 assistant, MCP and batch scripts.</p>
 <p><em>Scope:</em> simple structure (one factor per indicator); continuous
-indicators by maximum likelihood — single-group with modification indices
-on request, or multi-group with invariance testing up to strict — or
+indicators by maximum likelihood (single-group with modification indices
+on request, or multi-group with invariance testing up to strict), or
 ordinal indicators by WLSMV (single-group). Mixed continuous/ordinal
 models, multi-group WLSMV, partial invariance and regression paths between
 factors (SEM territory) stay out. Validated against lavaan on the classic
-Holzinger–Swineford example — continuous, multi-group and ordinal — see the
+Holzinger–Swineford example (continuous, multi-group and ordinal); see the
 <a href="../../validation/">validation suite</a>.</p>
       </article>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../../index.html">Home</a> ·
-        <a href="../../../quick-start/">Quick Start</a> ·
-        <a href="../../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../../license/">License</a> ·
-        <a href="../../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../../index.html">
+            <img class="brand-mark" src="../../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../../index.html#features">Features</a>
+          <a href="../../../index.html#screenshots">Screenshots</a>
+          <a href="../../../index.html#download">Download</a>
+          <a href="../../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../../docs/">User Guide</a>
+          <a href="../../../quick-start/">Quick Start</a>
+          <a href="../../../docs/validation/">Validation</a>
+          <a href="../../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../../cite/">How to cite</a>
+          <a href="../../../license/">License</a>
+          <a href="../../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

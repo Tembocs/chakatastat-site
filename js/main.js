@@ -96,7 +96,8 @@ let lastFocused = null;
 
 function openLightbox(img) {
   lastFocused = document.activeElement;
-  lightboxImg.src = img.src;
+  // A gallery thumbnail names its full-size capture in data-full.
+  lightboxImg.src = img.dataset.full || img.src;
   lightboxImg.alt = img.alt;
   lightbox.classList.add("open");
   lightbox.setAttribute("aria-hidden", "false");

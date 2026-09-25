@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Descriptive Statistics — ChakataStat User Guide</title>
+  <title>Descriptive Statistics · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/analyze/descriptive-statistics/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Descriptive Statistics — ChakataStat User Guide">
+  <meta property="og:title" content="Descriptive Statistics · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/analyze/descriptive-statistics/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#validation">Validation</a>
+        <a href="../../../docs/" aria-current="page">User Guide</a>
+        <a href="../../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -104,7 +108,7 @@ coarse-numeric) variable occurs.</p>
 <p><strong>Output.</strong> One <strong>frequency table</strong> per variable: each value, its count, percent,
 valid percent (excluding missing) and cumulative percent.</p>
 <p><strong>Example.</strong> <code>StudyZone</code> and <code>SmokingStatus</code> from the sample data each yield a table
-of category counts — e.g. how many participants are from each region, and the
+of category counts, e.g. how many participants are from each region, and the
 split of Never/Former/Current smokers.</p>
 <h2 id="descriptives">Descriptives</h2>
 <p><strong>When to use it.</strong> To get the standard summary statistics for <strong>scale</strong>
@@ -119,19 +123,19 @@ N, minimum, maximum, mean and standard deviation (plus any extras you enabled).<
 of their valid N, range, mean and SD.</p>
 <h2 id="explore">Explore</h2>
 <p><strong>When to use it.</strong> For a deeper look at a scale variable's distribution, on its
-own or <strong>split by a factor</strong> — including normality and outliers.</p>
+own or <strong>split by a factor</strong>, including normality and outliers.</p>
 <p><strong>Dialog.</strong> Put the scale variable(s) in <strong>Dependent List</strong> and an optional
 grouping variable in <strong>Factor List</strong>.</p>
 <p><strong>Output.</strong></p>
 <ul>
 <li><strong>Descriptives</strong> with a confidence interval for the mean, trimmed mean,
 median, variance, skewness and kurtosis.</li>
-<li><strong>Tests of Normality</strong> — Shapiro-Wilk and Kolmogorov-Smirnov (with Lilliefors
+<li><strong>Tests of Normality</strong>: Shapiro-Wilk and Kolmogorov-Smirnov (with Lilliefors
 significance), and a <em>Decision</em> column that rejects normality at your chosen α.</li>
 <li>Percentiles.</li>
 </ul>
 <p><strong>Example.</strong> <em>BMI</em> by <em>Sex</em> shows each group's distribution and whether each is
-plausibly normal — useful before choosing a t-test vs a nonparametric test.</p>
+plausibly normal, which is useful before choosing a t-test vs a nonparametric test.</p>
 <h2 id="crosstabs">Crosstabs</h2>
 <p><strong>When to use it.</strong> To cross two categorical variables and test whether they are
 associated.</p>
@@ -141,29 +145,29 @@ want.</p>
 <p><strong>Output.</strong></p>
 <ul>
 <li>The <strong>contingency table</strong> of counts (with optional row/column/total percents).</li>
-<li><strong>Chi-square tests</strong> — Pearson, likelihood-ratio, Fisher's exact and (for 2×2)
+<li><strong>Chi-square tests</strong>: Pearson, likelihood-ratio, Fisher's exact and (for 2×2)
 McNemar.</li>
-<li><strong>Association measures</strong> — phi and Cramér's V, Goodman &amp; Kruskal's gamma and
+<li><strong>Association measures</strong>: phi and Cramér's V, Goodman &amp; Kruskal's gamma and
 lambda (with its significance), and Cohen's kappa for a matched table.</li>
-<li>With a layer: the <strong>Cochran/Mantel-Haenszel</strong> statistics —
-conditional-independence test, the common odds ratio, and the Breslow-Day test
+<li>With a layer: the <strong>Cochran/Mantel-Haenszel</strong> statistics:
+the conditional-independence test, the common odds ratio, and the Breslow-Day test
 of homogeneity.</li>
 </ul>
 <p><strong>Example.</strong> <code>SmokingStatus × Hypertensive</code> tests whether smoking and
 hypertension are associated; adding <code>Sex</code> as a layer asks whether that
 association holds within each sex.</p>
 <h2 id="missing-value-analysis">Missing Value Analysis</h2>
-<p><strong>When to use it.</strong> Before you model anything on a dataset with gaps — to find
+<p><strong>When to use it.</strong> Before you model anything on a dataset with gaps, to find
 out <em>how much</em> is missing, <em>where</em>, and whether the pattern looks random.</p>
 <p><strong>Dialog.</strong> Move at least two numeric variables into <strong>Variables</strong>.
 <strong>Save EM imputed values</strong> optionally writes single-imputed columns back as
 <code>&lt;variable&gt;_imp</code>.</p>
 <p><strong>Output.</strong></p>
 <ul>
-<li>A <strong>per-variable summary</strong> — valid N, missing count and missing percent.</li>
+<li>A <strong>per-variable summary</strong>: valid N, missing count and missing percent.</li>
 <li>The distinct <strong>missingness patterns</strong> across the chosen variables, with how
 many cases follow each.</li>
-<li><strong>Little's MCAR test</strong> — a single test of whether the missingness is
+<li><strong>Little's MCAR test</strong>: a single test of whether the missingness is
 unrelated to the data (Missing Completely At Random). A non-significant
 result is the reassuring one.</li>
 </ul>
@@ -172,7 +176,7 @@ result is the reassuring one.</li>
 patterns show whether the same participants are missing all three, and Little's
 test asks whether the gaps carry information.</p>
 <p><strong>A note on single imputation.</strong> The saved EM values fill each hole with one
-number, which understates uncertainty — every later standard error is computed
+number, which understates uncertainty: every later standard error is computed
 as if those values had been <em>measured</em>. Use them for exploration; use Multiple
 Imputation below for anything you will report.</p>
 <h2 id="multiple-imputation">Multiple Imputation</h2>
@@ -181,18 +185,18 @@ honestly for what is missing, rather than dropping incomplete cases or filling
 them with one guess.</p>
 <p><strong>Dialog.</strong></p>
 <ul>
-<li><strong>Variables</strong> — the analysis variables to pool. For a linear regression, the
+<li><strong>Variables</strong>: the analysis variables to pool. For a linear regression, the
 outcome first, then the predictors; for a mean, a single variable.</li>
-<li><strong>Analysis</strong> — what is run on each completed dataset and then pooled
+<li><strong>Analysis</strong>: what is run on each completed dataset and then pooled
 (linear regression by default, or a mean).</li>
-<li><strong>Auxiliary variables</strong> — extra numeric variables used <em>only</em> to help impute.
+<li><strong>Auxiliary variables</strong>: extra numeric variables used <em>only</em> to help impute.
 They improve the imputations without joining the pooled analysis.</li>
 <li><strong>Imputations</strong> (<em>m</em>, default 5), <strong>iterations</strong> per imputation (default 10),
-<strong>confidence</strong> level and <strong>seed</strong> — the seed makes the whole thing
+<strong>confidence</strong> level and <strong>seed</strong>. The seed makes the whole thing
 reproducible, which matters because imputation is a random procedure.</li>
 </ul>
-<p><strong>Output.</strong> The <strong>pooled estimates</strong> — coefficient, standard error, confidence
-interval and <em>p</em> — combined across the <em>m</em> completed datasets by <strong>Rubin's
+<p><strong>Output.</strong> The <strong>pooled estimates</strong> (coefficient, standard error, confidence
+interval and <em>p</em>), combined across the <em>m</em> completed datasets by <strong>Rubin's
 rules</strong>, together with the <strong>fraction of missing information</strong> (FMI) per term:
 how much of what you would like to know was supplied by imputation rather than
 by data.</p>
@@ -201,46 +205,68 @@ by data.</p>
 by chained equations, the regression is run on each, and the results are pooled
 into one table with an FMI column saying how much the gaps cost you.</p>
 <h2 id="how-this-is-computed">How this is computed</h2>
-<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
+<p>This section names <em>which</em> method each procedure prints: the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules. Each line links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
 <ul>
-<li><strong>Frequencies / Descriptives / Explore</strong> — mean, SD and variance with divisor n − 1, SE = s/√n; <strong>skewness and kurtosis are the bias-adjusted G₁ / G₂</strong> (SPSS, SAS, R type 2) (<a href="../../validation/conventions/classical/#skewness-and-kurtosis">moments</a>); <strong>percentiles, the median and the quartiles are the inverse empirical CDF, averaged at an exact boundary</strong> (R type 2), weighted on cumulative weight (<a href="../../validation/conventions/classical/#quantiles">quantiles</a> · <a href="../../validation/tolerances/">tolerances</a>). A frequency weight counts a case that many times (<a href="../../validation/tolerances/">case weighting</a>). Explore's box plot uses Tukey's 1.5 × IQR fences (<a href="../../validation/conventions/classical/#box-plot">charts</a>); its normality table is Shapiro–Wilk (Royston) and Kolmogorov–Smirnov with Lilliefors significance (<a href="../../validation/conventions/classical/#normality-tests">normality tests</a>).</li>
-<li><strong>Crosstabs</strong> — Pearson χ² <strong>without</strong> a continuity correction on every table, the likelihood-ratio χ², <strong>Fisher's exact test</strong> by the sum-of-less-likely-tables rule, <strong>McNemar</strong> exact for b + c ≤ 25 and continuity-corrected above, φ and Cramér's V uncorrected, Mantel–Haenszel with and Cochran's without the correction (<a href="../../validation/conventions/classical/#tables">tables</a>). Gamma, τ-b/τ-c, Somers' d, λ and κ are the standard forms.</li>
-<li><strong>Missing Value Analysis / Multiple Imputation</strong> — chained equations with 10 cycles, Rubin's rules with the Barnard–Rubin df, a seeded reproducible PRNG (<a href="../../validation/#coverage">validation</a>). Every procedure is listwise on its own variables (<a href="../../validation/conventions/classical/#missing-data-policy">missing-data policy</a>).</li>
+<li><strong>Frequencies / Descriptives / Explore</strong>: mean, SD and variance with divisor n − 1, SE = s/√n; <strong>skewness and kurtosis are the bias-adjusted G₁ / G₂</strong> (SPSS, SAS, R type 2) (<a href="../../validation/conventions/classical/#skewness-and-kurtosis">moments</a>); <strong>percentiles, the median and the quartiles are the inverse empirical CDF, averaged at an exact boundary</strong> (R type 2), weighted on cumulative weight (<a href="../../validation/conventions/classical/#quantiles">quantiles</a> · <a href="../../validation/tolerances/">tolerances</a>). A frequency weight counts a case that many times (<a href="../../validation/tolerances/">case weighting</a>). Explore's box plot uses Tukey's 1.5 × IQR fences (<a href="../../validation/conventions/classical/#box-plot">charts</a>); its normality table is Shapiro–Wilk (Royston) and Kolmogorov–Smirnov with Lilliefors significance (<a href="../../validation/conventions/classical/#normality-tests">normality tests</a>).</li>
+<li><strong>Crosstabs</strong>: Pearson χ² <strong>without</strong> a continuity correction on every table, the likelihood-ratio χ², <strong>Fisher's exact test</strong> by the sum-of-less-likely-tables rule, <strong>McNemar</strong> exact for b + c ≤ 25 and continuity-corrected above, φ and Cramér's V uncorrected, Mantel–Haenszel with and Cochran's without the correction (<a href="../../validation/conventions/classical/#tables">tables</a>). Gamma, τ-b/τ-c, Somers' d, λ and κ are the standard forms.</li>
+<li><strong>Missing Value Analysis / Multiple Imputation</strong>: chained equations with 10 cycles, Rubin's rules with the Barnard–Rubin df, a seeded reproducible PRNG (<a href="../../validation/#coverage">validation</a>). Every procedure is listwise on its own variables (<a href="../../validation/conventions/classical/#missing-data-policy">missing-data policy</a>).</li>
 </ul>
 <h2 id="see-also">See also</h2>
 <ul>
-<li><a href="../compare-means/">Compare Means</a> — when one variable is a scale outcome.</li>
-<li><a href="../../graphs/">Graphs</a> — histograms and boxplots for these distributions.</li>
-<li><a href="../../tutorial/09-missing-data/">Module 9 of the tutorial</a> — the same two
+<li><a href="../compare-means/">Compare Means</a>: when one variable is a scale outcome.</li>
+<li><a href="../../graphs/">Graphs</a>: histograms and boxplots for these distributions.</li>
+<li><a href="../../tutorial/09-missing-data/">Module 9 of the tutorial</a>: the same two
 procedures taught step by step on the sample data.</li>
 </ul>
       </article>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../../index.html">Home</a> ·
-        <a href="../../../quick-start/">Quick Start</a> ·
-        <a href="../../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../../license/">License</a> ·
-        <a href="../../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../../index.html">
+            <img class="brand-mark" src="../../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../../index.html#features">Features</a>
+          <a href="../../../index.html#screenshots">Screenshots</a>
+          <a href="../../../index.html#download">Download</a>
+          <a href="../../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../../docs/">User Guide</a>
+          <a href="../../../quick-start/">Quick Start</a>
+          <a href="../../../docs/validation/">Validation</a>
+          <a href="../../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../../cite/">How to cite</a>
+          <a href="../../../license/">License</a>
+          <a href="../../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Getting Started — ChakataStat User Guide</title>
+  <title>Getting Started · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/getting-started/">
   <link rel="icon" type="image/svg+xml" href="../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Getting Started — ChakataStat User Guide">
+  <meta property="og:title" content="Getting Started · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/getting-started/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../index.html#features">Features</a>
+        <a href="../../index.html#validation">Validation</a>
+        <a href="../../docs/" aria-current="page">User Guide</a>
+        <a href="../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -96,17 +100,17 @@
 assumes you have read <a href="../overview/">ChakataStat at a glance</a>; if not, skim that
 first for the big picture.</p>
 <h2 id="installing-chakatastat">Installing ChakataStat</h2>
-<p>ChakataStat is a self-contained desktop application — there is nothing to
+<p>ChakataStat is a self-contained desktop application; there is nothing to
 configure and no separate runtime to install. Download the package for your
 platform and run it:</p>
 <ul>
-<li><strong>Windows</strong> — run the installer (<code>.exe</code>) or unzip the portable build, then
+<li><strong>Windows</strong>: run the installer (<code>.exe</code>) or unzip the portable build, then
 launch <code>ChakataStat.exe</code>.</li>
-<li><strong>macOS</strong> — open the <code>.dmg</code> and drag <strong>ChakataStat</strong> to <em>Applications</em>.</li>
-<li><strong>Linux</strong> — install the <code>.deb</code>, the Snap, or run the bundled binary.</li>
+<li><strong>macOS</strong>: open the <code>.dmg</code> and drag <strong>ChakataStat</strong> to <em>Applications</em>.</li>
+<li><strong>Linux</strong>: install the <code>.deb</code>, the Snap, or run the bundled binary.</li>
 </ul>
 <p>The statistics engine is bundled inside the app. If it ever fails to load,
-ChakataStat does not start silently broken — it shows a full-screen diagnostic
+ChakataStat does not start silently broken: it shows a full-screen diagnostic
 with a <strong>Copy report</strong> button so you can see exactly what went wrong.</p>
 <blockquote>
 <p>Building from source instead? The developer guide ships with the source, not
@@ -115,12 +119,12 @@ with the application.</p>
 <h2 id="the-first-run-welcome">The first-run welcome</h2>
 <p>The first time you launch, a <strong>welcome overlay</strong> offers three ways to begin:</p>
 <ul>
-<li><strong>New Dataset</strong> — start with an empty grid and type or paste data in.</li>
-<li><strong>Import Data…</strong> — load a CSV/TSV, Excel (<code>.xlsx</code>/<code>.xls</code>/<code>.ods</code>), Parquet,
+<li><strong>New Dataset</strong>: start with an empty grid and type or paste data in.</li>
+<li><strong>Import Data…</strong>: load a CSV/TSV, Excel (<code>.xlsx</code>/<code>.xls</code>/<code>.ods</code>), Parquet,
 Arrow, JSON, <strong>SPSS (<code>.sav</code>)</strong>, <strong>Stata (<code>.dta</code>)</strong> or <strong>SAS (<code>.sas7bdat</code>,
-<code>.xpt</code>)</strong> file — these carry variable labels, value labels and more across
+<code>.xpt</code>)</strong> file. These carry variable labels, value labels and more across
 with the data, instead of leaving you to re-type them.</li>
-<li><strong>Open Recent</strong> — reopen something you worked on before.</li>
+<li><strong>Open Recent</strong>: reopen something you worked on before.</li>
 </ul>
 <p>Press <strong>Esc</strong> or pick any action to dismiss it. It only appears once; you can
 always get back to these actions from the <strong>File</strong> menu.</p>
@@ -128,14 +132,14 @@ always get back to these actions from the <strong>File</strong> menu.</p>
 <p>The window is organised around the <strong>view tabs</strong> on the left. The three you use
 constantly:</p>
 <ol>
-<li><strong>Data View</strong> (<code>Ctrl+1</code>) — the spreadsheet. Each <strong>row is a case</strong>
+<li><strong>Data View</strong> (<code>Ctrl+1</code>): the spreadsheet. Each <strong>row is a case</strong>
 (one observation, e.g. one survey respondent); each <strong>column is a variable</strong>
 (e.g. <em>Age</em>). Hover a column header to see that variable's label, type and
 measurement level.</li>
-<li><strong>Variable View</strong> (<code>Ctrl+2</code>) — the <em>definition</em> of each variable, one per
+<li><strong>Variable View</strong> (<code>Ctrl+2</code>): the <em>definition</em> of each variable, one per
 row: its <strong>Name, Type, Label, Value labels, Missing values, Measure</strong>, and
 display width/decimals. Time spent here pays off everywhere downstream.</li>
-<li><strong>Output View</strong> (<code>Ctrl+3</code>) — your <strong>results log</strong>. Each analysis or chart
+<li><strong>Output View</strong> (<code>Ctrl+3</code>): your <strong>results log</strong>. Each analysis or chart
 appends a titled card; nothing is overwritten.</li>
 </ol>
 <p>On the right is the <strong>AI assistant</strong> panel (toggle with <code>Ctrl+Shift+A</code>); at the
@@ -143,17 +147,17 @@ bottom, the <strong>status bar</strong> shows the case count and any active filt
 split.</p>
 <h2 id="your-first-analysis-in-five-minutes">Your first analysis in five minutes</h2>
 <p>We will use the bundled sample dataset, a small health study (<strong>File → Open
-Sample Dataset</strong> — 600 participants, 21 variables: age, sex, study zone, blood
+Sample Dataset</strong>, 600 participants, 21 variables: age, sex, study zone, blood
 pressure, glucose, cholesterol, and more).</p>
 <h3 id="1-open-the-data">1. Open the data</h3>
 <p><strong>File → Import Data…</strong>, choose <code>health_study.csv</code>, and accept the import
-options (ChakataStat infers each column's type — numbers become numeric
+options (ChakataStat infers each column's type: numbers become numeric
 variables, text becomes string variables). You now see 600 rows in the Data
 View. A progress dialog appears while the file loads.</p>
 <h3 id="2-glance-at-the-variables">2. Glance at the variables</h3>
 <p>Switch to <strong>Variable View</strong> (<code>Ctrl+2</code>). You will see <em>Age</em>, <em>Sex</em>, <em>BMI</em>,
 <em>SystolicBP</em>, and the rest. Notice that text columns like <em>Sex</em> and <em>StudyZone</em> came
-in as <strong>Nominal</strong> and numbers like <em>Age</em> as <strong>Scale</strong> — that measurement level
+in as <strong>Nominal</strong> and numbers like <em>Age</em> as <strong>Scale</strong>. That measurement level
 is what tells the analyses and charts how to treat each variable. You can adjust
 any of it here; for now, leave it.</p>
 <h3 id="3-run-descriptives">3. Run Descriptives</h3>
@@ -184,44 +188,66 @@ console</strong> (<code>Ctrl+4</code>) and you will see lines like:</p>
 histogram variable=BMI
 </code></pre>
 <p>You can edit and re-run these, save them as an <code>.cks</code> script, or replay them on
-a different dataset — the foundation of reproducible analysis. That is covered in
+a different dataset: the foundation of reproducible analysis. That is covered in
 <a href="../advanced/reproducibility/">Reproducibility</a>.</p>
 <h2 id="where-to-go-next">Where to go next</h2>
 <ul>
-<li><strong><a href="../working-with-data/">Working with Data</a></strong> — importing, the Variable View
+<li><strong><a href="../working-with-data/">Working with Data</a></strong>: importing, the Variable View
 in depth, and saving formats.</li>
-<li><strong><a href="../analyze/">Analyzing Data</a></strong> — every procedure, with worked
+<li><strong><a href="../analyze/">Analyzing Data</a></strong>: every procedure, with worked
 examples on this same sample data.</li>
-<li><strong><a href="../graphs/">Graphs</a></strong> — charts and the Chart Builder.</li>
+<li><strong><a href="../graphs/">Graphs</a></strong>: charts and the Chart Builder.</li>
 <li>Not sure which test you need? → <strong><a href="../reference/choosing-a-procedure/">Choosing a procedure</a></strong>.</li>
 </ul>
       </article>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../index.html">Home</a> ·
-        <a href="../../quick-start/">Quick Start</a> ·
-        <a href="../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../license/">License</a> ·
-        <a href="../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../index.html">
+            <img class="brand-mark" src="../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../index.html#features">Features</a>
+          <a href="../../index.html#screenshots">Screenshots</a>
+          <a href="../../index.html#download">Download</a>
+          <a href="../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../docs/">User Guide</a>
+          <a href="../../quick-start/">Quick Start</a>
+          <a href="../../docs/validation/">Validation</a>
+          <a href="../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../cite/">How to cite</a>
+          <a href="../../license/">License</a>
+          <a href="../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Custom Tables — ChakataStat User Guide</title>
+  <title>Custom Tables · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/analyze/tables/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Custom Tables — ChakataStat User Guide">
+  <meta property="og:title" content="Custom Tables · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/analyze/tables/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#validation">Validation</a>
+        <a href="../../../docs/" aria-current="page">User Guide</a>
+        <a href="../../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -96,18 +100,18 @@
 not the layout you want, these two build a table to your specification.</p>
 <h2 id="custom-tables-2">Custom Tables</h2>
 <p><strong>When to use it.</strong> To pivot one or more categorical variables against others,
-with a cell statistic of your choosing — a generalisation of a crosstab and of a
+with a cell statistic of your choosing. It generalises a crosstab and a
 means-by-factor breakdown in one tool.</p>
 <p><strong>Dialog.</strong></p>
 <ul>
-<li><strong>Rows</strong> and (nested) <strong>Rows</strong> — the categorical variables down the side.</li>
-<li><strong>Columns</strong> and (nested) <strong>Columns</strong> — the categorical variables across the
+<li><strong>Rows</strong> and (nested) <strong>Rows</strong>: the categorical variables down the side.</li>
+<li><strong>Columns</strong> and (nested) <strong>Columns</strong>: the categorical variables across the
 top.</li>
-<li><strong>Statistics</strong> — what each cell shows. Choose any of: <strong>Count</strong>, <strong>Valid N</strong>,
+<li><strong>Statistics</strong>: what each cell shows. Choose any of: <strong>Count</strong>, <strong>Valid N</strong>,
 <strong>Mean, Sum, Median, Min, Max, Std. Deviation</strong> of a measure variable, or
 <strong>Row / Column / Total percentage</strong>. You can show several at once (e.g. count
 <strong>and</strong> column percentage together).</li>
-<li><strong>Compare column proportions</strong> — adds a column-proportions z-test (Bonferroni
+<li><strong>Compare column proportions</strong>: adds a column-proportions z-test (Bonferroni
 adjusted) to test whether column percentages differ.</li>
 </ul>
 <p><strong>Output.</strong> The pivot table you described, with margins computed over the margin
@@ -117,14 +121,14 @@ in each cell; or <em>SmokingStatus</em> (rows) × <em>Hypertensive</em> (columns
 and column percentage together, with a column-proportions test.</p>
 <h2 id="multiple-response">Multiple Response</h2>
 <p><strong>When to use it.</strong> When a &quot;pick all that apply&quot; question is stored across
-<strong>several variables</strong> — either as a set of yes/no <strong>dichotomies</strong> (one variable
+<strong>several variables</strong>, either as a set of yes/no <strong>dichotomies</strong> (one variable
 per option) or as several variables sharing a common <strong>category</strong> coding.</p>
 <p><strong>Dialog.</strong> Move the variables of the response set in, and choose the <strong>set
 type</strong>:</p>
 <ul>
-<li><strong>Dichotomy</strong> (default) — each variable is a yes/no flag; set the <strong>counted
+<li><strong>Dichotomy</strong> (default): each variable is a yes/no flag; set the <strong>counted
 value</strong> that means &quot;selected&quot; (default 1).</li>
-<li><strong>Category</strong> — the variables share a category coding; the table pools the
+<li><strong>Category</strong>: the variables share a category coding; the table pools the
 distinct categories across them.</li>
 </ul>
 <p><strong>Output.</strong> A frequency table over the set: for each option/category, the count,
@@ -134,43 +138,65 @@ if it is non-missing on at least one variable in the set.</p>
 a dichotomy multiple-response table shows how often each symptom was reported,
 both as a share of all responses and as a share of participants.</p>
 <h2 id="how-this-is-computed">How this is computed</h2>
-<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
+<p>This section names <em>which</em> method each procedure prints: the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules. Each line links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
 <ul>
-<li><strong>Custom Tables</strong> — counts, percentages and summary statistics over the (value, weight) pairs of the cases, so a frequency weight counts a case that many times (<a href="../../validation/tolerances/">case weighting</a>); the mean, SD and percentiles are the same definitions as Descriptives — n − 1 and the type-2 percentile (<a href="../../validation/conventions/classical/#quantiles">quantiles</a>). The <strong>column-proportion z tests</strong> are the pooled two-proportion <em>z</em> with no continuity correction and no multiple-comparison adjustment (<a href="../../validation/conventions/classical/#column-proportion-z-tests-custom-tables">column tests</a>); the χ² rows are Pearson's without a continuity correction (<a href="../../validation/conventions/classical/#pearson-chi-square-no-continuity-correction">Pearson χ²</a>).</li>
-<li><strong>Multiple Response</strong> — the dichotomy and category counting modes are layout rules over the same counts, not new statistics (<a href="../../validation/#coverage">validation</a>); percentages are of cases or of responses as the dialog says.</li>
+<li><strong>Custom Tables</strong>: counts, percentages and summary statistics over the (value, weight) pairs of the cases, so a frequency weight counts a case that many times (<a href="../../validation/tolerances/">case weighting</a>); the mean, SD and percentiles are the same definitions as Descriptives, namely n − 1 and the type-2 percentile (<a href="../../validation/conventions/classical/#quantiles">quantiles</a>). The <strong>column-proportion z tests</strong> are the pooled two-proportion <em>z</em> with no continuity correction and no multiple-comparison adjustment (<a href="../../validation/conventions/classical/#column-proportion-z-tests-custom-tables">column tests</a>); the χ² rows are Pearson's without a continuity correction (<a href="../../validation/conventions/classical/#pearson-chi-square-no-continuity-correction">Pearson χ²</a>).</li>
+<li><strong>Multiple Response</strong>: the dichotomy and category counting modes are layout rules over the same counts, not new statistics (<a href="../../validation/#coverage">validation</a>); percentages are of cases or of responses as the dialog says.</li>
 </ul>
 <h2 id="see-also">See also</h2>
 <ul>
-<li><a href="../descriptive-statistics/#crosstabs">Crosstabs</a> — for the standard
+<li><a href="../descriptive-statistics/#crosstabs">Crosstabs</a>: for the standard
 two-variable contingency table with chi-square and association measures.</li>
 </ul>
       </article>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../../index.html">Home</a> ·
-        <a href="../../../quick-start/">Quick Start</a> ·
-        <a href="../../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../../license/">License</a> ·
-        <a href="../../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../../index.html">
+            <img class="brand-mark" src="../../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../../index.html#features">Features</a>
+          <a href="../../../index.html#screenshots">Screenshots</a>
+          <a href="../../../index.html#download">Download</a>
+          <a href="../../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../../docs/">User Guide</a>
+          <a href="../../../quick-start/">Quick Start</a>
+          <a href="../../../docs/validation/">Validation</a>
+          <a href="../../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../../cite/">How to cite</a>
+          <a href="../../../license/">License</a>
+          <a href="../../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

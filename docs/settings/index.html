@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Settings — ChakataStat User Guide</title>
+  <title>Settings · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/settings/">
   <link rel="icon" type="image/svg+xml" href="../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Settings — ChakataStat User Guide">
+  <meta property="og:title" content="Settings · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/settings/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../index.html#features">Features</a>
+        <a href="../../index.html#validation">Validation</a>
+        <a href="../../docs/" aria-current="page">User Guide</a>
+        <a href="../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -96,33 +100,33 @@
 between launches. They fall into four areas.</p>
 <h2 id="appearance">Appearance</h2>
 <ul>
-<li><strong>Theme mode</strong> — Light, Dark or follow the system.</li>
-<li><strong>Accent colour</strong> — pick from a curated palette; it re-themes the whole app
+<li><strong>Theme mode</strong>: Light, Dark or follow the system.</li>
+<li><strong>Accent colour</strong>: pick from a curated palette; it re-themes the whole app
 live.</li>
-<li><strong>Text size</strong> — scale the UI text up or down for readability: a Small /
+<li><strong>Text size</strong>: scale the UI text up or down for readability: a Small /
 Default / Large preset, or a Custom percentage you type in.</li>
-<li><strong>Content text size</strong> — scale just the <em>reading</em> surfaces — the Output
-log, the syntax console's messages and the AI chat — on top of the text
+<li><strong>Content text size</strong>: scale just the <em>reading</em> surfaces (the Output
+log, the syntax console's messages and the AI chat) on top of the text
 size, so results and error messages can be enlarged without inflating the
 whole UI. Presets up to Largest, or a Custom percentage.</li>
-<li><strong>Chart colours</strong> — which validated palette multi-series charts use to tell
+<li><strong>Chart colours</strong>: which validated palette multi-series charts use to tell
 series apart: <strong>Standard</strong> (the default) or <strong>Colour-blind safe
-(Okabe–Ito)</strong>. The list is short and closed on purpose — every entry is
+(Okabe–Ito)</strong>. The list is short and closed on purpose: every entry is
 checked for colour-vision separation in both light and dark mode, so a
 palette that would leave two groups indistinguishable is not offered. The
 swatch strip under the dropdown shows the palette as it will actually paint.
 See <a href="../graphs/#choosing-a-palette">Graphs → Choosing a palette</a>.</li>
-<li><strong>Output chart width</strong> — how wide charts are drawn in the Output log.</li>
+<li><strong>Output chart width</strong>: how wide charts are drawn in the Output log.</li>
 </ul>
 <h2 id="files">Files</h2>
 <ul>
-<li><strong>Protect CSV exports from formulas</strong> — on by default. When you export to
+<li><strong>Protect CSV exports from formulas</strong>: on by default. When you export to
 CSV/TSV, any text cell that starts with <code>=</code>, <code>+</code>, <code>-</code>, <code>@</code>, a tab or a
 carriage return and is not a number is written with a leading apostrophe
-(<code>'</code>), which spreadsheets read as &quot;text&quot; and hide — so a value that arrived
+(<code>'</code>), which spreadsheets read as &quot;text&quot; and hide, so a value that arrived
 in your data can never run as a formula in someone's Excel or Calc. Numbers
 such as <code>-5</code> are never touched. Turn it off for a byte-faithful export.</li>
-<li><strong>Mark CSV exports as UTF-8 for Excel</strong> — on by default. When a CSV/TSV
+<li><strong>Mark CSV exports as UTF-8 for Excel</strong>: on by default. When a CSV/TSV
 export holds any non-ASCII text (<code>é</code>, <code>ü</code>, <code>ß</code>, …), the file starts with a
 byte-order mark, so Excel on Windows reads it as UTF-8 instead of
 garbling those characters. A plain-ASCII export never gets one. Turn it
@@ -141,60 +145,82 @@ the environment variables that activate each one, marked set or unset),
 <strong>Behavior</strong> (the everyday controls), and a collapsed <strong>Connection overrides</strong>
 group for the rarely-needed fields.</p>
 <ul>
-<li><strong>Backend</strong> — choose among the backends you have configured (Claude, an
+<li><strong>Backend</strong>: choose among the backends you have configured (Claude, an
 OpenAI-compatible endpoint, DeepSeek, Kimi, Ollama), and switch live. Your
 choice is persisted; <strong>your API key is never stored</strong>.</li>
-<li><strong>Environment variables</strong> — the exact variable name for each backend
+<li><strong>Environment variables</strong>: the exact variable name for each backend
 (<code>ANTHROPIC_API_KEY</code>, <code>OPENAI_API_KEY</code>, <code>DEEPSEEK_API_KEY</code>, <code>MOONSHOT_API_KEY</code>,
-or <code>ChakataStat_OLLAMA=1</code>), each marked set or unset — so you can confirm you
+or <code>ChakataStat_OLLAMA=1</code>), each marked set or unset, so you can confirm you
 used the name the app reads.</li>
-<li><strong>Overrides</strong> — model id, temperature, maximum response tokens, base URL,
+<li><strong>Overrides</strong>: model id, temperature, maximum response tokens, base URL,
 custom headers, the tool-round cap, a system-prompt override, and the
 read-only toggle (<strong>on by default</strong>; the same switch sits in the assistant
 panel's header). The base URL and custom headers are stored <strong>in plain
-text</strong> in your session file — keep API keys in their environment variable,
+text</strong> in your session file; keep API keys in their environment variable,
 never in a header.</li>
-<li><strong>Custom context</strong> — a free-text note about your data and goals, sent with each
+<li><strong>Custom context</strong>: a free-text note about your data and goals, sent with each
 request so the assistant interprets your dataset correctly.</li>
 </ul>
 <h2 id="advanced">Advanced</h2>
 <ul>
-<li><strong>Advanced mode</strong> — off by default. Turning it on reveals
+<li><strong>Advanced mode</strong>: off by default. Turning it on reveals
 <a href="../advanced/engine-access/">Engine Diagnostics</a>. It changes nothing about
 your data; it only exposes the developer-facing tools.</li>
 </ul>
 <h2 id="where-settings-live">Where settings live</h2>
 <p>Settings are part of your persisted session, alongside the window layout, the
 recent-files list, the AI conversation and the syntax script. No API keys are
-ever written to disk — but the assistant's custom base URL and headers are, in
+ever written to disk, but the assistant's custom base URL and headers are, in
 plain text, so never put a key in a header.</p>
       </article>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../index.html">Home</a> ·
-        <a href="../../quick-start/">Quick Start</a> ·
-        <a href="../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../license/">License</a> ·
-        <a href="../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../index.html">
+            <img class="brand-mark" src="../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../index.html#features">Features</a>
+          <a href="../../index.html#screenshots">Screenshots</a>
+          <a href="../../index.html#download">Download</a>
+          <a href="../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../docs/">User Guide</a>
+          <a href="../../quick-start/">Quick Start</a>
+          <a href="../../docs/validation/">Validation</a>
+          <a href="../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../cite/">How to cite</a>
+          <a href="../../license/">License</a>
+          <a href="../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Module 4 — Graphs — ChakataStat User Guide</title>
+  <title>Module 4: Graphs · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/tutorial/04-graphs/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Module 4 — Graphs — ChakataStat User Guide">
+  <meta property="og:title" content="Module 4: Graphs · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/tutorial/04-graphs/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#validation">Validation</a>
+        <a href="../../../docs/" aria-current="page">User Guide</a>
+        <a href="../../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -91,39 +95,39 @@
       </ul>
       </aside>
       <article class="docs-content">
-<h1 id="module-4--graphs">Module 4 — Graphs</h1>
+<h1 id="module-4-graphs">Module 4: Graphs</h1>
 <p><strong>Question:</strong> what does the distribution actually look like? Numbers
 summarize; pictures reveal shape, outliers and comparisons at a glance.</p>
 <p>Open the sample (<code>Ctrl+Shift+O</code>). Charts land as cards in the Output View,
 interleaved with tables; right-click a card to copy it as an image straight
-into a document, or <strong>Export image…</strong> to save it — see
+into a document, or <strong>Export image…</strong> to save it (see
 <a href="#taking-a-chart-out">Taking a chart out of ChakataStat</a> at the end of this
-module.</p>
-<h2 id="histogram--one-scale-variables-shape">Histogram — one scale variable's shape</h2>
+module).</p>
+<h2 id="histogram-one-scale-variables-shape">Histogram: one scale variable's shape</h2>
 <p><strong>Graphs → Histogram…</strong> (<code>Ctrl+Shift+H</code>), variable <em>BMI</em>, <strong>Run</strong>.</p>
-<p>A roughly bell-shaped pile centred in the mid-20s with a right tail — real
+<p>A roughly bell-shaped pile centred in the mid-20s with a right tail; real
 BMI data look like this too. Re-run with the <strong>bins</strong> slider at different
 values: more bins show more detail and more noise. The bins are <em>display
-only</em> — they change no data. (Turning BMI into actual categories is a
-transform — <a href="../08-transforms/">module 8</a>.)</p>
-<h2 id="boxplot--a-scale-variable-across-groups">Boxplot — a scale variable across groups</h2>
+only</em>: they change no data. (Turning BMI into actual categories is a
+transform; see <a href="../08-transforms/">module 8</a>.)</p>
+<h2 id="boxplot-a-scale-variable-across-groups">Boxplot: a scale variable across groups</h2>
 <p><strong>Graphs → Boxplot…</strong> (<code>Ctrl+Shift+B</code>), variable <em>SystolicBP</em>, category
 <em>SmokingStatus</em>, <strong>Run</strong>.</p>
 <p>Each box is a group's median and quartiles, whiskers and outlier points.
-The <em>Current</em> box should sit visibly higher — the picture version of the
+The <em>Current</em> box should sit visibly higher: the picture version of the
 test you will run in module 6.</p>
-<h2 id="line-chart--a-trend-across-a-scale-variable">Line Chart — a trend across a scale variable</h2>
+<h2 id="line-chart-a-trend-across-a-scale-variable">Line Chart: a trend across a scale variable</h2>
 <p><strong>Graphs → Line Chart…</strong> (<code>Ctrl+Shift+L</code>), Y series <em>SystolicBP</em>, X axis
 <em>Age</em>, split by <em>SmokingStatus</em>, <strong>Run</strong>.</p>
 <p><em>health_study</em> is one row per participant, not one row per visit, so this
 connects each smoking group's points in age order rather than tracing a
-single patient over time — the mechanics are the same chart you would use for
+single patient over time. The mechanics are the same chart you would use for
 a real time series (repeated visits, a stock price, a sensor log). Turn on
 <strong>point markers</strong> to see the individual participants along each line.</p>
 <h2 id="the-chart-builder">The Chart Builder</h2>
 <p><strong>Graphs → Chart Builder…</strong> (<code>Ctrl+Shift+G</code>) is the general dialog: pick the
 chart type, assign variables to its roles. Rebuild the boxplot above in it,
-then try a <strong>Scatterplot</strong> of <em>BMI</em> (X) against <em>SystolicBP</em> (Y) — the cloud
+then try a <strong>Scatterplot</strong> of <em>BMI</em> (X) against <em>SystolicBP</em> (Y). The cloud
 should visibly climb, previewing module 7's correlation.</p>
 <p>Beyond the four chart types this module builds, the Graphs menu also offers
 <strong>Bar Chart</strong>, <strong>Error Bar</strong> and <strong>Q-Q Plot</strong>, and analyses draw their own
@@ -133,8 +137,8 @@ catalogue.</p>
 <h2 id="editing-a-chart-after-you-have-drawn-it">Editing a chart after you have drawn it</h2>
 <p>Every chart card has an <strong>Edit chart…</strong> button in its header. Press it on the
 boxplot and the chart editor opens with a live preview beside the controls
-<strong>that chart actually supports</strong> — for a boxplot: the title, the y-axis title
-and range, the colours, gridlines, reference lines and figure height. A line
+<strong>that chart actually supports</strong> (for a boxplot: the title, the y-axis title
+and range, the colours, gridlines, reference lines and figure height). A line
 chart or a bar chart offers more (legend placement, marker shape and size, bar
 stacking), because those charts have more to set.</p>
 <p>The editor changes how a chart <em>looks</em>, never what it <em>measures</em>: no control in
@@ -145,17 +149,17 @@ re-run the command.</p>
 <pre><code>boxplot variable=SystolicBP, category=SmokingStatus, title=&quot;Systolic pressure by smoking status&quot;
 </code></pre>
 <p>That is the part worth pausing on. ChakataStat did not save your styling
-somewhere beside the chart — it rewrote the chart's own line in the journal, so
+somewhere beside the chart; it rewrote the chart's own line in the journal, so
 re-running the script tomorrow brings the chart back <strong>styled exactly as you
 left it</strong>. Presentation is part of the analysis you recorded, not a layer on
 top of it. <a href="../../chart-editor/">Editing a chart</a> covers the editor in full.</p>
 <h2 id="taking-a-chart-out">Taking a chart out</h2>
 <p>Right-click a card and choose <strong>Export image…</strong>. Three formats:</p>
 <ul>
-<li><strong>PNG</strong> — a picture at a resolution you choose. For a slide or an email.</li>
-<li><strong>SVG</strong> — vector: every line and label still separate and still editable in a
+<li><strong>PNG</strong>: a picture at a resolution you choose. For a slide or an email.</li>
+<li><strong>SVG</strong>: vector, with every line and label still separate and still editable in a
 drawing program. The format most journals prefer.</li>
-<li><strong>PDF</strong> — vector, as a one-page document that opens the same way everywhere.</li>
+<li><strong>PDF</strong>: vector, as a one-page document that opens the same way everywhere.</li>
 </ul>
 <p>The two vector formats have no resolution to set, which is the point of them:
 they redraw sharp at any size, so the resolution control greys out when you
@@ -164,11 +168,11 @@ detail.</p>
 <h2 id="exercise">Exercise</h2>
 <ol>
 <li>Histogram of <em>FastingGlucose_mmolL</em>. There is a small second bump well to
-the right of the main pile — what is it? (Codebook: a diabetic-range
+the right of the main pile. What is it? (Codebook: a diabetic-range
 cluster.) Note that the declared-missing <code>99</code>s are <em>not</em> in the plot.</li>
 <li>Boxplot of <em>BMI</em> by <em>Sex</em>. Do the medians differ much?</li>
 <li>Scatterplot <em>Age</em> (X) vs <em>HeartRate</em> (Y). Describe what &quot;no relationship&quot;
-looks like — you will want this picture in mind whenever a correlation
+looks like; you will want this picture in mind whenever a correlation
 comes out near zero.</li>
 </ol>
 <h2 id="the-syntax-trail">The syntax trail</h2>
@@ -183,29 +187,51 @@ chart edit lands in the trail the same way.</p>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../../index.html">Home</a> ·
-        <a href="../../../quick-start/">Quick Start</a> ·
-        <a href="../../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../../license/">License</a> ·
-        <a href="../../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../../index.html">
+            <img class="brand-mark" src="../../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../../index.html#features">Features</a>
+          <a href="../../../index.html#screenshots">Screenshots</a>
+          <a href="../../../index.html#download">Download</a>
+          <a href="../../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../../docs/">User Guide</a>
+          <a href="../../../quick-start/">Quick Start</a>
+          <a href="../../../docs/validation/">Validation</a>
+          <a href="../../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../../cite/">How to cite</a>
+          <a href="../../../license/">License</a>
+          <a href="../../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

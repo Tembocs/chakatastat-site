@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>The AI Assistant — ChakataStat User Guide</title>
+  <title>The AI Assistant · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/advanced/ai-assistant/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="The AI Assistant — ChakataStat User Guide">
+  <meta property="og:title" content="The AI Assistant · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/advanced/ai-assistant/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#validation">Validation</a>
+        <a href="../../../docs/" aria-current="page">User Guide</a>
+        <a href="../../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -94,7 +98,7 @@
 <h1 id="the-ai-assistant">The AI Assistant</h1>
 <p>ChakataStat has a built-in assistant that can run analyses on your behalf when
 you describe what you want in plain language. It is not a separate chatbot bolted
-on — it drives the <strong>same engine</strong> the menus do, so anything it produces is a
+on. It drives the <strong>same engine</strong> the menus do, so anything it produces is a
 real ChakataStat result you could have run yourself.</p>
 <p>Open the panel with <strong>View → AI Assistant</strong> (<code>Ctrl+Shift+A</code>); it docks on the
 right of the workbench.</p>
@@ -103,7 +107,7 @@ right of the workbench.</p>
 works with:</p>
 <ul>
 <li><strong>Claude</strong> (Anthropic);</li>
-<li>any <strong>OpenAI-compatible</strong> endpoint — OpenAI itself, DeepSeek, <strong>Kimi</strong>
+<li>any <strong>OpenAI-compatible</strong> endpoint: OpenAI itself, DeepSeek, <strong>Kimi</strong>
 (Moonshot AI), a local <strong>Ollama</strong> server, or other compatible providers and
 proxies.</li>
 </ul>
@@ -141,7 +145,7 @@ a local endpoint needs no key. The recognized variables are:</p>
 </table></div>
 <p>These exact names are also listed under <strong>Settings → AI Assistant →
 Environment variables</strong>, each marked set or unset, so you can confirm you set
-the key under the name the app reads. The key is used in memory only — <strong>it is
+the key under the name the app reads. The key is used in memory only: <strong>it is
 never written to disk or into your session</strong>.</p>
 <h3 id="which-model-each-backend-uses">Which model each backend uses</h3>
 <p>Setting a key is enough: each backend comes with a current default model, so
@@ -177,29 +181,29 @@ there is nothing to choose unless you want to.</p>
 </tbody>
 </table></div>
 <p>To use a different one, set the model id under <strong>Settings → AI Assistant</strong>, or
-the <code>ChakataStat_AI_MODEL</code> environment variable — either overrides the default
+the <code>ChakataStat_AI_MODEL</code> environment variable. Either overrides the default
 for whichever backend is active.</p>
 <p>Two notes if you do override it. Recent Claude and OpenAI models <strong>no longer
 accept a sampling temperature</strong>; ChakataStat leaves the setting out of the
 request for those models rather than let it fail the whole message, so a
 temperature you set will simply have no effect there. And current models may
 reason before they answer, out of the same <strong>maximum response tokens</strong> budget
-as the reply itself — so if you lower that setting a long answer can run out of
+as the reply itself, so if you lower that setting a long answer can run out of
 room mid-sentence.</p>
 <p>One more, for the OpenAI backend specifically: on the GPT-5 family
 ChakataStat asks for <strong>no reasoning pass</strong> on its requests. Those models refuse
 a request that carries function tools together with their default reasoning
-setting, and the assistant's every message carries the tools — so without this
+setting, and the assistant's every message carries the tools, so without this
 every message would fail. The model still answers and still runs tools; it
 does so without its private deliberation step. (Found, and fixed, by running
-the assistant against the live service — 0.22.0.)</p>
+the assistant against the live service, 0.22.0.)</p>
 <h3 id="choosing-among-several-backends">Choosing among several backends</h3>
 <p>If you have more than one backend configured, you can <strong>pick and switch</strong> the
 active one live from <strong>Settings → AI Assistant</strong>, and your choice is remembered
-between launches (the choice — never the key). The Settings page also exposes
+between launches (the choice, never the key). The Settings page also exposes
 optional overrides: the model id, temperature, maximum response tokens, a custom
 base URL and headers, the tool-round cap, a system-prompt override, and the
-read-only toggle (on by default — see below). The custom base URL and headers
+read-only toggle (on by default; see below). The custom base URL and headers
 are <strong>stored in plain text</strong> in your session file, so keep API keys in their
 environment variable, never in a header.</p>
 <h2 id="asking-for-an-analysis">Asking for an analysis</h2>
@@ -210,7 +214,7 @@ environment variable, never in a header.</p>
 <li><em>&quot;Run a logistic regression predicting hypertension from age and BMI.&quot;</em></li>
 </ul>
 <p>The assistant chooses the right procedure, runs it through the engine, and shows
-the <strong>actual result tables and charts</strong> inline in the conversation — the same
+the <strong>actual result tables and charts</strong> inline in the conversation, the same
 output you would get from the menus.</p>
 <p>Answers <strong>stream in as they are written</strong> rather than appearing all at once, so
 a long reply starts reading immediately. Per-reply <strong>token usage</strong> is shown
@@ -221,12 +225,12 @@ a fraction of the usual rate, so a long conversation on one dataset costs far
 less per message than the raw totals suggest.</p>
 <h2 id="explaining-a-result-you-already-have">Explaining a result you already have</h2>
 <p>The assistant sees your <strong>data</strong>, not your output. A result you ran from the
-menus is invisible to it — so asking &quot;what does that table mean?&quot; in the panel
+menus is invisible to it, so asking &quot;what does that table mean?&quot; in the panel
 would, at best, make it run the analysis again to find out.</p>
 <p>Every card in the <strong>Output</strong> tab therefore carries an <strong>Ask the assistant about
 this</strong> button (the ✨ icon in the card's header, beside <em>Remove</em>). It hands that
 one result to the assistant and opens the panel if it is closed. The
-explanation comes back in plain language, and <strong>nothing is re-run</strong> — the
+explanation comes back in plain language, and <strong>nothing is re-run</strong>: the
 numbers you are shown are the numbers you already had.</p>
 <p>It works on charts as well as tables, and charts are where it earns its keep: a
 histogram or a scatterplot cannot be read back off the screen, so this is the
@@ -234,13 +238,13 @@ only way the assistant learns what was drawn.</p>
 <p>Two things worth knowing:</p>
 <ul>
 <li>The button appears <strong>only when a model backend is connected</strong>. If you do not
-see it, no API key was found — see <em>Connecting a model backend</em> above.</li>
+see it, no API key was found; see <em>Connecting a model backend</em> above.</li>
 <li>It works the same under <strong>read-only mode</strong> (the default). Asking for an
 explanation grants the assistant nothing new: the result is sent as part of
 your message, rather than by giving it a way to reach into your output.</li>
 </ul>
-<p>A very large result — a frequency table over thousands of distinct values, say
-— is sent as its opening section rather than in full, and the assistant is told
+<p>A very large result (a frequency table over thousands of distinct values, say)
+is sent as its opening section rather than in full, and the assistant is told
 that is what it is looking at.</p>
 <h2 id="adding-context-about-your-data">Adding context about your data</h2>
 <p>The assistant sees your variable names, types and labels, so well-defined
@@ -248,28 +252,29 @@ variables (see <a href="../../working-with-data/">Working with Data</a>) make it
 accurate. On a wide dataset the summary sent with each request lists the first
 200 variables (labels cut to 120 characters) and says how many more there are;
 for the rest, or whenever it is unsure of a name, the assistant calls
-<code>list_variables</code> — a discovery tool that returns every variable's name, type,
-measurement level and label — before it analyzes anything. You can also add <strong>custom context</strong> in Settings — a note describing your
-study, your coding conventions, or what you are trying to find out — which is sent
-with each request so the assistant interprets your data correctly.</p>
+<code>list_variables</code> (a discovery tool that returns every variable's name, type,
+measurement level and label) before it analyzes anything. You can also add
+<strong>custom context</strong> in Settings (a note describing your study, your coding
+conventions, or what you are trying to find out), which is sent with each
+request so the assistant interprets your data correctly.</p>
 <h2 id="what-it-can-and-cannot-do">What it can and cannot do</h2>
 <ul>
-<li>It can run any analysis, chart or transform exposed as a tool — subject to
+<li>It can run any analysis, chart or transform exposed as a tool, subject to
 the read-only switch.</li>
 <li><strong>Read-only is the default.</strong> Out of the box the assistant can run analyses
-and draw charts but <strong>cannot change your data</strong> — neither the transforms
+and draw charts but <strong>cannot change your data</strong>: neither the transforms
 (sort, compute, rank, …) nor an analysis's <em>save columns</em> options (saved
 clusters, residuals, scores, …), which are withheld from it and refused if
-it names one anyway — a safe way to let it explore. To let it transform
+it names one anyway. This is a safe way to let it explore. To let it transform
 your dataset, click the <strong>Read-only</strong> chip in the panel's header (it becomes
 <strong>Full access</strong>; click again to go back) or use the switch under
-Settings → AI Assistant. Every change it then makes is an ordinary command
-— undoable like your own edits (the assistant's commands are not written
+Settings → AI Assistant. Every change it then makes is an ordinary command,
+undoable like your own edits (the assistant's commands are not written
 into the Syntax journal; its results appear in the Output log, and the
 reproducibility bundle will note when a session's journal cannot replay
 everything that happened).</li>
 <li>One boundary holds even under full access: the assistant is never offered
-the two tools that read a <strong>file from disk</strong> (the Merge Files commands) —
+the two tools that read a <strong>file from disk</strong> (the Merge Files commands);
 its reach ends at the open dataset. Merging stays a menu action you take
 yourself.</li>
 </ul>
@@ -280,44 +285,66 @@ journal: its analyses and charts land in the Output log, and any change it
 makes to your data is undoable like your own. Because the journal cannot
 replay a change it never recorded, a journal save or a reproducibility
 bundle <strong>states</strong> every data change the assistant made that is still in
-your data — and drops the note if you undo the change.
+your data, and drops the note if you undo the change.
 The conversation itself persists with your session, so closing and reopening
 ChakataStat keeps the thread (you can start fresh with the panel's New
 conversation button).</p>
 <h2 id="privacy">Privacy</h2>
-<p>When you use a hosted backend, your prompts — including the data context you add
-and the result summaries — are sent to that provider. Use a local <strong>Ollama</strong>
+<p>When you use a hosted backend, your prompts, including the data context you add
+and the result summaries, are sent to that provider. Use a local <strong>Ollama</strong>
 endpoint if the data must not leave your machine. No API key is ever stored by
-ChakataStat — but the custom base URL and headers you set under Settings → AI
+ChakataStat. But the custom base URL and headers you set under Settings → AI
 Assistant <strong>are</strong> stored, in plain text, in your session file; never put a key
 in a header, use the environment variable.</p>
       </article>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../../index.html">Home</a> ·
-        <a href="../../../quick-start/">Quick Start</a> ·
-        <a href="../../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../../license/">License</a> ·
-        <a href="../../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../../index.html">
+            <img class="brand-mark" src="../../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../../index.html#features">Features</a>
+          <a href="../../../index.html#screenshots">Screenshots</a>
+          <a href="../../../index.html#download">Download</a>
+          <a href="../../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../../docs/">User Guide</a>
+          <a href="../../../quick-start/">Quick Start</a>
+          <a href="../../../docs/validation/">Validation</a>
+          <a href="../../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../../cite/">How to cite</a>
+          <a href="../../../license/">License</a>
+          <a href="../../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>What's New — ChakataStat</title>
+  <title>What's New · ChakataStat</title>
   <meta name="description" content="What changed in each ChakataStat release: the release notes, dated, with each version's DOI.">
 
   <link rel="icon" type="image/svg+xml" href="../assets/logo-mark.svg">
@@ -15,7 +15,7 @@
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
 
   <meta property="og:type" content="website">
-  <meta property="og:title" content="What's New — ChakataStat">
+  <meta property="og:title" content="What's New · ChakataStat">
   <meta property="og:description" content="What changed in each ChakataStat release: the release notes, dated, with each version's DOI.">
   <meta property="og:url" content="https://chakatastat.app/whats-new/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
@@ -48,19 +48,16 @@
 
   <header class="site-header">
     <div class="container nav">
-      <a class="brand" href="../index.html#top">
+      <a class="brand" href="../#top">
         <img class="brand-mark" src="../assets/logo-mark.svg" width="32" height="32" alt="">
         <span class="brand-name">ChakataStat</span>
       </a>
 
       <nav id="nav-links" class="nav-links">
+        <a href="../#features">Features</a>
+        <a href="../#validation">Validation</a>
         <a href="../docs/">User Guide</a>
-        <a href="../docs/validation/">Validation</a>
-        <a href="../cite/">Cite</a>
-        <a href="../index.html#features">Features</a>
         <a href="../quick-start/">Quick Start</a>
-        <a href="../index.html#screenshots">Screenshots</a>
-        <a href="../index.html#analyze">Analyze</a>
       </nav>
 
       <div class="nav-actions">
@@ -73,7 +70,7 @@
             <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
           </svg>
         </button>
-        <a class="btn btn-primary nav-cta" href="../index.html#download">Download</a>
+        <a class="btn btn-primary nav-cta" href="../#download">Download</a>
         <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
           <span></span><span></span><span></span>
         </button>
@@ -86,226 +83,246 @@
       <div class="container legal-content">
         <h1>What's New</h1>
         <p class="legal-updated">
-          What changed in each release. Each version links its own DOI, so a
-          release can be cited exactly.
-          Installed copies update automatically through their store.
+          The changes in each release. Each version has its own DOI, so you
+          can cite the exact release you used. Installed copies update
+          automatically through their store.
         </p>
 
-        <h2>0.24.0 — 2026-09-15</h2>
+        <h2>0.24.0 (15 September 2026)</h2>
         <p>
           DOI: <a href="https://doi.org/10.5281/zenodo.22764163">10.5281/zenodo.22764163</a>
         </p>
         <p>
-          The catalog grows from 108 to 115 tools: Select Cases, Weight
+          The catalog grows from 108 to 115 tools. Select Cases, Weight
           Cases, Split File, Recode, Transpose and both dataset merges are
-          now first-class commands. With that, every transform made in the
-          GUI enters the command journal, so a point-and-click session
-          replays from the original data to identical numbers — merges
-          record a fingerprint of their second input, verified before
-          anything changes.
+          now commands in their own right. As a result, every change you
+          make to the data in the menus is recorded, and a point-and-click
+          session can be replayed from the original data to the same
+          numbers. A merge records a fingerprint of the second file and
+          checks it before anything changes.
         </p>
         <p>
-          Undo is now a dataset transaction: deleting a column, recoding,
-          or editing cells undoes atomically, with variable identity
-          preserved — no silent column shifts.
+          Undo now treats each change to the dataset as one step. Deleting a
+          column, recoding or editing cells is undone in full, and variables
+          keep their identity, so columns never shift without notice.
         </p>
         <p>
-          Data integrity on the way in: integers too large for exact
-          numeric storage import exactly, kept as text with a note; values
-          that fail numeric conversion are counted, badged in Variable
-          View, and noted on any analysis that uses them; date columns
-          validate on entry and canonicalize to ISO, with chronological
-          sorting and filtering — the policy documented and pinned.
+          Imported data is protected better. Integers too large to store
+          exactly as numbers are kept as text, with a note. Values that
+          can't be read as numbers are counted, marked in the Variable View
+          and mentioned in any analysis that uses them. Date columns are
+          checked on entry, stored in ISO format, and sort and filter in
+          date order.
         </p>
         <p>
-          Rejected input says why: unknown or misspelled arguments are
-          refused by name on every front, the AI assistant and MCP
-          included; oversized requests are capped with a visible note,
-          never silently truncated.
+          When input is rejected, the message says why. Unknown or misspelt
+          arguments are refused by name everywhere, including in the AI
+          assistant and MCP. Requests that are too large are shortened with
+          a visible note.
         </p>
         <p>
-          Large text imports now parse off the interface thread. And the
-          app speaks to screen readers: the data grid announces cells and
-          selection, every chart carries a spoken summary and an
-          accessible data view — manually verified with Orca on Linux and
+          Large text files now load without freezing the window. The app
+          also works with screen readers: the data grid announces cells and
+          selections, and every chart has a spoken summary and an accessible
+          table of its data. This was tested by hand with Orca on Linux and
           Narrator on Windows.
         </p>
 
-        <h2>0.23.0 — 2026-08-31</h2>
+        <h2>0.23.0 (31 August 2026)</h2>
         <p>
           DOI: <a href="https://doi.org/10.5281/zenodo.22199867">10.5281/zenodo.22199867</a>
         </p>
         <p>
-          The catalog stays at 108 validated tools. This release makes
-          results verifiable on an installed copy.
+          The catalog stays at 108 tools. This release lets you check the
+          results on your own installed copy.
         </p>
         <p>
-          <strong>Help → Verify this installation</strong> recomputes pinned
-          reference checks on your own installed copy — the same numbers
-          validated before release — and writes a report; it runs headlessly
-          too, with <code>--verify</code>.
+          <strong>Help → Verify this installation</strong> repeats the
+          reference checks that are run before each release, on your
+          computer, and writes a report. It also runs without a window, with
+          <code>--verify</code>.
         </p>
         <p>
-          Every result now names its data: a dataset fingerprint in each
-          output's footer, beside the active filter, weight and split.
-          <strong>File → Export Reproducibility Bundle</strong> packs
-          journal, fingerprint and versions into one file; ChakataStat
-          re-runs it against your data and confirms the numbers match in one
-          step.
+          Every result now names its data. The footer of each output shows a
+          fingerprint of the dataset, with any active filter, weight or
+          split. <strong>File → Export Reproducibility Bundle</strong> saves
+          the commands, the fingerprint and the version numbers in one file.
+          ChakataStat can re-run the bundle against your data and confirm
+          that the numbers match.
         </p>
         <p>
-          The methods are documented: every procedure page in the guide gains
-          a "How this is computed" section, each line linking its convention
-          — 48 previously implicit definitions written down. Two defaults
-          move to the conventional choice, Cox ties to Efron and mixed
-          models to REML; saved syntax without those options prints slightly
-          different numbers; one option restores the old behaviour.
+          The methods are documented. Every procedure page in the guide has
+          a "How this is computed" section, and 48 definitions that were
+          previously implicit are now written down. Two defaults changed to
+          the usual choice: Cox regression uses Efron's method for ties, and
+          mixed models use REML. Saved scripts without those options now give
+          slightly different numbers, and one option restores the old
+          behaviour.
         </p>
         <p>
-          Cross-checks: every Python-referenced pin re-derived in R
-          (267 of 267, each divergence a recorded convention), and the full
-          pin set compared across Windows, macOS and Linux; the agreement
-          report is in the guide.
+          More cross-checks. Every value with a Python reference was
+          recomputed in R (267 of 267, with each difference explained), and
+          the full set was compared across Windows, macOS and Linux. The
+          results are in the guide.
         </p>
         <p>
-          The file readers are hardened: a crafted or corrupted SPSS,
-          Stata, SAS, Excel, Parquet or Arrow file is reported as an error.
-          The readers are fuzz-tested continuously and checked against an
-          84-case battery of degenerate-data edges, each pinned to a number
-          or a named error.
+          The file readers are more robust. A damaged or deliberately
+          malformed SPSS, Stata, SAS, Excel, Parquet or Arrow file now
+          produces an error message. The readers are fuzz-tested
+          continuously and checked against 84 difficult edge cases.
         </p>
 
-        <h2>0.22.0 — 2026-08-26</h2>
+        <h2>0.22.0 (26 August 2026)</h2>
         <p>
           DOI: <a href="https://doi.org/10.5281/zenodo.22112257">10.5281/zenodo.22112257</a>
         </p>
         <p>
-          The catalog stays at 108 validated tools. This release deepens
-          what they draw, export and print — and was checked against live
-          services and captured screens before shipping.
+          The catalog stays at 108 tools. This release improves charts,
+          export and numerical accuracy.
         </p>
         <p>
-          Finish a chart without leaving the app. The chart editor gains
-          axis titles, axis limits, reference lines, marker shapes and
-          sizes, a gridline toggle, a figure height, a text-size slider that
-          scales every label at once, and logarithmic axes labelled at the
-          decades — a log axis is refused, naming the value, rather than
-          silently dropping a zero. Every edit is written back into the
-          chart's own syntax command, so a styled chart re-runs styled.
+          You can finish a chart without leaving the app. The chart editor
+          adds axis titles, axis limits, reference lines, marker shapes and
+          sizes, gridlines, figure height, a text-size slider and
+          logarithmic axes. A log axis with a zero or negative value is
+          refused with a message naming the value. Every edit is saved in
+          the chart's command, so the chart looks the same when you run it
+          again.
         </p>
         <p>
-          Then export it for publication. Any chart saves as SVG or PDF —
-          vector formats with labels that stay selectable text — and PNG
-          export gains a resolution chooser.
+          Charts can be exported for publication. Any chart saves as SVG or
+          PDF, with labels kept as selectable text, and PNG export lets you
+          choose the resolution.
         </p>
         <p>
-          Numerical accuracy: normal and chi-square p-values were returned
-          as exactly zero past about eight standard deviations and are now
-          accurate far into the tail, on a dedicated erfc checked against a
-          50-digit reference. Matrix inversion is scale-invariant and the
-          GLM families fit through an orthogonal decomposition.
+          Numerical accuracy improved. Normal and chi-square p-values used to
+          become exactly zero beyond about eight standard deviations and are
+          now accurate much further into the tail, checked against a
+          50-digit reference. Matrix inversion no longer depends on the scale
+          of the variables, and the GLM families are fitted with an
+          orthogonal decomposition.
         </p>
         <p>
-          Small things you will see: chart fills clear the 3:1 contrast bar
-          in both themes, Variable View labels end in an ellipsis, scrolling
-          dialogs fade at the edge, and charts repaint when you switch
-          theme.
+          Smaller changes: chart colours meet the 3:1 contrast guideline in
+          both themes, long labels in the Variable View end with an
+          ellipsis, scrolling dialogs fade at the edge, and charts redraw
+          when you switch theme.
         </p>
         <p>
-          The assistant streams its replies, caches its prompt and shows the
-          cached share; ask it about any result in your output log and it
-          explains what you see, using no tools. Both backends were tested
-          against live services.
+          The AI assistant shows its replies as they are written and caches
+          its instructions to reduce cost. You can also ask it to explain
+          any result in your output. Both supported services were tested
+          live.
         </p>
 
         <h2>Earlier releases</h2>
         <div class="legal-table-wrap">
           <table>
             <thead>
-              <tr><th>Version</th><th>Released</th><th>In brief</th></tr>
+              <tr><th>Version</th><th>Released</th><th>Summary</th></tr>
             </thead>
             <tbody>
               <tr>
                 <td>0.21.0</td>
                 <td>2026-08-23</td>
-                <td>CFA gains modification indices, multi-group invariance testing and ordinal (WLSMV) estimation; Johnson&ndash;Neyman regions, a second moderator and serial mediation; SAS <code>.sas7bdat</code> import with <code>.sas7bcat</code> value labels; regression through the origin; a citation DOI; a CSV formula-injection guard on export.</td>
+                <td>Confirmatory factor analysis adds modification indices, multi-group invariance testing and ordinal (WLSMV) estimation. Johnson&ndash;Neyman regions, a second moderator and serial mediation. SAS <code>.sas7bdat</code> import with <code>.sas7bcat</code> value labels. Regression through the origin. A citation DOI. CSV export guards against formula injection.</td>
               </tr>
               <tr>
                 <td>0.20.0</td>
                 <td>2026-08-20</td>
-                <td>The syntax console becomes a real editor: line numbers, syntax colouring, bracket matching, find &amp; replace, as-you-type diagnostics from the same parser that runs the script, catalog-driven completion, hover help and a run-state gutter.</td>
+                <td>The syntax console becomes a full editor, with line numbers, syntax colouring, bracket matching, find and replace, error checking as you type, completion and hover help.</td>
               </tr>
               <tr>
                 <td>0.19.0</td>
                 <td>2026-08-19</td>
-                <td>Eight catalog additions: complex survey designs, equivalence tests (TOST), Bland-Altman method comparison, latent class analysis, item response theory, a LOESS scatterplot smoother, permutation tests, and vector autoregression with Granger causality.</td>
+                <td>Eight additions: complex survey designs, equivalence tests (TOST), Bland&ndash;Altman method comparison, latent class analysis, item response theory, a LOESS smoother for scatterplots, permutation tests, and vector autoregression with Granger causality.</td>
               </tr>
               <tr>
                 <td>0.18.0</td>
                 <td>2026-08-14</td>
-                <td>Import robustness: automatic text-encoding detection, a content-based delimiter sniff, Stata strL long strings carried, and fixed-width text import with a column-spec dialog.</td>
+                <td>Better imports: automatic text-encoding detection, delimiter detection from the file's content, Stata long strings, and fixed-width text import.</td>
               </tr>
               <tr>
                 <td>0.17.0</td>
                 <td>2026-08-13</td>
-                <td>The interactive chart editor: restyle a finished chart in place, with every edit written back to the journaled command that drew it.</td>
+                <td>The chart editor: change a finished chart in place, with every edit saved in the command that drew it.</td>
               </tr>
               <tr>
                 <td>0.16.0</td>
                 <td>2026-08-10</td>
-                <td>Quantile-residual diagnostic panels for the GLM regression families; scatterplot matrix, ECDF, Cleveland dot and bubble charts; a colour-blind-safe Okabe&ndash;Ito palette option.</td>
+                <td>Diagnostic plots for the GLM regression families; scatterplot matrix, ECDF, Cleveland dot and bubble charts; a colour-blind-safe Okabe&ndash;Ito palette.</td>
               </tr>
               <tr>
                 <td>0.15.0</td>
                 <td>2026-08-09</td>
-                <td>Panel regression — fixed, random and pooled effects with the Hausman test and entity-clustered standard errors — and moderated mediation with its interaction plot.</td>
+                <td>Panel regression (fixed, random and pooled effects, the Hausman test and clustered standard errors) and moderated mediation with an interaction plot.</td>
               </tr>
               <tr>
                 <td>0.14.0</td>
                 <td>2026-08-07</td>
-                <td>Native SPSS (<code>.sav</code>), Stata (<code>.dta</code>) and SAS transport (<code>.xpt</code>) import carrying variable and value labels across; NDJSON, gzipped text, Arrow/Feather and legacy <code>.xls</code>/<code>.ods</code>.</td>
+                <td>Native SPSS (<code>.sav</code>), Stata (<code>.dta</code>) and SAS transport (<code>.xpt</code>) import with variable and value labels; NDJSON, gzipped text, Arrow/Feather and older <code>.xls</code>/<code>.ods</code> files.</td>
               </tr>
               <tr>
                 <td>0.13.0</td>
                 <td>2026-08-06</td>
-                <td>Propensity-score matching and inverse-probability weighting, with the before/after balance plot and saved filter and weight columns.</td>
+                <td>Propensity-score matching and inverse-probability weighting, with a before-and-after balance plot and saved filter and weight columns.</td>
               </tr>
               <tr>
                 <td>0.12.0</td>
                 <td>2026-08-04</td>
-                <td>The charts overhaul — a fixed, colour-vision-validated palette, violin plots, the correlation heatmap, regression diagnostics, 100%-stacked bars — and the Python client published to PyPI.</td>
+                <td>New charts: a colour-vision-checked palette, violin plots, a correlation heatmap, regression diagnostics and 100% stacked bars. The Python client is published on PyPI.</td>
               </tr>
             </tbody>
           </table>
         </div>
         <p>
-          Releases before 0.12.0 predate this page; their records are in the
-          project's release documents. Versions from 0.20.0 on carry DOIs —
-          the full list is on the <a href="../cite/">How to Cite</a> page.
+          Releases before 0.12.0 are not listed here; their notes are in the
+          project's release documents. Versions from 0.20.0 on have DOIs,
+          listed on the <a href="../cite/">How to cite</a> page.
         </p>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer" id="cite">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-cite">
-        Cite: Amani, E. (2026). <em>ChakataStat</em> [Computer software].
-        <a href="https://doi.org/10.5281/zenodo.22112256">https://doi.org/10.5281/zenodo.22112256</a>
-        — <a href="../cite/">how to cite a specific version</a>
-      </p>
-      <p class="footer-legal">
-        <a href="../quick-start/">Quick Start</a> ·
-        <a href="../whats-new/" aria-current="page">What's New</a> ·
-        <a href="../privacy-policy/">Privacy Policy</a> ·
-        <a href="../license/">License</a> ·
-        <a href="../cite/">How to Cite</a> ·
-        <a href="mailto:contact@chakatastat.app">contact@chakatastat.app</a>
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../">
+            <img class="brand-mark" src="../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../#features">Features</a>
+          <a href="../#screenshots">Screenshots</a>
+          <a href="../#download">Download</a>
+          <a href="../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../docs/">User Guide</a>
+          <a href="../quick-start/">Quick Start</a>
+          <a href="../docs/validation/">Validation</a>
+          <a href="../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../cite/">How to cite</a>
+          <a href="../license/">License</a>
+          <a href="../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p>
+          Cite as: Amani, E. (2026). <em>ChakataStat</em> [Computer software].
+          <a href="https://doi.org/10.5281/zenodo.22112256">doi.org/10.5281/zenodo.22112256</a>
+        </p>
+      </div>
     </div>
   </footer>
 

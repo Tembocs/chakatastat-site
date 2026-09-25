@@ -1128,7 +1128,10 @@ section h2 {
   }
 }
 
-@media (max-width: 1020px) {
+/* 2026-09-25: the nav went from seven items to four (Features, Validation,
+   User Guide, Quick Start), so the row fits down to ~860px and collapses
+   into the toggle only below that. Re-measure if an item is added. */
+@media (max-width: 860px) {
   /* The documentation pages' single back-link is exempt: there is nothing to
      collapse, no hamburger to collapse it into, and hiding it would strand a
      reader on a phone with no way back to the site. */
@@ -1551,4 +1554,427 @@ section h2 {
   border: none;
   background: none;
   font-size: 0.85rem;
+}
+
+/* ------------------------------------------------------------------------
+   Homepage, 2026-09 redesign. Scoped under body.home where a rule would
+   otherwise change the subpages or the User Guide, which share this file.
+   ------------------------------------------------------------------------ */
+
+.home .hero {
+  padding: 96px 0 104px;
+  background:
+    radial-gradient(900px 480px at 88% 18%,
+      color-mix(in srgb, var(--color-primary) 11%, transparent), transparent 70%),
+    linear-gradient(180deg, var(--color-bg-alt), var(--color-bg) 85%);
+}
+
+.home .hero h1 {
+  font-size: clamp(2.5rem, 5vw, 3.75rem);
+  max-width: 13ch;
+  letter-spacing: -0.035em;
+}
+
+.home .lede {
+  font-size: 1.2rem;
+  max-width: 44ch;
+}
+
+.hero-meta {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+.hero-meta a {
+  color: inherit;
+  text-underline-offset: 0.15em;
+}
+
+.hero-meta a:hover {
+  color: var(--color-text);
+}
+
+/* The formats strip: one line of plain badges under the hero. */
+.formats {
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  padding: 22px 0;
+}
+
+.formats-inner {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.formats-label {
+  margin: 0;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+.formats-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.formats-list li {
+  padding: 5px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+/* Section heads: eyebrow, heading and a short lede, the same everywhere. */
+.section-head {
+  max-width: 64ch;
+  margin-bottom: 44px;
+}
+
+.section-head h2 {
+  margin-bottom: 0.35em;
+}
+
+.section-head .section-lede {
+  margin: 0;
+}
+
+.section-head--split {
+  max-width: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.text-link {
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.text-link::after {
+  content: " \2192";
+}
+
+.text-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+/* Three feature rows, alternating sides, each with a legible cropped shot. */
+.pillars {
+  padding: 96px 0 88px;
+}
+
+.pillar {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 64px;
+  align-items: center;
+  margin: 0 0 96px;
+}
+
+.pillar--reverse .pillar-copy {
+  order: 2;
+}
+
+.pillar-copy h3 {
+  font-size: clamp(1.4rem, 2.4vw, 1.75rem);
+  margin-bottom: 0.45em;
+}
+
+.pillar-copy p {
+  color: var(--color-text-muted);
+  font-size: 1.08rem;
+  max-width: 44ch;
+  margin: 0 0 18px;
+}
+
+.pillar-shot {
+  margin: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-lift);
+}
+
+.pillar-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Six smaller features on an even grid. */
+.extras {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.extra,
+.catalog-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  box-shadow: var(--shadow);
+}
+
+.extra h3,
+.catalog-card h3 {
+  font-size: 1.02rem;
+  margin-bottom: 0.4em;
+}
+
+.extra p,
+.catalog-card p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+@media (hover: hover) {
+  .extra:hover,
+  .catalog-card:hover {
+    border-color: var(--border-hover);
+    box-shadow: 0 0 0 1px var(--border-hover), var(--shadow-hover);
+  }
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .extra,
+  .catalog-card {
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+}
+
+.home .trust {
+  padding: 96px 0;
+}
+
+.home .stat-row {
+  margin-top: 0;
+}
+
+.home .trust-note {
+  font-size: 0.98rem;
+  max-width: 64ch;
+}
+
+.home .stream {
+  padding: 96px 0;
+}
+
+/* The catalog: eight groups on a grid instead of one long sentence. */
+.catalog {
+  padding: 96px 0;
+  background: var(--color-bg-alt);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.catalog-note {
+  margin: 24px 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+/* Gallery: six thumbnails, each opening the full capture in the lightbox. */
+.home .screenshots {
+  background: var(--color-bg);
+  border: none;
+  padding: 96px 0;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gallery-card {
+  margin: 0;
+}
+
+.gallery-card .shot-trigger {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  box-shadow: var(--shadow);
+}
+
+.gallery-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.gallery-card figcaption {
+  padding: 12px 2px 0;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.home .download {
+  background: var(--color-bg-alt);
+  border-top: 1px solid var(--color-border);
+}
+
+.download-lede {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 1.08rem;
+}
+
+/* The full footer: brand, three link columns, then the legal line. */
+.site-footer--full {
+  padding: 64px 0 36px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 32px;
+}
+
+.footer-brand p {
+  margin: 12px 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  max-width: 30ch;
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-col h2 {
+  margin: 0 0 4px;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+}
+
+.footer-col a {
+  color: var(--color-text);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.footer-col a:hover {
+  color: var(--color-primary);
+}
+
+.footer-bottom {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--color-text-muted);
+  font-size: 0.86rem;
+}
+
+.footer-bottom p {
+  margin: 0;
+}
+
+.footer-bottom a {
+  color: inherit;
+}
+
+@media (max-width: 960px) {
+  .catalog-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 860px) {
+  .home .hero {
+    padding: 64px 0 72px;
+  }
+
+  .pillar,
+  .pillar--reverse {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    margin-bottom: 72px;
+  }
+
+  /* Copy above the picture on narrow screens, whichever side it had. */
+  .pillar--reverse .pillar-copy {
+    order: 0;
+  }
+
+  .extras,
+  .gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 640px) {
+  .extras,
+  .gallery,
+  .catalog-grid,
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pillars,
+  .home .trust,
+  .home .stream,
+  .catalog,
+  .home .screenshots {
+    padding: 64px 0;
+  }
+}
+
+/* The section heads carry their own measure; the older per-section caps
+   (.stream h2 at 20ch, .trust h2 at 24ch) wrapped the new headings early. */
+.home .section-head h2 {
+  max-width: 28ch;
+}
+
+/* The User Guide's CC BY notice, in the full footer's bottom band. */
+.footer-bottom .footer-docs-licence {
+  max-width: 88ch;
+  margin-top: 8px;
+  line-height: 1.6;
 }

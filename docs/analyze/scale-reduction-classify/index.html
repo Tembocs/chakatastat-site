@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Scale, Dimension Reduction &amp; Classify — ChakataStat User Guide</title>
+  <title>Scale, Dimension Reduction &amp; Classify · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/analyze/scale-reduction-classify/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Scale, Dimension Reduction &amp; Classify — ChakataStat User Guide">
+  <meta property="og:title" content="Scale, Dimension Reduction &amp; Classify · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/analyze/scale-reduction-classify/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#validation">Validation</a>
+        <a href="../../../docs/" aria-current="page">User Guide</a>
+        <a href="../../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -98,7 +102,7 @@ reducing many variables to a few, and grouping or classifying cases.</p>
 <p><strong>When to use it.</strong> To check whether a set of items (e.g. questionnaire
 questions) measure one underlying construct consistently.</p>
 <p><strong>Dialog.</strong> Move the item variables into the list.</p>
-<p><strong>Output.</strong> <strong>Cronbach's alpha</strong> for the scale, plus <strong>item-total statistics</strong> —
+<p><strong>Output.</strong> <strong>Cronbach's alpha</strong> for the scale, plus <strong>item-total statistics</strong>:
 how each item correlates with the rest and what alpha would become if the item
 were dropped. Low item-total correlation flags an item that does not belong.</p>
 <h2 id="scale--intraclass-correlation">Scale → Intraclass Correlation</h2>
@@ -112,11 +116,11 @@ one row per subject.</p>
 confidence interval, F test and significance, plus the ANOVA mean squares they
 are built from. Pick the form from your design:</p>
 <ul>
-<li><strong>One-way vs two-way</strong> — one-way if each subject is rated by a <em>different</em>
+<li><strong>One-way vs two-way</strong>: one-way if each subject is rated by a <em>different</em>
 random set of raters; two-way if the <em>same</em> raters score every subject.</li>
-<li><strong>Absolute agreement vs consistency</strong> — agreement if the raters' actual values
+<li><strong>Absolute agreement vs consistency</strong>: agreement if the raters' actual values
 must match; consistency if a constant offset between raters is acceptable.</li>
-<li><strong>Single vs average measures</strong> — single if one rater's score will be used;
+<li><strong>Single vs average measures</strong>: single if one rater's score will be used;
 average if you will use the mean of all raters.</li>
 </ul>
 <blockquote>
@@ -124,26 +128,26 @@ average if you will use the mean of all raters.</li>
 Values near 1 mean highly reliable ratings; near 0, no better than chance.</p>
 </blockquote>
 <blockquote>
-<p>Comparing two measurement <strong>methods</strong> — where the question is how far apart
-they get in the measurement's own units, not a relative index — is the
+<p>Comparing two measurement <strong>methods</strong>, where the question is how far apart
+they get in the measurement's own units, not a relative index, is the
 <a href="../method-comparison/">Bland-Altman analysis</a>'s job (Scale → Bland-Altman).</p>
 </blockquote>
 <h2 id="dimension-reduction--factor">Dimension Reduction → Factor</h2>
 <p><strong>When to use it.</strong> To find a small number of latent <strong>factors</strong> behind many
 correlated variables. (Testing a structure you already <em>hypothesize</em> is the
-complementary procedure — see
+complementary procedure; see
 <a href="../cfa/">Confirmatory Factor Analysis</a>.)</p>
 <p><strong>Dialog.</strong> Move the variables in. In Options choose:</p>
 <ul>
-<li><strong>Extraction</strong> — principal components (default), principal-axis factoring, or
+<li><strong>Extraction</strong>: principal components (default), principal-axis factoring, or
 exact-discrepancy maximum likelihood;</li>
-<li><strong>Rotation</strong> — none, <strong>Varimax</strong> (orthogonal) or <strong>Promax</strong> (oblique);</li>
-<li><strong>Scree plot</strong> — on by default, the eigenvalues as a marked line with the
+<li><strong>Rotation</strong>: none, <strong>Varimax</strong> (orthogonal) or <strong>Promax</strong> (oblique);</li>
+<li><strong>Scree plot</strong>: on by default, the eigenvalues as a marked line with the
 Kaiser criterion line at 1 (the classic pick-the-elbow view);</li>
 <li><strong>save</strong> factor scores back as new variables.</li>
 </ul>
 <p><strong>Output.</strong> Communalities, total variance explained, the component/factor matrix
-(loadings), the scree plot, and — for ML — a goodness-of-fit χ² test. Oblique
+(loadings), the scree plot, and, for ML, a goodness-of-fit χ² test. Oblique
 rotation adds Pattern, Structure and Factor-Correlation matrices.</p>
 <p><strong>Example.</strong> Reduce the body-measurement and blood-pressure variables to a couple
 of interpretable factors.</p>
@@ -175,8 +179,8 @@ row and column category on them.</p>
 <p><strong>Dialog.</strong> Pick a <strong>Row variable</strong> and a <strong>Column variable</strong> (two different
 variables, text or numeric codes) and the number of <strong>Dimensions</strong> to report
 (default 2).</p>
-<p><strong>Output.</strong> A <strong>Correspondence Summary</strong> with one row per dimension —
-<strong>Singular Value</strong>, <strong>Inertia</strong>, <strong>% of Inertia</strong>, <strong>Cumulative %</strong> — and a
+<p><strong>Output.</strong> A <strong>Correspondence Summary</strong> with one row per dimension
+(<strong>Singular Value</strong>, <strong>Inertia</strong>, <strong>% of Inertia</strong>, <strong>Cumulative %</strong>) and a
 <strong>Total</strong> row; the note gives the χ² test of independence (total inertia =
 χ²/N). <strong>Row Points</strong> and <strong>Column Points</strong> tables list each category's
 <strong>Mass</strong> (its share of the total) and its principal coordinate on each
@@ -190,7 +194,7 @@ Weight Cases setting</strong>: each case adds its weight to its cell of the tabl
 </blockquote>
 <h2 id="dimension-reduction--multidimensional-scaling">Dimension Reduction → Multidimensional Scaling</h2>
 <p><strong>When to use it.</strong> To picture the <strong>cases</strong> as points in a few dimensions,
-laid out from their Euclidean distances over a set of numeric variables —
+laid out from their Euclidean distances over a set of numeric variables:
 classical (metric) scaling (the <code>multidimensional_scaling</code> tool).</p>
 <p><strong>Dialog.</strong> Tick at least two numeric <strong>Variables</strong>, then set <strong>Dimensions</strong>
 (default 2) and <strong>Max cases (0 = no cap)</strong> (default 200).</p>
@@ -201,7 +205,7 @@ each <strong>Dimension</strong> (<strong>Case</strong> is its row number). A dim
 is numerically zero is dropped, so you can get fewer than you asked for.</p>
 <blockquote>
 <p><strong>Scope limits.</strong> Distances are computed on the variables as given (not
-standardized) over the cases complete on every variable — at least three.
+standardized) over the cases complete on every variable (at least three).
 By default only the first <strong>200</strong> complete cases are placed, and the
 coordinates table says so; raise <strong>Max cases</strong>, or set it to <strong>0</strong> to lift
 the default. No setting goes past <strong>3,000 cases</strong>: the method holds two
@@ -226,7 +230,7 @@ optionally, each case's membership at a chosen number of clusters.</p>
 <blockquote>
 <p><strong>Scope limits.</strong> Capped at <strong>200 cases</strong> by default, because the method's cost
 grows steeply with case count (cubic in time, quadratic in memory). Raise
-<strong>Maximum cases</strong> — or set it to <strong>0</strong> to lift it — to cluster more; the
+<strong>Maximum cases</strong> (or set it to <strong>0</strong> to lift it) to cluster more; the
 result then carries a note that the cap was lifted. No setting takes it past
 <strong>10,000 cases</strong>: the distance matrix alone would need 800 MB there, and a
 larger request is refused rather than risking a crash (use k-means for
@@ -291,7 +295,7 @@ honoured</strong>.</p>
 </blockquote>
 <h3 id="roc-curve">ROC Curve</h3>
 <p><strong>When.</strong> Judge how well a <strong>continuous score</strong> (a measurement, or a fitted
-probability from logistic regression) separates two known classes — the standard
+probability from logistic regression) separates two known classes, the standard
 way to assess a diagnostic test or a binary classifier. <strong>Analyze → ROC Curve…</strong>
 (a top-level item, next to Classify).</p>
 <p><strong>Dialog.</strong> A <strong>Test variable</strong> (the numeric score) and a <strong>State variable</strong> (the
@@ -308,7 +312,7 @@ specificity − 1). The plot draws the curve on the unit square against the chan
 diagonal, annotates the AUC, and marks the optimal cut-point.</p>
 <blockquote>
 <p>The AUC equals the Mann-Whitney <em>U</em> statistic divided by the number of
-positive×negative pairs (ties counted as half) — the probability that a random
+positive×negative pairs (ties counted as half): the probability that a random
 positive scores above a random negative. A natural workflow is to fit a binary
 <strong>Logistic</strong> regression, <strong>save</strong> its predicted probabilities, and run ROC on
 that saved column.</p>
@@ -317,14 +321,14 @@ that saved column.</p>
 <code>1</code>): read the AUC, and take the cut-point that best balances sensitivity and
 specificity.</p>
 <h2 id="how-this-is-computed">How this is computed</h2>
-<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
+<p>This section names <em>which</em> method each procedure prints: the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules. Each line links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
 <ul>
-<li><strong>Reliability</strong> — Cronbach's α on the raw covariances and the standardized α on the correlations, both printed; item-total statistics and α-if-deleted (<a href="../../validation/conventions/classical/#reliability">reliability</a>). <strong>Intraclass correlation</strong> — the six Shrout–Fleiss forms with F-based intervals (<a href="../../validation/#coverage">validation</a>).</li>
-<li><strong>Factor</strong> — principal components by default, principal-axis (from the squared multiple correlations) or maximum likelihood on request; Kaiser's eigenvalue &gt; 1 retention unless a count is given; Varimax with Kaiser normalization or Promax (κ = 4); no rotation by default (<a href="../../validation/conventions/classical/#factor-analysis-extraction-retention-rotation">factor analysis</a>).</li>
-<li><strong>K-Means</strong> — Lloyd's algorithm on squared Euclidean distance over the variables as given (standardize first if scales differ); deterministic maximin seeding unless a seed asks for random starts. <strong>Hierarchical</strong> — average linkage (UPGMA) by default; Ward on squared Euclidean; a weight counts as coincident objects. <strong>Two-Step</strong> — the cluster count by a BIC-style criterion (<a href="../../validation/conventions/classical/#clustering">clustering</a>). Partitions are not pinned across packages (<a href="../../validation/#coverage">validation</a>).</li>
-<li><strong>Discriminant</strong> — Fisher's canonical functions from W⁻¹B; classification functions with <strong>priors proportional to group size</strong>; stepwise by Wilks' Λ with F = 3.84 (<a href="../../validation/conventions/classical/#discriminant-analysis-prior-probabilities">discriminant</a>).</li>
-<li><strong>ROC Curve</strong> — a larger score is more positive; tied scores get half credit (the Mann–Whitney identity); the Hanley–McNeil SE for the interval, the null SE for the test; Youden's J for the cut-point (<a href="../../validation/#coverage">validation</a>).</li>
-<li><strong>Decision Tree</strong> — CART with Gini (or entropy) impurity, or CHAID. <strong>Correspondence analysis / Multidimensional scaling / Canonical correlation</strong> — the classical eigen-decompositions (<a href="../../validation/#coverage">validation</a>).</li>
+<li><strong>Reliability</strong>: Cronbach's α on the raw covariances and the standardized α on the correlations, both printed; item-total statistics and α-if-deleted (<a href="../../validation/conventions/classical/#reliability">reliability</a>). <strong>Intraclass correlation</strong>: the six Shrout–Fleiss forms with F-based intervals (<a href="../../validation/#coverage">validation</a>).</li>
+<li><strong>Factor</strong>: principal components by default, principal-axis (from the squared multiple correlations) or maximum likelihood on request; Kaiser's eigenvalue &gt; 1 retention unless a count is given; Varimax with Kaiser normalization or Promax (κ = 4); no rotation by default (<a href="../../validation/conventions/classical/#factor-analysis-extraction-retention-rotation">factor analysis</a>).</li>
+<li><strong>K-Means</strong>: Lloyd's algorithm on squared Euclidean distance over the variables as given (standardize first if scales differ); deterministic maximin seeding unless a seed asks for random starts. <strong>Hierarchical</strong>: average linkage (UPGMA) by default; Ward on squared Euclidean; a weight counts as coincident objects. <strong>Two-Step</strong>: the cluster count by a BIC-style criterion (<a href="../../validation/conventions/classical/#clustering">clustering</a>). Partitions are not pinned across packages (<a href="../../validation/#coverage">validation</a>).</li>
+<li><strong>Discriminant</strong>: Fisher's canonical functions from W⁻¹B; classification functions with <strong>priors proportional to group size</strong>; stepwise by Wilks' Λ with F = 3.84 (<a href="../../validation/conventions/classical/#discriminant-analysis-prior-probabilities">discriminant</a>).</li>
+<li><strong>ROC Curve</strong>: a larger score is more positive; tied scores get half credit (the Mann–Whitney identity); the Hanley–McNeil SE for the interval, the null SE for the test; Youden's J for the cut-point (<a href="../../validation/#coverage">validation</a>).</li>
+<li><strong>Decision Tree</strong>: CART with Gini (or entropy) impurity, or CHAID. <strong>Correspondence analysis / Multidimensional scaling / Canonical correlation</strong>: the classical eigen-decompositions (<a href="../../validation/#coverage">validation</a>).</li>
 <li><strong>IRT, Latent Class, CFA, Propensity, Bland–Altman</strong> have their own pages with their own sections.</li>
 </ul>
 <h2 id="choosing-among-them">Choosing among them</h2>
@@ -350,29 +354,51 @@ Correlation</strong>.</li>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../../index.html">Home</a> ·
-        <a href="../../../quick-start/">Quick Start</a> ·
-        <a href="../../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../../license/">License</a> ·
-        <a href="../../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../../index.html">
+            <img class="brand-mark" src="../../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../../index.html#features">Features</a>
+          <a href="../../../index.html#screenshots">Screenshots</a>
+          <a href="../../../index.html#download">Download</a>
+          <a href="../../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../../docs/">User Guide</a>
+          <a href="../../../quick-start/">Quick Start</a>
+          <a href="../../../docs/validation/">Validation</a>
+          <a href="../../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../../cite/">How to cite</a>
+          <a href="../../../license/">License</a>
+          <a href="../../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

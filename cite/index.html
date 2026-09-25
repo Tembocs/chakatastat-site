@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>How to cite ChakataStat — ChakataStat</title>
+  <title>How to cite ChakataStat · ChakataStat</title>
   <meta name="description" content="How to cite ChakataStat: the concept DOI for the software itself, a version DOI for the exact release you ran, with APA and BibTeX examples.">
 
   <link rel="icon" type="image/svg+xml" href="../assets/logo-mark.svg">
@@ -48,19 +48,16 @@
 
   <header class="site-header">
     <div class="container nav">
-      <a class="brand" href="../index.html#top">
+      <a class="brand" href="../#top">
         <img class="brand-mark" src="../assets/logo-mark.svg" width="32" height="32" alt="">
         <span class="brand-name">ChakataStat</span>
       </a>
 
       <nav id="nav-links" class="nav-links">
+        <a href="../#features">Features</a>
+        <a href="../#validation">Validation</a>
         <a href="../docs/">User Guide</a>
-        <a href="../docs/validation/">Validation</a>
-        <a href="../cite/" aria-current="page">Cite</a>
-        <a href="../index.html#features">Features</a>
         <a href="../quick-start/">Quick Start</a>
-        <a href="../index.html#screenshots">Screenshots</a>
-        <a href="../index.html#analyze">Analyze</a>
       </nav>
 
       <div class="nav-actions">
@@ -73,7 +70,7 @@
             <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
           </svg>
         </button>
-        <a class="btn btn-primary nav-cta" href="../index.html#download">Download</a>
+        <a class="btn btn-primary nav-cta" href="../#download">Download</a>
         <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
           <span></span><span></span><span></span>
         </button>
@@ -85,23 +82,23 @@
     <section class="legal">
       <div class="container legal-content">
         <h1>How to cite ChakataStat</h1>
-        <p class="legal-updated">Last updated: August 23, 2026</p>
+        <p class="legal-updated">Last updated: September 25, 2026</p>
 
         <p>
           ChakataStat is archived on
           <a href="https://zenodo.org/records/22112257">Zenodo</a>, which
-          gives it two kinds of DOI. Which one you want depends on what you
-          are pointing at: the software, or the exact release that produced
-          your numbers.
+          gives it two kinds of DOI. Use the first to refer to the software
+          in general, and the second to refer to the exact release that
+          produced your results.
         </p>
 
         <h2>Citing the software</h2>
         <p>
-          Use the <strong>concept DOI</strong> when you mean ChakataStat
-          itself — in a methods section that names the tool, a
-          bibliography entry, or a link that should keep working after the
-          next release. It never changes, and it always resolves to the
-          newest version with every earlier one listed beneath it.
+          Use the <strong>concept DOI</strong> when you mean ChakataStat in
+          general, for example in a methods section that names the tool or
+          in a link that should keep working after the next release. It
+          never changes. It always leads to the newest version, with every
+          earlier version listed below it.
         </p>
         <p class="cite-block">
           Amani, E. (2026). <em>ChakataStat</em> [Computer software].
@@ -111,12 +108,12 @@
         <h2>Citing the version you ran</h2>
         <p>
           Use a <strong>version DOI</strong> when the result has to be
-          reproducible — a paper reporting statistics ChakataStat
-          computed, a pre-registration, a submitted analysis script. It
-          pins one release and one archived record, so a reader can identify
-          the exact release you used and reach its archived materials.
-          ChakataStat prints its version under <strong>Help → About</strong>
-          and at the foot of every output document.
+          reproducible, for example in a paper that reports statistics
+          computed with ChakataStat, a pre-registration or a submitted
+          analysis script. It points to one release, so a reader can find the
+          exact version you used and its archived files. ChakataStat shows
+          its version under <strong>Help → About</strong> and at the bottom
+          of every output document.
         </p>
         <p class="cite-block">
           Amani, E. (2026). <em>ChakataStat</em> (Version 0.24.0) [Computer
@@ -160,17 +157,21 @@
           </table>
         </div>
         <p>
-          Releases before 0.20.0 predate the archive and have no DOI; cite
-          those with the concept DOI and the version number. From 0.22.0 each
-          version record is minted by Zenodo from the release on GitHub and
-          archives that release's public repository snapshot; the Linux
-          installer and its <code>SHA256SUMS.txt</code> checksums sit on the
-          release the record points to. The 0.20.0 and 0.21.0 records were
-          archived by hand with the installer inside them, under the earlier
-          concept DOI <code>10.5281/zenodo.22043444</code>, which still
-          resolves. Either way a version DOI identifies the <em>release</em>:
-          a reader who ran the Windows or Snap build of 0.24.0 cites the same
-          DOI, and obtains that release from its own official channel.
+          Releases before 0.20.0 were made before the archive existed and have
+          no DOI. Cite them with the concept DOI and the version number.
+        </p>
+        <p>
+          From 0.22.0 on, Zenodo creates each version record from the release
+          on GitHub and archives that release's public repository. The Linux
+          installer and its <code>SHA256SUMS.txt</code> checksums are attached
+          to that release. The 0.20.0 and 0.21.0 records were archived by
+          hand, with the installer included, under an earlier concept DOI,
+          <code>10.5281/zenodo.22043444</code>, which still works.
+        </p>
+        <p>
+          A version DOI identifies the <em>release</em>, not the installer.
+          Whether you ran the Windows or the Snap build of 0.24.0, you cite
+          the same DOI.
         </p>
 
         <h2>BibTeX</h2>
@@ -183,35 +184,63 @@
   url     = {https://doi.org/10.5281/zenodo.22764163}
 }</code></pre>
         <p>
-          Drop the <code>version</code> field and swap in
-          <code>10.5281/zenodo.22112256</code> to cite the software rather
-          than one release.
+          To cite the software rather than one release, remove the
+          <code>version</code> field and use
+          <code>10.5281/zenodo.22112256</code> as the DOI.
         </p>
 
-        <h2>Citing the numbers, not just the tool</h2>
+        <h2>If a reviewer asks how the results were checked</h2>
         <p>
-          If a reviewer asks how the statistics were verified, the
-          <a href="../docs/validation/">validation report</a> is the citable
-          answer: it lists every statistic pinned to an independently
-          computed reference value, the tolerance recorded for each one, the
-          NIST certified datasets scored by digits of agreement, and the
-          convention chosen wherever a statistic has more than one defensible
-          definition.
+          Point them to the <a href="../docs/validation/">validation
+          report</a>. It lists every statistic that is compared with an
+          independently computed reference value, the tolerance used for
+          each, the NIST reference datasets with their digits of agreement,
+          and the definition chosen wherever a statistic has more than one
+          accepted form.
         </p>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer" id="cite">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-cite">
-        Cite: Amani, E. (2026). <em>ChakataStat</em> [Computer software].
-        <a href="https://doi.org/10.5281/zenodo.22112256">https://doi.org/10.5281/zenodo.22112256</a>
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../">
+            <img class="brand-mark" src="../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../#features">Features</a>
+          <a href="../#screenshots">Screenshots</a>
+          <a href="../#download">Download</a>
+          <a href="../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../docs/">User Guide</a>
+          <a href="../quick-start/">Quick Start</a>
+          <a href="../docs/validation/">Validation</a>
+          <a href="../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../cite/">How to cite</a>
+          <a href="../license/">License</a>
+          <a href="../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p>
+          Cite as: Amani, E. (2026). <em>ChakataStat</em> [Computer software].
+          <a href="https://doi.org/10.5281/zenodo.22112256">doi.org/10.5281/zenodo.22112256</a>
+        </p>
+      </div>
     </div>
   </footer>
 

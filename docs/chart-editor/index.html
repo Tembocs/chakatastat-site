@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Editing a chart — ChakataStat User Guide</title>
+  <title>Editing a chart · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/chart-editor/">
   <link rel="icon" type="image/svg+xml" href="../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Editing a chart — ChakataStat User Guide">
+  <meta property="og:title" content="Editing a chart · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/chart-editor/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../index.html#features">Features</a>
+        <a href="../../index.html#validation">Validation</a>
+        <a href="../../docs/" aria-current="page">User Guide</a>
+        <a href="../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -94,9 +98,9 @@
 <h1 id="editing-a-chart">Editing a chart</h1>
 <p>Every chart in the Output log has an <strong>Edit chart…</strong> button in its card header.
 It opens the chart editor: a live preview with the presentation controls that
-chart actually supports — legend placement, series colours, line width, bar
+chart actually supports (legend placement, series colours, line width, bar
 stacking and spacing, axis limits and reference lines, text size, logarithmic
-axes, and the title.</p>
+axes, and the title).</p>
 <p>The editor changes how a chart <em>looks</em>. It never changes what it <em>measures</em>: no
 control in it can alter a variable, a filter, a bin count or a statistic. To
 change the analysis, re-run the command.</p>
@@ -111,18 +115,18 @@ swaps the restyled chart into the same slot in the Output log:</p>
 <p>becomes, after you stack the bars, move the legend and pick two colours:</p>
 <pre><code>bar_chart category=Region, cluster=Treatment, stacked=true, legend=bottom, colors=[&quot;#1f77b4&quot;, &quot;#d62728&quot;]
 </code></pre>
-<p>(One command per line, however long — see
+<p>(One command per line, however long; see
 <a href="../advanced/reproducibility/#one-command-per-line">Reproducibility</a>.)</p>
 <p>That is the whole design. Re-run the script tomorrow, hand it to a colleague,
 or replay it on next year's data, and the chart comes back <strong>styled exactly as
-you left it</strong> — because the styling is part of the analysis you recorded, not a
+you left it</strong>, because the styling is part of the analysis you recorded, not a
 layer on top of it. Nothing you can do in the editor is unreproducible.</p>
 <p>It also means the editor and the console are two views of one thing: anything
 the editor can set, you can type; anything you type, the editor picks up when
 you open it.</p>
 <h2 id="what-you-can-edit">What you can edit</h2>
 <p>The editor asks the chart's own command what arguments it takes and offers
-exactly those controls — so it never shows you a control that would do nothing.
+exactly those controls, so it never shows you a control that would do nothing.
 A bar chart has no <strong>Line width</strong>; a histogram has one colour rather than a
 series list; a violin plot has no <strong>Legend</strong>, because it labels its groups on
 the axis instead.</p>
@@ -177,7 +181,7 @@ the axis instead.</p>
 </tr>
 <tr>
 <td><strong>Horizontal lines at</strong> / <strong>Vertical lines at</strong></td>
-<td>Dashed reference lines at the values you type — a mean, a threshold, a target. Separate several with commas</td>
+<td>Dashed reference lines at the values you type: a mean, a threshold, a target. Separate several with commas</td>
 <td>As above, per axis</td>
 </tr>
 <tr>
@@ -197,7 +201,7 @@ the axis instead.</p>
 </tr>
 <tr>
 <td><strong>Text size</strong></td>
-<td>Scales every piece of text on the chart at once — tick labels, axis titles, legend, annotations — from 0.5× to 3×. The gutters grow with it so larger labels still fit</td>
+<td>Scales every piece of text on the chart at once (tick labels, axis titles, legend, annotations), from 0.5× to 3×. The gutters grow with it so larger labels still fit</td>
 <td>Every chart the editor opens for</td>
 </tr>
 <tr>
@@ -208,7 +212,7 @@ the axis instead.</p>
 </tbody>
 </table></div>
 <p><strong>Why a control appears on some charts and not others.</strong> The right-hand column
-above is not a rule of thumb — each control is offered only where it would
+above is not a rule of thumb: each control is offered only where it would
 actually do something:</p>
 <ul>
 <li>An <strong>axis label</strong> appears where that axis has a title to rename. A boxplot
@@ -222,30 +226,30 @@ takes no <strong>Y min</strong>. Kaplan-Meier is finer still: the cumulative-haz
 takes a y limit, the survival curve does not, because clipping a probability
 axis would misrepresent the estimate rather than reframe the view.</li>
 <li><strong>Markers</strong> appear only where a chart draws a mark at each data point.</li>
-<li>A <strong>logarithmic axis</strong> needs an axis that is a <em>measured quantity</em> — never a
+<li>A <strong>logarithmic axis</strong> needs an axis that is a <em>measured quantity</em>, never a
 bar chart's categories, a Q-Q plot's theoretical quantiles or a survival
 curve's probability. It also needs every plotted value on that axis to be
 positive, because zero and negatives have no logarithm. When the chart's
 data includes one, the switch is shown disabled with the offending value
 named beneath it, and the same request typed in the console is refused with
-the same message — the points are <strong>never</strong> silently dropped to make the
+the same message. The points are <strong>never</strong> silently dropped to make the
 axis fit. An <strong>X min</strong> or <strong>Y min</strong> on a log axis must be positive for the
 same reason. On a Kaplan-Meier plot the curve's start at time 0 does not
 count: it is drawn from the axis edge, and only the event times must be
 positive.</li>
 </ul>
-<p>A reference line outside the axis range is simply not drawn — the axis is not
+<p>A reference line outside the axis range is simply not drawn. The axis is not
 stretched to reach it, because that would quietly undo a limit you set.</p>
-<p>Three deliberate gaps, all for the same reason — an option that cannot be
-stated honestly is not offered:</p>
+<p>Three deliberate gaps, all for the same reason (an option that cannot be
+stated honestly is not offered):</p>
 <ul>
 <li><strong>Kaplan-Meier plots take no title.</strong> One <code>kaplan_meier</code> command can draw two
 different charts (the survival curve and the cumulative hazard), and a single
-title argument cannot name both. Their other controls all work — including
+title argument cannot name both. Their other controls all work, including
 the axis labels, because both charts share a time axis and the y label
 follows the curve kind.</li>
-<li><strong>Charts embedded in an analysis's output</strong> — a regression's diagnostic
-panels, a scree plot, a dendrogram — have no Edit button. They are byproducts
+<li><strong>Charts embedded in an analysis's output</strong> (a regression's diagnostic
+panels, a scree plot, a dendrogram) have no Edit button. They are byproducts
 of an analysis command rather than charts you asked for, and styling them
 would mean putting presentation arguments on statistical procedures.</li>
 </ul>
@@ -259,7 +263,7 @@ survive a window resize honestly. Use <strong>Legend → Hidden</strong> to remo
 <li><strong>Click a legend row</strong> to select that series; its row lights up in the colour
 list, so you can recolour the series you pointed at rather than counting rows.</li>
 </ul>
-<p>Charts without a legend — the violin plot, the single-colour charts — are edited
+<p>Charts without a legend (the violin plot, the single-colour charts) are edited
 entirely from the panel, which always works.</p>
 <h2 id="split-file-one-edit-the-whole-set">Split File: one edit, the whole set</h2>
 <p>Under <a href="../cases-and-transforms/">Split File</a>, one command produces one chart per
@@ -268,8 +272,8 @@ restyles <strong>all</strong> of them, and the editor says so before you apply. 
 styling is not something the command can express, so it is not something the
 editor pretends to do.</p>
 <p>Titles are the exception that proves the rule. Rename a split chart &quot;Blood
-pressure&quot; and each group keeps its own qualifier —
-<code>Blood pressure [region = North]</code>, <code>Blood pressure [region = South]</code> — because
+pressure&quot; and each group keeps its own qualifier
+(<code>Blood pressure [region = North]</code>, <code>Blood pressure [region = South]</code>), because
 otherwise a renamed set would be several identical-looking charts with nothing
 to tell them apart.</p>
 <h2 id="when-the-journal-gains-a-line-instead">When the journal gains a line instead</h2>
@@ -277,7 +281,7 @@ to tell them apart.</p>
 append a new line instead, and the chart's note says so when it happens:</p>
 <ul>
 <li><strong>A chart the AI assistant made.</strong> The assistant runs tools directly and does
-not record them, so there is no line to amend — styling one of its charts is
+not record them, so there is no line to amend; styling one of its charts is
 what finally gives it a command in the journal. That is the journal doing its
 job, not an error.</li>
 <li><strong>A line you edited away.</strong> If you have since rewritten or deleted the
@@ -291,49 +295,71 @@ current output, styled as seen</strong>.</p>
 <p>By design, and recorded rather than merely missing: no annotations or
 free-standing text, no free-pixel legend placement, no per-group styling of a
 split set, no per-element text sizes (one <strong>Text size</strong> scales everything, on
-purpose — a chart with three type sizes chosen by hand rarely reads better
+purpose: a chart with three type sizes chosen by hand rarely reads better
 than one), and no editing of data or of what is plotted. The editor edits what
-the recorded command can express — exactly that, so that everything it can do
+the recorded command can express, and exactly that, so that everything it can do
 survives a re-run.</p>
 <p>(Axis ranges, tick control, font scaling and a log axis <em>were</em> all on this
 list until 0.22.0, which added axis limits, reference lines, step-aware tick
 labels, <strong>Text size</strong> and the two <strong>Logarithmic axis</strong> switches.)</p>
 <h2 id="see-also">See also</h2>
 <ul>
-<li><a href="../graphs/">Graphs</a> — the chart dialogs and what each chart is for, and
+<li><a href="../graphs/">Graphs</a>: the chart dialogs and what each chart is for, and
 <a href="../graphs/#exporting-one-chart">exporting one chart</a> to PNG, SVG or PDF.
 Everything you set here is part of the chart, so it is part of every export.</li>
-<li><a href="../advanced/reproducibility/">Reproducibility</a> — the command journal the
+<li><a href="../advanced/reproducibility/">Reproducibility</a>: the command journal the
 editor writes into, and the presentation arguments you can type directly.</li>
-<li><a href="../settings/">Settings</a> — the palette every chart starts from.</li>
+<li><a href="../settings/">Settings</a>: the palette every chart starts from.</li>
 </ul>
       </article>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../index.html">Home</a> ·
-        <a href="../../quick-start/">Quick Start</a> ·
-        <a href="../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../license/">License</a> ·
-        <a href="../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../index.html">
+            <img class="brand-mark" src="../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../index.html#features">Features</a>
+          <a href="../../index.html#screenshots">Screenshots</a>
+          <a href="../../index.html#download">Download</a>
+          <a href="../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../docs/">User Guide</a>
+          <a href="../../quick-start/">Quick Start</a>
+          <a href="../../docs/validation/">Validation</a>
+          <a href="../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../cite/">How to cite</a>
+          <a href="../../license/">License</a>
+          <a href="../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

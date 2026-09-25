@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Advanced Features — ChakataStat User Guide</title>
+  <title>Advanced Features · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/advanced/">
   <link rel="icon" type="image/svg+xml" href="../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Advanced Features — ChakataStat User Guide">
+  <meta property="og:title" content="Advanced Features · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/advanced/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../index.html#features">Features</a>
+        <a href="../../index.html#validation">Validation</a>
+        <a href="../../docs/" aria-current="page">User Guide</a>
+        <a href="../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -92,27 +96,27 @@
       </aside>
       <article class="docs-content">
 <h1 id="advanced-features">Advanced Features</h1>
-<p>Everything in this section is <strong>optional</strong>. The core of ChakataStat — import,
-define, analyse, chart, save — needs none of it. These pages are for when you
+<p>Everything in this section is <strong>optional</strong>. The core of ChakataStat (import,
+define, analyse, chart, save) needs none of it. These pages are for when you
 want to go further: ask for analyses in plain language, make your work
 reproducible and scriptable, or reach the engine directly.</p>
 <p>They share one foundation. Every analysis, chart and transform in ChakataStat is
 a single named <strong>command</strong>. The menus emit commands, and so the same commands can
-be typed, scripted, asked for by an AI, or sent by another program — all driving
+be typed, scripted, asked for by an AI, or sent by another program, all driving
 the one engine, all returning results (including errors) as data. The advanced
 features are different windows onto that one command stream.</p>
 <h2 id="the-sections">The sections</h2>
 <ol>
 <li>
-<p><strong><a href="ai-assistant/">The AI Assistant</a></strong> — connect a model backend (Claude or
+<p><strong><a href="ai-assistant/">The AI Assistant</a></strong>: connect a model backend (Claude or
 any OpenAI-compatible endpoint), ask for analyses in plain English, and read
 the resulting tables and charts inline. Choose and switch among several
 backends; add custom context about your data.</p>
 </li>
 <li>
-<p><strong><a href="reproducibility/">Reproducibility</a></strong> — the <code>.cks</code> <strong>syntax console</strong> that
+<p><strong><a href="reproducibility/">Reproducibility</a></strong>: the <code>.cks</code> <strong>syntax console</strong> that
 records and replays your work, now a real <strong>syntax editor</strong> (line numbers,
-colours, bracket matching, find &amp; replace, run keys — and, as you type,
+colours, bracket matching, find &amp; replace, run keys and, as you type,
 <strong>error checking</strong>, <strong>completion</strong> over the catalog and your variables,
 and <strong>hover help</strong>); the <strong>command palette</strong>; <strong>headless batch runs</strong>
 (<code>--run</code>) for CI and pipelines; <strong>exporting the output log</strong> to
@@ -120,12 +124,12 @@ HTML/Markdown/LaTeX; and <strong>exporting a session as Python</strong> for the
 external Python client.</p>
 </li>
 <li>
-<p><strong><a href="engine-access/">Direct Engine Access</a></strong> — <strong>Advanced mode</strong>, the
+<p><strong><a href="engine-access/">Direct Engine Access</a></strong>: <strong>Advanced mode</strong>, the
 <strong>engine diagnostics</strong> panel, and driving ChakataStat from another program
 over <strong>MCP</strong>.</p>
 </li>
 <li>
-<p><strong><a href="verify-installation/">Verify this Installation</a></strong> — run the built-in
+<p><strong><a href="verify-installation/">Verify this Installation</a></strong>: run the built-in
 check of the installed copy against independently computed reference
 values (and NIST certified datasets), from the Help menu or headless with
 <code>--verify</code>, and read the report it prints.</p>
@@ -137,38 +141,60 @@ values (and NIST certified datasets), from the Help menu or headless with
 <li>The <strong>engine diagnostics</strong> panel is hidden until you enable <strong>Advanced mode</strong>
 in Settings.</li>
 <li>The <strong>AI assistant</strong> and <strong>MCP</strong> callers see only the tools you allow; the
-<strong>read-only</strong> profile — the assistant's default, flipped from its panel's
-header — lets them run analyses but blocks anything that changes data — the
+<strong>read-only</strong> profile (the assistant's default, flipped from its panel's
+header) lets them run analyses but blocks anything that changes data: the
 transforms and the analyses' <em>save columns</em> options alike.</li>
-<li>Your <strong>API key is never stored</strong> — only your choice of backend is remembered.</li>
+<li>Your <strong>API key is never stored</strong>; only your choice of backend is remembered.</li>
 </ul>
       </article>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../index.html">Home</a> ·
-        <a href="../../quick-start/">Quick Start</a> ·
-        <a href="../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../license/">License</a> ·
-        <a href="../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../index.html">
+            <img class="brand-mark" src="../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../index.html#features">Features</a>
+          <a href="../../index.html#screenshots">Screenshots</a>
+          <a href="../../index.html#download">Download</a>
+          <a href="../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../docs/">User Guide</a>
+          <a href="../../quick-start/">Quick Start</a>
+          <a href="../../docs/validation/">Validation</a>
+          <a href="../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../cite/">How to cite</a>
+          <a href="../../license/">License</a>
+          <a href="../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

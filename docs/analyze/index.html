@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Analyzing Data — ChakataStat User Guide</title>
+  <title>Analyzing Data · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/analyze/">
   <link rel="icon" type="image/svg+xml" href="../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Analyzing Data — ChakataStat User Guide">
+  <meta property="og:title" content="Analyzing Data · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/analyze/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../index.html#features">Features</a>
+        <a href="../../index.html#validation">Validation</a>
+        <a href="../../docs/" aria-current="page">User Guide</a>
+        <a href="../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -104,16 +108,16 @@ worked examples on the bundled sample data (<strong>File → Open Sample Dataset
 <li>A <strong>source list</strong> of variables on the left; <strong>target list(s)</strong> (Variables,
 Factor, Dependent, …) on the right. Double-click or use the arrows to move
 variables across.</li>
-<li>An <strong>Options</strong> section (collapsible) holds the advanced knobs — confidence
+<li>An <strong>Options</strong> section (collapsible) holds the advanced knobs: confidence
 level, significance level (α), one/two-tailed, missing-data handling, random
-seed — hidden by default so the common path stays simple.</li>
+seed. They are hidden by default so the common path stays simple.</li>
 <li>A <strong>Run</strong> button (also <strong>Enter</strong>) dispatches the analysis; it shows a spinner
 while the engine works and blocks a double-submit. <strong>Esc</strong> cancels.</li>
 <li>Results append to the <strong>Output View</strong> as titled cards. Many dialogs also offer
 a <strong>Plot…</strong> checkbox that adds a chart built from the result.</li>
 </ul>
-<p>Every analysis respects the active <strong>case semantics</strong> — Select, Weight and Split
-— described in <a href="../cases-and-transforms/">Case Semantics &amp; Transforms</a>. And
+<p>Every analysis respects the active <strong>case semantics</strong> (Select, Weight and Split),
+described in <a href="../cases-and-transforms/">Case Semantics &amp; Transforms</a>. And
 every run is recorded in the <a href="../advanced/reproducibility/">Syntax console</a>.</p>
 <h2 id="the-procedures">The procedures</h2>
 <div class="docs-table-wrap"><table>
@@ -148,7 +152,7 @@ every run is recorded in the <a href="../advanced/reproducibility/">Syntax conso
 <tr>
 <td><strong><a href="power/">Power Analysis</a></strong></td>
 <td>Power Analysis</td>
-<td>Power, required sample size or minimum detectable effect for the t tests, one-way ANOVA, a correlation, two proportions and the regression R² — no dataset needed</td>
+<td>Power, required sample size or minimum detectable effect for the t tests, one-way ANOVA, a correlation, two proportions and the regression R²; no dataset needed</td>
 </tr>
 <tr>
 <td><strong><a href="bootstrap/">Bootstrap Confidence Intervals</a></strong></td>
@@ -220,35 +224,57 @@ every run is recorded in the <a href="../advanced/reproducibility/">Syntax conso
 <h2 id="a-note-on-assumptions">A note on assumptions</h2>
 <p>Many procedures carry optional <strong>assumption checks</strong> (Levene's test of equal
 variances, Mauchly's sphericity test, Tests of Normality, casewise influence
-diagnostics). Where they exist, the relevant page points them out — turning them
+diagnostics). Where they exist, the relevant page points them out. Turning them
 on costs nothing and keeps you honest about whether the headline test is valid.</p>
       </article>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../index.html">Home</a> ·
-        <a href="../../quick-start/">Quick Start</a> ·
-        <a href="../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../license/">License</a> ·
-        <a href="../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../index.html">
+            <img class="brand-mark" src="../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../index.html#features">Features</a>
+          <a href="../../index.html#screenshots">Screenshots</a>
+          <a href="../../index.html#download">Download</a>
+          <a href="../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../docs/">User Guide</a>
+          <a href="../../quick-start/">Quick Start</a>
+          <a href="../../docs/validation/">Validation</a>
+          <a href="../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../cite/">How to cite</a>
+          <a href="../../license/">License</a>
+          <a href="../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

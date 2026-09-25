@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Panel Regression — ChakataStat User Guide</title>
+  <title>Panel Regression · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/analyze/panel/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Panel Regression — ChakataStat User Guide">
+  <meta property="og:title" content="Panel Regression · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/analyze/panel/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#validation">Validation</a>
+        <a href="../../../docs/" aria-current="page">User Guide</a>
+        <a href="../../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -92,19 +96,19 @@
       </aside>
       <article class="docs-content">
 <h1 id="panel-regression">Panel Regression</h1>
-<p><strong>Analyze → Regression → Panel Regression.</strong> For <strong>panel (longitudinal) data</strong>
-— the same entities (firms, patients, countries, stores) observed repeatedly
+<p><strong>Analyze → Regression → Panel Regression.</strong> For <strong>panel (longitudinal) data</strong>:
+the same entities (firms, patients, countries, stores) observed repeatedly
 over time. Repeated observations are an opportunity, not just a nuisance: each
 entity can serve as its own control, so effects can be estimated from
 <strong>within-entity variation</strong> alone, sweeping out everything about an entity
-that never changes — measured or not.</p>
+that never changes, measured or not.</p>
 <p>That identification strategy is what distinguishes this procedure from adding
 entity dummies to an ordinary regression by hand, and from the
 <a href="../correlation-and-regression/#linear-mixed-model">Linear Mixed Model</a>, which
 overlaps statistically but frames its output around variance components rather
 than the fixed-/random-effects choice econometrics expects.</p>
 <h2 id="the-data-layout">The data layout</h2>
-<p>Panel data is entered in <strong>long format</strong> — one row per entity-period, with the
+<p>Panel data is entered in <strong>long format</strong>, one row per entity-period, with the
 identifiers as ordinary columns:</p>
 <div class="docs-table-wrap"><table>
 <thead>
@@ -148,72 +152,72 @@ identifiers as ordinary columns:</p>
 </tbody>
 </table></div>
 <ul>
-<li><strong>Entity</strong> — which unit the row belongs to. Numeric or string; every row
+<li><strong>Entity</strong>: which unit the row belongs to. Numeric or string; every row
 needs one.</li>
-<li><strong>Time</strong> (optional) — the period. When given, a duplicate entity-time pair
+<li><strong>Time</strong> (optional): the period. When given, a duplicate entity-time pair
 stops the analysis with a message (it almost always means a data problem).
 Without it, rows are taken in dataset order within each entity.</li>
-<li><strong>Dependent</strong> and <strong>Regressors</strong> — ordinary numeric variables.</li>
+<li><strong>Dependent</strong> and <strong>Regressors</strong>: ordinary numeric variables.</li>
 </ul>
 <p>Unbalanced panels (entities with different numbers of periods) are supported;
-the output's entity and period counts show what was actually estimated —
-dropped rows change the counts, never silently shrink the estimate.</p>
+the output's entity and period counts show what was actually estimated.
+Dropped rows change the counts, never silently shrink the estimate.</p>
 <h2 id="choosing-an-estimator">Choosing an estimator</h2>
 <ul>
-<li><strong>Fixed effects (within)</strong> — the default. Each variable is demeaned by its
+<li><strong>Fixed effects (within)</strong>: the default. Each variable is demeaned by its
 entity mean and OLS runs on the deviations, which is equivalent to giving
-every entity its own intercept. Anything constant within an entity —
-industry, sex, an unmeasured &quot;management quality&quot; — is swept out, so FE is
+every entity its own intercept. Anything constant within an entity
+(industry, sex, an unmeasured &quot;management quality&quot;) is swept out, so FE is
 robust to time-invariant confounding, but it also <strong>cannot estimate</strong> the
 effect of a time-invariant regressor (the procedure stops with a message
 naming it).</li>
-<li><strong>Random effects (GLS)</strong> — treats the entity effect as a random draw
+<li><strong>Random effects (GLS)</strong>: treats the entity effect as a random draw
 uncorrelated with the regressors. More efficient than FE when that
-assumption holds, and it <em>can</em> estimate time-invariant regressors — but if
+assumption holds, and it <em>can</em> estimate time-invariant regressors, but if
 the entity effect is correlated with a regressor, RE is biased. The
 reported <strong>θ</strong> shows how far toward FE the GLS transformation sat
 (θ = 0 is pooled OLS, θ → 1 is FE).</li>
-<li><strong>Pooled OLS</strong> — ignores the panel structure entirely; the baseline the
+<li><strong>Pooled OLS</strong>: ignores the panel structure entirely; the baseline the
 other two are compared against.</li>
 </ul>
-<p><strong>Standard errors</strong>: <strong>Conventional</strong>, or <strong>Clustered by entity</strong> — robust to
-arbitrary within-entity correlation over time, the usual default in applied
+<p><strong>Standard errors</strong>: <strong>Conventional</strong>, or <strong>Clustered by entity</strong>, which is robust to
+arbitrary within-entity correlation over time and the usual default in applied
 panel work whenever T is more than a couple of periods.</p>
-<h2 id="the-hausman-test--what-it-does-and-does-not-tell-you">The Hausman test — what it does and does not tell you</h2>
+<h2 id="the-hausman-test-what-it-does-and-does-not-tell-you">The Hausman test: what it does and does not tell you</h2>
 <p>Whenever both FE and RE can be fitted, a <strong>Hausman Test</strong> table compares their
 slope estimates. Under the null hypothesis the entity effect is uncorrelated
 with the regressors, so FE and RE both estimate the same thing and RE is the
 efficient choice; a <strong>small p-value</strong> says their estimates differ by more than
-sampling noise — evidence the RE assumption fails, so use fixed effects.</p>
+sampling noise: evidence the RE assumption fails, so use fixed effects.</p>
 <p>What it does <strong>not</strong> tell you: a large p-value does not <em>prove</em> RE is valid
 (it may simply lack power), and the test says nothing about time-varying
 confounding, which neither estimator fixes. In finite samples the statistic
-can come out <strong>negative</strong> — a failure of the test's conditions, reported as
-computed with a note rather than hidden — and a negative H does not reject
+can come out <strong>negative</strong> (a failure of the test's conditions, reported as
+computed with a note rather than hidden), and a negative H does not reject
 random effects.</p>
 <h2 id="reading-the-output">Reading the output</h2>
 <ul>
-<li><strong>Fixed Effects / Random Effects / Pooled OLS Coefficients</strong> — the chosen
+<li><strong>Fixed Effects / Random Effects / Pooled OLS Coefficients</strong>: the chosen
 estimator's slopes with SEs, t, p and confidence intervals. The table note
 names the SE type and the degrees of freedom.</li>
-<li><strong>Model Summary</strong> — the econometrics vocabulary: <strong>N</strong> (observations),
+<li><strong>Model Summary</strong> uses the econometrics vocabulary: <strong>N</strong> (observations),
 <strong>n</strong> (entities), <strong>T min / mean / max</strong>, and the three R²s. For RE it adds
 <strong>σ_u</strong> (entity-effect SD), <strong>σ_e</strong> (idiosyncratic SD), <strong>ρ</strong> (the share of
 variance due to entities) and <strong>θ</strong>.</li>
-<li><strong>Estimator Comparison</strong> — all three estimators side by side with
+<li><strong>Estimator Comparison</strong>: all three estimators side by side with
 conventional SEs, so a coefficient's sensitivity to the choice is visible
 at a glance. An estimator that could not be fitted is named in the note.</li>
-<li><strong>Hausman Test</strong> — see above.</li>
+<li><strong>Hausman Test</strong>: see above.</li>
 </ul>
 <h3 id="within-between-and-overall-r">Within, between and overall R²</h3>
 <p>The most common misreading of panel output is treating the three R²s as one
 number:</p>
 <ul>
-<li><strong>R² within</strong> — how well the model explains variation <strong>inside</strong> entities
+<li><strong>R² within</strong>: how well the model explains variation <strong>inside</strong> entities
 over time (on the demeaned data). This is the number FE actually maximizes,
 and the one to quote for a within identification strategy.</li>
-<li><strong>R² between</strong> — how well it explains differences <strong>across</strong> entity means.</li>
-<li><strong>R² overall</strong> — on the raw data, mixing the two.</li>
+<li><strong>R² between</strong>: how well it explains differences <strong>across</strong> entity means.</li>
+<li><strong>R² overall</strong>: on the raw data, mixing the two.</li>
 </ul>
 <p>A model can have a high within R² and a near-zero between R² (or vice versa);
 which one matters depends on which variation answers your question.</p>
@@ -229,7 +233,7 @@ charged against the residual df (df = N − n − K), matching Stata's
 <code>xtreg, fe</code>. The intercept is the grand-mean constant, Stata-style.</li>
 <li><strong>Cluster-robust small-sample factor</strong>: <code>xtreg</code>'s
 G/(G−1) · (N−1)/(N−K), which does <strong>not</strong> charge the absorbed entity
-effects — Stata's <code>areg</code> does, and reports larger SEs for the same model.</li>
+effects; Stata's <code>areg</code> does, and reports larger SEs for the same model.</li>
 <li><strong>Hausman</strong>: the classic form on conventional covariances, slopes only.</li>
 <li>Inference is <strong>t on the residual df</strong> for all three estimators, and the
 R²s are the 1 − SSR/TSS family (Stata defines between/overall R² as
@@ -240,18 +244,18 @@ points before suspecting the data.</p>
 <blockquote>
 <p><strong>Weighting.</strong> Computed <strong>unweighted by design</strong>: a frequency weight
 replicates cases, and no reference package defines the within/GLS
-transformations under that reading — an active Weight Cases variable only
+transformations under that reading. An active Weight Cases variable only
 selects cases, and the output says so. Select Cases and Split File are
 honored.</p>
 </blockquote>
 <h2 id="how-this-is-computed">How this is computed</h2>
-<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>. The choices specific to panels are spelled out in
+<p>This section names <em>which</em> method each procedure prints: the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules. Each line links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>. The choices specific to panels are spelled out in
 <a href="#the-conventions-behind-the-numbers">The conventions behind the numbers</a> above.</p>
 <ul>
-<li><strong>Fixed effects</strong> — the within transformation with the grand means added back (a Stata-style constant), residual df N − n − K (<a href="../../validation/tolerances/">panel conventions</a>).</li>
-<li><strong>Random effects</strong> — Swamy–Arora variance components, the harmonic-mean T̄ on unbalanced panels — where plm's Baltagi–Chang correction differs, recorded (<a href="../../validation/conventions/regression/#the-unbalanced-panels-variance-components--the-0230-convention">unbalanced panel</a>).</li>
+<li><strong>Fixed effects</strong>: the within transformation with the grand means added back (a Stata-style constant), residual df N − n − K (<a href="../../validation/tolerances/">panel conventions</a>).</li>
+<li><strong>Random effects</strong>: Swamy–Arora variance components, the harmonic-mean T̄ on unbalanced panels, where plm's Baltagi–Chang correction differs, recorded (<a href="../../validation/conventions/regression/#the-unbalanced-panels-variance-components--the-0230-convention">unbalanced panel</a>).</li>
 <li><strong>Pooled OLS</strong>, the <strong>classic Hausman</strong> on conventional covariances (slopes only), <strong>cluster-robust SEs</strong> with the <code>xtreg</code> factor G/(G − 1)·(N − 1)/(N − K), and the 1 − SSR/TSS family of within / between / overall R² (<a href="../../validation/tolerances/">panel conventions</a>).</li>
-<li><strong>Weights</strong> — computed unweighted by design; an active weight only selects cases and the output says so.</li>
+<li><strong>Weights</strong>: computed unweighted by design; an active weight only selects cases and the output says so.</li>
 </ul>
 <h2 id="reproducibility">Reproducibility</h2>
 <p>Like every analysis, a run journals a syntax command, e.g.:</p>
@@ -262,7 +266,7 @@ honored.</p>
 recorded only when set. The same tool is available to the AI assistant, MCP
 and batch scripts, and every table it prints carries an <strong>Ask the assistant
 about this</strong> action (0.22.0) that hands the rendered result to the
-<a href="../../advanced/ai-assistant/">AI assistant</a> to interpret — the Hausman table
+<a href="../../advanced/ai-assistant/">AI assistant</a> to interpret; the Hausman table
 is the one people most often ask about.</p>
 <blockquote>
 <p><strong>Scope (v1).</strong> One-way (entity) effects, balanced or unbalanced panels.
@@ -273,29 +277,51 @@ or two-way clustered SEs, no between estimator or first differences.</p>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../../index.html">Home</a> ·
-        <a href="../../../quick-start/">Quick Start</a> ·
-        <a href="../../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../../license/">License</a> ·
-        <a href="../../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../../index.html">
+            <img class="brand-mark" src="../../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../../index.html#features">Features</a>
+          <a href="../../../index.html#screenshots">Screenshots</a>
+          <a href="../../../index.html#download">Download</a>
+          <a href="../../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../../docs/">User Guide</a>
+          <a href="../../../quick-start/">Quick Start</a>
+          <a href="../../../docs/validation/">Validation</a>
+          <a href="../../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../../cite/">How to cite</a>
+          <a href="../../../license/">License</a>
+          <a href="../../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

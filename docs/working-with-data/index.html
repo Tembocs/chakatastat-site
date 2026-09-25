@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Working with Data — ChakataStat User Guide</title>
+  <title>Working with Data · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/working-with-data/">
   <link rel="icon" type="image/svg+xml" href="../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Working with Data — ChakataStat User Guide">
+  <meta property="og:title" content="Working with Data · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/working-with-data/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../index.html#features">Features</a>
+        <a href="../../index.html#validation">Validation</a>
+        <a href="../../docs/" aria-current="page">User Guide</a>
+        <a href="../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -99,12 +103,12 @@ the native <code>.ckd</code> document, and the tools for tidying a dataset up.</
 <p>A dataset is a rectangle: <strong>rows are cases</strong>, <strong>columns are variables</strong>. Behind
 the scenes a variable holds one of three storage types:</p>
 <ul>
-<li><strong>Numeric</strong> — numbers; a blank or non-number is <em>missing</em>.</li>
-<li><strong>String</strong> — text (imported timestamps stay here, as ISO text).</li>
-<li><strong>Date</strong> — a calendar date, stored as ISO <code>YYYY-MM-DD</code> text. Typing into a
+<li><strong>Numeric</strong>: numbers; a blank or non-number is <em>missing</em>.</li>
+<li><strong>String</strong>: text (imported timestamps stay here, as ISO text).</li>
+<li><strong>Date</strong>: a calendar date, stored as ISO <code>YYYY-MM-DD</code> text. Typing into a
 date column is validated: <code>2024-02-29</code> and the compact <code>20240229</code> are
 accepted (and stored in the dashed form), while <code>1/2/2024</code>, an impossible
-date like <code>2023-02-29</code>, or a time-of-day is refused — dates are never
+date like <code>2023-02-29</code>, or a time-of-day is refused. Dates are never
 guessed from a regional format. Because the stored form is fixed-width ISO
 text, sorting and Select Cases comparisons on a date variable are
 chronological. Cells that don't conform (for example after re-typing a text
@@ -112,7 +116,7 @@ column to Date) are never rewritten: the Variable View marks the variable
 with a warning badge and analyses over it carry a one-line note.</li>
 </ul>
 <p>On top of storage sits each variable's <strong>definition</strong> (label, value labels,
-measurement level, missing rules) — that lives in the Variable View and travels
+measurement level, missing rules). That lives in the Variable View and travels
 with the data inside an <code>.ckd</code> file.</p>
 <h2 id="importing-data">Importing data</h2>
 <p><strong>File → Import Data…</strong> reads the formats below. The <strong>Carries metadata</strong>
@@ -198,83 +202,83 @@ View what the file already knew.</p>
 </tbody>
 </table></div>
 <ul>
-<li><strong>CSV / TSV</strong> — the delimiter is sniffed from the <strong>content</strong>: comma,
+<li><strong>CSV / TSV</strong>: the delimiter is sniffed from the <strong>content</strong>: comma,
 semicolon, tab or pipe, with quoted fields respected (so a <code>;</code>-file full of
 quoted commas still reads correctly; <code>.tsv</code> always reads as tab). The header
 row is detected, and each column's type is <strong>inferred</strong> (all-numeric →
 numeric, otherwise string). An import-options dialog lets you confirm before
 loading. A gzipped text file (<code>.csv.gz</code>, <code>.tsv.gz</code>, <code>.json.gz</code>, …) is
 decompressed and read the same way.</li>
-<li><strong>Fixed-width text (<code>.fwf</code>, <code>.prn</code>)</strong> — column-aligned text with no
+<li><strong>Fixed-width text (<code>.fwf</code>, <code>.prn</code>)</strong>: column-aligned text with no
 delimiter (mainframe extracts, printed reports). The one thing no sniffer
 can know is where the columns break, so a small dialog asks you: the first
 lines of the file are shown in a monospaced preview under a clickable
-ruler — <strong>click to place or remove a column break</strong> (▼), with initial
+ruler; <strong>click to place or remove a column break</strong> (▼), with initial
 breaks suggested from the runs of spaces every sampled line shares. The
 same spec is editable as text beside the preview (<code>start-end</code> ranges,
 1-based and inclusive, e.g. <code>1-8,9-12,13-20</code>), and the two stay in step;
 ranges may skip over junk columns. Once split, columns type-infer exactly
 as CSV's do. Headless (batch or MCP) passes the same spec with
 <code>--fwf-spec</code>.</li>
-<li><strong>Excel (<code>.xlsx</code>)</strong>, legacy <strong><code>.xls</code></strong> and OpenDocument <strong><code>.ods</code></strong> —
+<li><strong>Excel (<code>.xlsx</code>)</strong>, legacy <strong><code>.xls</code></strong> and OpenDocument <strong><code>.ods</code></strong>:
 the first sheet, read by the native engine, with the same header prompt
 and type inference. A cell holding a formula imports as the value the
 workbook last calculated for it (never the formula text), dates keep the
 workbook's own date system (including the 1904 system of older Mac
 workbooks) and import as <code>YYYY-MM-DD</code>, time-only cells as <code>HH:MM:SS</code>, and
-an error cell (<code>#DIV/0!</code>, <code>#N/A</code>) imports blank — the import tells you
+an error cell (<code>#DIV/0!</code>, <code>#N/A</code>) imports blank; the import tells you
 how many there were.</li>
-<li><strong>Parquet / Arrow</strong> — typed columns read directly by the native engine.</li>
+<li><strong>Parquet / Arrow</strong>: typed columns read directly by the native engine.</li>
 </ul>
 <blockquote>
 <p><strong>Big integer identifiers stay exact.</strong> An integer column holding values
 beyond what double precision can represent exactly (IDs beyond about
-9 × 10¹⁵ — adjacent identifiers there can collapse into the same number)
+9 × 10¹⁵; adjacent identifiers there can collapse into the same number)
 imports as a <strong>String</strong> variable holding the exact digits, and the import
 summary says so. That keeps every ID distinct for grouping, joins and
 saving; the trade is that such a column sorts as text and is refused by
 numeric analyses (which is what you want for an identifier). The same rule
 applies to CSV/JSON type inference, and a <code>.ckd</code> save preserves such
 values exactly. If a number really was a <em>measurement</em>, not an ID, retype
-the variable to Numeric in the Variable View — analyses will then note
+the variable to Numeric in the Variable View; analyses will then note
 that the values were rounded to double precision.</p>
 </blockquote>
 <ul>
-<li><strong>JSON</strong> — either an array of records (<code>[{&quot;age&quot;: 30, …}, …]</code>, one object per
+<li><strong>JSON</strong>: either an array of records (<code>[{&quot;age&quot;: 30, …}, …]</code>, one object per
 case) or a columnar object (<code>{&quot;age&quot;: [30, 31, …], …}</code>); newline-delimited
 <strong><code>.ndjson</code>/<code>.jsonl</code></strong> has one object per line. The column names come from
 the JSON, so there is no header prompt; each column's type is inferred like
 CSV.</li>
-<li><strong>SPSS (<code>.sav</code>, <code>.zsav</code>)</strong> — typed columns <strong>plus the file's metadata</strong>:
+<li><strong>SPSS (<code>.sav</code>, <code>.zsav</code>)</strong>. Typed columns <strong>plus the file's metadata</strong>:
 variable labels, value labels (<code>1 → Male</code> arrives as a ChakataStat value
-label), measurement levels, and discrete user-missing values — on a
+label), measurement levels, and discrete user-missing values, on a
 date or time variable too, where the code arrives as a date
 (<code>1900-01-01</code>) matching the cells it marks. SPSS
 <em>ranges</em> of missing values have no equivalent here; the import says so
 in its summary rather than dropping them silently. Legacy portable
-<code>.por</code> files are not read — save them as <code>.sav</code> from SPSS first.</li>
-<li><strong>Stata (<code>.dta</code>)</strong> — typed columns plus variable labels and value labels
+<code>.por</code> files are not read. Save them as <code>.sav</code> from SPSS first.</li>
+<li><strong>Stata (<code>.dta</code>)</strong>: typed columns plus variable labels and value labels
 (every <code>.dta</code> release is read). Daily dates (<code>%td</code>) and datetimes
 (<code>%tc</code>) arrive as readable dates; the rarer week/month/quarter display
 formats arrive as their stored numbers, and the import summary notes it.
-Stata's <strong>long strings (strL)</strong> are carried like any other text —
+Stata's <strong>long strings (strL)</strong> are carried like any other text,
 including files written by third-party tools whose strL layout differs
 from Stata's own. A rare <em>binary</em> strL payload is decoded as text and the
 import summary names the variable.</li>
-<li><strong>SAS transport (<code>.xpt</code>)</strong> — the open format SAS writes for exchange
+<li><strong>SAS transport (<code>.xpt</code>)</strong>: the open format SAS writes for exchange
 (<code>PROC CPORT</code>/<code>COPY</code>), typed columns plus variable labels. SAS date, datetime
 and time formats arrive as readable dates and times. Two limits, both noted
-in the import summary: <strong>value labels are not in the file at all</strong> — SAS
-keeps them in a separate <code>.sas7bcat</code> catalog — and if the file holds more
+in the import summary: <strong>value labels are not in the file at all</strong> (SAS
+keeps them in a separate <code>.sas7bcat</code> catalog), and if the file holds more
 than one dataset, the first is imported.</li>
-<li><strong>SAS data (<code>.sas7bdat</code>)</strong> — SAS's own data files open directly, typed
+<li><strong>SAS data (<code>.sas7bdat</code>)</strong>: SAS's own data files open directly, typed
 columns plus variable labels and the file label, with dates, datetimes and
 times rendered exactly as from <code>.xpt</code> (fractional seconds are truncated to
 the second; the month-year / quarter / year display formats arrive as their
 stored numbers, noted in the summary). <strong>Value labels live in a separate
-SAS format catalog</strong>, so put the <code>.sas7bcat</code> next to the data file — named
+SAS format catalog</strong>, so put the <code>.sas7bcat</code> next to the data file, named
 like it (<code>study.sas7bcat</code> beside <code>study.sas7bdat</code>) or as <code>formats.sas7bcat</code>,
-SAS's default catalog name — and every variable whose format the catalog
+SAS's default catalog name, and every variable whose format the catalog
 defines gets its value labels. With no catalog beside the file, a variable
 with a user-defined format is named in the import summary, with that
 advice. SAS's missing values (<code>.</code> and the special <code>.A</code>–<code>.Z</code>) arrive blank,
@@ -283,29 +287,29 @@ compressed (<code>COMPRESS=CHAR</code>/<code>BINARY</code>) and uncompressed fil
 of SAS's session encodings.</li>
 </ul>
 <h3 id="text-encodings">Text encodings</h3>
-<p>Every text import (delimited, fixed-width, JSON — gzipped included) detects
+<p>Every text import (delimited, fixed-width, JSON, gzipped included) detects
 its <strong>encoding</strong> rather than assuming UTF-8: a byte-order mark wins when
 present (UTF-8, UTF-16LE, UTF-16BE); without one, UTF-16 is recognised
-heuristically, then strict UTF-8 is tried, and <strong>Windows-1252</strong> — what
-&quot;Latin-1&quot; files in the wild almost always are — is the final fallback, so
+heuristically, then strict UTF-8 is tried, and <strong>Windows-1252</strong> (what
+&quot;Latin-1&quot; files in the wild almost always are) is the final fallback, so
 the decode itself never fails. UTF-8 files open silently (that is the norm,
 not news); anything else imports <strong>and says so</strong>: the import summary carries
 a note such as <em>decoded as UTF-16LE</em>, telling you a conversion happened and
 which encoding was assumed. If text still looks wrong despite the note, the
-file is in some other single-byte code page — re-save it as UTF-8 and it
+file is in some other single-byte code page; re-save it as UTF-8 and it
 opens exactly. Exported files are always UTF-8.</p>
 <p>A progress dialog shows while large files load, and the import runs without
 freezing the window.</p>
 <blockquote>
 <p><strong>Tip.</strong> After importing a CSV, visit the Variable View and set measurement
 levels and labels. Type inference gets storage right but cannot know that a
-numeric <code>1/2</code> column means <em>Male/Female</em> — that is a value-label job (below).
+numeric <code>1/2</code> column means <em>Male/Female</em>; that is a value-label job (below).
 An SPSS or Stata import does this for you: the labels arrive with the data.</p>
 </blockquote>
 <h2 id="exporting-data">Exporting data</h2>
 <p><strong>File → Export Data…</strong> writes the current dataset to <strong>CSV</strong>, <strong>TSV</strong>,
 <strong>Excel</strong>, <strong>Parquet</strong>, <strong>JSON</strong> (an array of records) or <strong>NDJSON</strong>
-(<code>.ndjson</code> / <code>.jsonl</code>, one record per line) — the format is chosen from the
+(<code>.ndjson</code> / <code>.jsonl</code>, one record per line). The format is chosen from the
 file extension you give, and a name with no extension is written as CSV.
 Every case is written: an active <strong>Select Cases</strong> filter decides what the
 analyses see, it does not remove rows from an export.</p>
@@ -324,7 +328,7 @@ analyses see, it does not remove rows from an export.</p>
 </tr>
 <tr>
 <td>Excel</td>
-<td>Numbers as numbers and text as text. An integer too long for a double (past 2⁵³ — Excel stores only doubles) is written as text, so its digits survive.</td>
+<td>Numbers as numbers and text as text. An integer too long for a double (past 2⁵³; Excel stores only doubles) is written as text, so its digits survive.</td>
 </tr>
 <tr>
 <td>JSON / NDJSON</td>
@@ -332,16 +336,16 @@ analyses see, it does not remove rows from an export.</p>
 </tr>
 <tr>
 <td>Parquet</td>
-<td>The <strong>analysis view</strong> — what the engine computes on. User-missing values and cells that do not read as numbers are written empty (so a code such as 99 never reaches pandas or R as data), integers past 2⁵³ are rounded, and date cells are written as their text (not a Parquet date type). The status line after the export counts each of these when there are any.</td>
+<td>The <strong>analysis view</strong>: what the engine computes on. User-missing values and cells that do not read as numbers are written empty (so a code such as 99 never reaches pandas or R as data), integers past 2⁵³ are rounded, and date cells are written as their text (not a Parquet date type). The status line after the export counts each of these when there are any.</td>
 </tr>
 </tbody>
 </table></div>
-<p>For a file that keeps everything — including the variable metadata — save
+<p>For a file that keeps everything, including the variable metadata, save
 the dataset as <code>.ckd</code> instead.</p>
 <p>CSV/TSV exports are <strong>protected against spreadsheet formula injection</strong> by
 default: a text cell that starts with <code>=</code>, <code>+</code>, <code>-</code>, <code>@</code>, a tab or a carriage
 return and is not a number is written with a leading apostrophe (<code>'</code>), which
-Excel and Calc read as &quot;this is text&quot; and hide — so a value that arrived in
+Excel and Calc read as &quot;this is text&quot; and hide, so a value that arrived in
 your data can never run as a formula on someone else's machine. Numbers such
 as <code>-5</code> are never touched. If you need a byte-faithful file (for a tool that
 would show the apostrophe), turn the guard off under <strong>Settings → Files</strong>.
@@ -364,26 +368,26 @@ the cells in place).</li>
 <li><strong>Find &amp; Replace</strong> (<code>Ctrl+F</code>) opens a search bar with <em>match case</em>, <em>entire
 cell</em> and <em>wrap-around</em> options; <strong>Replace All</strong> is a single undoable edit.</li>
 <li>Hover any <strong>column header</strong> to see that variable's label, type and measurement
-level as a tooltip — the editor documents itself.</li>
+level as a tooltip. The editor documents itself.</li>
 <li>When the dataset is empty, the view shows an <strong>empty state</strong> with Open and
 Import buttons instead of a blank grid.</li>
 <li><strong>Hide a column</strong> you don't need right now: right-click its header and choose
 <strong>Hide column</strong> (selecting several headers first hides them all together). A
-thin double line marks where columns are hidden — click it, or right-click the
+thin double line marks where columns are hidden. Click it, or right-click the
 header on either side and choose <strong>Unhide</strong>, to bring them back. <strong>View →
 Unhide All Columns</strong> is the escape hatch if you lose track. Hiding is a
 display preference, not a data change: the variable still exists, still
-appears in every dialog's variable list, and stays valid in <code>.cks</code> syntax —
+appears in every dialog's variable list, and stays valid in <code>.cks</code> syntax;
 it just isn't shown in the grid.</li>
 </ul>
 <p><strong>With a screen reader</strong>, the grid reads like a grid: each visible cell
 announces its variable, row number, value and selection state, moving the
 selection (arrow keys, Tab, Enter, or the reader's own navigation)
 announces the newly active cell, and every cell offers an <strong>Edit cell</strong>
-action alongside its activate action. Only what is on screen is exposed —
-scrolling brings the next window of cells into the reader's view — so
+action alongside its activate action. Only what is on screen is exposed
+(scrolling brings the next window of cells into the reader's view), so
 large datasets stay responsive.</p>
-<p>Edits are undoable (<code>Ctrl+Z</code> / <code>Ctrl+Y</code>) — and undo works on the whole
+<p>Edits are undoable (<code>Ctrl+Z</code> / <code>Ctrl+Y</code>), and undo works on the whole
 dataset, not just cells: deleting a variable and undoing it brings back its
 data <strong>and</strong> its full definition (name, labels, value labels, missing
 values, type, measure) at its place, with any Select Cases / Weight Cases /
@@ -394,7 +398,7 @@ one field counting as a single step. Undoing a transform also removes its
 command from the <a href="../advanced/reproducibility/">Syntax console</a>'s journal
 (and redo puts it back), so the journal keeps describing what was actually
 done. Transpose is the one exception: it replaces the whole dataset and
-cannot be undone — the dialog says so.</p>
+cannot be undone; the dialog says so.</p>
 <h2 id="the-variable-view">The Variable View</h2>
 <p>The Variable View (<code>Ctrl+2</code>) shows <strong>one row per variable</strong>. The columns are the
 variable's metadata; click a cell to edit it:</p>
@@ -424,11 +428,11 @@ variable's metadata; click a cell to edit it:</p>
 </tr>
 <tr>
 <td><strong>Values</strong></td>
-<td><strong>Value labels</strong> — map stored codes to text (e.g. <code>1 → Male</code>).</td>
+<td><strong>Value labels</strong>: map stored codes to text (e.g. <code>1 → Male</code>).</td>
 </tr>
 <tr>
 <td><strong>Missing</strong></td>
-<td><strong>User-missing values</strong> — codes that mean &quot;no answer&quot; and are excluded from analysis (e.g. <code>99 → declined</code>).</td>
+<td><strong>User-missing values</strong>: codes that mean &quot;no answer&quot; and are excluded from analysis (e.g. <code>99 → declined</code>).</td>
 </tr>
 <tr>
 <td><strong>Measure</strong></td>
@@ -439,55 +443,55 @@ variable's metadata; click a cell to edit it:</p>
 <h3 id="why-the-measurement-level-matters">Why the measurement level matters</h3>
 <p>The <strong>Measure</strong> tells procedures how to treat a variable:</p>
 <ul>
-<li><strong>Scale</strong> — a true number (age, blood pressure): means, correlations, the
+<li><strong>Scale</strong>. A true number (age, blood pressure): means, correlations, the
 numeric axis of a histogram.</li>
-<li><strong>Ordinal</strong> — ordered categories (education level): ranks and ordered tests.</li>
-<li><strong>Nominal</strong> — unordered categories (region, sex): counts, crosstabs, grouping.</li>
+<li><strong>Ordinal</strong>. Ordered categories (education level): ranks and ordered tests.</li>
+<li><strong>Nominal</strong>. Unordered categories (region, sex): counts, crosstabs, grouping.</li>
 </ul>
 <p>Charts and dialogs use the level to offer sensible defaults and to label output,
 so setting it correctly is worth the minute it takes.</p>
 <h3 id="value-labels-and-missing-values">Value labels and missing values</h3>
 <p>Both are edited in a small dialog from the relevant Variable View cell:</p>
 <ul>
-<li><strong>Value labels</strong> make output readable — a crosstab shows <em>Male/Female</em> instead
+<li><strong>Value labels</strong> make output readable: a crosstab shows <em>Male/Female</em> instead
 of <em>1/2</em>, and the underlying codes stay numeric for analysis.</li>
 <li><strong>User-missing values</strong> mark specific codes as &quot;not a real value&quot;. They reach
 the engine as nulls and are dropped from every statistic, while still being
 visible (and editable) in the Data View.</li>
 </ul>
 <h2 id="saving-the-ckd-document">Saving: the <code>.ckd</code> document</h2>
-<p><strong>File → Save</strong> (<code>Ctrl+S</code>) writes an <strong><code>.ckd</code></strong> file — ChakataStat's native
+<p><strong>File → Save</strong> (<code>Ctrl+S</code>) writes an <strong><code>.ckd</code></strong> file, ChakataStat's native
 document. Unlike a CSV, it stores <strong>both the data and every variable
 definition</strong> (labels, value labels, missing rules, measurement levels), plus
 document provenance. Reopening an <code>.ckd</code> restores the dataset exactly.</p>
 <p>Internally <code>.ckd</code> is a versioned ZIP of a <code>meta.json</code> (all metadata) and a typed
 <code>data.parquet</code> (the columns). You never need to look inside, but the format is
 documented for the curious in <a href="../file-format/">docs/file_format.md</a>.</p>
-<p>Your wider <strong>session</strong> — the open document, the results log, the AI conversation
-and the syntax — is also remembered between launches, and the unsaved working
+<p>Your wider <strong>session</strong> (the open document, the results log, the AI conversation
+and the syntax) is also remembered between launches, and the unsaved working
 dataset is autosaved for crash recovery.</p>
 <h2 id="tidying-a-dataset">Tidying a dataset</h2>
 <p>A few tools under the <strong>Data</strong> menu help with messy or wide datasets:</p>
 <ul>
-<li><strong>Define Variable Properties…</strong> — scan the data and set value labels,
+<li><strong>Define Variable Properties…</strong>: scan the data and set value labels,
 measurement levels and missing rules for several variables at once, guided by
 the values actually present.</li>
-<li><strong>Bulk Rename Variables…</strong> — rename many variables with a <strong>regular
+<li><strong>Bulk Rename Variables…</strong>: rename many variables with a <strong>regular
 expression</strong> (with <code>$1</code> group references), a live preview and collision-safe
 de-duplication. Ideal for stripping a common prefix or renaming <code>q1, q2, …</code>.</li>
-<li><strong>Define Variable Sets…</strong> — group related variables under a name, then pick
+<li><strong>Define Variable Sets…</strong>: group related variables under a name, then pick
 the set in the Variable View's filter bar to focus on just that group.
 Since 0.14.0 the active set reaches everywhere you pick variables: the
 <strong>Data View shows only the set's columns</strong>, and <strong>analysis dialogs offer
-only the set's variables</strong> in their source lists — the way to keep a
-400-column survey workable. Sets are a view convenience — they never
+only the set's variables</strong> in their source lists. This is the way to keep a
+400-column survey workable. Sets are a view convenience: they never
 change the data, a hidden column stays in every analysis, and a variable
 you already selected in a dialog stays listed even if the set excludes
 it. Sets persist with the session.</li>
 </ul>
 <h3 id="the-data-dictionary-ckdict">The data dictionary (<code>.ckdict</code>)</h3>
 <p><strong>File → Export Data Dictionary…</strong> writes all variable metadata to a standalone,
-versioned JSON <strong><code>.ckdict</code></strong> file — names, labels, types, value labels and
+versioned JSON <strong><code>.ckdict</code></strong> file: names, labels, types, value labels and
 missing rules, <em>without</em> the data. <strong>Import Data Dictionary…</strong> applies one to the
 current dataset: it matches by variable name, writes only the fields each (even
 hand-edited, partial) entry carries, leaves your data untouched, and reports the
@@ -495,37 +499,59 @@ fit (applied / unmatched / not in dictionary).</p>
 <p>This is how you reuse one carefully-defined codebook across many data files.</p>
 <h2 id="where-to-go-next">Where to go next</h2>
 <ul>
-<li><strong><a href="../cases-and-transforms/">Case Semantics &amp; Transforms</a></strong> — filter, weight and
+<li><strong><a href="../cases-and-transforms/">Case Semantics &amp; Transforms</a></strong>: filter, weight and
 split cases; compute, recode and rank.</li>
-<li><strong><a href="../analyze/">Analyzing Data</a></strong> — run statistics on your dataset.</li>
+<li><strong><a href="../analyze/">Analyzing Data</a></strong>: run statistics on your dataset.</li>
 </ul>
       </article>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../index.html">Home</a> ·
-        <a href="../../quick-start/">Quick Start</a> ·
-        <a href="../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../license/">License</a> ·
-        <a href="../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../index.html">
+            <img class="brand-mark" src="../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../index.html#features">Features</a>
+          <a href="../../index.html#screenshots">Screenshots</a>
+          <a href="../../index.html#download">Download</a>
+          <a href="../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../docs/">User Guide</a>
+          <a href="../../quick-start/">Quick Start</a>
+          <a href="../../docs/validation/">Validation</a>
+          <a href="../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../cite/">How to cite</a>
+          <a href="../../license/">License</a>
+          <a href="../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

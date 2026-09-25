@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>The ChakataStat Tutorial Workbook — ChakataStat User Guide</title>
+  <title>The ChakataStat Tutorial Workbook · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/tutorial/">
   <link rel="icon" type="image/svg+xml" href="../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="The ChakataStat Tutorial Workbook — ChakataStat User Guide">
+  <meta property="og:title" content="The ChakataStat Tutorial Workbook · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/tutorial/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../index.html#features">Features</a>
+        <a href="../../index.html#validation">Validation</a>
+        <a href="../../docs/" aria-current="page">User Guide</a>
+        <a href="../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -92,14 +96,14 @@
       </aside>
       <article class="docs-content">
 <h1 id="the-chakatastat-tutorial-workbook">The ChakataStat Tutorial Workbook</h1>
-<p>A ten-module course that teaches ChakataStat by doing — built for self-study
+<p>A ten-module course that teaches ChakataStat by doing, built for self-study
 and for classroom training of students, teaching staff and researchers. Every
 module works on the same <strong>bundled sample health study</strong> (600 synthetic
 participants; see the <a href="codebook/">codebook</a>), so there is nothing to
 download: <strong>File → Open Sample Dataset</strong> (<code>Ctrl+Shift+O</code>) and you are ready.</p>
 <p>Each module has the same shape: a <strong>question</strong> a researcher would actually
 ask, the <strong>menu path</strong> that answers it, <strong>how to read the output</strong>, an
-<strong>exercise</strong> to do on your own, and — at the end — <strong>the syntax</strong> the module
+<strong>exercise</strong> to do on your own, and (at the end) <strong>the syntax</strong> the module
 generated, because every GUI action in ChakataStat also records an editable,
 re-runnable command. By module 10 that trail is the star of the show.</p>
 <p>If you have not run the app before, do the ten-minute
@@ -117,12 +121,12 @@ re-runnable command. By module 10 that trail is the star of the show.</p>
 <tr>
 <td>1</td>
 <td><a href="01-open-and-views/">Opening data &amp; the two Views</a></td>
-<td>The sample dataset, Data vs Variable View, a CSV export→import round trip — and which formats keep the labels</td>
+<td>The sample dataset, Data vs Variable View, a CSV export→import round trip, and which formats keep the labels</td>
 </tr>
 <tr>
 <td>2</td>
 <td><a href="02-variable-view/">The Variable View</a></td>
-<td>Types, labels, value labels, missing codes, measures — and why they matter</td>
+<td>Types, labels, value labels, missing codes, measures, and why they matter</td>
 </tr>
 <tr>
 <td>3</td>
@@ -170,42 +174,64 @@ re-runnable command. By module 10 that trail is the star of the show.</p>
 <ul>
 <li>Modules are 20–40 minutes each including the exercise; 1–5 make a
 half-day introductory session, 6–10 a second session.</li>
-<li>The dataset's structure is <strong>planted and documented</strong> — the
+<li>The dataset's structure is <strong>planted and documented</strong>: the
 <a href="codebook/">codebook</a> lists which effects are real, and which
 relationships are deliberately null so students also experience a
 non-significant result. Answers to each exercise are therefore checkable.</li>
 <li>The sample always opens as a <em>new, unsaved document</em>: students can never
 damage it, and a fresh copy is one <code>Ctrl+Shift+O</code> away.</li>
 <li>The data are <strong>synthetic</strong>. No statistic derived from them describes any
-real population — they exist so the <em>methods</em> can be taught.</li>
+real population; they exist so the <em>methods</em> can be taught.</li>
 </ul>
       </article>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../index.html">Home</a> ·
-        <a href="../../quick-start/">Quick Start</a> ·
-        <a href="../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../license/">License</a> ·
-        <a href="../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../index.html">
+            <img class="brand-mark" src="../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../index.html#features">Features</a>
+          <a href="../../index.html#screenshots">Screenshots</a>
+          <a href="../../index.html#download">Download</a>
+          <a href="../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../docs/">User Guide</a>
+          <a href="../../quick-start/">Quick Start</a>
+          <a href="../../docs/validation/">Validation</a>
+          <a href="../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../cite/">How to cite</a>
+          <a href="../../license/">License</a>
+          <a href="../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

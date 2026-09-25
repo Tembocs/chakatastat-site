@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Latent Class Analysis — ChakataStat User Guide</title>
+  <title>Latent Class Analysis · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/analyze/latent-class/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Latent Class Analysis — ChakataStat User Guide">
+  <meta property="og:title" content="Latent Class Analysis · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/analyze/latent-class/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#validation">Validation</a>
+        <a href="../../../docs/" aria-current="page">User Guide</a>
+        <a href="../../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -93,7 +97,7 @@
       <article class="docs-content">
 <h1 id="latent-class-analysis">Latent Class Analysis</h1>
 <p><strong>Analyze → Classify → Latent Class.</strong> For a set of <strong>categorical</strong>
-indicators — survey items, symptoms, yes/no behaviours, diagnostic ratings —
+indicators (survey items, symptoms, yes/no behaviours, diagnostic ratings),
 the question &quot;are there unobserved subgroups here, and how many?&quot; is a
 mixture-modeling question: a latent class analysis assumes the population is
 a blend of a few hidden <strong>classes</strong>, each with its own probability of every
@@ -104,13 +108,13 @@ proper statistical model for categorical data: it reports <strong>fit indices</s
 for choosing the number of classes, <strong>class profiles</strong> in probability terms,
 and each case's <strong>membership probabilities</strong> rather than a hard assignment.</p>
 <h2 id="the-data-layout">The data layout</h2>
-<p>One row per case, one column per indicator — numeric or string, each with
+<p>One row per case, one column per indicator, numeric or string, each with
 <strong>2–15 distinct values</strong> (a column with more looks like a scale variable and
 is refused; recode or bin it first). Cases incomplete on any indicator are
 dropped, and the output's note counts what remained.</p>
 <h2 id="the-dialog">The dialog</h2>
 <p>Tick the <strong>Indicators</strong>, set the number of <strong>Classes</strong> (default 2), and
-optionally <strong>Compare counts up to</strong> <em>M</em> — the enumeration workflow in one
+optionally <strong>Compare counts up to</strong> <em>M</em>. This is the enumeration workflow in one
 run: every count from 1 to <em>M</em> is fitted with the same settings and a
 comparison table opens the output. <strong>Save modal class membership</strong> /
 <strong>Save posterior probabilities</strong> write the results back as new variables.</p>
@@ -120,14 +124,14 @@ behind a fixed seed, so the same run always reproduces the same tables; the
 <h2 id="choosing-the-number-of-classes">Choosing the number of classes</h2>
 <p>Fit is compared across counts, never judged absolutely:</p>
 <ul>
-<li><strong>Latent Class Enumeration</strong> — one row per class count: log-likelihood,
+<li><strong>Latent Class Enumeration</strong>: one row per class count, with log-likelihood,
 parameters, <strong>AIC / BIC / aBIC</strong> (lower is better; BIC is the
 conventional default, aBIC weights small samples more gently) and
 <strong>entropy</strong>. The information criteria usually stop disagreeing one or
-two counts apart — prefer the smaller model when in doubt, and always ask
+two counts apart; prefer the smaller model when in doubt, and always ask
 whether the extra class <em>means</em> something: a class you cannot name is a
 class you cannot use.</li>
-<li><strong>Entropy</strong> (0–1) is not a fit index — it measures how <strong>crisply</strong> cases
+<li><strong>Entropy</strong> (0–1) is not a fit index: it measures how <strong>crisply</strong> cases
 classify (near 1 = classes well separated). A well-fitting model can
 still have low entropy; then the classes exist but individuals cannot be
 confidently assigned.</li>
@@ -138,46 +142,46 @@ so.</li>
 </ul>
 <h2 id="reading-the-output">Reading the output</h2>
 <ul>
-<li><strong>Latent Class Model Summary</strong> — N (complete cases), classes, parameters,
+<li><strong>Latent Class Model Summary</strong>: N (complete cases), classes, parameters,
 residual df, the log-likelihood, AIC/BIC/aBIC, entropy, and the G² /
 chi-square tests of the fitted response-pattern table. The note names the
 starts, the seed and the convergence of the winning start.</li>
-<li><strong>Latent Class Sizes</strong> — the estimated share of each class (classes are
+<li><strong>Latent Class Sizes</strong>: the estimated share of each class (classes are
 always numbered in <strong>descending size</strong> order), its expected N, and the
 modal N (cases assigned to it by highest posterior). A class no case is
-modally assigned to is flagged — fewer classes likely fit better.</li>
-<li><strong>Class-Conditional Item Probabilities</strong> — the heart of the output: for
+modally assigned to is flagged; fewer classes likely fit better.</li>
+<li><strong>Class-Conditional Item Probabilities</strong>, the heart of the output: for
 each indicator category, the probability of that response <strong>within each
 class</strong>. Read the columns as profiles and name the classes from them
 (e.g. &quot;high-symptomatic&quot;, &quot;abstainers&quot;). Probabilities of exactly 0 or 1
 are legitimate boundary estimates, not errors.</li>
-<li><strong>Average Posterior Probabilities by Assigned Class</strong> — classification
-quality: for the cases assigned to each class, their average posterior
+<li><strong>Average Posterior Probabilities by Assigned Class</strong> (classification
+quality): for the cases assigned to each class, their average posterior
 probability of belonging to every class. Diagonal values ≥ 0.8 are the
 usual &quot;adequately separated&quot; benchmark; low diagonals mean assignments
 are uncertain even if the model fits.</li>
 </ul>
 <h2 id="how-this-is-computed">How this is computed</h2>
-<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
+<p>This section names <em>which</em> method each procedure prints: the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules. Each line links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
 <ul>
-<li><strong>The model</strong> — a latent class model for categorical indicators fitted by EM from multiple seeded starts, the best log-likelihood kept; <code>poLCA</code>'s parameterization and its AIC / BIC / G² / χ² fit block, verified from source (<a href="../../validation/conventions/latent-variable/#latent-class-analysis--the-v1-conventions">LCA conventions</a> · <a href="../../validation/conventions/latent-variable/#the-fit-block-polcas-definitions-verified-from-source">fit block</a>).</li>
-<li><strong>Entropy</strong> — the Mplus form 1 − Σ(−p·ln p)/(N·ln C), ~1 meaning crisp classes.</li>
-<li><strong>Saved columns</strong> — the modal class and the posterior probabilities (<a href="../../validation/conventions/latent-variable/#saved-columns-and-the-tool-shape">saved columns</a>).</li>
-<li><strong>Weights and design</strong> — a frequency weight replicates cases; survey designs are out of scope and refused as data (<a href="../../validation/conventions/latent-variable/#weights-design-and-scope-cuts">weights and scope</a>).</li>
+<li><strong>The model</strong>: a latent class model for categorical indicators fitted by EM from multiple seeded starts, the best log-likelihood kept; <code>poLCA</code>'s parameterization and its AIC / BIC / G² / χ² fit block, verified from source (<a href="../../validation/conventions/latent-variable/#latent-class-analysis--the-v1-conventions">LCA conventions</a> · <a href="../../validation/conventions/latent-variable/#the-fit-block-polcas-definitions-verified-from-source">fit block</a>).</li>
+<li><strong>Entropy</strong>: the Mplus form 1 − Σ(−p·ln p)/(N·ln C), ~1 meaning crisp classes.</li>
+<li><strong>Saved columns</strong>: the modal class and the posterior probabilities (<a href="../../validation/conventions/latent-variable/#saved-columns-and-the-tool-shape">saved columns</a>).</li>
+<li><strong>Weights and design</strong>: a frequency weight replicates cases; survey designs are out of scope and refused as data (<a href="../../validation/conventions/latent-variable/#weights-design-and-scope-cuts">weights and scope</a>).</li>
 </ul>
 <h2 id="using-the-saved-columns">Using the saved columns</h2>
 <ul>
-<li><strong>Modal class</strong> (<code>lca_class</code>, 1 = largest class) — a categorical variable
+<li><strong>Modal class</strong> (<code>lca_class</code>, 1 = largest class): a categorical variable
 ready for Crosstabs, group comparisons or plots. Remember it hardens a
 probabilistic classification: with low entropy, treating it as known
 overstates certainty.</li>
-<li><strong>Posteriors</strong> (<code>lca_p1</code> … <code>lca_pC</code>) — the full membership probabilities,
+<li><strong>Posteriors</strong> (<code>lca_p1</code> … <code>lca_pC</code>): the full membership probabilities,
 for weighting or sensitivity checks.</li>
 </ul>
 <blockquote>
 <p><strong>Scope (v1).</strong> Unconditional LCA only: no covariates predicting class
 membership, no ordinal/constrained item models, no retention of partially
-missing responses, and no bootstrap likelihood-ratio test — the
+missing responses, and no bootstrap likelihood-ratio test; the
 enumeration table's information criteria are the class-count decision
 aids. A frequency weight (Weight Cases) is honored as case replication; a
 declared survey design is not covered and the output says so.</p>
@@ -186,29 +190,51 @@ declared survey design is not covered and the output says so.</p>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../../index.html">Home</a> ·
-        <a href="../../../quick-start/">Quick Start</a> ·
-        <a href="../../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../../license/">License</a> ·
-        <a href="../../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../../index.html">
+            <img class="brand-mark" src="../../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../../index.html#features">Features</a>
+          <a href="../../../index.html#screenshots">Screenshots</a>
+          <a href="../../../index.html#download">Download</a>
+          <a href="../../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../../docs/">User Guide</a>
+          <a href="../../../quick-start/">Quick Start</a>
+          <a href="../../../docs/validation/">Validation</a>
+          <a href="../../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../../cite/">How to cite</a>
+          <a href="../../../license/">License</a>
+          <a href="../../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

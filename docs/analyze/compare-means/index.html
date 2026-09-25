@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Compare Means — ChakataStat User Guide</title>
+  <title>Compare Means · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/analyze/compare-means/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Compare Means — ChakataStat User Guide">
+  <meta property="og:title" content="Compare Means · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/analyze/compare-means/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#validation">Validation</a>
+        <a href="../../../docs/" aria-current="page">User Guide</a>
+        <a href="../../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -93,11 +97,11 @@
       <article class="docs-content">
 <h1 id="compare-means">Compare Means</h1>
 <p><strong>Analyze → Compare Means.</strong> These procedures ask whether the <strong>mean</strong> of a scale
-variable differs — between groups, against a fixed value, or across paired
+variable differs: between groups, against a fixed value, or across paired
 measurements.</p>
 <h2 id="means">Means</h2>
 <p><strong>When to use it.</strong> To get summary statistics for a scale variable <strong>broken down
-by the categories of one or more factors</strong> — a descriptive breakdown, not a test.</p>
+by the categories of one or more factors</strong> (a descriptive breakdown, not a test).</p>
 <p><strong>Dialog.</strong> A <strong>Dependent</strong> scale variable and one or more <strong>Independent</strong>
 (grouping) variables.</p>
 <p><strong>Output.</strong> A table of the dependent's mean, N and standard deviation within each
@@ -126,21 +130,21 @@ No?</p>
 <strong>randomization</strong>: the group labels are reshuffled over and over, and the
 permutation p is simply the share of relabelings whose mean difference is at
 least as extreme as the one observed. Nothing is assumed about
-distributions — no normality, no equal variances — which makes it the
+distributions (no normality, no equal variances), which makes it the
 methods-course answer for small samples and odd-shaped data, while still
 testing the <em>mean difference</em> (unlike <a href="../nonparametric/">Mann–Whitney</a>,
 which tests a rank-based shift).</p>
 <p>How it runs, automatically:</p>
 <ul>
 <li><strong>Small samples are exact</strong>: when every possible group assignment can be
-enumerated (up to a million arrangements — balanced designs up to about
+enumerated (up to a million arrangements; balanced designs up to about
 n = 22), the table says <em>Exact</em> with the arrangement count, and the p is
-the exact share, not an estimate. An exact p can never be 0 — the
+the exact share, not an estimate. An exact p can never be 0: the
 observed assignment is always one of the arrangements.</li>
 <li><strong>Larger samples are Monte Carlo</strong>: the table says <em>Monte Carlo</em> with the
 resample count (default 10,000, adjustable in the dialog), the p is
 estimated as (b+1)/(m+1), and <strong>Lower/Upper</strong> bracket the <em>simulation</em>
-uncertainty of that p at 99% — how much it could move with a different
+uncertainty of that p at 99%: how much it could move with a different
 seed, not an interval for the effect. A fixed <strong>Seed</strong> makes the run
 exactly <a href="../../advanced/reproducibility/">reproducible</a>; rerunning with
 the same seed gives the same p to the last digit.</li>
@@ -157,14 +161,14 @@ CI.</p>
 <p><strong>Example.</strong> <em>SystolicBP</em> vs <em>DiastolicBP</em> (illustrative paired comparison).</p>
 <blockquote>
 <p>Comparing two <strong>measurement methods</strong> on the same subjects? The paired t
-answers only whether the <em>average</em> difference is zero — the agreement
+answers only whether the <em>average</em> difference is zero. The agreement
 question (how far apart the methods get case by case) is the
 <a href="../method-comparison/">Bland-Altman analysis</a>'s job.</p>
 </blockquote>
 <h2 id="equivalence-t-test-tost">Equivalence T Test (TOST)</h2>
 <p><strong>Analyze → Compare Means → Equivalence T Test (TOST)…</strong></p>
-<p><strong>When to use it.</strong> To show two means are <strong>practically equivalent</strong> — a
-question a t test cannot answer: &quot;not significantly different&quot; is <em>not</em>
+<p><strong>When to use it.</strong> To show two means are <strong>practically equivalent</strong>. A t
+test cannot answer this question: &quot;not significantly different&quot; is <em>not</em>
 &quot;equivalent&quot;. You declare how big a difference would still be negligible (the
 <strong>equivalence bounds</strong>), and the TOST procedure (<strong>t</strong>wo <strong>o</strong>ne-<strong>s</strong>ided
 <strong>t</strong>ests) tests whether the true difference lies <strong>inside</strong> those bounds.
@@ -173,35 +177,35 @@ study's point is that a difference is absent or ignorable.</p>
 <p><strong>Dialog.</strong> The same three designs as the classical t tests, behind a
 <strong>One-Sample / Paired / Independent</strong> selector, plus:</p>
 <ul>
-<li><strong>Bounds</strong> — the lower and upper equivalence bounds (lower &lt; upper; they
+<li><strong>Bounds</strong>: the lower and upper equivalence bounds (lower &lt; upper; they
 need not be symmetric). For a one-sample test they are centered on the
-<strong>Test Value</strong> — bounds of −1.5 to 1.5 with test value 100 declare
+<strong>Test Value</strong>: bounds of −1.5 to 1.5 with test value 100 declare
 &quot;anything between 98.5 and 101.5 is equivalent to 100&quot;.</li>
-<li><strong>Bound units</strong> — <strong>Raw units</strong> (the default: the variable's own scale) or
+<li><strong>Bound units</strong>: <strong>Raw units</strong> (the default: the variable's own scale) or
 <strong>Cohen's d</strong>, converted to raw units per design with the sample
 standardizer. Raw bounds are preferred when the scale is meaningful:
 d-scale bounds move with the sample's own spread, a caution the output
 note repeats.</li>
-<li><strong>Alpha</strong> — the level of each one-sided test (default 0.05). The interval
+<li><strong>Alpha</strong>: the level of each one-sided test (default 0.05). The interval
 shown is the <strong>1 − 2α</strong> confidence interval (90% at the default), the
 standard TOST presentation.</li>
 </ul>
 <p><strong>Output.</strong> Two tables:</p>
 <ul>
-<li><strong>Equivalence Test (TOST)</strong> — per variable (or pair; the independent
+<li><strong>Equivalence Test (TOST)</strong> shows, per variable (or pair; the independent
 design keeps the familiar two rows, equal variances assumed / not
 assumed): the mean difference, its standard error and df, <strong>both
 one-sided tests</strong> (t and one-sided significance against each bound), the
-<strong>TOST Sig.</strong> — the larger of the two one-sided p's — and a printed
+<strong>TOST Sig.</strong> (the larger of the two one-sided p's) and a printed
 <strong>Decision</strong>: <em>Equivalent</em> when TOST Sig. &lt; α, else <em>Not equivalent</em>.</li>
-<li><strong>Equivalence Bounds and Confidence Interval</strong> — the bounds in raw units
+<li><strong>Equivalence Bounds and Confidence Interval</strong> shows the bounds in raw units
 (as converted, when declared in Cohen's d) beside the 1 − 2α CI of the
 difference. The two views agree by construction: the difference is
 equivalent at α exactly when the interval lies inside the bounds.</li>
 </ul>
 <p><strong>Example.</strong> A generic drug's mean <em>SystolicBP</em> effect vs the brand
 compound, with equivalence declared as ±3 mmHg: TOST Sig. = 0.02 →
-<em>Equivalent</em> — the 90% CI of the difference sits entirely inside −3…3.</p>
+<em>Equivalent</em>: the 90% CI of the difference sits entirely inside −3…3.</p>
 <p><strong>Reading it with the t test.</strong> The four corners are all possible: a
 difference can be significant yet equivalent (precisely estimated and
 trivially small), or non-significant yet not equivalent (too little data to
@@ -214,7 +218,7 @@ variable). The Options section adds:</p>
 <ul>
 <li><strong>Levene's test</strong> of homogeneity of variances;</li>
 <li>the <strong>Welch</strong> robust test (for unequal variances);</li>
-<li><strong>post-hoc comparisons</strong> — Bonferroni, Scheffé, Tukey HSD;</li>
+<li><strong>post-hoc comparisons</strong>: Bonferroni, Scheffé, Tukey HSD;</li>
 <li><strong>a-priori contrasts</strong> (custom weighted comparisons).</li>
 </ul>
 <p><strong>Output.</strong> The <strong>ANOVA table</strong> (between/within sums of squares, F, significance),
@@ -223,34 +227,34 @@ plus any homogeneity test, post-hoc table and contrast results you requested.</p
 HSD to see which education levels differ.</p>
 <h2 id="bayesian-t-test">Bayesian t test</h2>
 <p>A Bayesian counterpart to the three t tests, under <strong>Analyze → Bayesian → t
-Test…</strong>. Where a classical t test gives a p-value — which can only ever <em>fail to
-reject</em> the null, never support it — a Bayesian t test reports a <strong>Bayes factor</strong>
+Test…</strong>. Where a classical t test gives a p-value (which can only ever <em>fail to
+reject</em> the null, never support it), a Bayesian t test reports a <strong>Bayes factor</strong>
 that grades the evidence in either direction.</p>
 <p><strong>When to use it.</strong> Whenever you would run a one-sample, paired or
 independent-samples t test but want to quantify evidence <strong>for</strong> the null as well
 as against it, or want a posterior on the effect size rather than a confidence
-interval. (To argue equivalence against <em>declared bounds</em> — the frequentist
-route journals usually ask for — see the
+interval. (To argue equivalence against <em>declared bounds</em>, which is the
+frequentist route journals usually ask for, see the
 <a href="#equivalence-t-test-tost">Equivalence T Test (TOST)</a> above.)</p>
 <p><strong>Dialog.</strong> A <strong>One-Sample / Paired / Independent</strong> selector (the same three
 designs as the classical t tests), the test variables, and:</p>
 <ul>
-<li><strong>Prior scale r</strong> — the width of the Cauchy prior on the standardized effect
+<li><strong>Prior scale r</strong>: the width of the Cauchy prior on the standardized effect
 size δ; the default 0.707 (≈ 1/√2) is the standard &quot;medium&quot; scale.</li>
-<li><strong>Credible %</strong> — the level for the posterior interval of δ (default 95).</li>
+<li><strong>Credible %</strong>: the level for the posterior interval of δ (default 95).</li>
 </ul>
 <p><strong>Output.</strong> A <strong>Bayesian t Test</strong> table with, per variable/pair:</p>
 <ul>
-<li><strong>BF₁₀</strong> — the evidence for a difference, and <strong>BF₀₁ = 1/BF₁₀</strong> — the evidence
+<li><strong>BF₁₀</strong>, the evidence for a difference, and <strong>BF₀₁ = 1/BF₁₀</strong>, the evidence
 for the null. A BF₁₀ of 6 means the data are 6× more likely under a real
 effect; a BF₁₀ of 0.2 (BF₀₁ = 5) means they are 5× more likely under the null.</li>
-<li><strong>Evidence</strong> — a verbal category for the Bayes factor (Anecdotal, Moderate,
+<li><strong>Evidence</strong>: a verbal category for the Bayes factor (Anecdotal, Moderate,
 Strong, Very strong, Extreme), tagged with the favoured hypothesis.</li>
-<li><strong>Median δ</strong> and its <strong>credible interval</strong> — the posterior for the standardized
+<li><strong>Median δ</strong> and its <strong>credible interval</strong>: the posterior for the standardized
 effect size.</li>
 </ul>
 <p><strong>Example.</strong> A paired Bayesian t test of <em>Pre</em> vs <em>Post</em>: a BF₁₀ of 0.3
-(&quot;Moderate (H0)&quot;) is positive evidence that the intervention made no difference —
+(&quot;Moderate (H0)&quot;) is positive evidence that the intervention made no difference,
 a conclusion a non-significant p-value could not have supported.</p>
 <h3 id="bayesian-correlation">Bayesian correlation</h3>
 <p>Also under <strong>Analyze → Bayesian → Correlation…</strong>: the Bayesian counterpart to
@@ -259,48 +263,48 @@ variables; each <strong>pair</strong> is reported with its Pearson <strong>r</st
 <strong>BF₀₁</strong> (evidence for / against a correlation) and evidence category, and the
 <strong>posterior median and credible interval</strong> of ρ.</p>
 <ul>
-<li><strong>Prior width κ</strong> — the stretched-beta prior on ρ; the default 1 is a uniform
+<li><strong>Prior width κ</strong>: the stretched-beta prior on ρ; the default 1 is a uniform
 prior on −1…1. (Smaller κ pulls the prior toward 0.)</li>
-<li><strong>Credible %</strong> — the level for the posterior interval of ρ.</li>
+<li><strong>Credible %</strong>: the level for the posterior interval of ρ.</li>
 </ul>
 <p>A BF₁₀ well above 1 is evidence the two variables <em>are</em> correlated; a BF₀₁ above 1
-is evidence they are <em>not</em> — the latter being something a significance test on <em>r</em>
-cannot deliver.</p>
+is evidence they are <em>not</em>. A significance test on <em>r</em> cannot deliver the
+latter.</p>
 <h3 id="bayesian-anova">Bayesian ANOVA</h3>
 <p>Under <strong>Analyze → Bayesian → ANOVA…</strong>: the Bayesian counterpart to the one-way
 ANOVA. Pick one or more numeric <strong>dependent</strong> variables and a <strong>factor</strong>; each is
 reported with its group count, <strong>η²</strong> (the variance explained), and the <strong>BF₁₀</strong> /
-<strong>BF₀₁</strong> for the <em>group-means model against the no-effect null</em> — i.e. whether the
+<strong>BF₀₁</strong> for the <em>group-means model against the no-effect null</em>, i.e. whether the
 factor matters at all.</p>
 <ul>
-<li><strong>Prior scale r</strong> — the Cauchy prior on the standardized group effects; the
+<li><strong>Prior scale r</strong>: the Cauchy prior on the standardized group effects; the
 default 0.5 is the standard &quot;medium&quot; fixed-effect scale.</li>
 </ul>
 <p>A BF₁₀ above 1 is evidence the groups differ; a BF₀₁ above 1 is evidence they do
-<em>not</em> — direct support for a null that an ANOVA <em>F</em> test cannot provide.</p>
+<em>not</em>. That is direct support for a null that an ANOVA <em>F</em> test cannot provide.</p>
 <h3 id="bayesian-linear-regression">Bayesian linear regression</h3>
 <p>Under <strong>Analyze → Bayesian → Linear Regression…</strong>: the Bayesian counterpart to
 <a href="../correlation-and-regression/">linear regression</a>. Pick a <strong>dependent</strong> variable
 and one or more numeric <strong>predictors</strong>. It reports:</p>
 <ul>
-<li><strong>Coefficients</strong> — each predictor's <strong>posterior mean</strong> (the OLS estimate under
+<li><strong>Coefficients</strong>: each predictor's <strong>posterior mean</strong> (the OLS estimate under
 the diffuse prior) and its <strong>credible interval</strong>.</li>
-<li><strong>Model summary</strong> — N, the predictor count, R², and the <strong>residual variance</strong>
+<li><strong>Model summary</strong>: N, the predictor count, R², and the <strong>residual variance</strong>
 posterior (mean and credible interval).</li>
-<li><strong>Bayes factor</strong> — <strong>BF₁₀</strong> / <strong>BF₀₁</strong> for the full model against the
-intercept-only null: whether the predictors collectively matter.</li>
+<li><strong>Bayes factor</strong>: <strong>BF₁₀</strong> / <strong>BF₀₁</strong> for the full model against the
+intercept-only null (whether the predictors collectively matter).</li>
 </ul>
 <p>Controls: a <strong>Prior scale r</strong> (the g-prior on the effects; default √2/4 ≈ 0.354)
 and a <strong>Credible %</strong> for the intervals. A BF₁₀ above 1 favours the predictors; a
 BF₀₁ above 1 is evidence that an intercept-only model suffices.</p>
 <h2 id="how-this-is-computed">How this is computed</h2>
-<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
+<p>This section names <em>which</em> method each procedure prints: the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules. Each line links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
 <ul>
-<li><strong>T tests</strong> — one-sample, paired and independent <em>t</em> with <em>t</em> confidence intervals; the independent test prints <strong>both</strong> the pooled row (df n₁ + n₂ − 2) and the Welch row (Welch–Satterthwaite df) beside Levene's test, and never switches for you (<a href="../../validation/conventions/classical/#the-independent-samples-t-test-both-variances-rows">both rows</a>). <strong>Cohen's d</strong> uses the pooled n − 1 SD (paired: d_z on the SD of the differences), <strong>Hedges' g</strong> the factor 1 − 3/(4df − 1), and the CI on d the noncentral <em>t</em> (<a href="../../validation/conventions/classical/#cohens-d-and-hedges-g">effect sizes</a>).</li>
-<li><strong>Levene's test</strong> — mean-centred, the original form (R and SciPy default to the median-centred Brown–Forsythe; set the centre to reproduce) (<a href="../../validation/conventions/classical/#levenes-test-mean-centred">Levene</a>).</li>
-<li><strong>Equivalence (TOST)</strong> — bounds centred on the test value, the 1 − 2α interval, Welch by default (<a href="../../validation/conventions/clinical-and-survey/#equivalence-tests-tost--the-v1-conventions">TOST</a>).</li>
-<li><strong>One-way ANOVA</strong> — the classic between / within partition (k − 1, N − k df); η², ε² and ω² in the Olejnik–Algina forms (<a href="../../validation/conventions/classical/#one-way-anova-effect-sizes">ANOVA effect sizes</a>); Welch's robust F*; planned contrasts both pooled and Welch–Satterthwaite; <strong>post hoc</strong> Bonferroni, Scheffé and Tukey HSD on the pooled within MS (<a href="../../validation/conventions/classical/#post-hoc-tests">post hoc</a>).</li>
-<li><strong>Bayesian t test / correlation / ANOVA / regression</strong> — JZS Bayes factors with the Cauchy prior scale r = 0.707, the stretched-beta prior width κ = 1 for ρ, the Zellner–Siow g-prior (<a href="../../validation/#coverage">validation</a>).</li>
+<li><strong>T tests</strong>: one-sample, paired and independent <em>t</em> with <em>t</em> confidence intervals; the independent test prints <strong>both</strong> the pooled row (df n₁ + n₂ − 2) and the Welch row (Welch–Satterthwaite df) beside Levene's test, and never switches for you (<a href="../../validation/conventions/classical/#the-independent-samples-t-test-both-variances-rows">both rows</a>). <strong>Cohen's d</strong> uses the pooled n − 1 SD (paired: d_z on the SD of the differences), <strong>Hedges' g</strong> the factor 1 − 3/(4df − 1), and the CI on d the noncentral <em>t</em> (<a href="../../validation/conventions/classical/#cohens-d-and-hedges-g">effect sizes</a>).</li>
+<li><strong>Levene's test</strong>: mean-centred, the original form (R and SciPy default to the median-centred Brown–Forsythe; set the centre to reproduce) (<a href="../../validation/conventions/classical/#levenes-test-mean-centred">Levene</a>).</li>
+<li><strong>Equivalence (TOST)</strong>: bounds centred on the test value, the 1 − 2α interval, Welch by default (<a href="../../validation/conventions/clinical-and-survey/#equivalence-tests-tost--the-v1-conventions">TOST</a>).</li>
+<li><strong>One-way ANOVA</strong>: the classic between / within partition (k − 1, N − k df); η², ε² and ω² in the Olejnik–Algina forms (<a href="../../validation/conventions/classical/#one-way-anova-effect-sizes">ANOVA effect sizes</a>); Welch's robust F*; planned contrasts both pooled and Welch–Satterthwaite; <strong>post hoc</strong> Bonferroni, Scheffé and Tukey HSD on the pooled within MS (<a href="../../validation/conventions/classical/#post-hoc-tests">post hoc</a>).</li>
+<li><strong>Bayesian t test / correlation / ANOVA / regression</strong>: JZS Bayes factors with the Cauchy prior scale r = 0.707, the stretched-beta prior width κ = 1 for ρ, the Zellner–Siow g-prior (<a href="../../validation/#coverage">validation</a>).</li>
 </ul>
 <h2 id="choosing-among-them">Choosing among them</h2>
 <div class="docs-table-wrap"><table>
@@ -347,35 +351,57 @@ BF₀₁ above 1 is evidence that an intercept-only model suffices.</p>
 </table></div>
 <p>If a normality or variance assumption looks shaky (check it in
 <a href="../descriptive-statistics/#explore">Explore</a>), consider the
-<a href="../nonparametric/">nonparametric equivalents</a> — or keep the mean as the
+<a href="../nonparametric/">nonparametric equivalents</a>, or keep the mean as the
 statistic and add the <a href="#permutation-test">permutation test</a>.</p>
       </article>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../../index.html">Home</a> ·
-        <a href="../../../quick-start/">Quick Start</a> ·
-        <a href="../../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../../license/">License</a> ·
-        <a href="../../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../../index.html">
+            <img class="brand-mark" src="../../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../../index.html#features">Features</a>
+          <a href="../../../index.html#screenshots">Screenshots</a>
+          <a href="../../../index.html#download">Download</a>
+          <a href="../../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../../docs/">User Guide</a>
+          <a href="../../../quick-start/">Quick Start</a>
+          <a href="../../../docs/validation/">Validation</a>
+          <a href="../../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../../cite/">How to cite</a>
+          <a href="../../../license/">License</a>
+          <a href="../../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Module 7 — Relationships between scale variables — ChakataStat User Guide</title>
+  <title>Module 7: Relationships between scale variables · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/tutorial/07-correlation-regression/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Module 7 — Relationships between scale variables — ChakataStat User Guide">
+  <meta property="og:title" content="Module 7: Relationships between scale variables · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/tutorial/07-correlation-regression/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#validation">Validation</a>
+        <a href="../../../docs/" aria-current="page">User Guide</a>
+        <a href="../../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -91,8 +95,8 @@
       </ul>
       </aside>
       <article class="docs-content">
-<h1 id="module-7--relationships-between-scale-variables">Module 7 — Relationships between scale variables</h1>
-<p><strong>Question:</strong> does blood pressure rise with BMI — and by how much, holding
+<h1 id="module-7-relationships-between-scale-variables">Module 7: Relationships between scale variables</h1>
+<p><strong>Question:</strong> does blood pressure rise with BMI, and by how much, holding
 age constant?</p>
 <p>Open the sample (<code>Ctrl+Shift+O</code>).</p>
 <h2 id="correlation">Correlation</h2>
@@ -101,19 +105,19 @@ age constant?</p>
 <p>The matrix gives each pair's Pearson <em>r</em> and its <em>p</em>. Expect <em>Age</em>–<em>SystolicBP</em>
 and <em>BMI</em>–<em>SystolicBP</em> clearly positive, and everything involving <em>HeartRate</em>
 near zero (the planted null). Remember module 4's scatterplots: <em>r</em> is only
-trustworthy when the cloud is roughly linear — always look first.</p>
+trustworthy when the cloud is roughly linear, so always look first.</p>
 <h2 id="linear-regression">Linear regression</h2>
 <p><strong>Analyze → Regression → Linear…</strong>, dependent <em>SystolicBP</em>, predictors <em>Age</em>
 and <em>BMI</em>, <strong>Run</strong>.</p>
 <p>How to read the three blocks:</p>
 <ul>
-<li><strong>Model summary</strong> — R²: the share of SystolicBP's variance the two
+<li><strong>Model summary</strong>: R²: the share of SystolicBP's variance the two
 predictors explain together.</li>
-<li><strong>ANOVA</strong> — whether the model beats no model at all.</li>
-<li><strong>Coefficients</strong> — the substance. The <em>BMI</em> coefficient is <em>mmHg per BMI
-unit, holding Age constant</em> — the &quot;holding constant&quot; is what regression
-adds over correlation. The constant is the fitted value at Age 0, BMI 0 —
-outside the data, not meaningful on its own.</li>
+<li><strong>ANOVA</strong>: whether the model beats no model at all.</li>
+<li><strong>Coefficients</strong>: the substance. The <em>BMI</em> coefficient is <em>mmHg per BMI
+unit, holding Age constant</em>; the &quot;holding constant&quot; is what regression
+adds over correlation. The constant is the fitted value at Age 0, BMI 0,
+which is outside the data and not meaningful on its own.</li>
 </ul>
 <p>Write the fitted equation out once by hand:
 <code>SystolicBP ≈ b₀ + b₁·Age + b₂·BMI</code>. Predict the SBP of a 50-year-old with
@@ -123,17 +127,17 @@ BMI 30 and sanity-check it against the Explore output from module 3.</p>
 that violate its assumptions. Re-run the model with <strong>Diagnostics</strong> ticked and
 you get three plots that check them:</p>
 <ul>
-<li><strong>Residuals vs Fitted</strong> — should be a shapeless cloud. A curve means the
+<li><strong>Residuals vs Fitted</strong>: should be a shapeless cloud. A curve means the
 relationship is not linear; a funnel means the spread depends on the
 prediction.</li>
-<li><strong>Scale-Location</strong> — the same homoscedasticity check made easier to read,
+<li><strong>Scale-Location</strong>: the same homoscedasticity check made easier to read,
 plotting √|standardized residual| against the fitted value. A rising trend is
 the funnel again.</li>
-<li><strong>Normal Q-Q</strong> of the standardized residuals — points on the reference line
+<li><strong>Normal Q-Q</strong> of the standardized residuals: points on the reference line
 mean the residuals are plausibly normal, which is what the <em>p</em> values assume.</li>
 </ul>
-<p>A separate <strong>Casewise diagnostics</strong> option adds the per-case table — leverage
-and Cook's distance — which answers a different question: is a handful of cases
+<p>A separate <strong>Casewise diagnostics</strong> option adds the per-case table (leverage
+and Cook's distance), which answers a different question: is a handful of cases
 steering the whole fit?</p>
 <p>Reading these before quoting R² is the difference between a model you have run
 and a model you can defend.</p>
@@ -141,12 +145,12 @@ and a model you can defend.</p>
 <ol>
 <li>Add <em>TotalCholesterol_mmolL</em> as a third predictor. Does R² move much? Is
 its coefficient significant?</li>
-<li>Correlate <em>PhysicalActivity_minWk</em> with <em>TotalCholesterol_mmolL</em> — the
+<li>Correlate <em>PhysicalActivity_minWk</em> with <em>TotalCholesterol_mmolL</em>, the
 codebook's documented null pair. Report it honestly.</li>
 <li>Spearman instead of Pearson (the <strong>method</strong> option): rank-based, robust
 to outliers and curvature. Do the Age/BMI/SBP conclusions change?</li>
 <li>Re-run the regression with <strong>Diagnostics</strong> on. Is Residuals vs Fitted a
-shapeless cloud, or does it fan out? Then add <strong>Casewise diagnostics</strong> —
+shapeless cloud, or does it fan out? Then add <strong>Casewise diagnostics</strong>:
 does any single case stand out on Cook's distance?</li>
 </ol>
 <h2 id="the-syntax-trail">The syntax trail</h2>
@@ -159,29 +163,51 @@ correlate variables=[PhysicalActivity_minWk, TotalCholesterol_mmolL]
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../../index.html">Home</a> ·
-        <a href="../../../quick-start/">Quick Start</a> ·
-        <a href="../../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../../license/">License</a> ·
-        <a href="../../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../../index.html">
+            <img class="brand-mark" src="../../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../../index.html#features">Features</a>
+          <a href="../../../index.html#screenshots">Screenshots</a>
+          <a href="../../../index.html#download">Download</a>
+          <a href="../../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../../docs/">User Guide</a>
+          <a href="../../../quick-start/">Quick Start</a>
+          <a href="../../../docs/validation/">Validation</a>
+          <a href="../../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../../cite/">How to cite</a>
+          <a href="../../../license/">License</a>
+          <a href="../../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

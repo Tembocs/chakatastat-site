@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Complex Samples (Survey Designs) — ChakataStat User Guide</title>
+  <title>Complex Samples (Survey Designs) · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/analyze/complex-samples/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Complex Samples (Survey Designs) — ChakataStat User Guide">
+  <meta property="og:title" content="Complex Samples (Survey Designs) · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/analyze/complex-samples/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#validation">Validation</a>
+        <a href="../../../docs/" aria-current="page">User Guide</a>
+        <a href="../../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -92,32 +96,32 @@
       </aside>
       <article class="docs-content">
 <h1 id="complex-samples-survey-designs">Complex Samples (Survey Designs)</h1>
-<p><strong>Data → Survey Design…</strong> Real survey datasets — DHS, ESS, NHANES and their
-kin — are not simple random samples: cases are drawn in <strong>clusters</strong> (primary
+<p><strong>Data → Survey Design…</strong> Real survey datasets (DHS, ESS, NHANES and their
+kin) are not simple random samples: cases are drawn in <strong>clusters</strong> (primary
 sampling units, PSUs) within <strong>strata</strong>, with unequal <strong>sampling weights</strong>.
 Analyzing such data as if every case were an independent draw produces wrong
-standard errors, silently — usually too small, because cases in the same
-cluster resemble each other. Declaring the survey design fixes that: the
+standard errors, silently. They are usually too small, because cases in the
+same cluster resemble each other. Declaring the survey design fixes that: the
 covered procedures then report <strong>design-based</strong> estimates with
 Taylor-linearized standard errors, the way R's <code>survey</code> package and the major
 packages' complex-samples modules do.</p>
 <h2 id="declaring-a-design">Declaring a design</h2>
 <p>Open <strong>Data → Survey Design…</strong>, choose <strong>Declare a design</strong>, and pick:</p>
 <ul>
-<li><strong>Sampling weight</strong> (required) — the numeric variable holding each case's
+<li><strong>Sampling weight</strong> (required): the numeric variable holding each case's
 sampling weight. Every case must have a positive weight; a missing, zero or
 negative value stops the declaration with a message naming the case, because
 a sampling weight is part of the design, not a filter.</li>
-<li><strong>PSU / cluster</strong> (optional) — the primary-sampling-unit identifier. PSU
+<li><strong>PSU / cluster</strong> (optional): the primary-sampling-unit identifier. PSU
 values are read <strong>within</strong> strata, so reusing PSU numbers 1–n in every
 stratum works (the common survey-file convention). Leave it out for a
 design without clustering (each case its own PSU).</li>
-<li><strong>Strata</strong> (optional) — the stratum identifier. Leave it out for an
+<li><strong>Strata</strong> (optional): the stratum identifier. Leave it out for an
 unstratified design.</li>
 </ul>
 <p>On <strong>OK</strong> the declaration is validated and a <strong>Survey Design</strong> summary is
 written to the output: the number of strata and PSUs, the <strong>design degrees of
-freedom</strong> (PSUs − strata — the df every design-based confidence interval
+freedom</strong> (PSUs − strata; the df every design-based confidence interval
 uses), the case count and the sum of weights. The status bar shows <strong>Survey
 Design On</strong> while a design is active, and the declaration is journaled as a
 <code>survey_design</code> command, so a saved syntax file reproduces it:</p>
@@ -134,9 +138,9 @@ sampling weight already weights every estimate; layering a frequency weight
 on top would count cases twice. Declaring one clears the other.</li>
 </ul>
 <h2 id="what-is-design-aware-and-what-is-not">What is design-aware (and what is not)</h2>
-<p>With a design declared, exactly these procedures estimate design-based —
+<p>With a design declared, exactly these procedures estimate design-based:
 <strong>Explore, Frequencies, Crosstabs (two-way), Means, Linear Regression and
-Logistic Regression</strong>:</p>
+Logistic Regression</strong>.</p>
 <div class="docs-table-wrap"><table>
 <thead>
 <tr>
@@ -155,7 +159,7 @@ Logistic Regression</strong>:</p>
 </tr>
 <tr>
 <td><strong>Crosstabs</strong></td>
-<td>Estimated population counts, and — with the chi-square option — the <strong>Rao–Scott second-order corrected test</strong> with an F reference distribution (the <code>svychisq</code> default) instead of the classic Pearson block.</td>
+<td>Estimated population counts, and, with the chi-square option, the <strong>Rao–Scott second-order corrected test</strong> with an F reference distribution (the <code>svychisq</code> default) instead of the classic Pearson block.</td>
 </tr>
 <tr>
 <td><strong>Means</strong></td>
@@ -170,10 +174,10 @@ Logistic Regression</strong>:</p>
 <p><strong>Every other analysis states, in its output note, that it ran ignoring the
 design.</strong> Nothing is wrong silently: a procedure either estimates
 design-based or says plainly that it did not. (Descriptives is in this second
-group — use Explore for design-based summaries.)</p>
+group; use Explore for design-based summaries.)</p>
 <h2 id="domains-subgroup-analysis-done-right">Domains: subgroup analysis done right</h2>
-<p>Estimating a subgroup of a survey — one sex, one region, the cases passing a
-filter — is <strong>not</strong> the same as deleting the other cases and re-analyzing.
+<p>Estimating a subgroup of a survey (one sex, one region, the cases passing a
+filter) is <strong>not</strong> the same as deleting the other cases and re-analyzing.
 The subgroup's sample size is itself random, and dropping cases can drop
 whole PSUs, which changes the variance structure. The correct method,
 <strong>domain estimation</strong>, keeps every case's stratum/PSU membership and zeroes
@@ -181,10 +185,10 @@ the out-of-domain contributions.</p>
 <p>ChakataStat applies domain estimation automatically wherever a subgroup
 arises under a declared design:</p>
 <ul>
-<li><strong>Select Cases</strong> — the filter defines a domain, never a row subset;</li>
-<li><strong>Split File</strong> — each group is a domain;</li>
-<li>the <strong>Means</strong> factor — each level is a domain;</li>
-<li><strong>missing values</strong> on an analysis variable — the complete cases form a
+<li><strong>Select Cases</strong>: the filter defines a domain, never a row subset;</li>
+<li><strong>Split File</strong>: each group is a domain;</li>
+<li>the <strong>Means</strong> factor: each level is a domain;</li>
+<li><strong>missing values</strong> on an analysis variable: the complete cases form a
 domain.</li>
 </ul>
 <p>You do not have to do anything; the point of this section is that you can
@@ -192,38 +196,38 @@ trust Select Cases and Split File under a design, where naive subsetting
 would misstate the standard errors.</p>
 <h2 id="reading-the-output">Reading the output</h2>
 <ul>
-<li><strong>Std. Error</strong> — Taylor-linearized over the stratum/PSU structure (with
+<li><strong>Std. Error</strong>: Taylor-linearized over the stratum/PSU structure (with
 replacement; no finite-population correction in this version).</li>
-<li><strong>Confidence intervals</strong> — t on the <strong>design df</strong> (PSUs − strata), the
+<li><strong>Confidence intervals</strong>: t on the <strong>design df</strong> (PSUs − strata), the
 SPSS/Stata convention. Proportions use a logit-scale interval
 (<code>svyciprop</code>'s &quot;logit&quot; method), so bounds stay inside 0–1; a proportion of
 exactly 0 or 1 has no interval rather than a fabricated one.</li>
-<li><strong>Deff</strong> — the design effect: the ratio of the design-based variance to
+<li><strong>Deff</strong> (the design effect): the ratio of the design-based variance to
 the variance a simple random sample of the same size would have had
 (with-replacement baseline, R's <code>deff = &quot;replace&quot;</code>). Deff ≈ 2 means the
-clustering/weighting doubled the variance — the effective sample size is
+clustering/weighting doubled the variance; the effective sample size is
 about half the nominal one.</li>
-<li><strong>Population Size / Weighted N</strong> — the sum of the sampling weights: the
+<li><strong>Population Size / Weighted N</strong>: the sum of the sampling weights, the
 population the sample stands for, which is what a survey estimate is
 about.</li>
 </ul>
 <p>Every design-based table names the design (variables, strata, PSUs, df) in
 its note, so output stays self-describing when exported.</p>
 <h2 id="how-this-is-computed">How this is computed</h2>
-<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
+<p>This section names <em>which</em> method each procedure prints: the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules. Each line links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
 <ul>
-<li><strong>Variance estimation</strong> — Taylor linearization under the declared design (strata, PSUs, weights, finite-population correction), the <code>survey</code> package's estimators; domains are analysed over the full design with zero-filled indicators, never by subsetting (<a href="../../validation/conventions/clinical-and-survey/#the-five-estimation-conventions">the five estimation conventions</a>).</li>
-<li><strong>Descriptives and frequencies</strong> — design-based means, proportions and totals with Taylor SEs, <em>t</em> intervals on the design df, logit-scale intervals for proportions, and the design effect.</li>
-<li><strong>Crosstabs</strong> — the Rao–Scott second-order corrected χ² with the F reference, <code>svychisq</code>'s default (<a href="../../validation/conventions/clinical-and-survey/#complex-survey-designs--the-v1-conventions">survey conventions</a>).</li>
-<li><strong>Regression under a design</strong> — weighted least squares / IRLS with Taylor sandwich SEs, inference on (design df) − p + 1 (<code>summary.svyglm</code>); the classic ANOVA table, standardized β and VIF are suppressed as SRS constructs (<a href="../../validation/conventions/clinical-and-survey/#regression-under-a-design">regression under a design</a>).</li>
+<li><strong>Variance estimation</strong>: Taylor linearization under the declared design (strata, PSUs, weights, finite-population correction), the <code>survey</code> package's estimators; domains are analysed over the full design with zero-filled indicators, never by subsetting (<a href="../../validation/conventions/clinical-and-survey/#the-five-estimation-conventions">the five estimation conventions</a>).</li>
+<li><strong>Descriptives and frequencies</strong>: design-based means, proportions and totals with Taylor SEs, <em>t</em> intervals on the design df, logit-scale intervals for proportions, and the design effect.</li>
+<li><strong>Crosstabs</strong>: the Rao–Scott second-order corrected χ² with the F reference, <code>svychisq</code>'s default (<a href="../../validation/conventions/clinical-and-survey/#complex-survey-designs--the-v1-conventions">survey conventions</a>).</li>
+<li><strong>Regression under a design</strong>: weighted least squares / IRLS with Taylor sandwich SEs, inference on (design df) − p + 1 (<code>summary.svyglm</code>); the classic ANOVA table, standardized β and VIF are suppressed as SRS constructs (<a href="../../validation/conventions/clinical-and-survey/#regression-under-a-design">regression under a design</a>).</li>
 </ul>
 <h2 id="scope-precisely">Scope, precisely</h2>
-<p>This version estimates by <strong>Taylor linearization</strong> only — no
+<p>This version estimates by <strong>Taylor linearization</strong> only: no
 BRR/jackknife/bootstrap replicate weights, no finite population correction,
 no multistage variance (first-stage PSUs carry the variance, the standard
 with-replacement approximation), and no design-based quantiles. Every number
 the design-aware procedures print is validated end to end against R's
-<code>survey</code> package — see the project's validation methodology.</p>
+<code>survey</code> package; see the project's validation methodology.</p>
 <hr />
 <p>Related: <a href="../../cases-and-transforms/">Case Semantics &amp; Transforms</a> (Select /
 Weight / Split), <a href="../descriptive-statistics/">Descriptive Statistics</a>,
@@ -232,29 +236,51 @@ Weight / Split), <a href="../descriptive-statistics/">Descriptive Statistics</a>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../../index.html">Home</a> ·
-        <a href="../../../quick-start/">Quick Start</a> ·
-        <a href="../../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../../license/">License</a> ·
-        <a href="../../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../../index.html">
+            <img class="brand-mark" src="../../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../../index.html#features">Features</a>
+          <a href="../../../index.html#screenshots">Screenshots</a>
+          <a href="../../../index.html#download">Download</a>
+          <a href="../../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../../docs/">User Guide</a>
+          <a href="../../../quick-start/">Quick Start</a>
+          <a href="../../../docs/validation/">Validation</a>
+          <a href="../../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../../cite/">How to cite</a>
+          <a href="../../../license/">License</a>
+          <a href="../../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

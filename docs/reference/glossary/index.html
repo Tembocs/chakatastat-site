@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Glossary — ChakataStat User Guide</title>
+  <title>Glossary · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/reference/glossary/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Glossary — ChakataStat User Guide">
+  <meta property="og:title" content="Glossary · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/reference/glossary/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#validation">Validation</a>
+        <a href="../../../docs/" aria-current="page">User Guide</a>
+        <a href="../../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -97,138 +101,138 @@ guide. For &quot;which test do I need?&quot;, see
 <a href="../choosing-a-procedure/">Choosing a procedure</a>.</p>
 <h2 id="chakatastat-terms">ChakataStat terms</h2>
 <ul>
-<li><strong>Case</strong> — one row of the dataset; one observation (e.g. one participant).</li>
-<li><strong>Variable</strong> — one column; a measured attribute (e.g. <em>Age</em>).</li>
-<li><strong><code>.ckd</code></strong> — ChakataStat's native document: data <strong>plus</strong> all variable
+<li><strong>Case</strong>: one row of the dataset; one observation (e.g. one participant).</li>
+<li><strong>Variable</strong>: one column; a measured attribute (e.g. <em>Age</em>).</li>
+<li><strong><code>.ckd</code></strong>: ChakataStat's native document: data <strong>plus</strong> all variable
 definitions in one file.</li>
-<li><strong><code>.ckdict</code></strong> — a standalone data dictionary: variable metadata without the
+<li><strong><code>.ckdict</code></strong>: a standalone data dictionary: variable metadata without the
 data.</li>
-<li><strong><code>.cks</code></strong> — ChakataStat syntax: the readable command-stream script the syntax
+<li><strong><code>.cks</code></strong>: ChakataStat syntax, the readable command-stream script the syntax
 console reads and writes.</li>
-<li><strong>Measurement level (Measure)</strong> — how a variable is treated: <strong>Scale</strong> (true
+<li><strong>Measurement level (Measure)</strong>: how a variable is treated: <strong>Scale</strong> (true
 number), <strong>Ordinal</strong> (ordered categories), <strong>Nominal</strong> (unordered categories).</li>
-<li><strong>Value label</strong> — text shown for a stored code (e.g. <code>1 → Male</code>).</li>
-<li><strong>User-missing value</strong> — a code that means &quot;no answer&quot;, excluded from analysis.</li>
-<li><strong>Case semantics</strong> — Select (which cases), Weight (how much each counts) and
+<li><strong>Value label</strong>: text shown for a stored code (e.g. <code>1 → Male</code>).</li>
+<li><strong>User-missing value</strong>: a code that means &quot;no answer&quot;, excluded from analysis.</li>
+<li><strong>Case semantics</strong>: Select (which cases), Weight (how much each counts) and
 Split (analyse per group); applied to every analysis.</li>
-<li><strong>Tool / command</strong> — the single named operation behind every menu action,
+<li><strong>Tool / command</strong>: the single named operation behind every menu action,
 shared by the syntax console, the AI assistant and MCP.</li>
-<li><strong>Command journal</strong> — the running record of every command a session has run;
+<li><strong>Command journal</strong>: the running record of every command a session has run;
 what the Syntax tab shows and what a <code>.cks</code> file saves.</li>
-<li><strong>Syntax editor</strong> — the Syntax tab: a real editor over the journal, with
+<li><strong>Syntax editor</strong>: the Syntax tab, a real editor over the journal, with
 highlighting, <code>Ctrl+Space</code> completion and errors marked before you run.</li>
-<li><strong>Chart editor</strong> — the <strong>Edit chart…</strong> panel on a chart card. It changes how
+<li><strong>Chart editor</strong>: the <strong>Edit chart…</strong> panel on a chart card. It changes how
 a chart looks, never what it measures, and writes the change back into the
-chart's own command — so a restyled chart re-runs restyled.</li>
-<li><strong>User-defined tool</strong> — a saved <code>.cks</code> recipe registered under a name, which
+chart's own command, so a restyled chart re-runs restyled.</li>
+<li><strong>User-defined tool</strong>: a saved <code>.cks</code> recipe registered under a name, which
 the syntax console, the AI assistant and MCP can then run like any built-in.</li>
-<li><strong>Concept DOI</strong> — the permanent identifier for citing ChakataStat itself
+<li><strong>Concept DOI</strong>: the permanent identifier for citing ChakataStat itself
 (<strong>Help → How to Cite</strong>), stable across releases; each tagged version also
 gets its own version DOI.</li>
-<li><strong>Foreign formats</strong> — the statistical files ChakataStat reads directly:
+<li><strong>Foreign formats</strong>: the statistical files ChakataStat reads directly:
 SPSS (<code>.sav</code>, <code>.zsav</code>), Stata (<code>.dta</code>), SAS (<code>.sas7bdat</code>, <code>.xpt</code>), plus
 Parquet and Arrow. Unlike CSV they carry variable and value labels with the
 data. See <a href="../../working-with-data/#importing-data">Working with data</a>.</li>
 </ul>
 <h2 id="common-statistics-terms">Common statistics terms</h2>
 <ul>
-<li><strong>Mean / Median / Mode</strong> — average, middle value, most frequent value.</li>
-<li><strong>Standard deviation (SD)</strong> — typical spread around the mean.</li>
-<li><strong>Confidence interval (CI)</strong> — a range that, at a stated level (e.g. 95%),
+<li><strong>Mean / Median / Mode</strong>: average, middle value, most frequent value.</li>
+<li><strong>Standard deviation (SD)</strong>: typical spread around the mean.</li>
+<li><strong>Confidence interval (CI)</strong>: a range that, at a stated level (e.g. 95%),
 plausibly contains the true value.</li>
-<li><strong>Significance (p-value)</strong> — the probability of seeing data this extreme if the
+<li><strong>Significance (p-value)</strong>: the probability of seeing data this extreme if the
 null hypothesis were true; small values are evidence against the null.</li>
-<li><strong>Alpha (α)</strong> — the significance threshold for a reject/retain decision
+<li><strong>Alpha (α)</strong>: the significance threshold for a reject/retain decision
 (commonly 0.05).</li>
-<li><strong>One- vs two-tailed</strong> — whether the test looks for a difference in one
+<li><strong>One- vs two-tailed</strong>: whether the test looks for a difference in one
 specified direction or in either direction.</li>
-<li><strong>Null hypothesis</strong> — the &quot;no effect / no difference&quot; baseline a test evaluates.</li>
+<li><strong>Null hypothesis</strong>: the &quot;no effect / no difference&quot; baseline a test evaluates.</li>
 </ul>
 <h2 id="relationships-and-models">Relationships and models</h2>
 <ul>
-<li><strong>Correlation</strong> — strength and direction of association (−1 to +1).
+<li><strong>Correlation</strong>: strength and direction of association (−1 to +1).
 <strong>Pearson</strong> is linear; <strong>Spearman</strong> and <strong>Kendall</strong> are rank-based.</li>
-<li><strong>Partial correlation</strong> — association between two variables controlling for
+<li><strong>Partial correlation</strong>: association between two variables controlling for
 others.</li>
-<li><strong>Regression</strong> — predicting an outcome from one or more predictors.</li>
-<li><strong>Coefficient (B)</strong> — the modelled effect of a predictor on the outcome.</li>
-<li><strong>Odds ratio / Exp(B)</strong> — in logistic regression, the multiplicative change in
+<li><strong>Regression</strong>: predicting an outcome from one or more predictors.</li>
+<li><strong>Coefficient (B)</strong>: the modelled effect of a predictor on the outcome.</li>
+<li><strong>Odds ratio / Exp(B)</strong>: in logistic regression, the multiplicative change in
 odds per unit of a predictor.</li>
-<li><strong>Hazard ratio</strong> — in Cox regression, the multiplicative change in the event
+<li><strong>Hazard ratio</strong>: in Cox regression, the multiplicative change in the event
 rate per unit of a predictor.</li>
-<li><strong>R²</strong> — the share of the outcome's variance the model explains.</li>
-<li><strong>Regression diagnostics</strong> — the plots that check a fitted model's
+<li><strong>R²</strong>: the share of the outcome's variance the model explains.</li>
+<li><strong>Regression diagnostics</strong>: the plots that check a fitted model's
 assumptions: <strong>Residuals vs Fitted</strong>, <strong>Scale-Location</strong> and a <strong>Normal Q-Q</strong>
 of the residuals.</li>
-<li><strong>Leverage / Cook's distance</strong> — per-case measures of how unusual a case's
+<li><strong>Leverage / Cook's distance</strong>: per-case measures of how unusual a case's
 predictors are, and how much the fit would move without it.</li>
-<li><strong>Mediation</strong> — decomposing an effect into a <strong>direct</strong> path and an
+<li><strong>Mediation</strong>: decomposing an effect into a <strong>direct</strong> path and an
 <strong>indirect</strong> path through a mediator; <strong>moderated</strong> mediation lets that
 depend on a third variable, and the <strong>Johnson–Neyman</strong> interval reports where
 the effect is significant.</li>
-<li><strong>Fixed vs random effects (panel)</strong> — for repeated observations on the same
+<li><strong>Fixed vs random effects (panel)</strong>: for repeated observations on the same
 entities: fixed effects use only within-entity variation, random effects also
 use between-entity variation; the <strong>Hausman test</strong> chooses between them.</li>
-<li><strong>Propensity score</strong> — the modelled probability of being treated, used to
+<li><strong>Propensity score</strong>: the modelled probability of being treated, used to
 <strong>match</strong> or <strong>weight</strong> cases so treated and control groups become comparable;
 balance is judged on standardised differences.</li>
-<li><strong>ATE / ATT</strong> — the average treatment effect over everyone, versus over the
+<li><strong>ATE / ATT</strong>: the average treatment effect over everyone, versus over the
 treated only.</li>
 </ul>
 <h2 id="group-comparisons">Group comparisons</h2>
 <ul>
-<li><strong>t-test</strong> — compares two means.</li>
-<li><strong>ANOVA</strong> — compares three or more means; the <strong>F</strong> statistic is its test.</li>
-<li><strong>Levene's test</strong> — tests whether groups have equal variances.</li>
-<li><strong>Post-hoc test</strong> — pairwise comparisons after a significant ANOVA
+<li><strong>t-test</strong>: compares two means.</li>
+<li><strong>ANOVA</strong>: compares three or more means; the <strong>F</strong> statistic is its test.</li>
+<li><strong>Levene's test</strong>: tests whether groups have equal variances.</li>
+<li><strong>Post-hoc test</strong>: pairwise comparisons after a significant ANOVA
 (Bonferroni, Scheffé, Tukey HSD).</li>
-<li><strong>Chi-square (χ²)</strong> — tests association in a contingency table.</li>
-<li><strong>Nonparametric test</strong> — a test that does not assume normality, using ranks.</li>
-<li><strong>Equivalence test (TOST)</strong> — two one-sided tests asking whether a difference
+<li><strong>Chi-square (χ²)</strong>: tests association in a contingency table.</li>
+<li><strong>Nonparametric test</strong>: a test that does not assume normality, using ranks.</li>
+<li><strong>Equivalence test (TOST)</strong>: two one-sided tests asking whether a difference
 is small enough to be practically nil. &quot;No significant difference&quot; is not the
 same claim, which is why this test exists.</li>
-<li><strong>Permutation test</strong> — a <em>p</em> value built by reshuffling the data many times
+<li><strong>Permutation test</strong>: a <em>p</em> value built by reshuffling the data many times
 rather than from a theoretical distribution.</li>
 </ul>
 <h2 id="multivariate--specialised">Multivariate &amp; specialised</h2>
 <ul>
-<li><strong>Factor analysis</strong> — finds latent factors behind many correlated variables;
+<li><strong>Factor analysis</strong>: finds latent factors behind many correlated variables;
 <strong>loadings</strong> show each variable's link to a factor; <strong>rotation</strong> (Varimax,
 Promax) makes them interpretable.</li>
-<li><strong>Cronbach's alpha</strong> — internal-consistency reliability of a set of items.</li>
-<li><strong>Cluster analysis</strong> — groups similar cases (<strong>k-means</strong>, <strong>hierarchical</strong>,
+<li><strong>Cronbach's alpha</strong>: internal-consistency reliability of a set of items.</li>
+<li><strong>Cluster analysis</strong>: groups similar cases (<strong>k-means</strong>, <strong>hierarchical</strong>,
 <strong>two-step</strong>).</li>
-<li><strong>Discriminant analysis</strong> — predicts known group membership from predictors.</li>
-<li><strong>Censoring</strong> — in survival data, a case whose event had not occurred by the
+<li><strong>Discriminant analysis</strong>: predicts known group membership from predictors.</li>
+<li><strong>Censoring</strong>: in survival data, a case whose event had not occurred by the
 end of observation.</li>
-<li><strong>Kaplan-Meier</strong> — a model-free estimate of a survival curve; <strong>log-rank</strong>
+<li><strong>Kaplan-Meier</strong>: a model-free estimate of a survival curve; <strong>log-rank</strong>
 compares curves between groups.</li>
-<li><strong>ACF / PACF</strong> — autocorrelation and partial autocorrelation of a time series.</li>
-<li><strong>ARIMA / SARIMA</strong> — Box-Jenkins time-series models; SARIMA adds seasonal
+<li><strong>ACF / PACF</strong>: autocorrelation and partial autocorrelation of a time series.</li>
+<li><strong>ARIMA / SARIMA</strong>: Box-Jenkins time-series models; SARIMA adds seasonal
 terms; both can <strong>forecast</strong>.</li>
-<li><strong>VAR / Granger causality</strong> — a vector autoregression models several series
+<li><strong>VAR / Granger causality</strong>: a vector autoregression models several series
 jointly; a Granger test asks whether one series' past helps predict another's
 future (prediction, not cause).</li>
-<li><strong>Confirmatory factor analysis (CFA)</strong> — tests a factor structure you specify
+<li><strong>Confirmatory factor analysis (CFA)</strong>: tests a factor structure you specify
 in advance; <strong>modification indices</strong> suggest what would improve fit, and
 <strong>measurement invariance</strong> checks the structure means the same thing across
 groups.</li>
-<li><strong>Latent class analysis (LCA)</strong> — finds unobserved subgroups behind
+<li><strong>Latent class analysis (LCA)</strong>: finds unobserved subgroups behind
 categorical responses; the cluster analysis of categorical data.</li>
-<li><strong>Item response theory (IRT)</strong> — models each item's <strong>difficulty</strong> and
+<li><strong>Item response theory (IRT)</strong>: models each item's <strong>difficulty</strong> and
 <strong>discrimination</strong> separately from the person's ability.</li>
-<li><strong>Meta-analysis</strong> — pools effect sizes across studies; <strong>heterogeneity</strong>
+<li><strong>Meta-analysis</strong>: pools effect sizes across studies; <strong>heterogeneity</strong>
 (Q, I², τ²) says how much they disagree, the <strong>forest plot</strong> shows every
 study, and the <strong>funnel plot</strong> looks for small-study bias.</li>
-<li><strong>Bland-Altman</strong> — a method-comparison plot of the mean of two measurements
+<li><strong>Bland-Altman</strong>: a method-comparison plot of the mean of two measurements
 against their difference, with the <strong>limits of agreement</strong>.</li>
-<li><strong>LOESS</strong> — a smooth curve fitted locally through a scatterplot, with no
+<li><strong>LOESS</strong>: a smooth curve fitted locally through a scatterplot, with no
 global equation assumed.</li>
-<li><strong>Multiple imputation</strong> — filling gaps <em>m</em> times to preserve uncertainty,
+<li><strong>Multiple imputation</strong>: filling gaps <em>m</em> times to preserve uncertainty,
 pooling the results by <strong>Rubin's rules</strong>; the <strong>FMI</strong> reports how much of the
 answer came from imputation rather than data.</li>
-<li><strong>Survey design</strong> — telling ChakataStat the sample was not simple random:
-<strong>strata</strong>, <strong>clusters</strong> (PSUs) and <strong>sampling weights</strong>. The everyday
+<li><strong>Survey design</strong>: telling ChakataStat the sample was not simple random,
+with its <strong>strata</strong>, <strong>clusters</strong> (PSUs) and <strong>sampling weights</strong>. The everyday
 procedures then estimate design-based, reporting a <strong>design df</strong> and an
 <strong>effective sample size</strong> rather than pretending N independent observations.</li>
 </ul>
@@ -236,29 +240,51 @@ procedures then estimate design-based, reporting a <strong>design df</strong> an
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../../index.html">Home</a> ·
-        <a href="../../../quick-start/">Quick Start</a> ·
-        <a href="../../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../../license/">License</a> ·
-        <a href="../../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../../index.html">
+            <img class="brand-mark" src="../../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../../index.html#features">Features</a>
+          <a href="../../../index.html#screenshots">Screenshots</a>
+          <a href="../../../index.html#download">Download</a>
+          <a href="../../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../../docs/">User Guide</a>
+          <a href="../../../quick-start/">Quick Start</a>
+          <a href="../../../docs/validation/">Validation</a>
+          <a href="../../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../../cite/">How to cite</a>
+          <a href="../../../license/">License</a>
+          <a href="../../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

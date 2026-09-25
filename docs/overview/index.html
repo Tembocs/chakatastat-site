@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ChakataStat at a glance — ChakataStat User Guide</title>
+  <title>ChakataStat at a glance · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/overview/">
   <link rel="icon" type="image/svg+xml" href="../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="ChakataStat at a glance — ChakataStat User Guide">
+  <meta property="og:title" content="ChakataStat at a glance · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/overview/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../index.html#features">Features</a>
+        <a href="../../index.html#validation">Validation</a>
+        <a href="../../docs/" aria-current="page">User Guide</a>
+        <a href="../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -100,7 +104,7 @@ follow <a href="../getting-started/">Getting Started</a> for your first analysis
 <p>ChakataStat is a desktop application for <strong>statistical data analysis</strong>. It pairs
 a spreadsheet-style <strong>data editor</strong> with a fast <strong>statistics engine</strong>, so you can
 type or import a table of data, describe and model it, draw charts, and save the
-whole thing as a single document — without writing any code.</p>
+whole thing as a single document, without writing any code.</p>
 <p>Two things make it more than a spreadsheet:</p>
 <ul>
 <li><strong>A statistics engine.</strong> Everything from a frequency table to ARIMA
@@ -112,7 +116,7 @@ assistant, or driven by an external program. They are all the same underlying
 operation, so anything you do by clicking can be reproduced exactly later.</li>
 </ul>
 <h2 id="the-workbench-part-by-part">The workbench, part by part</h2>
-<p>When you open ChakataStat you see the <strong>workbench</strong> — one window with these
+<p>When you open ChakataStat you see the <strong>workbench</strong>, one window with these
 pieces:</p>
 <div class="docs-table-wrap"><table>
 <thead>
@@ -140,7 +144,7 @@ pieces:</p>
 </tr>
 <tr>
 <td><strong>Work area</strong></td>
-<td>The active view — your data, your variable definitions, or your results</td>
+<td>The active view: your data, your variable definitions, or your results</td>
 <td>Centre</td>
 </tr>
 <tr>
@@ -158,42 +162,42 @@ pieces:</p>
 <h3 id="the-four-views">The four views</h3>
 <p>You spend all your time in one of these tabs. Switch with the tabs or <code>Ctrl+1</code>…<code>Ctrl+4</code>.</p>
 <ul>
-<li><strong>Data View</strong> (<code>Ctrl+1</code>) — the spreadsheet. Rows are <strong>cases</strong> (observations);
+<li><strong>Data View</strong> (<code>Ctrl+1</code>): the spreadsheet. Rows are <strong>cases</strong> (observations);
 columns are <strong>variables</strong>. This is where you type, paste and edit data.</li>
-<li><strong>Variable View</strong> (<code>Ctrl+2</code>) — one row per variable, where you set each
+<li><strong>Variable View</strong> (<code>Ctrl+2</code>): one row per variable, where you set each
 variable's <strong>name, type, label, value labels, measurement level and
 missing-value rules</strong>. Defining variables well here makes every analysis and
 chart read better.</li>
-<li><strong>Output View</strong> (<code>Ctrl+3</code>) — the <strong>log of results</strong>. Every analysis and chart
+<li><strong>Output View</strong> (<code>Ctrl+3</code>): the <strong>log of results</strong>. Every analysis and chart
 you run appends a titled card here. You can copy, export, or clear it.</li>
-<li><strong>Syntax console</strong> (<code>Ctrl+4</code>) — <em>advanced.</em> The editable command stream that
+<li><strong>Syntax console</strong> (<code>Ctrl+4</code>): <em>advanced.</em> The editable command stream that
 records what you have done and lets you re-run it. See
 <a href="../advanced/reproducibility/">Reproducibility</a>.</li>
 </ul>
-<p>(Earlier versions had a fifth, Advanced-mode SQL tab; it has been removed — see
+<p>(Earlier versions had a fifth, Advanced-mode SQL tab; it has been removed. See
 <a href="../advanced/engine-access/">Direct engine access</a>.)</p>
-<h2 id="what-you-can-do--the-menus-in-one-line-each">What you can do — the menus in one line each</h2>
+<h2 id="what-you-can-do-the-menus-in-one-line-each">What you can do: the menus in one line each</h2>
 <ul>
-<li><strong>File</strong> — new dataset, open/save <code>.ckd</code> documents, import CSV, fixed-width
+<li><strong>File</strong>: new dataset, open/save <code>.ckd</code> documents, import CSV, fixed-width
 text, Excel, Parquet/Arrow, JSON, SPSS, Stata and SAS (export to
 CSV, Excel, Parquet and JSON), import/export a data dictionary, export the
 output log.</li>
-<li><strong>Edit</strong> — undo/redo, cut/copy/paste, select all, find &amp; replace (<code>Ctrl+F</code>).</li>
-<li><strong>View</strong> — switch views, open the <strong>Command Palette</strong> (<code>Ctrl+Shift+P</code>), toggle
+<li><strong>Edit</strong>: undo/redo, cut/copy/paste, select all, find &amp; replace (<code>Ctrl+F</code>).</li>
+<li><strong>View</strong>: switch views, open the <strong>Command Palette</strong> (<code>Ctrl+Shift+P</code>), toggle
 the AI panel, and (in Advanced mode) Engine Diagnostics.</li>
-<li><strong>Data</strong> — define variable properties, sort, select / weight / split cases,
+<li><strong>Data</strong>: define variable properties, sort, select / weight / split cases,
 merge files, transpose, bulk-rename variables, define variable sets.</li>
-<li><strong>Transform</strong> — compute a new variable from an expression, recode, rank cases.</li>
-<li><strong>Analyze</strong> — the statistics: Descriptives, Compare Means, Correlate,
+<li><strong>Transform</strong>: compute a new variable from an expression, recode, rank cases.</li>
+<li><strong>Analyze</strong>: the statistics, covering Descriptives, Compare Means, Correlate,
 Regression (including Panel Regression and moderated mediation), the General
 Linear and Mixed models, Nonparametric tests, Scale, Dimension Reduction,
 Classify, Meta-Analysis, Propensity Score, Survival, Time Series and custom
 Tables.</li>
-<li><strong>Graphs</strong> — Histogram, Scatterplot, Boxplot and a free-form Chart Builder
+<li><strong>Graphs</strong>: Histogram, Scatterplot, Boxplot and a free-form Chart Builder
 (which also holds the violin plot, scatterplot matrix, ECDF, Cleveland dot
 plot and bubble chart). Any finished chart can be restyled from its card in
-the Output log — see <a href="../chart-editor/">Editing a chart</a>.</li>
-<li><strong>Help</strong> — documentation and the About box.</li>
+the Output log (see <a href="../chart-editor/">Editing a chart</a>).</li>
+<li><strong>Help</strong>: documentation and the About box.</li>
 </ul>
 <h2 id="how-a-session-usually-flows">How a session usually flows</h2>
 <pre><code>  Open or import data ─▶ Define variables ─▶ (optionally) filter / weight / split
@@ -210,13 +214,13 @@ replayed on new data with one click.</p>
 <h2 id="the-advanced-features-in-brief">The advanced features, in brief</h2>
 <p>These have their own sections because they reward a closer read:</p>
 <ul>
-<li><strong><a href="../advanced/ai-assistant/">The AI assistant</a></strong> — connect a model (Claude or
+<li><strong><a href="../advanced/ai-assistant/">The AI assistant</a></strong>: connect a model (Claude or
 any OpenAI-compatible endpoint) and ask for analyses in plain English; results
 come back as tables and charts in the chat.</li>
-<li><strong><a href="../advanced/reproducibility/">Reproducibility</a></strong> — the <code>.cks</code> syntax stream,
+<li><strong><a href="../advanced/reproducibility/">Reproducibility</a></strong>: the <code>.cks</code> syntax stream,
 the command palette, headless batch runs (<code>--run</code>), exporting the output log to
 HTML/Markdown/LaTeX, and exporting a session as a Python script.</li>
-<li><strong><a href="../advanced/engine-access/">Direct engine access</a></strong> — the engine
+<li><strong><a href="../advanced/engine-access/">Direct engine access</a></strong>: the engine
 diagnostics panel, Advanced mode, and driving ChakataStat from another
 program over MCP.</li>
 </ul>
@@ -232,29 +236,51 @@ program over MCP.</li>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../index.html">Home</a> ·
-        <a href="../../quick-start/">Quick Start</a> ·
-        <a href="../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../license/">License</a> ·
-        <a href="../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../index.html">
+            <img class="brand-mark" src="../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../index.html#features">Features</a>
+          <a href="../../index.html#screenshots">Screenshots</a>
+          <a href="../../index.html#download">Download</a>
+          <a href="../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../docs/">User Guide</a>
+          <a href="../../quick-start/">Quick Start</a>
+          <a href="../../docs/validation/">Validation</a>
+          <a href="../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../cite/">How to cite</a>
+          <a href="../../license/">License</a>
+          <a href="../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

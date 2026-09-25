@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Module 1 — Opening data &amp; the two Views — ChakataStat User Guide</title>
+  <title>Module 1: Opening data &amp; the two Views · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/tutorial/01-open-and-views/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Module 1 — Opening data &amp; the two Views — ChakataStat User Guide">
+  <meta property="og:title" content="Module 1: Opening data &amp; the two Views · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/tutorial/01-open-and-views/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#validation">Validation</a>
+        <a href="../../../docs/" aria-current="page">User Guide</a>
+        <a href="../../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -91,43 +95,43 @@
       </ul>
       </aside>
       <article class="docs-content">
-<h1 id="module-1--opening-data--the-two-views">Module 1 — Opening data &amp; the two Views</h1>
+<h1 id="module-1-opening-data--the-two-views">Module 1: Opening data &amp; the two Views</h1>
 <p><strong>Question:</strong> what does a dataset look like in ChakataStat, and how does data
 get in and out?</p>
 <h2 id="open-the-sample">Open the sample</h2>
 <p><strong>File → Open Sample Dataset</strong> (<code>Ctrl+Shift+O</code>). The status bar reports 600
-cases; the title shows an unsaved document — the bundled sample can never be
+cases; the title shows an unsaved document. The bundled sample can never be
 overwritten, so you can experiment freely.</p>
 <h2 id="the-two-views">The two Views</h2>
 <p>The bottom-left tabs switch between two faces of the same dataset:</p>
 <ul>
-<li><strong>Data View</strong> (<code>Ctrl+1</code>) — one row per participant, one column per
+<li><strong>Data View</strong> (<code>Ctrl+1</code>): one row per participant, one column per
 variable. Click a cell: its full row and column tint so you can trace a
 case; type to edit; <code>Ctrl+F</code> finds values. Hover a column header for the
 variable's description.</li>
-<li><strong>Variable View</strong> (<code>Ctrl+2</code>) — one row per <em>variable</em>, holding everything
+<li><strong>Variable View</strong> (<code>Ctrl+2</code>): one row per <em>variable</em>, holding everything
 ChakataStat knows about it: name, type, label, value labels, missing
 values, measure. <a href="../02-variable-view/">Module 2</a> lives here.</li>
 </ul>
 <h2 id="round-trip-export-then-import">Round trip: export, then import</h2>
-<p>The sample opened fully <em>dressed</em> — labels and codes all set. To see what raw
+<p>The sample opened fully <em>dressed</em>, with labels and codes all set. To see what raw
 data looks like, push it out and bring it back:</p>
 <ol>
 <li><strong>File → Export…</strong>, format <strong>CSV</strong>, save as <code>mystudy.csv</code>.</li>
 <li><strong>File → Import Data…</strong>, choose <code>mystudy.csv</code>, accept the header-row
 prompt.</li>
 </ol>
-<p>Same values — but check Variable View: <em>EducationLevel</em>'s value labels and
+<p>Same values, but check Variable View: <em>EducationLevel</em>'s value labels and
 <em>FastingGlucose_mmolL</em>'s missing code are <strong>gone</strong>. A CSV carries values
 only; the metadata lives in the <code>.ckd</code> document. That is why the last step of
-any session is <strong>File → Save</strong> (<code>Ctrl+S</code>) — it keeps data <em>and</em> definitions.</p>
+any session is <strong>File → Save</strong> (<code>Ctrl+S</code>): it keeps data <em>and</em> definitions.</p>
 <h3 id="not-every-format-loses-the-labels">Not every format loses the labels</h3>
-<p>CSV loses the labels because a CSV has nowhere to put them — not because
+<p>CSV loses the labels because a CSV has nowhere to put them, not because
 importing does. <strong>File → Import Data…</strong> also reads <strong>SPSS</strong> (<code>.sav</code>, <code>.zsav</code>),
 <strong>Stata</strong> (<code>.dta</code>), <strong>SAS</strong> (<code>.sas7bdat</code>, <code>.xpt</code>), <strong>Parquet</strong> and <strong>Excel</strong>,
 and the statistical formats bring their metadata across with the values:</p>
 <ul>
-<li><strong>SPSS</strong> carries the most — variable labels, value labels, measurement level
+<li><strong>SPSS</strong> carries the most: variable labels, value labels, measurement level
 and declared missing values. A <code>.sav</code> opens <em>fully dressed</em>, the way the
 sample did, and module 2's work is already done for you.</li>
 <li><strong>Stata</strong> carries variable labels and value labels.</li>
@@ -145,42 +149,64 @@ next module.</p>
 <li>In Data View, find participant <code>P1234</code> (<code>Ctrl+F</code>). What is their BMI?</li>
 <li>Export to CSV and re-import. Which columns import as <em>String</em> and which as
 <em>Numeric</em>? Why did the importer decide that way? (The importer has only
-the values to go on — no format that carries types would need to guess.)</li>
+the values to go on; no format that carries types would need to guess.)</li>
 <li>Save your imported copy as <code>mystudy.ckd</code>, close and reopen it. Did it
-remember anything the CSV did not? (Not yet — you have added no metadata.
+remember anything the CSV did not? (Not yet: you have added no metadata.
 Module 2 fixes that.)</li>
 </ol>
 <h2 id="the-syntax-trail">The syntax trail</h2>
 <p>Open the <strong>Syntax</strong> tab: even this module left commands (the export). From
-here on, every module ends with the commands it generated — the growing,
+here on, every module ends with the commands it generated: the growing,
 re-runnable record of your session.</p>
       </article>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../../index.html">Home</a> ·
-        <a href="../../../quick-start/">Quick Start</a> ·
-        <a href="../../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../../license/">License</a> ·
-        <a href="../../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../../index.html">
+            <img class="brand-mark" src="../../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../../index.html#features">Features</a>
+          <a href="../../../index.html#screenshots">Screenshots</a>
+          <a href="../../../index.html#download">Download</a>
+          <a href="../../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../../docs/">User Guide</a>
+          <a href="../../../quick-start/">Quick Start</a>
+          <a href="../../../docs/validation/">Validation</a>
+          <a href="../../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../../cite/">How to cite</a>
+          <a href="../../../license/">License</a>
+          <a href="../../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 

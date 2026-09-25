@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Quick Start — ChakataStat</title>
+  <title>Quick Start · ChakataStat</title>
   <meta name="description" content="From install to your first statistical result in about ten minutes: open the bundled sample dataset, run Frequencies, Descriptives, a t test and a histogram.">
 
   <link rel="icon" type="image/svg+xml" href="../assets/logo-mark.svg">
@@ -15,7 +15,7 @@
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
 
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Quick Start — ChakataStat">
+  <meta property="og:title" content="Quick Start · ChakataStat">
   <meta property="og:description" content="From install to your first statistical result in about ten minutes, on the bundled sample dataset.">
   <meta property="og:url" content="https://chakatastat.app/quick-start/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
@@ -48,19 +48,16 @@
 
   <header class="site-header">
     <div class="container nav">
-      <a class="brand" href="../index.html#top">
+      <a class="brand" href="../#top">
         <img class="brand-mark" src="../assets/logo-mark.svg" width="32" height="32" alt="">
         <span class="brand-name">ChakataStat</span>
       </a>
 
       <nav id="nav-links" class="nav-links">
+        <a href="../#features">Features</a>
+        <a href="../#validation">Validation</a>
         <a href="../docs/">User Guide</a>
-        <a href="../docs/validation/">Validation</a>
-        <a href="../cite/">Cite</a>
-        <a href="../index.html#features">Features</a>
         <a href="../quick-start/" aria-current="page">Quick Start</a>
-        <a href="../index.html#screenshots">Screenshots</a>
-        <a href="../index.html#analyze">Analyze</a>
       </nav>
 
       <div class="nav-actions">
@@ -73,7 +70,7 @@
             <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
           </svg>
         </button>
-        <a class="btn btn-primary nav-cta" href="../index.html#download">Download</a>
+        <a class="btn btn-primary nav-cta" href="../#download">Download</a>
         <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
           <span></span><span></span><span></span>
         </button>
@@ -85,100 +82,128 @@
     <section class="legal">
       <div class="container legal-content">
         <h1>Quick Start</h1>
-        <p class="legal-updated">From install to your first result in about ten minutes — one linear pass, no choices to make. Every step names the exact menu item.</p>
+        <p class="legal-updated">From installing the app to your first result in about ten minutes. Each step names the exact menu item to use.</p>
 
-        <h2>1. Install and launch</h2>
+        <h2>1. Install and open the app</h2>
         <ul>
-          <li><strong>Windows</strong> — install ChakataStat from the <a href="../index.html#download">Microsoft Store</a> and launch it from the Start menu.</li>
-          <li><strong>Ubuntu / Linux</strong> — <code>snap install chakatastat</code>, then launch <strong>ChakataStat</strong> from your applications.</li>
+          <li><strong>Windows:</strong> install ChakataStat from the <a href="../#download">Microsoft Store</a> and open it from the Start menu.</li>
+          <li><strong>Ubuntu and other Linux:</strong> run <code>snap install chakatastat</code>, then open <strong>ChakataStat</strong> from your applications.</li>
         </ul>
         <p>
-          You land in the <strong>Data View</strong>: an empty
-          spreadsheet-style editor (cases are rows, variables columns), with
-          the menu bar above and the AI assistant panel on the right — ignore
-          that panel for now (<kbd>Ctrl+Shift+A</kbd> hides it).
+          The app opens in the <strong>Data View</strong>, an empty
+          spreadsheet where each row is a case and each column a variable.
+          The menus are at the top and the AI assistant panel is on the
+          right. You can hide the panel with <kbd>Ctrl+Shift+A</kbd>.
         </p>
 
         <h2>2. Open the sample dataset</h2>
         <p>
-          <strong>File → Open Sample Dataset</strong> (<kbd>Ctrl+Shift+O</kbd>)
-          loads the bundled teaching dataset: a synthetic health study of 600
-          participants and 21 variables — age, sex, blood pressure, glucose,
-          cholesterol, smoking and more. It opens as a new, unsaved document,
-          so nothing you do can damage the sample.
+          Choose <strong>File → Open Sample Dataset</strong>
+          (<kbd>Ctrl+Shift+O</kbd>). This loads a synthetic health study of
+          600 participants and 21 variables, including age, sex, blood
+          pressure, glucose, cholesterol and smoking. It opens as a new,
+          unsaved document, so you can't damage the original.
         </p>
 
-        <h2>3. Read the two views</h2>
+        <h2>3. Look at the two views</h2>
         <ul>
-          <li><strong>Data View</strong> — the values, one row per participant. Click any cell and its whole row and column tint, so you can trace a case across the sheet.</li>
-          <li><strong>Variable View</strong> (<kbd>Ctrl+2</kbd>) — one row per <em>variable</em>: name, type, label, value labels (open <em>EducationLevel</em>'s — codes 0–3 mean None/Primary/Secondary/Tertiary), declared missing values, and measure.</li>
+          <li><strong>Data View</strong> shows the values, one row per participant. Click a cell and its row and column are highlighted, which makes a case easy to follow across the sheet.</li>
+          <li><strong>Variable View</strong> (<kbd>Ctrl+2</kbd>) shows one row per <em>variable</em>: its name, type, label, value labels, missing values and measurement level. Open the value labels of <em>EducationLevel</em> to see that codes 0 to 3 mean None, Primary, Secondary and Tertiary.</li>
         </ul>
-        <p>That metadata is what turns a grid of numbers into a dataset.</p>
+        <p>This information is what makes a grid of numbers into a dataset.</p>
 
         <h2>4. Run Frequencies on a categorical variable</h2>
         <p>
-          <strong>Analyze → Descriptive Statistics → Frequencies…</strong>
-          Move <em>SmokingStatus</em> into the Variables list, click
-          <strong>Run</strong>. The app switches to the Output View with a
-          frequency table: each category with its count and percent.
+          Choose <strong>Analyze → Descriptive Statistics → Frequencies…</strong>,
+          move <em>SmokingStatus</em> into the Variables list and click
+          <strong>Run</strong>. The app switches to the Output View and shows
+          a table with the count and percentage of each category.
         </p>
 
-        <h2>5. Run Descriptives on scale variables</h2>
+        <h2>5. Run Descriptives on numeric variables</h2>
         <p>
-          <strong>Analyze → Descriptive Statistics → Descriptives…</strong>
-          Move <em>Age</em>, <em>BMI</em> and <em>SystolicBP</em> across,
-          <strong>Run</strong> — valid N, minimum, maximum, mean and standard
-          deviation for each.
+          Choose <strong>Analyze → Descriptive Statistics → Descriptives…</strong>,
+          move <em>Age</em>, <em>BMI</em> and <em>SystolicBP</em> across and
+          click <strong>Run</strong>. You get the number of valid cases, the
+          minimum, maximum, mean and standard deviation of each.
         </p>
 
         <h2>6. Compare two groups with a t test</h2>
         <p>
-          <strong>Analyze → Compare Means → Independent-Samples T Test…</strong>
-          Test variable <em>SystolicBP</em>, grouping variable <em>Sex</em>,
-          <strong>Run</strong>. The output shows each group's mean and the
-          test statistics. A small <em>p</em> value ("Sig.") says that a
-          difference at least this large would be unlikely if the two groups
-          had the same population mean.
+          Choose <strong>Analyze → Compare Means → Independent-Samples T Test…</strong>.
+          Use <em>SystolicBP</em> as the test variable and <em>Sex</em> as the
+          grouping variable, then click <strong>Run</strong>. The output
+          shows the mean of each group and the test results. A small
+          <em>p</em> value (the "Sig." column) means a difference this large
+          would be unlikely if both groups had the same population mean.
         </p>
 
         <h2>7. Draw a chart</h2>
         <p>
-          <strong>Graphs → Histogram…</strong> (<kbd>Ctrl+Shift+H</kbd>), pick
-          <em>BMI</em>, <strong>Run</strong>. A histogram card appears in the
-          output right under your tables.
+          Choose <strong>Graphs → Histogram…</strong> (<kbd>Ctrl+Shift+H</kbd>),
+          pick <em>BMI</em> and click <strong>Run</strong>. The histogram
+          appears in the output below your tables.
         </p>
 
         <h2>8. Keep your work</h2>
         <ul>
-          <li><strong>File → Save</strong> (<kbd>Ctrl+S</kbd>) writes a <code>.ckd</code> document — data <em>and</em> every variable definition together.</li>
-          <li><strong>File → Export Output…</strong> writes the whole output log to HTML, Markdown or LaTeX.</li>
-          <li>Switch to the <strong>Syntax</strong> tab: every step you took was also recorded as an editable, re-runnable command — that trail is how work in ChakataStat stays reproducible.</li>
+          <li><strong>File → Save</strong> (<kbd>Ctrl+S</kbd>) writes a <code>.ckd</code> document with the data and every variable's settings.</li>
+          <li><strong>File → Export Output…</strong> saves all the results as HTML, Markdown or LaTeX.</li>
+          <li>Open the <strong>Syntax</strong> tab to see every step you took, recorded as a command you can edit and run again. This is how you repeat an analysis later.</li>
         </ul>
 
         <h2>Where to go next</h2>
         <p>
-          The full <strong>User Guide</strong> and a ten-module
-          <strong>tutorial workbook</strong> (built on the same sample
-          dataset, with exercises for classroom training) ship inside the
-          app — press <kbd>F1</kbd> or open <strong>Help →
-          Documentation</strong>. Or ask the built-in AI assistant
-          (<kbd>Ctrl+Shift+A</kbd>) for an analysis in plain language.
+          The full <strong>User Guide</strong> and a ten-part
+          <strong>tutorial workbook</strong>, with exercises on the same
+          sample dataset, are built into the app. Press <kbd>F1</kbd> or
+          choose <strong>Help → Documentation</strong>. You can also ask the
+          AI assistant (<kbd>Ctrl+Shift+A</kbd>) to run an analysis for you
+          in plain language.
         </p>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer" id="cite">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-cite">
-        Cite: Amani, E. (2026). <em>ChakataStat</em> [Computer software].
-        <a href="https://doi.org/10.5281/zenodo.22112256">https://doi.org/10.5281/zenodo.22112256</a>
-        — <a href="../cite/">how to cite a specific version</a>
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../">
+            <img class="brand-mark" src="../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../#features">Features</a>
+          <a href="../#screenshots">Screenshots</a>
+          <a href="../#download">Download</a>
+          <a href="../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../docs/">User Guide</a>
+          <a href="../quick-start/">Quick Start</a>
+          <a href="../docs/validation/">Validation</a>
+          <a href="../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../cite/">How to cite</a>
+          <a href="../license/">License</a>
+          <a href="../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p>
+          Cite as: Amani, E. (2026). <em>ChakataStat</em> [Computer software].
+          <a href="https://doi.org/10.5281/zenodo.22112256">doi.org/10.5281/zenodo.22112256</a>
+        </p>
+      </div>
     </div>
   </footer>
 

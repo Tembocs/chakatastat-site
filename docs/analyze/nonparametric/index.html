@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Nonparametric Tests — ChakataStat User Guide</title>
+  <title>Nonparametric Tests · ChakataStat User Guide</title>
   <link rel="canonical" href="https://chakatastat.app/docs/analyze/nonparametric/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Nonparametric Tests — ChakataStat User Guide">
+  <meta property="og:title" content="Nonparametric Tests · ChakataStat User Guide">
   <meta property="og:url" content="https://chakatastat.app/docs/analyze/nonparametric/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -37,14 +37,15 @@
         <span class="brand-name">ChakataStat</span>
       </a>
 
-      <!-- One link, not a copy of the site menu. While someone is reading the
-           guide, the sidebar is the navigation that matters; marketing anchors
-           (Features, Screenshots, …) only compete with it and push the reader
-           out of what they came for. All that is owed is a way back. Single
-           link means no mobile collapse either, so there is no hamburger on
-           these pages — main.js guards for its absence. -->
-      <nav id="nav-links" class="nav-links nav-links--single">
-        <a href="../../../index.html">← Back to chakatastat.app</a>
+      <!-- The same four links as every other page of the site (the 2026-09
+           redesign cut the menu from seven to four), with User Guide marked
+           as the current section. The sidebar stays the guide's own
+           navigation. -->
+      <nav id="nav-links" class="nav-links">
+        <a href="../../../index.html#features">Features</a>
+        <a href="../../../index.html#validation">Validation</a>
+        <a href="../../../docs/" aria-current="page">User Guide</a>
+        <a href="../../../quick-start/">Quick Start</a>
       </nav>
 
       <div class="nav-actions">
@@ -58,6 +59,9 @@
           </svg>
         </button>
         <a class="btn btn-primary nav-cta" href="../../../index.html#download">Download</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -169,29 +173,29 @@ difference</em> itself, the two-group alternative is the t-test dialog's
 <p>Each test takes the variable(s) it needs and, for the group-comparison tests, a
 <strong>grouping variable</strong>:</p>
 <ul>
-<li><strong>Mann-Whitney / Kruskal-Wallis</strong> — a <strong>test variable</strong> and a <strong>grouping
+<li><strong>Mann-Whitney / Kruskal-Wallis</strong>: a <strong>test variable</strong> and a <strong>grouping
 variable</strong> (two groups for Mann-Whitney, three+ for Kruskal-Wallis).</li>
-<li><strong>Wilcoxon / Sign</strong> — a <strong>pair</strong> of related variables.</li>
-<li><strong>Friedman</strong> — three or more <strong>related variables</strong>.</li>
-<li><strong>Kendall's W</strong> — two or more <strong>related variables</strong> (the items each case
+<li><strong>Wilcoxon / Sign</strong>: a <strong>pair</strong> of related variables.</li>
+<li><strong>Friedman</strong>: three or more <strong>related variables</strong>.</li>
+<li><strong>Kendall's W</strong>: two or more <strong>related variables</strong> (the items each case
 ranks); reports the <strong>coefficient of concordance</strong> (0..1 agreement) and its
 equivalent Friedman chi-square. It is the same statistic as Friedman, rescaled
-to read as an agreement measure — use it when the question is &quot;how much do the
+to read as an agreement measure. Use it when the question is &quot;how much do the
 rankers agree?&quot; rather than &quot;do the conditions differ?&quot;.</li>
-<li><strong>Cochran's Q</strong> — two or more <strong>related dichotomous variables</strong> (each
+<li><strong>Cochran's Q</strong>: two or more <strong>related dichotomous variables</strong> (each
 coded with the same two values; the higher one counts as a success),
-compared within each case — the k-sample extension of McNemar's test.</li>
-<li><strong>Jonckheere-Terpstra</strong> — one or more <strong>numeric variables</strong> and an
+compared within each case (the k-sample extension of McNemar's test).</li>
+<li><strong>Jonckheere-Terpstra</strong>: one or more <strong>numeric variables</strong> and an
 <strong>ordered grouping variable</strong>, whose levels are taken in ascending order;
 tests for a monotone trend across them (tie-corrected) rather than for any
-difference — the test to use when the groups have a natural order (doses,
+difference. It is the test to use when the groups have a natural order (doses,
 grades, age bands) and the question is whether the variable rises or falls
 with it.</li>
-<li><strong>Runs test</strong> — one variable; tests whether values fall in a random order
+<li><strong>Runs test</strong>: one variable; tests whether values fall in a random order
 around a cut point, with an optional <strong>exact</strong> small-sample significance.</li>
-<li><strong>Binomial test</strong> — one variable and an <strong>expected proportion</strong>; reports an
+<li><strong>Binomial test</strong>: one variable and an <strong>expected proportion</strong>; reports an
 exact or asymptotic significance.</li>
-<li><strong>Tests of Normality</strong> — one or more variables; reports <strong>Shapiro-Wilk</strong> and
+<li><strong>Tests of Normality</strong>: one or more variables; reports <strong>Shapiro-Wilk</strong> and
 <strong>Kolmogorov-Smirnov</strong> (Lilliefors) with a reject/retain <strong>Decision</strong> at your
 chosen α (set in Options).</li>
 </ul>
@@ -205,60 +209,82 @@ small-sample significance</strong> option (and <strong>Runs</strong> and <strong
 exact paths). The asymptotic (normal / χ²) p-value these tests report is only
 reliable for reasonably large samples; for small ones, tick <strong>Exact</strong> to add an
 <strong>Exact Sig.</strong> column computed from the statistic's true null distribution by
-enumeration. An exact value is shown only when it applies — <strong>tied data</strong> breaks
+enumeration. An exact value is shown only when it applies: <strong>tied data</strong> breaks
 it (the rank arrangements are no longer equally likely) and very large samples
-are not enumerated — and the output falls back to the asymptotic value with a
+are not enumerated. The output falls back to the asymptotic value with a
 note when it cannot.</p>
 <h2 id="example">Example</h2>
 <p>Earlier, <a href="../descriptive-statistics/#explore">Explore</a> suggested <em>FastingGlucose</em>
 is not normally distributed within groups. Rather than an independent-samples
 t-test of glucose by <em>Diabetic</em>, run <strong>Mann-Whitney U</strong> with <em>FastingGlucose</em> as
-the test variable and <em>Diabetic</em> as the grouping variable — a valid comparison
+the test variable and <em>Diabetic</em> as the grouping variable, a valid comparison
 that does not assume normality.</p>
 <h2 id="how-this-is-computed">How this is computed</h2>
-<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
+<p>This section names <em>which</em> method each procedure prints: the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules. Each line links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
 <ul>
-<li><strong>Mann–Whitney U</strong> — the smaller of U₁ / U₂; the asymptotic <em>z</em> is <strong>tie-corrected with no continuity correction</strong>; an exact significance when the samples are untied and small; the rank-biserial <em>r</em> is positive when the first group ranks higher (<a href="../../validation/tolerances/">tolerances</a> · <a href="../../validation/#coverage">validation</a>).</li>
-<li><strong>Wilcoxon signed-rank</strong> — zero differences dropped, tie-corrected <em>z</em>, no continuity correction (R's default adds one) (<a href="../../validation/conventions/classical/#wilcoxon-signed-rank">Wilcoxon</a>).</li>
-<li><strong>Sign test / Runs test</strong> — the continuity-corrected normal approximation; the runs test cuts at the median and offers an exact significance (<a href="../../validation/conventions/classical/#the-sign-test-and-the-runs-test">sign and runs</a>).</li>
-<li><strong>Binomial test</strong> — exact; <strong>two-tailed when the test proportion is ½, one-tailed otherwise</strong> (the SPSS rule — R's <code>binom.test</code> is two-sided at any proportion) (<a href="../../validation/conventions/classical/#the-binomial-test-which-tail">binomial</a>).</li>
-<li><strong>Kruskal–Wallis</strong> — tie-corrected H on k − 1 df, ε² = H/(N − 1), an exact upper-tail significance when untied; <strong>Dunn's</strong> pairwise <em>z</em> adjusted by Bonferroni (default) or Holm (<a href="../../validation/#coverage">validation</a> · <a href="../../validation/conventions/classical/#post-hoc-tests">post hoc</a>).</li>
-<li><strong>Friedman / Kendall's W</strong> — W = χ²/(N(k − 1)); <strong>Cochran's Q</strong> and <strong>Jonckheere–Terpstra</strong> in their standard forms with the tie-corrected null variance (<a href="../../validation/#coverage">validation</a>).</li>
-<li><strong>Tests of Normality</strong> — Shapiro–Wilk (Royston's AS R94) and Kolmogorov–Smirnov with <strong>Lilliefors</strong> significance (<a href="../../validation/conventions/classical/#normality-tests">normality</a>).</li>
-<li>Every test is listwise on its own variables (<a href="../../validation/conventions/classical/#missing-data-policy">missing-data policy</a>). Under an active weight (Data → Weight Cases) the <strong>binomial</strong> test weights its counts; the rank and normality tests use the weight only to choose which cases take part — they are not weighted — and each says so in a note under its output (<a href="../../validation/tolerances/">case weighting</a>).</li>
+<li><strong>Mann–Whitney U</strong>: the smaller of U₁ / U₂; the asymptotic <em>z</em> is <strong>tie-corrected with no continuity correction</strong>; an exact significance when the samples are untied and small; the rank-biserial <em>r</em> is positive when the first group ranks higher (<a href="../../validation/tolerances/">tolerances</a> · <a href="../../validation/#coverage">validation</a>).</li>
+<li><strong>Wilcoxon signed-rank</strong>: zero differences dropped, tie-corrected <em>z</em>, no continuity correction (R's default adds one) (<a href="../../validation/conventions/classical/#wilcoxon-signed-rank">Wilcoxon</a>).</li>
+<li><strong>Sign test / Runs test</strong>: the continuity-corrected normal approximation; the runs test cuts at the median and offers an exact significance (<a href="../../validation/conventions/classical/#the-sign-test-and-the-runs-test">sign and runs</a>).</li>
+<li><strong>Binomial test</strong>: exact; <strong>two-tailed when the test proportion is ½, one-tailed otherwise</strong> (the SPSS rule; R's <code>binom.test</code> is two-sided at any proportion) (<a href="../../validation/conventions/classical/#the-binomial-test-which-tail">binomial</a>).</li>
+<li><strong>Kruskal–Wallis</strong>: tie-corrected H on k − 1 df, ε² = H/(N − 1), an exact upper-tail significance when untied; <strong>Dunn's</strong> pairwise <em>z</em> adjusted by Bonferroni (default) or Holm (<a href="../../validation/#coverage">validation</a> · <a href="../../validation/conventions/classical/#post-hoc-tests">post hoc</a>).</li>
+<li><strong>Friedman / Kendall's W</strong>: W = χ²/(N(k − 1)); <strong>Cochran's Q</strong> and <strong>Jonckheere–Terpstra</strong> in their standard forms with the tie-corrected null variance (<a href="../../validation/#coverage">validation</a>).</li>
+<li><strong>Tests of Normality</strong>: Shapiro–Wilk (Royston's AS R94) and Kolmogorov–Smirnov with <strong>Lilliefors</strong> significance (<a href="../../validation/conventions/classical/#normality-tests">normality</a>).</li>
+<li>Every test is listwise on its own variables (<a href="../../validation/conventions/classical/#missing-data-policy">missing-data policy</a>). Under an active weight (Data → Weight Cases) the <strong>binomial</strong> test weights its counts; the rank and normality tests use the weight only to choose which cases take part (they are not weighted), and each says so in a note under its output (<a href="../../validation/tolerances/">case weighting</a>).</li>
 </ul>
 <h2 id="see-also">See also</h2>
 <ul>
-<li><a href="../compare-means/">Compare Means</a> — the parametric counterparts.</li>
+<li><a href="../compare-means/">Compare Means</a>: the parametric counterparts.</li>
 <li><a href="../descriptive-statistics/#explore">Tests of Normality</a> also appear in Explore.</li>
 </ul>
       </article>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p class="footer-copyright">
-        &copy; <span id="year"></span> Edward Amani. ChakataStat is
-        proprietary software — free to use, not open source.
-      </p>
-      <p class="footer-legal">
-        <a href="../../../index.html">Home</a> ·
-        <a href="../../../quick-start/">Quick Start</a> ·
-        <a href="../../../privacy-policy/">Privacy Policy</a> ·
-        <a href="../../../license/">License</a> ·
-        <a href="../../../cite/">How to Cite</a>
-      </p>
-      <p class="footer-docs-licence">
-        The text of this documentation is licensed
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-        — you may share and adapt it, including commercially, with attribution.
-        That licence covers the documentation text only. It does
-        <strong>not</strong> cover the ChakataStat software, which is
-        proprietary (free to use for any purpose, but not open source), and it
-        does <strong>not</strong> cover the ChakataStat name or logo, which are
-        trademarks and are not licensed for reuse.
-      </p>
+  <footer class="site-footer site-footer--full">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../../../index.html">
+            <img class="brand-mark" src="../../../assets/logo-mark.svg" width="28" height="28" alt="">
+            <span class="brand-name">ChakataStat</span>
+          </a>
+          <p>Statistical analysis you can check. Free to use.</p>
+        </div>
+        <nav class="footer-col" aria-label="Product">
+          <h2>Product</h2>
+          <a href="../../../index.html#features">Features</a>
+          <a href="../../../index.html#screenshots">Screenshots</a>
+          <a href="../../../index.html#download">Download</a>
+          <a href="../../../whats-new/">What's new</a>
+        </nav>
+        <nav class="footer-col" aria-label="Documentation">
+          <h2>Documentation</h2>
+          <a href="../../../docs/">User Guide</a>
+          <a href="../../../quick-start/">Quick Start</a>
+          <a href="../../../docs/validation/">Validation</a>
+          <a href="../../../docs/reference/commands/">Command reference</a>
+        </nav>
+        <nav class="footer-col" aria-label="About">
+          <h2>About</h2>
+          <a href="../../../cite/">How to cite</a>
+          <a href="../../../license/">License</a>
+          <a href="../../../privacy-policy/">Privacy policy</a>
+          <a href="mailto:contact@chakatastat.app">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Edward Amani. ChakataStat is proprietary software, free to use, not open source.</p>
+        <p class="footer-docs-licence">
+          The text of this documentation is licensed
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+          You may share and adapt it, including commercially, with attribution.
+          That licence covers the documentation text only. It does
+          <strong>not</strong> cover the ChakataStat software, which is
+          proprietary (free to use for any purpose, but not open source), and it
+          does <strong>not</strong> cover the ChakataStat name or logo, which are
+          trademarks and are not licensed for reuse.
+        </p>
+      </div>
     </div>
   </footer>
 
