@@ -1711,6 +1711,10 @@ section h2 {
   box-shadow: var(--shadow-lift);
 }
 
+.pillar-shot picture {
+  display: block;
+}
+
 .pillar-shot img {
   display: block;
   width: 100%;

@@ -23,24 +23,25 @@ function activeTheme() {
   return storedTheme() || (systemDark.matches ? "dark" : "light");
 }
 
-// The hero shot is a <picture> whose dark <source> matches on
-// prefers-color-scheme — which the toggle cannot change. Rewriting the
-// source's media query is what keeps the image in step with an explicit
-// choice; without this the page would go dark around a light screenshot.
-function syncHeroShot(theme) {
-  const source = document.querySelector(".app-frame source");
-  if (!source) return;
+// The hero and feature shots are <picture>s whose dark <source> (marked
+// data-theme-shot) matches on prefers-color-scheme, which the toggle cannot
+// change. Rewriting each source's media query keeps the images in step with
+// an explicit choice; without this the page would go dark around a light
+// screenshot.
+function syncThemedShots(theme) {
   const stored = storedTheme();
-  if (!stored) {
-    source.media = "(prefers-color-scheme: dark)";
-  } else {
-    source.media = theme === "dark" ? "all" : "not all";
-  }
+  document.querySelectorAll("source[data-theme-shot]").forEach((source) => {
+    if (!stored) {
+      source.media = "(prefers-color-scheme: dark)";
+    } else {
+      source.media = theme === "dark" ? "all" : "not all";
+    }
+  });
 }
 
 function applyTheme(theme) {
   document.documentElement.setAttribute("data-theme", theme);
-  syncHeroShot(theme);
+  syncThemedShots(theme);
   if (themeToggle) {
     themeToggle.setAttribute(
       "aria-label",

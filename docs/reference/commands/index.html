@@ -96,9 +96,9 @@
       </aside>
       <article class="docs-content">
 <h1 id="command-reference">Command reference</h1>
-<p>Every command ChakataStat can run, with its arguments — the reference for writing syntax by hand in the Syntax editor, for a <code>.cks</code> script run by <code>--run</code>, or for driving the app from the <a href="../../advanced/engine-access/">Python client</a> or an MCP agent.</p>
+<p>Every command ChakataStat can run, with its arguments. Use it as the reference for writing syntax by hand in the Syntax editor, for a <code>.cks</code> script run by <code>--run</code>, or for driving the app from the <a href="../../advanced/engine-access/">Python client</a> or an MCP agent.</p>
 <blockquote>
-<p><strong>Generated from the catalog.</strong> This page is produced by <code>dart run tool/gen_command_reference.dart</code> from <code>lib/tools/tool_catalog.dart</code>, the single source of truth for the tool surface, and a test fails if the two drift — so an argument listed here is an argument the engine accepts. Do not edit it by hand.</p>
+<p><strong>Generated from the catalog.</strong> This page is produced by <code>dart run tool/gen_command_reference.dart</code> from <code>lib/tools/tool_catalog.dart</code>, the single source of truth for the tool surface. A test fails if the two drift apart, so an argument listed here is an argument the engine accepts. Do not edit it by hand.</p>
 </blockquote>
 <p><strong>115 commands</strong>, by family.</p>
 <ul>
@@ -121,10 +121,10 @@
 </ul>
 <h2 id="reading-an-entry">Reading an entry</h2>
 <p>Arguments are <code>name=value</code>. A variable is named bare (<code>Age</code>), a list is bracketed (<code>[Age, Income]</code>), text is quoted, and a boolean is <code>true</code> or <code>false</code>. The syntax line shows the <strong>required</strong> arguments only; the table under it lists every argument, required or not.</p>
-<p>A ⚠️ marks an argument that <strong>writes new variables into your dataset</strong> (an analysis's &quot;save …&quot; option). A read-only session — the AI assistant by default, <code>--mcp --read-only</code>, a read-only batch run — withholds and refuses those.</p>
+<p>A ⚠️ marks an argument that <strong>writes new variables into your dataset</strong> (an analysis's &quot;save …&quot; option). A read-only session (the AI assistant by default, <code>--mcp --read-only</code>, a read-only batch run) withholds and refuses those.</p>
 <h2 id="discovering-the-dataset">Discovering the dataset</h2>
 <h3 id="list_variables"><code>list_variables</code></h3>
-<p>List the dataset's variables — name, type, measurement level and label — so you know what is available to analyze. Call this first when you do not yet know the variable names.</p>
+<p>List the dataset's variables (name, type, measurement level and label) so you know what is available to analyze. Call this first when you do not yet know the variable names.</p>
 <pre><code class="language-cks">list_variables
 </code></pre>
 <p><em>No arguments.</em></p>
@@ -174,7 +174,7 @@
 </tbody>
 </table></div>
 <h3 id="explore"><code>explore</code></h3>
-<p>Extended descriptives — quartiles, IQR, skewness, kurtosis — for numeric variables, optionally split by a factor.</p>
+<p>Extended descriptives (quartiles, IQR, skewness, kurtosis) for numeric variables, optionally split by a factor.</p>
 <pre><code class="language-cks">explore variables=[Var1, Var2]
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -271,7 +271,7 @@
 <td><code>save_imputed</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>⚠️ saves new variables — Save EM single-imputed values back as new variables (named <variable>_imp).</td>
+<td>⚠️ saves new variables. Save EM single-imputed values back as new variables (named <variable>_imp).</td>
 </tr>
 </tbody>
 </table></div>
@@ -444,7 +444,7 @@
 <td><code>permutation</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>Also run the permutation (randomization) test of the mean difference — no distributional assumptions: exact enumeration of every group assignment when feasible, otherwise a seeded Monte Carlo with a 99% interval on the permutation p. Not available under Weight Cases. Defaults to false.</td>
+<td>Also run the permutation (randomization) test of the mean difference (no distributional assumptions): exact enumeration of every group assignment when feasible, otherwise a seeded Monte Carlo with a 99% interval on the permutation p. Not available under Weight Cases. Defaults to false.</td>
 </tr>
 <tr>
 <td><code>replicates</code></td>
@@ -501,7 +501,7 @@
 </tbody>
 </table></div>
 <h3 id="equivalence_ttest"><code>equivalence_ttest</code></h3>
-<p>An equivalence test (TOST — two one-sided t tests) of whether a mean difference lies inside declared equivalence bounds: &quot;not significantly different&quot; is not &quot;equivalent&quot;, and this procedure can support equivalence where a t test only fails to reject. Covers a one-sample / paired design (against a test value or on the case differences) and two independent samples (pooled and Welch rows). Reports both one-sided tests, the TOST p (the larger one-sided p), the 1 − 2α confidence interval of the difference and an Equivalent / Not equivalent decision at α.</p>
+<p>An equivalence test (TOST, two one-sided t tests) of whether a mean difference lies inside declared equivalence bounds: &quot;not significantly different&quot; is not &quot;equivalent&quot;, and this procedure can support equivalence where a t test only fails to reject. Covers a one-sample / paired design (against a test value or on the case differences) and two independent samples (pooled and Welch rows). Reports both one-sided tests, the TOST p (the larger one-sided p), the 1 − 2α confidence interval of the difference and an Equivalent / Not equivalent decision at α.</p>
 <pre><code class="language-cks">equivalence_ttest variables=[Var1, Var2] bound_lower=0.5 bound_upper=0.5
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -560,7 +560,7 @@
 <td><code>bound_unit</code></td>
 <td>one of <code>raw</code>, <code>cohen_d</code></td>
 <td>no</td>
-<td>Units of the bounds: &quot;raw&quot; (the default — the variable's own units) or &quot;cohen_d&quot; (converted per design with the uncorrected standardizer; note that d-scale bounds are sample-dependent).</td>
+<td>Units of the bounds: &quot;raw&quot; (the default; the variable's own units) or &quot;cohen_d&quot; (converted per design with the uncorrected standardizer; note that d-scale bounds are sample-dependent).</td>
 </tr>
 <tr>
 <td><code>alpha</code></td>
@@ -658,7 +658,7 @@
 </table></div>
 <h2 id="bayesian-tests">Bayesian tests</h2>
 <h3 id="bayesian_ttest"><code>bayesian_ttest</code></h3>
-<p>A Bayesian t test — the JZS (Jeffreys-Zellner-Siow) Bayes factor and a posterior summary for a mean, in place of a classical t test. Covers a one-sample / paired design (test against a value or on the case differences) and two independent samples. Reports BF₁₀ (evidence for a difference) and BF₀₁ (evidence for the null) — so, unlike a p-value, it can support the null — a verbal evidence category, and the posterior median and credible interval of the standardized effect size δ under a Cauchy(0, r) prior.</p>
+<p>A Bayesian t test: the JZS (Jeffreys-Zellner-Siow) Bayes factor and a posterior summary for a mean, in place of a classical t test. Covers a one-sample / paired design (test against a value or on the case differences) and two independent samples. Reports BF₁₀ (evidence for a difference) and BF₀₁ (evidence for the null), a verbal evidence category, and the posterior median and credible interval of the standardized effect size δ under a Cauchy(0, r) prior. Unlike a p-value, it can support the null.</p>
 <pre><code class="language-cks">bayesian_ttest variables=[Var1, Var2]
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -716,7 +716,7 @@
 </tbody>
 </table></div>
 <h3 id="bayesian_correlation"><code>bayesian_correlation</code></h3>
-<p>A Bayesian test of correlation — the JZS / Ly Bayes factor and a posterior for Pearson's ρ — for each pair of variables. Reports BF₁₀ (evidence that the pair is correlated) and BF₀₁ (evidence for no correlation — which a p-value cannot give), a verbal evidence category, and the posterior median and credible interval of ρ under a stretched-beta prior.</p>
+<p>A Bayesian test of correlation: the JZS / Ly Bayes factor and a posterior for Pearson's ρ, for each pair of variables. Reports BF₁₀ (evidence that the pair is correlated) and BF₀₁ (evidence for no correlation, which a p-value cannot give), a verbal evidence category, and the posterior median and credible interval of ρ under a stretched-beta prior.</p>
 <pre><code class="language-cks">bayesian_correlation variables=[Var1, Var2]
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -750,7 +750,7 @@
 </tbody>
 </table></div>
 <h3 id="bayesian_anova"><code>bayesian_anova</code></h3>
-<p>A Bayesian one-way ANOVA — the Zellner-Siow g-prior Bayes factor for the group-means model against the no-effect null, for each dependent variable across a factor's levels. Reports BF₁₀ (evidence the factor matters) and BF₀₁ (evidence it does not — which a p-value cannot give), a verbal evidence category, and η² (the variance explained).</p>
+<p>A Bayesian one-way ANOVA: the Zellner-Siow g-prior Bayes factor for the group-means model against the no-effect null, for each dependent variable across a factor's levels. Reports BF₁₀ (evidence the factor matters) and BF₀₁ (evidence it does not, which a p-value cannot give), a verbal evidence category, and η² (the variance explained).</p>
 <pre><code class="language-cks">bayesian_anova variables=[Var1, Var2] factor=VarName
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -784,7 +784,7 @@
 </tbody>
 </table></div>
 <h3 id="bayesian_regression"><code>bayesian_regression</code></h3>
-<p>A Bayesian linear regression — the Normal-Inverse-Gamma posterior for the coefficients and residual variance, plus the regression Bayes factor for the full model against the intercept-only null. Reports each coefficient's posterior mean (the OLS estimate under the diffuse prior) and credible interval, the residual-variance posterior, R², and BF₁₀ / BF₀₁ (evidence the predictors matter, or do not).</p>
+<p>A Bayesian linear regression: the Normal-Inverse-Gamma posterior for the coefficients and residual variance, plus the regression Bayes factor for the full model against the intercept-only null. Reports each coefficient's posterior mean (the OLS estimate under the diffuse prior) and credible interval, the residual-variance posterior, R², and BF₁₀ / BF₀₁ (evidence the predictors matter, or do not).</p>
 <pre><code class="language-cks">bayesian_regression dependent=VarName predictors=[Var1, Var2]
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -893,7 +893,7 @@
 </tbody>
 </table></div>
 <h3 id="sign_test"><code>sign_test</code></h3>
-<p>A sign test: compares paired variables using only the direction (sign) of each per-case difference — the simplest nonparametric alternative to the paired-samples t test, weaker than Wilcoxon.</p>
+<p>A sign test: compares paired variables using only the direction (sign) of each per-case difference. The simplest nonparametric alternative to the paired-samples t test, weaker than Wilcoxon.</p>
 <pre><code class="language-cks">sign_test pair1=[Var1, Var2] pair2=[Var1, Var2]
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -921,7 +921,7 @@
 </tbody>
 </table></div>
 <h3 id="runs_test"><code>runs_test</code></h3>
-<p>A Wald-Wolfowitz runs test: dichotomizes each variable at a cut point and tests whether the resulting sequence (in case order) is random — too few or too many runs signal non-randomness.</p>
+<p>A Wald-Wolfowitz runs test: dichotomizes each variable at a cut point and tests whether the resulting sequence (in case order) is random; too few or too many runs signal non-randomness.</p>
 <pre><code class="language-cks">runs_test variables=[Var1, Var2]
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -1205,7 +1205,7 @@
 <td><code>missing</code></td>
 <td>one of <code>pairwise</code>, <code>listwise</code></td>
 <td>no</td>
-<td>Missing-data deletion: &quot;pairwise&quot; (the default — each pair uses the cases valid on both) or &quot;listwise&quot; (every coefficient uses only the cases valid on all the chosen variables).</td>
+<td>Missing-data deletion: &quot;pairwise&quot; (the default; each pair uses the cases valid on both) or &quot;listwise&quot; (every coefficient uses only the cases valid on all the chosen variables).</td>
 </tr>
 <tr>
 <td><code>plot</code></td>
@@ -1217,7 +1217,7 @@
 <td><code>permutation</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>Also run the permutation (randomization) test of the coefficient — no distributional assumptions: exact enumeration of every arrangement when feasible, otherwise a seeded Monte Carlo with a 99% interval on the permutation p. Needs exactly two variables and the pearson or spearman method; not available under Weight Cases. Defaults to false.</td>
+<td>Also run the permutation (randomization) test of the coefficient (no distributional assumptions): exact enumeration of every arrangement when feasible, otherwise a seeded Monte Carlo with a 99% interval on the permutation p. Needs exactly two variables and the pearson or spearman method; not available under Weight Cases. Defaults to false.</td>
 </tr>
 <tr>
 <td><code>replicates</code></td>
@@ -1291,7 +1291,7 @@
 <td><code>method</code></td>
 <td>one of <code>polychoric</code>, <code>tetrachoric</code></td>
 <td>no</td>
-<td>&quot;polychoric&quot; (the default, any number of ordered categories) or &quot;tetrachoric&quot; (requires binary variables — the 2×2 special case).</td>
+<td>&quot;polychoric&quot; (the default, any number of ordered categories) or &quot;tetrachoric&quot; (requires binary variables, the 2×2 special case).</td>
 </tr>
 </tbody>
 </table></div>
@@ -1378,25 +1378,25 @@
 <td><code>casewise</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>Add a Casewise Diagnostics table — each case's predicted value, residual, standardized/studentized residual, leverage and Cook's distance.</td>
+<td>Add a Casewise Diagnostics table: each case's predicted value, residual, standardized/studentized residual, leverage and Cook's distance.</td>
 </tr>
 <tr>
 <td><code>diagnostics</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>Add the regression diagnostic panel's source tables: &quot;Residuals vs Fitted&quot; (predicted value against raw residual), &quot;Scale-Location&quot; (predicted value against the square root of the absolute standardized residual — the homoscedasticity check) and a Normal Q-Q plot of the standardized residuals with its reference line.</td>
+<td>Add the regression diagnostic panel's source tables: &quot;Residuals vs Fitted&quot; (predicted value against raw residual), &quot;Scale-Location&quot; (predicted value against the square root of the absolute standardized residual; the homoscedasticity check) and a Normal Q-Q plot of the standardized residuals with its reference line.</td>
 </tr>
 <tr>
 <td><code>save_predicted</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>⚠️ saves new variables — Save the per-case predicted values back into the dataset as a new variable.</td>
+<td>⚠️ saves new variables. Save the per-case predicted values back into the dataset as a new variable.</td>
 </tr>
 <tr>
 <td><code>save_residuals</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>⚠️ saves new variables — Save the per-case residuals back into the dataset as a new variable.</td>
+<td>⚠️ saves new variables. Save the per-case residuals back into the dataset as a new variable.</td>
 </tr>
 </tbody>
 </table></div>
@@ -1472,7 +1472,7 @@
 <td><code>seed</code></td>
 <td>number</td>
 <td>no</td>
-<td>PRNG seed for the randomized quantile residuals; defaults to 1. The same seed always reproduces the same plot — vary it to check that a feature is the fit and not the draw. Ignored unless diagnostics is set.</td>
+<td>PRNG seed for the randomized quantile residuals; defaults to 1. The same seed always reproduces the same plot; vary it to check that a feature is the fit and not the draw. Ignored unless diagnostics is set.</td>
 </tr>
 </tbody>
 </table></div>
@@ -1524,7 +1524,7 @@
 <td><code>seed</code></td>
 <td>number</td>
 <td>no</td>
-<td>PRNG seed for the randomized quantile residuals; defaults to 1. The same seed always reproduces the same plot — vary it to check that a feature is the fit and not the draw. Ignored unless diagnostics is set.</td>
+<td>PRNG seed for the randomized quantile residuals; defaults to 1. The same seed always reproduces the same plot; vary it to check that a feature is the fit and not the draw. Ignored unless diagnostics is set.</td>
 </tr>
 </tbody>
 </table></div>
@@ -1570,7 +1570,7 @@
 <td><code>seed</code></td>
 <td>number</td>
 <td>no</td>
-<td>PRNG seed for the randomized quantile residuals; defaults to 1. The same seed always reproduces the same plot — vary it to check that a feature is the fit and not the draw. Ignored unless diagnostics is set.</td>
+<td>PRNG seed for the randomized quantile residuals; defaults to 1. The same seed always reproduces the same plot; vary it to check that a feature is the fit and not the draw. Ignored unless diagnostics is set.</td>
 </tr>
 </tbody>
 </table></div>
@@ -1628,12 +1628,12 @@
 <td><code>seed</code></td>
 <td>number</td>
 <td>no</td>
-<td>PRNG seed for the randomized quantile residuals; defaults to 1. The same seed always reproduces the same plot — vary it to check that a feature is the fit and not the draw. Ignored unless diagnostics is set.</td>
+<td>PRNG seed for the randomized quantile residuals; defaults to 1. The same seed always reproduces the same plot; vary it to check that a feature is the fit and not the draw. Ignored unless diagnostics is set.</td>
 </tr>
 </tbody>
 </table></div>
 <h3 id="regularized_regression"><code>regularized_regression</code></h3>
-<p>Regularized linear regression — ridge, lasso or elastic net — for prediction with many or collinear predictors and (lasso) automatic variable selection. The elastic-net penalty is fitted by coordinate descent along a path of penalties (λ), with λ chosen by k-fold cross-validation. Reports the coefficients at the selected λ (on the original and standardized scales), the regularization / CV path, and a model summary. Penalized estimates carry no standard errors.</p>
+<p>Regularized linear regression (ridge, lasso or elastic net) for prediction with many or collinear predictors and (lasso) automatic variable selection. The elastic-net penalty is fitted by coordinate descent along a path of penalties (λ), with λ chosen by k-fold cross-validation. Reports the coefficients at the selected λ (on the original and standardized scales), the regularization / CV path, and a model summary. Penalized estimates carry no standard errors.</p>
 <pre><code class="language-cks">regularized_regression dependent=VarName predictors=[Var1, Var2]
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -1720,7 +1720,7 @@
 <td><code>tuning</code></td>
 <td>number</td>
 <td>no</td>
-<td>The tuning constant c. Defaults to 1.345 (Huber) or 4.685 (Tukey) — each ~95% efficient under normality. Smaller is more resistant, larger is closer to OLS.</td>
+<td>The tuning constant c. Defaults to 1.345 (Huber) or 4.685 (Tukey), each ~95% efficient under normality. Smaller is more resistant, larger is closer to OLS.</td>
 </tr>
 <tr>
 <td><code>confidence</code></td>
@@ -1731,7 +1731,7 @@
 </tbody>
 </table></div>
 <h3 id="nonlinear_regression"><code>nonlinear_regression</code></h3>
-<p>Nonlinear least-squares regression of a user-specified model — a growth curve, a dose-response, a Michaelis-Menten — fitted by Levenberg-Marquardt over the named parameters. Reference predictors by name in the model; every other name is a parameter to estimate. Reports the parameter estimates with asymptotic (Gauss-Newton) standard errors, t-tests and confidence intervals, and a model summary (residual sum of squares, residual standard error, a 1−SSE/SST pseudo-R², iterations and whether the fit converged).</p>
+<p>Nonlinear least-squares regression of a user-specified model (a growth curve, a dose-response, a Michaelis-Menten), fitted by Levenberg-Marquardt over the named parameters. Reference predictors by name in the model; every other name is a parameter to estimate. Reports the parameter estimates with asymptotic (Gauss-Newton) standard errors, t-tests and confidence intervals, and a model summary (residual sum of squares, residual standard error, a 1−SSE/SST pseudo-R², iterations and whether the fit converged).</p>
 <pre><code class="language-cks">nonlinear_regression dependent=VarName predictors=[Var1, Var2] model=&quot;text&quot; start=&quot;text&quot;
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -1777,7 +1777,7 @@
 </tbody>
 </table></div>
 <h3 id="iv_regression"><code>iv_regression</code></h3>
-<p>Instrumental-variables regression by two-stage least squares (2SLS): consistent estimation when a regressor is endogenous (correlated with the error — from simultaneity, omitted confounders or measurement error). The endogenous regressors are projected onto the instruments and the outcome regressed on the projection. Reports the coefficients with corrected (2SLS) standard errors, t-tests and confidence intervals, a model summary, and the first-stage weak-instrument F for each endogenous regressor (rule of thumb F &lt; 10 is weak). Needs at least as many excluded instruments as endogenous regressors.</p>
+<p>Instrumental-variables regression by two-stage least squares (2SLS): consistent estimation when a regressor is endogenous (correlated with the error, from simultaneity, omitted confounders or measurement error). The endogenous regressors are projected onto the instruments and the outcome regressed on the projection. Reports the coefficients with corrected (2SLS) standard errors, t-tests and confidence intervals, a model summary, and the first-stage weak-instrument F for each endogenous regressor (rule of thumb F &lt; 10 is weak). Needs at least as many excluded instruments as endogenous regressors.</p>
 <pre><code class="language-cks">iv_regression dependent=VarName endogenous=[Var1, Var2] instruments=[Var1, Var2]
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -1800,7 +1800,7 @@
 <td><code>endogenous</code></td>
 <td>variable list</td>
 <td>yes</td>
-<td>The endogenous regressor(s) — the variables being instrumented (suspected correlated with the error).</td>
+<td>The endogenous regressor(s): the variables being instrumented (suspected correlated with the error).</td>
 </tr>
 <tr>
 <td><code>instruments</code></td>
@@ -1812,7 +1812,7 @@
 <td><code>exogenous</code></td>
 <td>variable list</td>
 <td>no</td>
-<td>Included exogenous regressors — predictors treated as their own instruments (they enter both the structural equation and the instrument set).</td>
+<td>Included exogenous regressors: predictors treated as their own instruments (they enter both the structural equation and the instrument set).</td>
 </tr>
 <tr>
 <td><code>confidence</code></td>
@@ -1864,7 +1864,7 @@
 <td><code>diagnostics</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>Add the GLM diagnostic panel's source tables: quantile residuals against the linear predictor, and a normal Q-Q of the same residuals against the identity line. The gamma outcome is continuous, so these residuals are exact — no randomization, and no seed.</td>
+<td>Add the GLM diagnostic panel's source tables: quantile residuals against the linear predictor, and a normal Q-Q of the same residuals against the identity line. The gamma outcome is continuous, so these residuals are exact: no randomization, and no seed.</td>
 </tr>
 </tbody>
 </table></div>
@@ -1978,7 +1978,7 @@
 <td><code>entity</code></td>
 <td>variable</td>
 <td>yes</td>
-<td>The entity (panel) identifier that groups repeated observations of the same unit — the firm, person or country variable.</td>
+<td>The entity (panel) identifier that groups repeated observations of the same unit: the firm, person or country variable.</td>
 </tr>
 <tr>
 <td><code>time</code></td>
@@ -2030,7 +2030,7 @@
 <td><code>model</code></td>
 <td>one of <code>independence</code>, <code>saturated</code></td>
 <td>no</td>
-<td>Which model to fit: independence / main effects (default — tests independence of the factors) or saturated (all interactions).</td>
+<td>Which model to fit: independence / main effects (default; tests independence of the factors) or saturated (all interactions).</td>
 </tr>
 </tbody>
 </table></div>
@@ -2196,7 +2196,7 @@
 <td><code>reml</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>Restricted maximum likelihood (default: true — unbiased variance components, the lme4 / SAS / SPSS convention); false fits by ML, needed to compare models with different fixed effects by likelihood ratio.</td>
+<td>Restricted maximum likelihood (default: true; unbiased variance components, the lme4 / SAS / SPSS convention); false fits by ML, needed to compare models with different fixed effects by likelihood ratio.</td>
 </tr>
 <tr>
 <td><code>confidence</code></td>
@@ -2356,13 +2356,13 @@
 <td><code>moderator2</code></td>
 <td>variable</td>
 <td>no</td>
-<td>With &quot;moderator&quot;: a second numeric moderator Z for a three-way interaction — it joins W in the moderated model(s) with every product up to X×W×Z (or M×W×Z). Conditional effects and indirect effects are probed on the W × Z grid, the index of moderated moderated mediation (a7·b or a·b7) and the conditional index of moderated mediation at each Z probe are bootstrapped, and the interaction plot (and Johnson–Neyman regions, if asked) are drawn per Z probe.</td>
+<td>With &quot;moderator&quot;: a second numeric moderator Z for a three-way interaction. It joins W in the moderated model(s) with every product up to X×W×Z (or M×W×Z). Conditional effects and indirect effects are probed on the W × Z grid, the index of moderated moderated mediation (a7·b or a·b7) and the conditional index of moderated mediation at each Z probe are bootstrapped, and the interaction plot (and Johnson–Neyman regions, if asked) are drawn per Z probe.</td>
 </tr>
 <tr>
 <td><code>moderation</code></td>
 <td>one of <code>a</code>, <code>b</code>, <code>both</code></td>
 <td>no</td>
-<td>Which path the moderator enters (only meaningful with &quot;moderator&quot;): a (default) moderates X → M (PROCESS model 7), b moderates M → Y (model 14), both moderates both (model 58 — no single index of moderated mediation exists there).</td>
+<td>Which path the moderator enters (only meaningful with &quot;moderator&quot;): a (default) moderates X → M (PROCESS model 7), b moderates M → Y (model 14), both moderates both (model 58; no single index of moderated mediation exists there).</td>
 </tr>
 <tr>
 <td><code>plot</code></td>
@@ -2374,7 +2374,7 @@
 <td><code>johnson_neyman</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>With &quot;moderator&quot;: report the Johnson–Neyman regions of significance for each moderated path — the moderator values at which the conditional effect of the path turns significant at the interval's level, with the percent of cases on each side — and plot the conditional effect with its confidence band across the observed moderator range. Default false.</td>
+<td>With &quot;moderator&quot;: report the Johnson–Neyman regions of significance for each moderated path (the moderator values at which the conditional effect of the path turns significant at the interval's level, with the percent of cases on each side), and plot the conditional effect with its confidence band across the observed moderator range. Default false.</td>
 </tr>
 <tr>
 <td><code>ci_method</code></td>
@@ -2531,7 +2531,7 @@
 <td><code>y_min</code></td>
 <td>number</td>
 <td>no</td>
-<td>Lower limit of the y axis — y_min: 0 is the common case, anchoring the axis at zero and leaving the top to the data.</td>
+<td>Lower limit of the y axis. y_min: 0 is the common case, anchoring the axis at zero and leaving the top to the data.</td>
 </tr>
 <tr>
 <td><code>y_max</code></td>
@@ -2543,7 +2543,7 @@
 <td><code>h_lines</code></td>
 <td>number list</td>
 <td>no</td>
-<td>Horizontal reference lines at these y values — a mean, a threshold, a target. Drawn dashed behind the data; a value outside the axis range is not drawn.</td>
+<td>Horizontal reference lines at these y values: a mean, a threshold, a target. Drawn dashed behind the data; a value outside the axis range is not drawn.</td>
 </tr>
 <tr>
 <td><code>v_lines</code></td>
@@ -2572,7 +2572,7 @@
 </tbody>
 </table></div>
 <h3 id="irt"><code>irt</code></h3>
-<p>An item response theory (IRT) analysis of binary items: Rasch or two-parameter logistic (2PL) item parameters — discrimination and difficulty with standard errors — estimated by marginal maximum likelihood (Bock-Aitkin EM, latent trait N(0,1)), with the model fit block and item/test information curves showing where on the trait the test measures well.</p>
+<p>An item response theory (IRT) analysis of binary items: Rasch or two-parameter logistic (2PL) item parameters (discrimination and difficulty with standard errors), estimated by marginal maximum likelihood (Bock-Aitkin EM, latent trait N(0,1)), with the model fit block and item/test information curves showing where on the trait the test measures well.</p>
 <pre><code class="language-cks">irt items=[Var1, Var2]
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -2589,7 +2589,7 @@
 <td><code>items</code></td>
 <td>variable list</td>
 <td>yes</td>
-<td>The binary item variables (two or more; each with exactly two observed values — the higher one is the keyed/correct response). Cases incomplete on any item are dropped.</td>
+<td>The binary item variables (two or more; each with exactly two observed values; the higher one is the keyed/correct response). Cases incomplete on any item are dropped.</td>
 </tr>
 <tr>
 <td><code>model</code></td>
@@ -2655,7 +2655,7 @@
 <td><code>y_min</code></td>
 <td>number</td>
 <td>no</td>
-<td>Lower limit of the y axis — y_min: 0 is the common case, anchoring the axis at zero and leaving the top to the data.</td>
+<td>Lower limit of the y axis. y_min: 0 is the common case, anchoring the axis at zero and leaving the top to the data.</td>
 </tr>
 <tr>
 <td><code>y_max</code></td>
@@ -2667,7 +2667,7 @@
 <td><code>h_lines</code></td>
 <td>number list</td>
 <td>no</td>
-<td>Horizontal reference lines at these y values — a mean, a threshold, a target. Drawn dashed behind the data; a value outside the axis range is not drawn.</td>
+<td>Horizontal reference lines at these y values: a mean, a threshold, a target. Drawn dashed behind the data; a value outside the axis range is not drawn.</td>
 </tr>
 <tr>
 <td><code>v_lines</code></td>
@@ -2743,18 +2743,18 @@
 <td><code>rotation</code></td>
 <td>one of <code>none</code>, <code>varimax</code>, <code>promax</code></td>
 <td>no</td>
-<td>Rotation of the retained factors: &quot;none&quot; (the default), &quot;varimax&quot; (orthogonal) or &quot;promax&quot; (oblique — gives pattern, structure and factor-correlation matrices).</td>
+<td>Rotation of the retained factors: &quot;none&quot; (the default), &quot;varimax&quot; (orthogonal) or &quot;promax&quot; (oblique; gives pattern, structure and factor-correlation matrices).</td>
 </tr>
 <tr>
 <td><code>save_scores</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>⚠️ saves new variables — Save each retained component's scores (regression method) back into the dataset as new variables.</td>
+<td>⚠️ saves new variables. Save each retained component's scores (regression method) back into the dataset as new variables.</td>
 </tr>
 </tbody>
 </table></div>
 <h3 id="cfa"><code>cfa</code></h3>
-<p>Confirmatory factor analysis (v1): tests a hypothesized measurement structure — which observed indicators load on which named latent factors — by maximum likelihood, unlike exploratory factor_analysis which finds a structure. Reports the model chi-square with the conventional fit indices (CFI, TLI, RMSEA with its 90% CI, SRMR), unstandardized and completely standardized loadings with expected-information standard errors, factor correlations, and factor and residual variances. Each factor's first indicator sets its scale (loading fixed at 1). Identification problems, non-convergence and Heywood cases are reported clearly, never as silent numbers. Optionally reports modification indices (the expected chi-square drop from freeing each fixed cross-loading or residual covariance, with the expected parameter change). With a grouping variable it becomes a multi-group CFA with a mean structure and tests measurement invariance: the configural, metric (equal loadings), scalar (equal intercepts, latent means free after the first group) and strict (equal residual variances) models up to the requested level, with the model-to-model chi-square, CFI and RMSEA differences, then every parameter per group. For ordinal (Likert) indicators the WLSMV estimator fits polychoric correlations by diagonally weighted least squares with the mean-and-variance-adjusted test, robust standard errors and thresholds. The covariance is weighted under Weight Cases; Select Cases and Split File are honored.</p>
+<p>Confirmatory factor analysis (v1): tests a hypothesized measurement structure (which observed indicators load on which named latent factors) by maximum likelihood, unlike exploratory factor_analysis which finds a structure. Reports the model chi-square with the conventional fit indices (CFI, TLI, RMSEA with its 90% CI, SRMR), unstandardized and completely standardized loadings with expected-information standard errors, factor correlations, and factor and residual variances. Each factor's first indicator sets its scale (loading fixed at 1). Identification problems, non-convergence and Heywood cases are reported clearly, never as silent numbers. Optionally reports modification indices (the expected chi-square drop from freeing each fixed cross-loading or residual covariance, with the expected parameter change). With a grouping variable it becomes a multi-group CFA with a mean structure and tests measurement invariance: the configural, metric (equal loadings), scalar (equal intercepts, latent means free after the first group) and strict (equal residual variances) models up to the requested level, with the model-to-model chi-square, CFI and RMSEA differences, then every parameter per group. For ordinal (Likert) indicators the WLSMV estimator fits polychoric correlations by diagonally weighted least squares with the mean-and-variance-adjusted test, robust standard errors and thresholds. The covariance is weighted under Weight Cases; Select Cases and Split File are honored.</p>
 <pre><code class="language-cks">cfa model=&quot;text&quot;
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -2771,7 +2771,7 @@
 <td><code>model</code></td>
 <td>text</td>
 <td>yes</td>
-<td>The measurement model, one factor per clause: &quot;Verbal: v1 v2 v3; Speed: v4 v5 v6&quot; — a factor name, a colon, then its indicator variables separated by spaces, factors separated by semicolons. Every factor needs at least two indicators (three when there is only one factor), and an indicator may belong to only one factor.</td>
+<td>The measurement model, one factor per clause: &quot;Verbal: v1 v2 v3; Speed: v4 v5 v6&quot; (a factor name, a colon, then its indicator variables separated by spaces, factors separated by semicolons). Every factor needs at least two indicators (three when there is only one factor), and an indicator may belong to only one factor.</td>
 </tr>
 <tr>
 <td><code>orthogonal</code></td>
@@ -2795,19 +2795,19 @@
 <td><code>estimator</code></td>
 <td>one of <code>ml</code>, <code>wlsmv</code></td>
 <td>no</td>
-<td>&quot;ml&quot; (the default): maximum likelihood for continuous indicators. &quot;wlsmv&quot;: for ordinal indicators (integer-coded, each distinct value an ordered category, at most 12) — thresholds, polychoric correlations, diagonally weighted least squares with the scaled-shifted chi-square (lavaan/Mplus WLSMV), robust standard errors, a thresholds table and the polychoric matrix. Not combinable with group or modification_indices.</td>
+<td>&quot;ml&quot; (the default): maximum likelihood for continuous indicators. &quot;wlsmv&quot;: for ordinal indicators (integer-coded, each distinct value an ordered category, at most 12): thresholds, polychoric correlations, diagonally weighted least squares with the scaled-shifted chi-square (lavaan/Mplus WLSMV), robust standard errors, a thresholds table and the polychoric matrix. Not combinable with group or modification_indices.</td>
 </tr>
 <tr>
 <td><code>group</code></td>
 <td>variable</td>
 <td>no</td>
-<td>A grouping variable (categorical; each distinct value is a group, in ascending order — the first group is the reference for latent means). Makes this a multi-group CFA with measurement-invariance tests. Every group needs more complete cases than indicators; not combinable with modification_indices or the wlsmv estimator.</td>
+<td>A grouping variable (categorical; each distinct value is a group, in ascending order; the first group is the reference for latent means). Makes this a multi-group CFA with measurement-invariance tests. Every group needs more complete cases than indicators; not combinable with modification_indices or the wlsmv estimator.</td>
 </tr>
 <tr>
 <td><code>invariance</code></td>
 <td>one of <code>configural</code>, <code>metric</code>, <code>scalar</code>, <code>strict</code></td>
 <td>no</td>
-<td>With group: the highest invariance level to fit and report. The models are nested — configural (same pattern, all free), metric (+ equal loadings), scalar (+ equal intercepts; latent means free in groups after the first) and strict (+ equal residual variances) — and every level up to this one is fitted and compared in the Invariance Tests table; the parameter tables show this level. Default scalar.</td>
+<td>With group: the highest invariance level to fit and report. The models are nested: configural (same pattern, all free), metric (+ equal loadings), scalar (+ equal intercepts; latent means free in groups after the first) and strict (+ equal residual variances). Every level up to this one is fitted and compared in the Invariance Tests table; the parameter tables show this level. Default scalar.</td>
 </tr>
 </tbody>
 </table></div>
@@ -2847,13 +2847,13 @@
 <td><code>save_clusters</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>⚠️ saves new variables — Save each case's cluster membership back into the dataset as a new variable.</td>
+<td>⚠️ saves new variables. Save each case's cluster membership back into the dataset as a new variable.</td>
 </tr>
 <tr>
 <td><code>save_distances</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>⚠️ saves new variables — Save each case's Euclidean distance from its assigned cluster center back into the dataset as a new variable.</td>
+<td>⚠️ saves new variables. Save each case's Euclidean distance from its assigned cluster center back into the dataset as a new variable.</td>
 </tr>
 </tbody>
 </table></div>
@@ -2899,7 +2899,7 @@
 <td><code>save_clusters</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>⚠️ saves new variables — Save each case's cluster membership (at the requested cut) back into the dataset as a new variable. Requires a cluster count.</td>
+<td>⚠️ saves new variables. Save each case's cluster membership (at the requested cut) back into the dataset as a new variable. Requires a cluster count.</td>
 </tr>
 </tbody>
 </table></div>
@@ -2945,7 +2945,7 @@
 <td><code>save_clusters</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>⚠️ saves new variables — Save each case's cluster membership back into the dataset as a new variable.</td>
+<td>⚠️ saves new variables. Save each case's cluster membership back into the dataset as a new variable.</td>
 </tr>
 </tbody>
 </table></div>
@@ -3027,7 +3027,7 @@
 <td><code>save_predicted_group</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>⚠️ saves new variables — Save each case's predicted group (from Fisher's classification functions) back into the dataset as a new variable.</td>
+<td>⚠️ saves new variables. Save each case's predicted group (from Fisher's classification functions) back into the dataset as a new variable.</td>
 </tr>
 <tr>
 <td><code>title</code></td>
@@ -3063,7 +3063,7 @@
 <td><code>y_min</code></td>
 <td>number</td>
 <td>no</td>
-<td>Lower limit of the y axis — y_min: 0 is the common case, anchoring the axis at zero and leaving the top to the data.</td>
+<td>Lower limit of the y axis. y_min: 0 is the common case, anchoring the axis at zero and leaving the top to the data.</td>
 </tr>
 <tr>
 <td><code>y_max</code></td>
@@ -3075,7 +3075,7 @@
 <td><code>h_lines</code></td>
 <td>number list</td>
 <td>no</td>
-<td>Horizontal reference lines at these y values — a mean, a threshold, a target. Drawn dashed behind the data; a value outside the axis range is not drawn.</td>
+<td>Horizontal reference lines at these y values: a mean, a threshold, a target. Drawn dashed behind the data; a value outside the axis range is not drawn.</td>
 </tr>
 <tr>
 <td><code>v_lines</code></td>
@@ -3145,7 +3145,7 @@
 <td><code>target_type</code></td>
 <td>one of <code>auto</code>, <code>categorical</code>, <code>continuous</code></td>
 <td>no</td>
-<td>Force the target handling: &quot;auto&quot; (the default — categorical unless the target is numeric with many distinct values), &quot;categorical&quot; or &quot;continuous&quot;.</td>
+<td>Force the target handling: &quot;auto&quot; (the default; categorical unless the target is numeric with many distinct values), &quot;categorical&quot; or &quot;continuous&quot;.</td>
 </tr>
 <tr>
 <td><code>max_depth</code></td>
@@ -3221,18 +3221,18 @@
 <td><code>save_class</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>⚠️ saves new variables — Save each case's modal (highest-posterior) class back into the dataset as a new variable.</td>
+<td>⚠️ saves new variables. Save each case's modal (highest-posterior) class back into the dataset as a new variable.</td>
 </tr>
 <tr>
 <td><code>save_posteriors</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>⚠️ saves new variables — Save each case's posterior class probabilities back into the dataset (one new variable per class).</td>
+<td>⚠️ saves new variables. Save each case's posterior class probabilities back into the dataset (one new variable per class).</td>
 </tr>
 </tbody>
 </table></div>
 <h3 id="roc_curve"><code>roc_curve</code></h3>
-<p>A receiver-operating-characteristic (ROC) analysis of a continuous test score against a binary state variable: the area under the curve (AUC) with its standard error, confidence interval and test against chance (0.5), the curve coordinates (sensitivity vs 1 − specificity at each cut-point), and the cut-point maximizing Youden's J. Pairs with binary logistic regression — fit it, save the predicted probabilities, then run ROC on that column.</p>
+<p>A receiver-operating-characteristic (ROC) analysis of a continuous test score against a binary state variable: the area under the curve (AUC) with its standard error, confidence interval and test against chance (0.5), the curve coordinates (sensitivity vs 1 − specificity at each cut-point), and the cut-point maximizing Youden's J. Pairs with binary logistic regression: fit it, save the predicted probabilities, then run ROC on that column.</p>
 <pre><code class="language-cks">roc_curve score=VarName state=VarName
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -3272,7 +3272,7 @@
 </tbody>
 </table></div>
 <h3 id="propensity_score"><code>propensity_score</code></h3>
-<p>Propensity-score matching / weighting (v1) for observational data where treatment was not randomized. Fits a logistic model of the binary treatment on the covariates (the fitted probability is the propensity score), then either matches each treated case to its nearest control(s) — greedy 1:k without replacement on the logit of the score, optional caliper, estimand ATT — or computes inverse-probability-of-treatment (IPTW) weights (estimand ATE or ATT). Reports the score model, a match/weight summary, and covariate balance as standardized mean differences before and after (|SMD| ≤ 0.1 is the common benchmark). The result is written back as columns: matching saves a 1/0 filter variable (propensity_matched) for Select Cases, weighting a weight variable (propensity_weight) for Weight Cases, so any downstream analysis can run on the matched or weighted sample. Computed unweighted by design (a pre-existing Weight Cases variable only selects cases); Select Cases is honored; Split File cannot be combined with the saved columns. No optimal/genetic/full matching and no doubly-robust estimators in v1.</p>
+<p>Propensity-score matching / weighting (v1) for observational data where treatment was not randomized. Fits a logistic model of the binary treatment on the covariates (the fitted probability is the propensity score), then either matches each treated case to its nearest control(s) (greedy 1:k without replacement on the logit of the score, optional caliper, estimand ATT) or computes inverse-probability-of-treatment (IPTW) weights (estimand ATE or ATT). Reports the score model, a match/weight summary, and covariate balance as standardized mean differences before and after (|SMD| ≤ 0.1 is the common benchmark). The result is written back as columns: matching saves a 1/0 filter variable (propensity_matched) for Select Cases, weighting a weight variable (propensity_weight) for Weight Cases, so any downstream analysis can run on the matched or weighted sample. Computed unweighted by design (a pre-existing Weight Cases variable only selects cases); Select Cases is honored; Split File cannot be combined with the saved columns. No optimal/genetic/full matching and no doubly-robust estimators in v1.</p>
 <pre><code class="language-cks">propensity_score treatment=VarName covariates=[Var1, Var2]
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -3325,25 +3325,25 @@
 <td><code>save_score</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>⚠️ saves new variables — Also save the fitted propensity score as a propensity_score variable (default false).</td>
+<td>⚠️ saves new variables. Also save the fitted propensity score as a propensity_score variable (default false).</td>
 </tr>
 <tr>
 <td><code>save_filter</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>⚠️ saves new variables (on by default) — Save the 1/0 matched-sample flag as a propensity_matched variable for Select Cases (default true). Match only.</td>
+<td>⚠️ saves new variables (on by default). Save the 1/0 matched-sample flag as a propensity_matched variable for Select Cases (default true). Match only.</td>
 </tr>
 <tr>
 <td><code>save_weight</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>⚠️ saves new variables (on by default) — Save the IPTW weight as a propensity_weight variable for Weight Cases (default true). Weight only.</td>
+<td>⚠️ saves new variables (on by default). Save the IPTW weight as a propensity_weight variable for Weight Cases (default true). Weight only.</td>
 </tr>
 <tr>
 <td><code>plot</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>Include the balance plot — each covariate's standardized mean difference before and after adjustment (default true; pass false to omit it).</td>
+<td>Include the balance plot: each covariate's standardized mean difference before and after adjustment (default true; pass false to omit it).</td>
 </tr>
 </tbody>
 </table></div>
@@ -3417,7 +3417,7 @@
 </table></div>
 <h2 id="survival-analysis">Survival analysis</h2>
 <h3 id="kaplan_meier"><code>kaplan_meier</code></h3>
-<p>A Kaplan-Meier (product-limit) estimate of a survival curve from a time-to-event variable that may be right-censored: the survival table (survival probability and Greenwood standard error at each time), the case summary with restricted-mean and median survival, and — when a grouping factor is given — a log-rank (Mantel-Cox) test comparing the groups.</p>
+<p>A Kaplan-Meier (product-limit) estimate of a survival curve from a time-to-event variable that may be right-censored: the survival table (survival probability and Greenwood standard error at each time), the case summary with restricted-mean and median survival, and, when a grouping factor is given, a log-rank (Mantel-Cox) test comparing the groups.</p>
 <pre><code class="language-cks">kaplan_meier time=VarName status=VarName
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -3458,7 +3458,7 @@
 <td><code>save_survival</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>⚠️ saves new variables — Save each case's estimated survival probability at its event/censoring time back into the dataset as a new variable.</td>
+<td>⚠️ saves new variables. Save each case's estimated survival probability at its event/censoring time back into the dataset as a new variable.</td>
 </tr>
 <tr>
 <td><code>plot</code></td>
@@ -3470,7 +3470,7 @@
 <td><code>hazard</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>Draw the cumulative hazard H(t) = -ln S(t) — the same estimate read as an ascending curve. Can be combined with plot to get both. Defaults to false.</td>
+<td>Draw the cumulative hazard H(t) = -ln S(t), the same estimate read as an ascending curve. Can be combined with plot to get both. Defaults to false.</td>
 </tr>
 <tr>
 <td><code>markers</code></td>
@@ -3524,7 +3524,7 @@
 <td><code>y_min</code></td>
 <td>number</td>
 <td>no</td>
-<td>Lower limit of the y axis — y_min: 0 is the common case, anchoring the axis at zero and leaving the top to the data.</td>
+<td>Lower limit of the y axis. y_min: 0 is the common case, anchoring the axis at zero and leaving the top to the data.</td>
 </tr>
 <tr>
 <td><code>y_max</code></td>
@@ -3536,7 +3536,7 @@
 <td><code>h_lines</code></td>
 <td>number list</td>
 <td>no</td>
-<td>Horizontal reference lines at these y values — a mean, a threshold, a target. Drawn dashed behind the data; a value outside the axis range is not drawn.</td>
+<td>Horizontal reference lines at these y values: a mean, a threshold, a target. Drawn dashed behind the data; a value outside the axis range is not drawn.</td>
 </tr>
 <tr>
 <td><code>v_lines</code></td>
@@ -3630,7 +3630,7 @@
 <td><code>start</code></td>
 <td>variable</td>
 <td>no</td>
-<td>An optional numeric entry-time variable for (start, stop] interval data — for time-dependent covariates or delayed entry. Each row is a risk interval; a subject with time-varying covariates spans several.</td>
+<td>An optional numeric entry-time variable for (start, stop] interval data, for time-dependent covariates or delayed entry. Each row is a risk interval; a subject with time-varying covariates spans several.</td>
 </tr>
 <tr>
 <td><code>baseline</code></td>
@@ -3642,13 +3642,13 @@
 <td><code>save_survival</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>⚠️ saves new variables — Save each case's predicted survival probability back into the dataset (simple right-censored data only).</td>
+<td>⚠️ saves new variables. Save each case's predicted survival probability back into the dataset (simple right-censored data only).</td>
 </tr>
 <tr>
 <td><code>save_residuals</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>⚠️ saves new variables — Save each case's martingale residual back into the dataset (simple right-censored data only).</td>
+<td>⚠️ saves new variables. Save each case's martingale residual back into the dataset (simple right-censored data only).</td>
 </tr>
 <tr>
 <td><code>test_ph</code></td>
@@ -3666,7 +3666,7 @@
 <td><code>save_schoenfeld</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>⚠️ saves new variables — Save the scaled Schoenfeld residual for each covariate back into the dataset (one column per covariate; event rows only).</td>
+<td>⚠️ saves new variables. Save the scaled Schoenfeld residual for each covariate back into the dataset (one column per covariate; event rows only).</td>
 </tr>
 </tbody>
 </table></div>
@@ -3866,7 +3866,7 @@
 </tbody>
 </table></div>
 <h3 id="var_model"><code>var_model</code></h3>
-<p>A vector autoregression (VAR) of two or more numeric series taken in case order: each series regressed on p lags of all of them by per-equation OLS, with lag-order selection criteria (AIC, HQ, BIC, FPE), residual covariance and correlation matrices, and pairwise Granger causality F tests — does one series's history improve the prediction of another?</p>
+<p>A vector autoregression (VAR) of two or more numeric series taken in case order: each series regressed on p lags of all of them by per-equation OLS, with lag-order selection criteria (AIC, HQ, BIC, FPE), residual covariance and correlation matrices, and pairwise Granger causality F tests: does one series's history improve the prediction of another?</p>
 <pre><code class="language-cks">var_model variables=[Var1, Var2]
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -3918,7 +3918,7 @@
 </tbody>
 </table></div>
 <h3 id="arima"><code>arima</code></h3>
-<p>A Box-Jenkins ARIMA(p,d,q)(P,D,Q)ₛ model of one numeric series taken in case order — fitted by conditional least squares or exact maximum likelihood, optionally with the orders chosen automatically by an information criterion: the AR and MA parameter estimates (including any seasonal terms) with standard errors and t tests, the model-fit statistics (residual variance, log-likelihood, AIC and BIC), and a Box-Ljung white-noise test of the residuals.</p>
+<p>A Box-Jenkins ARIMA(p,d,q)(P,D,Q)ₛ model of one numeric series taken in case order, fitted by conditional least squares or exact maximum likelihood, optionally with the orders chosen automatically by an information criterion: the AR and MA parameter estimates (including any seasonal terms) with standard errors and t tests, the model-fit statistics (residual variance, log-likelihood, AIC and BIC), and a Box-Ljung white-noise test of the residuals.</p>
 <pre><code class="language-cks">arima variable=VarName
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -4042,7 +4042,7 @@
 </tbody>
 </table></div>
 <h3 id="stationarity"><code>stationarity</code></h3>
-<p>Unit-root / stationarity tests of one numeric series taken in case order — the step before choosing ARIMA differencing. Runs the Augmented Dickey-Fuller test (null: a unit root, i.e. non-stationary) and the KPSS test (null: stationarity), reporting each statistic with a p-value and a 5% conclusion. The two are complementary.</p>
+<p>Unit-root / stationarity tests of one numeric series taken in case order (the step before choosing ARIMA differencing). Runs the Augmented Dickey-Fuller test (null: a unit root, i.e. non-stationary) and the KPSS test (null: stationarity), reporting each statistic with a p-value and a 5% conclusion. The two are complementary.</p>
 <pre><code class="language-cks">stationarity variable=VarName
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -4135,7 +4135,7 @@
 </table></div>
 <h2 id="evidence-synthesis-and-resampling">Evidence synthesis and resampling</h2>
 <h3 id="meta_analysis"><code>meta_analysis</code></h3>
-<p>Meta-analysis (v1): combines per-study effect sizes — one row per study, an effect column and its standard-error column, already on a common scale (log odds ratio, standardized mean difference, …) — into fixed-effect and random-effects pooled estimates (the τ² estimator is DerSimonian-Laird or REML) with Wald confidence intervals, heterogeneity statistics (Cochran's Q, I², τ²), a forest plot (per-study effects with CIs and the pooled diamond) and a funnel plot with Egger's regression test for small-study asymmetry. Every included row must have both an effect and a positive standard error; a missing cell is an error, not a silent drop. The dataset's Weight Cases setting does not apply (the inverse-variance weights are the statistic's own); Select Cases and Split File are honored.</p>
+<p>Meta-analysis (v1): combines per-study effect sizes (one row per study, with an effect column and its standard-error column already on a common scale: log odds ratio, standardized mean difference, …) into fixed-effect and random-effects pooled estimates (the τ² estimator is DerSimonian-Laird or REML) with Wald confidence intervals, heterogeneity statistics (Cochran's Q, I², τ²), a forest plot (per-study effects with CIs and the pooled diamond) and a funnel plot with Egger's regression test for small-study asymmetry. Every included row must have both an effect and a positive standard error; a missing cell is an error, not a silent drop. The dataset's Weight Cases setting does not apply (the inverse-variance weights are the statistic's own); Select Cases and Split File are honored.</p>
 <pre><code class="language-cks">meta_analysis effect=VarName se=VarName
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -4264,7 +4264,7 @@
 </table></div>
 <h2 id="power-and-sample-size">Power and sample size</h2>
 <h3 id="power_means"><code>power_means</code></h3>
-<p>Statistical power, required sample size, or minimum detectable effect for a t test (one-sample, paired or two independent samples), from Cohen's d. Takes no dataset — all inputs are numbers.</p>
+<p>Statistical power, required sample size, or minimum detectable effect for a t test (one-sample, paired or two independent samples), from Cohen's d. Takes no dataset: all inputs are numbers.</p>
 <pre><code class="language-cks">power_means
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -4299,7 +4299,7 @@
 <td><code>n</code></td>
 <td>number</td>
 <td>no</td>
-<td>Sample size — per group for two_sample, total observations (pairs) otherwise. Required unless solving for n.</td>
+<td>Sample size: per group for two_sample, total observations (pairs) otherwise. Required unless solving for n.</td>
 </tr>
 <tr>
 <td><code>power</code></td>
@@ -4581,7 +4581,7 @@
 </table></div>
 <h2 id="tables">Tables</h2>
 <h3 id="custom_tables"><code>custom_tables</code></h3>
-<p>A general / custom (pivot) table: one or more nested categorical row variables against zero or more nested categorical column variables, each cell holding one or more statistics — case counts (optionally as row, column or total percentages, so a cell can show a count and a percentage together) or summaries of a numeric measure variable (mean, sum, median, minimum, maximum, standard deviation or valid N). Generalizes crosstabs (counts) and means-by-group (a mean over a measure), and can run pairwise column-proportion z tests. The optional &quot;stack_rows&quot; / &quot;stack_columns&quot; lists add further independent variables on that axis, each its own block computed over its own cases — stacked down the row axis or laid side by side across the column axis (stack one axis at a time, not both).</p>
+<p>A general / custom (pivot) table: one or more nested categorical row variables against zero or more nested categorical column variables, each cell holding one or more statistics: case counts (optionally as row, column or total percentages, so a cell can show a count and a percentage together) or summaries of a numeric measure variable (mean, sum, median, minimum, maximum, standard deviation or valid N). Generalizes crosstabs (counts) and means-by-group (a mean over a measure), and can run pairwise column-proportion z tests. The optional &quot;stack_rows&quot; / &quot;stack_columns&quot; lists add further independent variables on that axis, each its own block computed over its own cases, stacked down the row axis or laid side by side across the column axis (stack one axis at a time, not both).</p>
 <pre><code class="language-cks">custom_tables row=VarName
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -4622,13 +4622,13 @@
 <td><code>stack_rows</code></td>
 <td>variable list</td>
 <td>no</td>
-<td>Additional, independent categorical row variables stacked below the primary row block — each becomes its own section (its own categories computed over its own non-missing cases) down the same row axis, under the shared column dimension and statistics. Use for unrelated variables in one table (e.g. a region block then an age-group block); unlike &quot;nest_rows&quot;, the variables are not crossed.</td>
+<td>Additional, independent categorical row variables stacked below the primary row block. Each becomes its own section (its own categories computed over its own non-missing cases) down the same row axis, under the shared column dimension and statistics. Use for unrelated variables in one table (e.g. a region block then an age-group block); unlike &quot;nest_rows&quot;, the variables are not crossed.</td>
 </tr>
 <tr>
 <td><code>stack_columns</code></td>
 <td>variable list</td>
 <td>no</td>
-<td>Additional, independent categorical column variables stacked beside the primary column block — each becomes its own group of columns (its own levels computed over its own non-missing cases) laid side by side across the column axis, sharing the row dimension and statistics. The column-axis mirror of &quot;stack_rows&quot;; stack only one axis at a time (not both rows and columns at once).</td>
+<td>Additional, independent categorical column variables stacked beside the primary column block. Each becomes its own group of columns (its own levels computed over its own non-missing cases) laid side by side across the column axis, sharing the row dimension and statistics. The column-axis mirror of &quot;stack_rows&quot;; stack only one axis at a time (not both rows and columns at once).</td>
 </tr>
 <tr>
 <td><code>statistic</code></td>
@@ -4727,7 +4727,7 @@
 <td><code>bin_labels</code></td>
 <td>one of <code>edges</code>, <code>range</code>, <code>start</code>, <code>custom</code></td>
 <td>no</td>
-<td>How the bars are labelled on the x axis: &quot;edges&quot; (a plain tick at each bin boundary, default), &quot;range&quot; (each bar's interval, e.g. &quot;11 - 20&quot;), &quot;start&quot; (the value each bar starts at), or &quot;custom&quot; (a chosen numbering laid over the bars — see bin_label_start/bin_label_width).</td>
+<td>How the bars are labelled on the x axis: &quot;edges&quot; (a plain tick at each bin boundary, default), &quot;range&quot; (each bar's interval, e.g. &quot;11 - 20&quot;), &quot;start&quot; (the value each bar starts at), or &quot;custom&quot; (a chosen numbering laid over the bars; see bin_label_start/bin_label_width).</td>
 </tr>
 <tr>
 <td><code>bin_label_start</code></td>
@@ -4775,7 +4775,7 @@
 <td><code>y_min</code></td>
 <td>number</td>
 <td>no</td>
-<td>Lower limit of the y axis — y_min: 0 is the common case, anchoring the axis at zero and leaving the top to the data.</td>
+<td>Lower limit of the y axis. y_min: 0 is the common case, anchoring the axis at zero and leaving the top to the data.</td>
 </tr>
 <tr>
 <td><code>y_max</code></td>
@@ -4787,7 +4787,7 @@
 <td><code>h_lines</code></td>
 <td>number list</td>
 <td>no</td>
-<td>Horizontal reference lines at these y values — a mean, a threshold, a target. Drawn dashed behind the data; a value outside the axis range is not drawn.</td>
+<td>Horizontal reference lines at these y values: a mean, a threshold, a target. Drawn dashed behind the data; a value outside the axis range is not drawn.</td>
 </tr>
 <tr>
 <td><code>gridlines</code></td>
@@ -4845,7 +4845,7 @@
 <td><code>smoother</code></td>
 <td>true / false</td>
 <td>no</td>
-<td>Draw a LOESS smoother — a local-linear tricube trend curve — over the points (needs at least 6 complete pairs). Defaults to false.</td>
+<td>Draw a LOESS smoother (a local-linear tricube trend curve) over the points (needs at least 6 complete pairs). Defaults to false.</td>
 </tr>
 <tr>
 <td><code>span</code></td>
@@ -4893,7 +4893,7 @@
 <td><code>y_min</code></td>
 <td>number</td>
 <td>no</td>
-<td>Lower limit of the y axis — y_min: 0 is the common case, anchoring the axis at zero and leaving the top to the data.</td>
+<td>Lower limit of the y axis. y_min: 0 is the common case, anchoring the axis at zero and leaving the top to the data.</td>
 </tr>
 <tr>
 <td><code>y_max</code></td>
@@ -4905,7 +4905,7 @@
 <td><code>h_lines</code></td>
 <td>number list</td>
 <td>no</td>
-<td>Horizontal reference lines at these y values — a mean, a threshold, a target. Drawn dashed behind the data; a value outside the axis range is not drawn.</td>
+<td>Horizontal reference lines at these y values: a mean, a threshold, a target. Drawn dashed behind the data; a value outside the axis range is not drawn.</td>
 </tr>
 <tr>
 <td><code>v_lines</code></td>
@@ -5005,7 +5005,7 @@
 <td><code>y_min</code></td>
 <td>number</td>
 <td>no</td>
-<td>Lower limit of the y axis — y_min: 0 is the common case, anchoring the axis at zero and leaving the top to the data.</td>
+<td>Lower limit of the y axis. y_min: 0 is the common case, anchoring the axis at zero and leaving the top to the data.</td>
 </tr>
 <tr>
 <td><code>y_max</code></td>
@@ -5017,7 +5017,7 @@
 <td><code>h_lines</code></td>
 <td>number list</td>
 <td>no</td>
-<td>Horizontal reference lines at these y values — a mean, a threshold, a target. Drawn dashed behind the data; a value outside the axis range is not drawn.</td>
+<td>Horizontal reference lines at these y values: a mean, a threshold, a target. Drawn dashed behind the data; a value outside the axis range is not drawn.</td>
 </tr>
 <tr>
 <td><code>gridlines</code></td>
@@ -5040,7 +5040,7 @@
 </tbody>
 </table></div>
 <h3 id="violin"><code>violin</code></h3>
-<p>A violin plot of one numeric variable, optionally one violin per level of a category: the kernel-density silhouette of the distribution with a quartile bar inside — shows the shape (skew, multiple modes) that a boxplot's five-number summary hides. Gaussian kernel, Silverman bandwidth; widths share one density scale across the violins.</p>
+<p>A violin plot of one numeric variable, optionally one violin per level of a category: the kernel-density silhouette of the distribution with a quartile bar inside. It shows the shape (skew, multiple modes) that a boxplot's five-number summary hides. Gaussian kernel, Silverman bandwidth; widths share one density scale across the violins.</p>
 <pre><code class="language-cks">violin variable=VarName
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -5087,7 +5087,7 @@
 <td><code>y_min</code></td>
 <td>number</td>
 <td>no</td>
-<td>Lower limit of the y axis — y_min: 0 is the common case, anchoring the axis at zero and leaving the top to the data.</td>
+<td>Lower limit of the y axis. y_min: 0 is the common case, anchoring the axis at zero and leaving the top to the data.</td>
 </tr>
 <tr>
 <td><code>y_max</code></td>
@@ -5099,7 +5099,7 @@
 <td><code>h_lines</code></td>
 <td>number list</td>
 <td>no</td>
-<td>Horizontal reference lines at these y values — a mean, a threshold, a target. Drawn dashed behind the data; a value outside the axis range is not drawn.</td>
+<td>Horizontal reference lines at these y values: a mean, a threshold, a target. Drawn dashed behind the data; a value outside the axis range is not drawn.</td>
 </tr>
 <tr>
 <td><code>gridlines</code></td>
@@ -5211,7 +5211,7 @@
 <td><code>y_min</code></td>
 <td>number</td>
 <td>no</td>
-<td>Lower limit of the y axis — y_min: 0 is the common case, anchoring the axis at zero and leaving the top to the data.</td>
+<td>Lower limit of the y axis. y_min: 0 is the common case, anchoring the axis at zero and leaving the top to the data.</td>
 </tr>
 <tr>
 <td><code>y_max</code></td>
@@ -5223,7 +5223,7 @@
 <td><code>h_lines</code></td>
 <td>number list</td>
 <td>no</td>
-<td>Horizontal reference lines at these y values — a mean, a threshold, a target. Drawn dashed behind the data; a value outside the axis range is not drawn.</td>
+<td>Horizontal reference lines at these y values: a mean, a threshold, a target. Drawn dashed behind the data; a value outside the axis range is not drawn.</td>
 </tr>
 <tr>
 <td><code>v_lines</code></td>
@@ -5365,7 +5365,7 @@
 <td><code>y_min</code></td>
 <td>number</td>
 <td>no</td>
-<td>Lower limit of the y axis — y_min: 0 is the common case, anchoring the axis at zero and leaving the top to the data.</td>
+<td>Lower limit of the y axis. y_min: 0 is the common case, anchoring the axis at zero and leaving the top to the data.</td>
 </tr>
 <tr>
 <td><code>y_max</code></td>
@@ -5377,7 +5377,7 @@
 <td><code>h_lines</code></td>
 <td>number list</td>
 <td>no</td>
-<td>Horizontal reference lines at these y values — a mean, a threshold, a target. Drawn dashed behind the data; a value outside the axis range is not drawn.</td>
+<td>Horizontal reference lines at these y values: a mean, a threshold, a target. Drawn dashed behind the data; a value outside the axis range is not drawn.</td>
 </tr>
 <tr>
 <td><code>gridlines</code></td>
@@ -5400,7 +5400,7 @@
 </tbody>
 </table></div>
 <h3 id="error_bar"><code>error_bar</code></h3>
-<p>An error-bar (means) plot: the mean of a scale variable per level of a category, each with an error bar — a confidence interval of the mean (default), or ±SE / ±SD. With a second category it becomes an interaction/profile plot, one connected point-run per level. Value labels drive the category axis.</p>
+<p>An error-bar (means) plot: the mean of a scale variable per level of a category, each with an error bar: a confidence interval of the mean (default), or ±SE / ±SD. With a second category it becomes an interaction/profile plot, one connected point-run per level. Value labels drive the category axis.</p>
 <pre><code class="language-cks">error_bar variable=VarName category=VarName
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -5483,7 +5483,7 @@
 <td><code>y_min</code></td>
 <td>number</td>
 <td>no</td>
-<td>Lower limit of the y axis — y_min: 0 is the common case, anchoring the axis at zero and leaving the top to the data.</td>
+<td>Lower limit of the y axis. y_min: 0 is the common case, anchoring the axis at zero and leaving the top to the data.</td>
 </tr>
 <tr>
 <td><code>y_max</code></td>
@@ -5495,7 +5495,7 @@
 <td><code>h_lines</code></td>
 <td>number list</td>
 <td>no</td>
-<td>Horizontal reference lines at these y values — a mean, a threshold, a target. Drawn dashed behind the data; a value outside the axis range is not drawn.</td>
+<td>Horizontal reference lines at these y values: a mean, a threshold, a target. Drawn dashed behind the data; a value outside the axis range is not drawn.</td>
 </tr>
 <tr>
 <td><code>gridlines</code></td>
@@ -5518,7 +5518,7 @@
 </tbody>
 </table></div>
 <h3 id="qq_plot"><code>qq_plot</code></h3>
-<p>A Q-Q plot of one numeric variable against a theoretical distribution (normal by default), with a reference line fit through the quartiles — the standard visual normality check.</p>
+<p>A Q-Q plot of one numeric variable against a theoretical distribution (normal by default), with a reference line fit through the quartiles. It is the standard visual normality check.</p>
 <pre><code class="language-cks">qq_plot variable=VarName
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -5595,7 +5595,7 @@
 <td><code>y_min</code></td>
 <td>number</td>
 <td>no</td>
-<td>Lower limit of the y axis — y_min: 0 is the common case, anchoring the axis at zero and leaving the top to the data.</td>
+<td>Lower limit of the y axis. y_min: 0 is the common case, anchoring the axis at zero and leaving the top to the data.</td>
 </tr>
 <tr>
 <td><code>y_max</code></td>
@@ -5607,7 +5607,7 @@
 <td><code>h_lines</code></td>
 <td>number list</td>
 <td>no</td>
-<td>Horizontal reference lines at these y values — a mean, a threshold, a target. Drawn dashed behind the data; a value outside the axis range is not drawn.</td>
+<td>Horizontal reference lines at these y values: a mean, a threshold, a target. Drawn dashed behind the data; a value outside the axis range is not drawn.</td>
 </tr>
 <tr>
 <td><code>v_lines</code></td>
@@ -5648,7 +5648,7 @@
 </tbody>
 </table></div>
 <h3 id="scatter_matrix"><code>scatter_matrix</code></h3>
-<p>A scatterplot matrix (pairs plot): every pair of the chosen numeric variables drawn in one grid — the standard first look at a multivariate dataset, showing at a glance which pairs are related and which are not. The diagonal names the variable; each pair appears in both orientations.</p>
+<p>A scatterplot matrix (pairs plot): every pair of the chosen numeric variables drawn in one grid. It is the standard first look at a multivariate dataset, showing at a glance which pairs are related and which are not. The diagonal names the variable; each pair appears in both orientations.</p>
 <pre><code class="language-cks">scatter_matrix variables=[Var1, Var2]
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -5706,7 +5706,7 @@
 </tbody>
 </table></div>
 <h3 id="ecdf"><code>ecdf</code></h3>
-<p>An empirical cumulative distribution (ECDF): the proportion of cases at or below each value, as a step curve. Answers distributional questions a histogram can obscure, since it needs no bin choice — and comparing groups is a matter of reading two curves apart.</p>
+<p>An empirical cumulative distribution (ECDF): the proportion of cases at or below each value, as a step curve. Answers distributional questions a histogram can obscure, since it needs no bin choice, and comparing groups is a matter of reading two curves apart.</p>
 <pre><code class="language-cks">ecdf variable=VarName
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -5806,7 +5806,7 @@
 </tbody>
 </table></div>
 <h3 id="dot_plot"><code>dot_plot</code></h3>
-<p>A Cleveland dot plot: one dot per category, placed at its value. Use it instead of a bar chart whenever the values do not start from zero — a bar's length only means something from a zero baseline, while a dot marks the value itself. Sorted by value by default.</p>
+<p>A Cleveland dot plot: one dot per category, placed at its value. Use it instead of a bar chart whenever the values do not start from zero: a bar's length only means something from a zero baseline, while a dot marks the value itself. Sorted by value by default.</p>
 <pre><code class="language-cks">dot_plot category=VarName
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -5841,7 +5841,7 @@
 <td><code>sort</code></td>
 <td>one of <code>value</code>, <code>category</code></td>
 <td>no</td>
-<td>Category order: &quot;value&quot; (default, descending — sorting is half of what makes a dot plot readable) or &quot;category&quot; (the levels' own order).</td>
+<td>Category order: &quot;value&quot; (default, descending; sorting is half of what makes a dot plot readable) or &quot;category&quot; (the levels' own order).</td>
 </tr>
 <tr>
 <td><code>colors</code></td>
@@ -5900,7 +5900,7 @@
 </tbody>
 </table></div>
 <h3 id="bubble_chart"><code>bubble_chart</code></h3>
-<p>A bubble chart: a scatterplot whose marks carry a third numeric variable as their area. Bubble <strong>area</strong> is proportional to the value, never the radius — mapping the value to the radius would exaggerate large values by the square.</p>
+<p>A bubble chart: a scatterplot whose marks carry a third numeric variable as their area. Bubble <strong>area</strong> is proportional to the value, never the radius: mapping the value to the radius would exaggerate large values by the square.</p>
 <pre><code class="language-cks">bubble_chart x=VarName y=VarName size=VarName
 </code></pre>
 <div class="docs-table-wrap"><table>
@@ -5971,7 +5971,7 @@
 <td><code>y_min</code></td>
 <td>number</td>
 <td>no</td>
-<td>Lower limit of the y axis — y_min: 0 is the common case, anchoring the axis at zero and leaving the top to the data.</td>
+<td>Lower limit of the y axis. y_min: 0 is the common case, anchoring the axis at zero and leaving the top to the data.</td>
 </tr>
 <tr>
 <td><code>y_max</code></td>
@@ -5983,7 +5983,7 @@
 <td><code>h_lines</code></td>
 <td>number list</td>
 <td>no</td>
-<td>Horizontal reference lines at these y values — a mean, a threshold, a target. Drawn dashed behind the data; a value outside the axis range is not drawn.</td>
+<td>Horizontal reference lines at these y values: a mean, a threshold, a target. Drawn dashed behind the data; a value outside the axis range is not drawn.</td>
 </tr>
 <tr>
 <td><code>v_lines</code></td>
@@ -6064,7 +6064,7 @@
 <td><code>target</code></td>
 <td>text</td>
 <td>yes</td>
-<td>The name of the variable to write — new, or an existing numeric variable to overwrite.</td>
+<td>The name of the variable to write: new, or an existing numeric variable to overwrite.</td>
 </tr>
 <tr>
 <td><code>expression</code></td>
@@ -6199,7 +6199,7 @@
 <td><code>value</code></td>
 <td>text</td>
 <td>no</td>
-<td>The literal to compare against — a number for a numeric variable, a calendar date in yyyy-MM-dd form for a date variable (compared chronologically), text otherwise. Required unless clear=true.</td>
+<td>The literal to compare against: a number for a numeric variable, a calendar date in yyyy-MM-dd form for a date variable (compared chronologically), text otherwise. Required unless clear=true.</td>
 </tr>
 <tr>
 <td><code>clear</code></td>
@@ -6366,12 +6366,12 @@
 <td><code>sha256</code></td>
 <td>text</td>
 <td>no</td>
-<td>The expected SHA-256 of the file's bytes. When given, a file that hashes differently fails by name before any mutation — this is what makes a journaled merge verifiable.</td>
+<td>The expected SHA-256 of the file's bytes. When given, a file that hashes differently fails by name before any mutation; this is what makes a journaled merge verifiable.</td>
 </tr>
 </tbody>
 </table></div>
 <h3 id="merge_add_variables"><code>merge_add_variables</code></h3>
-<p>Merge Files, Add Variables: join another dataset file's columns onto the current cases — by a key variable in each dataset (the first other row with the same key wins; the other key column is not duplicated), or by row position when no keys are given. Every other column becomes a new variable, filled only where a case matched. Reads a .ckd or .csv file from disk; the file is read and (when &quot;sha256&quot; is given) verified before anything mutates. Mutates the dataset.</p>
+<p>Merge Files, Add Variables: join another dataset file's columns onto the current cases, by a key variable in each dataset (the first other row with the same key wins; the other key column is not duplicated), or by row position when no keys are given. Every other column becomes a new variable, filled only where a case matched. Reads a .ckd or .csv file from disk; the file is read and (when &quot;sha256&quot; is given) verified before anything mutates. Mutates the dataset.</p>
 <blockquote>
 <p><strong>Changes your data.</strong> This is a transform, not an analysis; a read-only session cannot run it.</p>
 </blockquote>
@@ -6409,7 +6409,7 @@
 <td><code>sha256</code></td>
 <td>text</td>
 <td>no</td>
-<td>The expected SHA-256 of the file's bytes. When given, a file that hashes differently fails by name before any mutation — this is what makes a journaled merge verifiable.</td>
+<td>The expected SHA-256 of the file's bytes. When given, a file that hashes differently fails by name before any mutation; this is what makes a journaled merge verifiable.</td>
 </tr>
 </tbody>
 </table></div>

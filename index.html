@@ -167,7 +167,7 @@
             <picture>
               <!-- Both crops are 1180x860, cut from the 1920x1080 listing
                    captures, so neither theme shifts layout while loading. -->
-              <source srcset="assets/screenshots/crops/hero-histogram-dark.webp"
+              <source data-theme-shot srcset="assets/screenshots/crops/hero-histogram-dark.webp"
                       media="(prefers-color-scheme: dark)" width="1180" height="860">
               <img src="assets/screenshots/crops/hero-violin.webp" width="1180" height="860"
                    alt="ChakataStat's output view showing a violin plot of systolic blood pressure in four study zones"
@@ -213,8 +213,12 @@
             <a class="text-link" href="#analyze">See what's in the Analyze menu</a>
           </div>
           <figure class="pillar-shot">
-            <img src="assets/screenshots/crops/pillar-forest.webp" width="1180" height="790"
+            <picture>
+              <source data-theme-shot srcset="assets/screenshots/crops/pillar-forest-dark.webp"
+                      media="(prefers-color-scheme: dark)" width="1180" height="790">
+              <img src="assets/screenshots/crops/pillar-forest.webp" width="1180" height="790"
                  alt="A meta-analysis forest plot of eight studies with fixed-effect and random-effects pooled estimates" loading="lazy">
+            </picture>
           </figure>
         </article>
 
@@ -231,8 +235,12 @@
             <a class="text-link" href="docs/validation/">Read the validation report</a>
           </div>
           <figure class="pillar-shot">
-            <img src="assets/screenshots/crops/pillar-verify.webp" width="820" height="820"
+            <picture>
+              <source data-theme-shot srcset="assets/screenshots/crops/pillar-verify-dark.webp"
+                      media="(prefers-color-scheme: dark)" width="820" height="820">
+              <img src="assets/screenshots/crops/pillar-verify.webp" width="820" height="820"
                  alt="The installation verification report: result PASS, 195 of 195 checks passed on 19 datasets" loading="lazy">
+            </picture>
           </figure>
         </article>
 
@@ -248,8 +256,12 @@
             <a class="text-link" href="docs/advanced/reproducibility/">How reproducibility works</a>
           </div>
           <figure class="pillar-shot">
-            <img src="assets/screenshots/crops/pillar-syntax.webp" width="1180" height="820"
+            <picture>
+              <source data-theme-shot srcset="assets/screenshots/crops/pillar-syntax-dark.webp"
+                      media="(prefers-color-scheme: dark)" width="1180" height="820">
+              <img src="assets/screenshots/crops/pillar-syntax.webp" width="1180" height="820"
                  alt="The syntax editor with six commands, line numbers and a completion list of the dataset's variables" loading="lazy">
+            </picture>
           </figure>
         </article>
 
