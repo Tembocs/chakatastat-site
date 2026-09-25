@@ -2889,7 +2889,7 @@
 <td><code>max_cases</code></td>
 <td>integer</td>
 <td>no</td>
-<td>The largest number of cases the analysis will cluster (default 200). Cost grows steeply with case count (cubic time, quadratic memory), so large runs can be slow and memory-heavy; set to 0 to remove the limit.</td>
+<td>The largest number of cases the analysis will cluster (default 200). Cost grows steeply with case count (cubic time, quadratic memory), so large runs can be slow and memory-heavy; set to 0 to lift it as far as the absolute ceiling of 10,000 cases, which no setting removes (the distance matrix alone would outgrow memory).</td>
 </tr>
 <tr>
 <td><code>save_clusters</code></td>
@@ -3407,7 +3407,7 @@
 <td><code>max_cases</code></td>
 <td>integer</td>
 <td>no</td>
-<td>Cap on the number of cases embedded (default 200; the distance matrix is O(n²)). Set to 0 to remove the cap.</td>
+<td>Cap on the number of cases embedded (default 200; the distance matrix is O(n²)). Set to 0 to lift it as far as the absolute ceiling of 3,000 cases, which no setting removes.</td>
 </tr>
 </tbody>
 </table></div>

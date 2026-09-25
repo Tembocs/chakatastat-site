@@ -122,6 +122,13 @@ carriage return and is not a number is written with a leading apostrophe
 (<code>'</code>), which spreadsheets read as &quot;text&quot; and hide — so a value that arrived
 in your data can never run as a formula in someone's Excel or Calc. Numbers
 such as <code>-5</code> are never touched. Turn it off for a byte-faithful export.</li>
+<li><strong>Mark CSV exports as UTF-8 for Excel</strong> — on by default. When a CSV/TSV
+export holds any non-ASCII text (<code>é</code>, <code>ü</code>, <code>ß</code>, …), the file starts with a
+byte-order mark, so Excel on Windows reads it as UTF-8 instead of
+garbling those characters. A plain-ASCII export never gets one. Turn it
+off if a tool shows a stray character before the first column name (base
+R's <code>read.csv</code> does unless given <code>fileEncoding = &quot;UTF-8-BOM&quot;</code>; pandas,
+readr and data.table handle the mark).</li>
 </ul>
 <h2 id="connectivity">Connectivity</h2>
 <p>A connectivity check used to confirm the app can reach the network (relevant to

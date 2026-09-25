@@ -197,7 +197,13 @@ against the currently active Select Cases/Weight Cases, like every analysis.</p>
 <li><strong>Sort Cases</strong> (<code>Ctrl+Shift+D</code>) — reorder rows by one or more variables.</li>
 <li><strong>Transpose</strong> (<code>Ctrl+Alt+P</code>) — swap rows and columns.</li>
 <li><strong>Merge Files</strong> (<code>Ctrl+Alt+M</code>) — add cases or add variables from another
-dataset, matched by a key.</li>
+dataset, matched by a key (or by row position). A key that is numeric in
+both datasets matches by value, so <code>1</code> in one file meets <code>1.0</code> in the
+other; any other key matches its exact text. Each case takes the first
+row with its key. The status line says how many cases matched no row
+and how many of the file's rows matched no case (an unknown key, a blank
+key, a repeated key, or rows past the end of a positional join), so a
+join that misses is never silent.</li>
 <li><strong>Define Variable Properties</strong> (<code>Ctrl+Alt+D</code>), <strong>Bulk Rename</strong> and <strong>Variable
 Sets</strong> — covered in <a href="../working-with-data/#tidying-a-dataset">Working with Data</a>.</li>
 </ul>

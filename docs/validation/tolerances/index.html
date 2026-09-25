@@ -97,10 +97,12 @@ the choice is recorded here — these are <strong>agreements about definitions, 
 discrepancies</strong>:</p>
 <ul>
 <li>
-<p><strong>Quantiles</strong> (Explore percentiles) — the engine uses the <strong>Hazen</strong> definition
-(plotting position <code>(k − ½)/n</code>); the reference uses
-<code>numpy.percentile(method=&quot;hazen&quot;)</code>. (NumPy's default <code>&quot;linear&quot;</code> is a different,
-equally valid convention.)</p>
+<p><strong>Quantiles</strong> (Explore percentiles) — the engine uses the inverse empirical
+CDF, averaging at an exact boundary (R type 2); the reference uses
+<code>numpy.percentile(method=&quot;averaged_inverted_cdf&quot;)</code>. (NumPy's default
+<code>&quot;linear&quot;</code> and Hazen are different, equally valid conventions; until code
+review 2026-09-25 this line said Hazen, which the engine never
+implemented — see <a href="../conventions/classical/#quantiles">quantiles</a>.)</p>
 </li>
 <li>
 <p><strong>Mann-Whitney</strong> — the engine reports the asymptotic test from a <strong>tie-corrected

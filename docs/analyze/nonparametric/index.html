@@ -139,6 +139,16 @@ difference</em> itself, the two-group alternative is the t-test dialog's
 <td>Agreement among several rankers</td>
 </tr>
 <tr>
+<td><strong>Cochran's Q</strong></td>
+<td>Repeated-measures ANOVA (binary outcome)</td>
+<td>Success rates of three+ related yes/no measurements</td>
+</tr>
+<tr>
+<td><strong>Jonckheere-Terpstra</strong></td>
+<td>— (Kruskal-Wallis for an <em>ordered</em> alternative)</td>
+<td>A monotone trend across ordered groups</td>
+</tr>
+<tr>
 <td><strong>Runs test</strong></td>
 <td>—</td>
 <td>Randomness of a sequence</td>
@@ -168,6 +178,15 @@ ranks); reports the <strong>coefficient of concordance</strong> (0..1 agreement)
 equivalent Friedman chi-square. It is the same statistic as Friedman, rescaled
 to read as an agreement measure — use it when the question is &quot;how much do the
 rankers agree?&quot; rather than &quot;do the conditions differ?&quot;.</li>
+<li><strong>Cochran's Q</strong> — two or more <strong>related dichotomous variables</strong> (each
+coded with the same two values; the higher one counts as a success),
+compared within each case — the k-sample extension of McNemar's test.</li>
+<li><strong>Jonckheere-Terpstra</strong> — one or more <strong>numeric variables</strong> and an
+<strong>ordered grouping variable</strong>, whose levels are taken in ascending order;
+tests for a monotone trend across them (tie-corrected) rather than for any
+difference — the test to use when the groups have a natural order (doses,
+grades, age bands) and the question is whether the variable rises or falls
+with it.</li>
 <li><strong>Runs test</strong> — one variable; tests whether values fall in a random order
 around a cut point, with an optional <strong>exact</strong> small-sample significance.</li>
 <li><strong>Binomial test</strong> — one variable and an <strong>expected proportion</strong>; reports an
@@ -206,7 +225,7 @@ that does not assume normality.</p>
 <li><strong>Kruskal–Wallis</strong> — tie-corrected H on k − 1 df, ε² = H/(N − 1), an exact upper-tail significance when untied; <strong>Dunn's</strong> pairwise <em>z</em> adjusted by Bonferroni (default) or Holm (<a href="../../validation/#coverage">validation</a> · <a href="../../validation/conventions/classical/#post-hoc-tests">post hoc</a>).</li>
 <li><strong>Friedman / Kendall's W</strong> — W = χ²/(N(k − 1)); <strong>Cochran's Q</strong> and <strong>Jonckheere–Terpstra</strong> in their standard forms with the tie-corrected null variance (<a href="../../validation/#coverage">validation</a>).</li>
 <li><strong>Tests of Normality</strong> — Shapiro–Wilk (Royston's AS R94) and Kolmogorov–Smirnov with <strong>Lilliefors</strong> significance (<a href="../../validation/conventions/classical/#normality-tests">normality</a>).</li>
-<li>Every test is listwise on its own variables; a frequency weight replicates cases (<a href="../../validation/conventions/classical/#missing-data-policy">missing-data policy</a> · <a href="../../validation/tolerances/">case weighting</a>).</li>
+<li>Every test is listwise on its own variables (<a href="../../validation/conventions/classical/#missing-data-policy">missing-data policy</a>). Under an active weight (Data → Weight Cases) the <strong>binomial</strong> test weights its counts; the rank and normality tests use the weight only to choose which cases take part — they are not weighted — and each says so in a note under its output (<a href="../../validation/tolerances/">case weighting</a>).</li>
 </ul>
 <h2 id="see-also">See also</h2>
 <ul>

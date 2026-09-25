@@ -245,7 +245,11 @@ that is what it is looking at.</p>
 <h2 id="adding-context-about-your-data">Adding context about your data</h2>
 <p>The assistant sees your variable names, types and labels, so well-defined
 variables (see <a href="../../working-with-data/">Working with Data</a>) make it far more
-accurate. You can also add <strong>custom context</strong> in Settings — a note describing your
+accurate. On a wide dataset the summary sent with each request lists the first
+200 variables (labels cut to 120 characters) and says how many more there are;
+for the rest, or whenever it is unsure of a name, the assistant calls
+<code>list_variables</code> — a discovery tool that returns every variable's name, type,
+measurement level and label — before it analyzes anything. You can also add <strong>custom context</strong> in Settings — a note describing your
 study, your coding conventions, or what you are trying to find out — which is sent
 with each request so the assistant interprets your data correctly.</p>
 <h2 id="what-it-can-and-cannot-do">What it can and cannot do</h2>
@@ -270,8 +274,13 @@ its reach ends at the open dataset. Merging stays a menu action you take
 yourself.</li>
 </ul>
 <h2 id="reproducibility">Reproducibility</h2>
-<p>The assistant's actions are commands like any other, so they appear in the
-<a href="../reproducibility/">Syntax console</a> and can be reviewed, edited and replayed.
+<p>The assistant runs the same commands as the menus and the console, but it
+does <strong>not</strong> write them into the <a href="../reproducibility/">Syntax console</a>'s
+journal: its analyses and charts land in the Output log, and any change it
+makes to your data is undoable like your own. Because the journal cannot
+replay a change it never recorded, a journal save or a reproducibility
+bundle <strong>states</strong> every data change the assistant made that is still in
+your data — and drops the note if you undo the change.
 The conversation itself persists with your session, so closing and reopening
 ChakataStat keeps the thread (you can start fresh with the panel's New
 conversation button).</p>

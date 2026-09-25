@@ -232,6 +232,14 @@ pointing at things.</p>
 <ul>
 <li><strong>Run all</strong> / <strong>Run selection</strong> parse the script and dispatch each command into
 the Output log. Replaying does <strong>not</strong> re-record the commands.</li>
+<li><strong>Run all replays from the data you started with.</strong> The script is a
+recipe <em>from</em> your starting data, so once its transforms (Compute,
+Recode, Merge, Transpose, Select Cases, …) have changed the open data,
+running the whole script again would apply them a second time — a merge
+would duplicate its rows. Run all then refuses, before running
+anything, and says why. Open your original data file first (the script
+stays in the console) and Run all there — or select just the new lines
+and use <strong>Run selection</strong>.</li>
 <li>Parse errors and failed commands are reported in a status panel as data — a bad
 line never crashes the run. Drag the panel's top edge to make it taller
 (double-click the edge to reset); its text follows the <strong>Content text
@@ -357,20 +365,35 @@ Export Reproducibility Bundle…</strong>. The <code>.cksb</code> file contains:
 <ul>
 <li>your syntax journal (the <code>.cks</code> script);</li>
 <li>the data fingerprint (and the name of the file you had open);</li>
-<li>the name and byte hash of every file your session merged (Data → Merge
-Files), so a reader can be given those too and prove they are the same;</li>
-<li>a note naming any operation the journal cannot replay (a bulk rename, a
-dictionary import, a variable-properties edit), if your session used one;</li>
+<li>the name and byte hash of every file your journal merges (Data → Merge
+Files), so a reader can be given those too and prove they are the same.
+A merge you undid is not listed — its line left the journal. Two
+different files with the same name (say <code>2023/site.csv</code> and
+<code>2024/site.csv</code>) are listed with their hash in the name,
+<code>site.3f2a9c1b.csv</code>, so both can sit next to the data;</li>
+<li>a note naming every change to the data the journal cannot replay, if
+your session made one: Data View cell edits, Variable View edits, a bulk
+rename, a dictionary import, a variable-properties edit, a data change
+the assistant made, or a transform run more often than the journal
+records (a line re-run from the console). An edit you undid is not
+listed — it is no longer in the data. These notes, and the fingerprint
+of the data your session started from, survive closing and reopening
+ChakataStat. Opening a different data file starts them afresh; if the
+script you keep holds data-changing commands run on the earlier data,
+the bundle says so until you <strong>Run all</strong> on the new data;</li>
 <li>the ChakataStat version, the engine version and your platform;</li>
 <li>every output in the log, exactly as it was rendered — every table, and
 each chart as the geometry table its CSV export produces.</li>
 </ul>
 <p>It does <strong>not</strong> contain your data — nor any merged file's data. Whether
 and how to share the data is your decision, made separately; the bundle
-only says what you ran and what you saw. For a clean bundle, <strong>Clear All</strong> the output and <strong>Run All</strong> from
-the console first, so the log holds exactly what the journal produces (an
-assistant reply or an installation report in the log has no journal line to
-re-run, and the verifier will say so).</p>
+only says what you ran and what you saw. For a clean bundle, open the data
+you started from, <strong>Clear All</strong> the output and <strong>Run All</strong> from the console,
+so the log holds exactly what the journal produces (an assistant reply or an
+installation report in the log has no journal line to re-run, and the
+verifier will say so). Run All refuses to replay a script whose transforms
+are already in the open data — they would apply twice — which is why the
+starting data comes first.</p>
 <p>From a pipeline, <code>--run script.cks data.ckd --bundle analysis.cksb</code> writes
 the same bundle from a headless run.</p>
 <p><strong>As the reader.</strong> Obtain the data from the author, then either <strong>File →
@@ -385,7 +408,8 @@ purpose: the bundle's whole point is to compare against the author's data.
 If the bundle's journal merged other files, the verifier looks for each by
 its recorded name <strong>next to the data file you picked</strong> and checks its byte
 hash the same way — a missing or changed merge input also refuses by name
-before anything runs. With the right data it re-runs the journal and
+before anything runs. Each merge in the journal then reads the input whose
+hash its line records, so same-named inputs never mix. With the right data it re-runs the journal and
 compares every cell of every output with the bundle, within the precision
 the author saw it printed at, and reports <strong>PASS</strong> or <strong>FAIL</strong> per output,
 naming the first cells that differ. The exit status is 0 only on a full

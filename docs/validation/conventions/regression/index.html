@@ -968,6 +968,33 @@ balanced.</li>
 pinned against linearmodels). Both are legitimate Swamy–Arora estimators;
 the choice is the one a Stata user will reproduce. plm's values are
 recorded beside the five affected pins as a divergence, not a discrepancy.</p>
+<h2 id="case-weights-in-the-regression-outputs--the-2026-09-25-conventions">Case weights in the regression outputs — the 2026-09-25 conventions</h2>
+<p>Case weights are <strong>frequency weights</strong> — a weight of k is the case k times
+(the <a href="../README/">convention index</a>'s case-weights row) — and every
+regression output that is a statistic of the data equals the same output on
+the physically replicated data. The review of 2026-09-25 (V3) found three
+outputs that did not, and one that cannot:</p>
+<ul>
+<li><strong>Robust (HC0 / HC1 / HC3) standard errors</strong> — the sandwich
+(XᵀWX)⁻¹ (Σ wᵣ eᵣ² dᵣdᵣᵀ) (XᵀWX)⁻¹: the weight enters the meat <strong>once</strong>,
+HC1 scales by N/(N − p) with N = Σw, and HC3 divides eᵣ² by (1 − hᵣ)²
+with hᵣ = dᵣᵀ(XᵀWX)⁻¹dᵣ, the leverage of each replicate. The engine used
+the probability-weight form (wᵣ² in the meat, wᵣ·hᵣ as the leverage),
+which on one weighted fit put an SE at 0.079 where the replicated data
+give 0.045. The count models' sandwich (Poisson, negative binomial) takes
+wᵣ rᵣ² likewise (it took (wᵣ rᵣ)²).</li>
+<li><strong>Residuals Statistics N</strong> — Σw, like every weighted N (it printed the
+number of cases; the mean and SD were already weighted).</li>
+<li><strong>Durbin–Watson</strong> — not a replication statistic: it reads the residuals
+in case order, and replicating a case only inserts zero differences. It
+stays the unweighted case-order statistic, and under a weight the Model
+Summary's note says so.</li>
+<li><strong>Casewise diagnostics</strong> keep wᵣ·hᵣ as a case's leverage — the leverage
+of its replicates summed, i.e. of the case as a whole — and Cook's
+distance from it: a diagnostic of the case, not of one replicate.</li>
+</ul>
+<p><code>test/weight_replication_test.dart</code> runs each robust fit twice, weighted
+and replicated, and requires every number in every table to agree.</p>
       </article>
     </div>
   </main>

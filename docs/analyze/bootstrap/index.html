@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Module 10 — Reproducibility — ChakataStat User Guide</title>
-  <link rel="canonical" href="https://chakatastat.app/docs/tutorial/10-reproducibility/">
+  <title>Bootstrap Confidence Intervals — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/analyze/bootstrap/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Module 10 — Reproducibility — ChakataStat User Guide">
-  <meta property="og:url" content="https://chakatastat.app/docs/tutorial/10-reproducibility/">
+  <meta property="og:title" content="Bootstrap Confidence Intervals — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/analyze/bootstrap/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
@@ -71,11 +71,11 @@
         <li><a href="../../quick-start/">Quick Start</a></li>
         <li><a href="../../overview/">Overview</a></li>
         <li><a href="../../getting-started/">Getting Started</a></li>
-        <li><a href="../">Tutorial Workbook</a></li>
+        <li><a href="../../tutorial/">Tutorial Workbook</a></li>
         <li class="docs-nav-section">Core tasks</li>
         <li><a href="../../working-with-data/">Working with Data</a></li>
         <li><a href="../../cases-and-transforms/">Cases &amp; Transforms</a></li>
-        <li><a href="../../analyze/">Analyzing Data</a></li>
+        <li><a href="../">Analyzing Data</a></li>
         <li><a href="../../graphs/">Graphs</a></li>
         <li><a href="../../chart-editor/">Editing a chart</a></li>
         <li><a href="../../settings/">Settings</a></li>
@@ -91,72 +91,55 @@
       </ul>
       </aside>
       <article class="docs-content">
-<h1 id="module-10--reproducibility">Module 10 — Reproducibility</h1>
-<p><strong>Question:</strong> six months from now, can you — or a reviewer — reproduce every
-number in your report? In ChakataStat the answer is built in: every module of
-this course was quietly writing a script.</p>
-<h2 id="the-syntax-console">The Syntax console</h2>
-<p>Open the <strong>Syntax</strong> tab. Everything you ran through the menus is there as
-commands — the same ones each module's &quot;syntax trail&quot; showed. This console
-is editable and executable:</p>
-<ol>
-<li>Reopen the sample (<strong>File → Open…</strong>; the script stays in the console),
-then click <strong>Run all</strong>: the entire session replays, top to bottom, and
-the output regenerates. Reopening comes first because Module 8's
-transforms are already in the data you have open — the script is a
-recipe from the <em>starting</em> data, and Run all refuses to apply those
-transforms a second time.</li>
-<li>Edit one line — change a variable, add one — select it, and <strong>Run
-selection</strong> to run just that.</li>
-<li><strong>Save syntax…</strong> writes the script as a <code>.cks</code> file next to your dataset.</li>
-</ol>
-<p>It is a real editor, not a text box: commands and their parameters are
-highlighted, <code>Ctrl+Space</code> completes a command name or a variable, and a line
-the parser cannot read is marked before you run it rather than after. You are
-meant to write here, not only to read what the dialogs wrote.</p>
-<p>Dialogs are how you <em>find</em> an analysis; syntax is how you <em>keep</em> it.</p>
-<h2 id="the-reproducible-bundle">The reproducible bundle</h2>
-<p>A finished piece of work is three small files:</p>
+<h1 id="bootstrap-confidence-intervals">Bootstrap Confidence Intervals</h1>
+<p><strong>Analyze → Bootstrap Confidence Intervals.</strong> A confidence interval for a
+statistic without a formula for its standard error: the <strong>nonparametric
+bootstrap</strong> resamples your cases with replacement many times, recomputes the
+statistic on each resample, and reads the interval off the spread of those
+values. Use it for a median, a coefficient of variation, or any statistic whose
+textbook interval assumes more than you are willing to.</p>
+<h2 id="filling-the-dialog">Filling the dialog</h2>
 <ul>
-<li><code>study.ckd</code> — data plus every variable definition (modules 1–2);</li>
-<li><code>study.cks</code> — the ordered commands that produce the results;</li>
-<li>the exported output (<strong>File → Export Output…</strong>, HTML/Markdown/LaTeX) —
-what the numbers looked like when you reported them.</li>
+<li><strong>Statistic</strong> — one of <strong>Mean</strong>, <strong>Median</strong>, <strong>Standard deviation</strong>,
+<strong>Variance</strong> or <strong>Coefficient of variation</strong> of one variable; the
+<strong>Pearson</strong> or <strong>Spearman correlation</strong> of two (<strong>Variable (X)</strong> and
+<strong>Variable (Y)</strong>); or the <strong>Mean difference (2 groups)</strong> of a variable
+across a <strong>Grouping factor (2 levels)</strong> — the second level minus the first.</li>
+<li><strong>Resamples (B)</strong> — how many resamples to draw (default 1,000; capped at
+1,000,000). More resamples steady the interval's ends; BCa in particular
+wants 1,000 or more.</li>
+<li><strong>Interval method</strong> — <strong>Percentile</strong> (default) or <strong>BCa</strong> (bias-corrected
+and accelerated), which adjusts for a skewed or biased bootstrap
+distribution.</li>
+<li><strong>Confidence (0–1)</strong> — default 0.95.</li>
+<li><strong>Seed</strong> — the random seed (default 1). The same data, statistic, seed,
+resample count and method give <strong>the same interval, digit for digit</strong>, on
+every run and every platform.</li>
 </ul>
-<p>Anyone with the first two can regenerate the third — that is the standard
-your future self will thank you for. (Batch users can even run it headless:
-<code>chakatastat --run study.cks study.ckd --out report.html</code>.)</p>
-<h2 id="capstone-exercise">Capstone exercise</h2>
-<p>Reproduce a mini-report start to finish, in syntax:</p>
-<ol>
-<li>
-<p>Open the sample. In the Syntax tab, write (or paste from your trail):</p>
-<pre><code>descriptives variables=[Age, BMI, SystolicBP]
-crosstabs row=SmokingStatus, column=Hypertensive, chi_square=true
-anova variables=[SystolicBP], factor=SmokingStatus, posthoc=true
-linear_regression dependent=SystolicBP, predictors=[Age, BMI]
-histogram variable=BMI
+<h2 id="reading-the-output">Reading the output</h2>
+<p>One table, <strong>Bootstrap Confidence Interval</strong>, with the <strong>Observed</strong> statistic
+on your data, the bootstrap <strong>Bias</strong> (the resamples' mean minus the observed
+value), the bootstrap <strong>Std. Error</strong> (their standard deviation), and <strong>CI
+Lower</strong> / <strong>CI Upper</strong>. The note names the method, the level, the resample
+count, the seed and <em>n</em>. A resample on which the statistic is undefined (a
+correlation of a constant column; a mean difference with one group empty) is
+<strong>degenerate</strong>: it is excluded, and the note says how many were.</p>
+<h2 id="how-this-is-computed">How this is computed</h2>
+<p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
+<ul>
+<li><strong>Resampling</strong> — <em>n</em> cases drawn with replacement per resample, all cases together (a mean difference is not resampled within groups); the SplitMix64 generator seeded by <strong>Seed</strong>, drawn in a fixed order, so results are reproducible (<a href="../../validation/conventions/README/#meta-analysis-and-resampling-meta_analysis-bootstrap_ci">resampling conventions</a>).</li>
+<li><strong>Statistics</strong> — the standard deviation and variance use the <em>n</em> − 1 divisor; the coefficient of variation is SD / mean (a ratio, not a percentage; undefined at a zero mean).</li>
+<li><strong>Intervals</strong> — <strong>Percentile</strong>: the resamples' quantiles at (1 − level)/2 and (1 + level)/2. <strong>BCa</strong>: those quantiles shifted by the bias correction <em>z</em>₀ (from the share of resamples below the observed value) and the acceleration <em>a</em>, which is the <strong>jackknife</strong> of the same statistic (deterministic).</li>
+<li><strong>Missing values</strong> — listwise over the variables the statistic uses; cases an active Select Cases filter excludes are left out.</li>
+<li><strong>Weights</strong> — the bootstrap is <strong>unweighted</strong>: with Weight Cases on it resamples cases equally and says so in a note.</li>
+</ul>
+<h2 id="reproducibility">Reproducibility</h2>
+<p>Each run journals a syntax command, for example:</p>
+<pre><code>bootstrap_ci variable=income, statistic=median, ci_method=bca, replicates=2000
 </code></pre>
-</li>
-<li>
-<p><strong>Run all</strong>, review the output, export it to HTML.</p>
-</li>
-<li>
-<p>Save the <code>.cks</code> and the <code>.ckd</code>, close the app, reopen, run the script
-again — confirm the report reproduces exactly.</p>
-</li>
-</ol>
-<h2 id="where-next">Where next</h2>
-<ul>
-<li><strong><a href="../../analyze/">Analyzing Data</a></strong> — the full procedure catalog,
-from nonparametrics to survival and time series.</li>
-<li><strong><a href="../../advanced/ai-assistant/">The AI assistant</a></strong> — plain-language
-analysis over the same engine, with the same syntax trail.</li>
-<li><strong><a href="../../advanced/reproducibility/">Reproducibility in depth</a></strong> — batch
-runs, Python export, output formats.</li>
-</ul>
-<p>You now know the whole loop: open → describe → visualize → test → transform
-→ report — reproducibly. That is the course.</p>
+<p>— the tool <code>bootstrap_ci</code>, available to the AI assistant, MCP and batch
+scripts like every analysis. See the <a href="../../reference/commands/">command reference</a>
+for every argument.</p>
       </article>
     </div>
   </main>

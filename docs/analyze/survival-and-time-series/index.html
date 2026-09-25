@@ -98,14 +98,17 @@ Series</strong> for data ordered in time.</p>
 <p><strong>Analyze → Survival.</strong> Survival data record the <strong>time until an event</strong> (death,
 relapse, failure), where some cases are <strong>censored</strong> — the event had not happened
 by the end of observation.</p>
-<p>Both procedures use a <strong>status</strong> variable that marks the event, plus an
-<strong>event value</strong> that says which code means &quot;event happened&quot; (other values are
-treated as right-censored).</p>
+<p>Kaplan-Meier, Cox and Parametric Survival use a <strong>status</strong> variable that marks
+the event, plus an <strong>event value</strong> that says which code means &quot;event happened&quot;
+(other values are treated as right-censored); Competing Risks names the
+<em>censoring</em> code instead, and every other code is a cause.</p>
 <blockquote>
-<p><strong>Weighting.</strong> Survival estimates (Kaplan-Meier and Cox) <strong>honour the Weight
-Cases setting</strong>: the case weight is a frequency weight, folded into the risk
+<p><strong>Weighting.</strong> Every survival procedure <strong>honours the Weight Cases
+setting</strong>: the case weight is a frequency weight, folded into the risk
 sets, the event and censoring counts and the Greenwood standard errors
-(Kaplan-Meier and the log-rank test), and into the partial likelihood (Cox).</p>
+(Kaplan-Meier and the log-rank test), into the partial likelihood (Cox),
+into each case's likelihood term (Parametric Survival), and into the risk
+sets and cause-specific event counts (Competing Risks).</p>
 </blockquote>
 <h3 id="kaplan-meier">Kaplan-Meier</h3>
 <p><strong>When.</strong> Estimate and compare survival curves without assuming a model.</p>
@@ -136,6 +139,38 @@ flat band) is evidence the assumption is violated for that covariate — conside
 stratifying on it, adding a time interaction, or a (start, stop] layout. The
 time axis can be transformed by <strong>rank</strong> (default), <strong>identity</strong> or <strong>log</strong>.</p>
 <p><strong>Example.</strong> Model time-to-diagnosis by <em>Age</em>, <em>BMI</em> and <em>SmokingStatus</em>.</p>
+<h3 id="parametric-survival">Parametric Survival</h3>
+<p><strong>When.</strong> Model survival time directly under an assumed distribution — an
+<strong>accelerated-failure-time (AFT)</strong> model (the <code>parametric_survival</code> tool), where
+covariates stretch or shrink time rather than scale the hazard.</p>
+<p><strong>Dialog.</strong> <strong>Time</strong> (strictly positive), <strong>Status</strong> and its <strong>Event value</strong>
+(default 1; any other status is right-censored), the <strong>Distribution</strong> —
+<strong>Weibull</strong> (default), <strong>Exponential</strong> (constant hazard, scale fixed at 1) or
+<strong>Log-normal</strong> — and <strong>Covariates (optional)</strong>. With no covariates, the chosen
+distribution is simply fitted to the times.</p>
+<p><strong>Output.</strong> The <strong>Parametric Survival Model</strong> table: a row for the
+(Intercept) and each covariate with Estimate, Std. Error, <em>z</em>, Sig. and
+<strong>Exp(Estimate)</strong>, plus a <strong>Scale</strong> row (omitted for the exponential). The
+estimates are on the log-time scale, so Exp(Estimate) is the <strong>time ratio</strong>
+(acceleration factor). The note gives −2 log-likelihood, AIC and the number of
+cases and events. Cases missing the time, status or a covariate are left out; a
+zero or negative time stops the run with a message.</p>
+<h3 id="competing-risks">Competing Risks</h3>
+<p><strong>When.</strong> Several mutually exclusive event types compete (say, death from the
+disease or from another cause) and you want the probability of each by time
+<em>t</em>, allowing for the others (the <code>competing_risks</code> tool).</p>
+<p><strong>Dialog.</strong> <strong>Time</strong>, <strong>Status (causes)</strong> and the <strong>Censored value</strong> (default
+0). The coding runs the other way from the other survival procedures: you name
+the <em>censoring</em> code, and every other distinct status value is its own cause.</p>
+<p><strong>Output.</strong> The <strong>Cumulative Incidence</strong> table — one row per distinct event
+time, with Time, At Risk and a <strong>CIF (cause = k)</strong> column for each cause in
+ascending code order — and the <strong>Cumulative Incidence Summary</strong>, the final
+cumulative incidence per cause. At each event time a cause's CIF rises by the
+all-cause Kaplan-Meier survival just before that time × that cause's events ÷
+the number at risk, so the CIFs together equal 1 − overall survival. The
+analysis is descriptive: there is no between-group test, no covariate
+(Fine–Gray) model and no chart. Times must be non-negative, and cases missing
+time or status are left out.</p>
 <h2 id="time-series">Time Series</h2>
 <p><strong>Analyze → Time Series.</strong> For a variable whose cases are in <strong>time order</strong>. The
 series is taken as the non-missing values in case order.</p>
@@ -222,7 +257,7 @@ one's history improves the prediction of another. Its own page:
 <ul>
 <li><strong>Kaplan–Meier</strong> — the product-limit estimate with Greenwood's standard error; the median is the first time S(t) ≤ ½; the log-rank test is Mantel–Cox with the hypergeometric variance (<a href="../../validation/conventions/classical/#kaplanmeier">Kaplan–Meier</a>).</li>
 <li><strong>Cox regression</strong> — the partial likelihood with <strong>Efron's</strong> tie approximation by default (Breslow on request; SPSS and SAS default to Breslow), Wald hazard-ratio intervals exp(B ± z·SE), Breslow's baseline hazard (<a href="../../validation/conventions/classical/#cox-regression-tie-handling-and-intervals">Cox</a>); the proportional-hazards test is the Grambsch–Therneau statistic in its 1994 simplified form — survival ≥ 3.0's <code>cox.zph</code> uses the exact form, recorded (<a href="../../validation/conventions/clinical-and-survey/#the-proportional-hazards-test-statistic--the-0230-convention">PH test</a>).</li>
-<li><strong>Parametric survival / Competing risks</strong> — AFT models by ML on log-time; the cumulative incidence function and Fine–Gray (<a href="../../validation/#coverage">validation</a>).</li>
+<li><strong>Parametric survival / Competing risks</strong> — AFT models (Weibull, exponential, log-normal) by ML on log-time; the nonparametric cumulative incidence function, cause by cause — no Fine–Gray subdistribution-hazard model (<a href="../../validation/#coverage">validation</a>).</li>
 <li><strong>Autocorrelation</strong> — the ACF with divisor n, Bartlett's cumulative SE, Box–Ljung on k df; the PACF by Durbin–Levinson (<a href="../../validation/conventions/classical/#autocorrelation">autocorrelation</a>).</li>
 <li><strong>ARIMA / SARIMA</strong> — conditional least squares by default, exact ML (Kalman) on request, a constant for an undifferenced series (<a href="../../validation/conventions/classical/#arima">ARIMA</a> · <a href="../../validation/tolerances/">tolerances</a>).</li>
 <li><strong>Stationarity</strong> — ADF and KPSS with Schwert's lag rule; ADF's <em>p</em> from MacKinnon (1994); KPSS with the Bartlett kernel (<a href="../../validation/conventions/classical/#stationarity-tests">stationarity</a>).</li>

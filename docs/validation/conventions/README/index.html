@@ -145,7 +145,7 @@ continuity corrections, CI families, small-sample factors.</p>
 <tbody>
 <tr>
 <td>Percentiles, median, quartiles</td>
-<td>Hazen, (k − ½)/n; weighted on cumulative weight</td>
+<td>inverse ECDF, averaging at an exact boundary (R type 2), weighted or not (was recorded as Hazen, never implemented — corrected 2026-09-25, V3)</td>
 <td>✅ <a href="../../tolerances/">tolerances</a> · <a href="../classical/#quantiles">quantiles</a></td>
 </tr>
 <tr>
@@ -160,7 +160,7 @@ continuity corrections, CI families, small-sample factors.</p>
 </tr>
 <tr>
 <td>Case weights</td>
-<td>frequency weight ≡ replication, every procedure</td>
+<td>frequency weight ≡ replication in every procedure that weights; the rank and normality tests (Mann–Whitney, Wilcoxon, sign, runs, Kruskal–Wallis, Friedman, Kendall's W, Cochran's Q, Jonckheere–Terpstra, Shapiro–Wilk/Lilliefors) and the other procedures that note it use the weight only to select cases, and <strong>say so</strong> in their output under an active weight (code review 2026-09-25, S5); robust SEs, the count models' sandwich and the residual N follow replication too, Durbin–Watson stays case-order and says so (<a href="../regression/#case-weights-in-the-regression-outputs--the-2026-09-25-conventions">regression outputs</a>, V3)</td>
 <td>✅ <a href="../../tolerances/">tolerances</a></td>
 </tr>
 <tr>
@@ -170,7 +170,7 @@ continuity corrections, CI families, small-sample factors.</p>
 </tr>
 <tr>
 <td>Binning (<code>bin_variable</code>)</td>
-<td>equal width, Hazen-quantile, or custom cut points</td>
+<td>equal width, quantile (type 2), or custom cut points</td>
 <td>— single (the quantile rule is the row above)</td>
 </tr>
 <tr>
@@ -423,7 +423,7 @@ continuity corrections, CI families, small-sample factors.</p>
 </tr>
 <tr>
 <td>Hosmer–Lemeshow</td>
-<td>10 deciles of risk by rank; g − 2 df</td>
+<td>10 deciles of risk by rank, tied probabilities kept in one group; g − 2 df</td>
 <td>✅ <a href="../../#coverage">validation.md</a></td>
 </tr>
 <tr>
@@ -622,7 +622,7 @@ continuity corrections, CI families, small-sample factors.</p>
 </tr>
 <tr>
 <td>AFT models, competing risks</td>
-<td>ML on log-time; Fine–Gray / CIF</td>
+<td>ML on log-time; nonparametric CIF (no Fine–Gray model)</td>
 <td>✅ <a href="../../#coverage">validation.md</a></td>
 </tr>
 </tbody>

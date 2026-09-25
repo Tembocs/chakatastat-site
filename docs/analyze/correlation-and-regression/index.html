@@ -138,6 +138,25 @@ more others.</p>
 <p><strong>Dialog.</strong> The two variables plus the <strong>controlling</strong> variables. (Partial
 correlation is inherently listwise — it needs cases complete on all variables.)</p>
 <p><strong>Output.</strong> The partial correlation coefficient(s) with significance.</p>
+<h3 id="polychoric--tetrachoric">Polychoric / Tetrachoric</h3>
+<p><strong>When.</strong> <strong>Ordinal or binary items</strong> (Likert responses, yes/no answers), each
+taken as a coarsened reading of an underlying normal variable: the polychoric
+correlation is the correlation those latent variables would have — the right
+input to a factor analysis of ordinal items. Tetrachoric is the 2×2 case.</p>
+<p><strong>Dialog.</strong> Tick two or more <strong>Variables</strong> — integer-coded items, each distinct
+value an ordered category, at least two per variable — and pick the
+<strong>Method</strong>: <em>Polychoric</em> (the default) or <em>Tetrachoric</em>, which is refused for
+a pair in which either variable has more than two categories. The same
+analysis is the <code>polychoric_correlation</code> tool.</p>
+<p><strong>Output.</strong> A <strong>Polychoric Correlation</strong> matrix and a <strong>Polychoric Estimates</strong>
+table (both titled <em>Tetrachoric</em> under that method) with, per pair, <strong>ρ</strong>,
+<strong>S.E.</strong>, <strong>Sig. (2-tailed)</strong> (ρ/S.E. against the normal) and <strong>N</strong>. The
+estimate is two-step maximum likelihood — thresholds fixed at the inverse
+normal of each margin's cumulative proportions, then the ρ that maximizes the
+likelihood of the pair's cross-table; the S.E. comes from that likelihood's
+curvature and is blank at the ±1 boundary. Missing values are deleted
+pairwise. <strong>Weight Cases is honoured</strong>: each case adds its weight to the
+pair's cross-table.</p>
 <h2 id="regression">Regression</h2>
 <p><strong>Analyze → Regression.</strong> Model one outcome from one or more predictors. Pick the
 member that matches your <strong>outcome type</strong>:</p>
@@ -309,6 +328,24 @@ work differently from the Linear ones — see
 dispersion parameter for over-dispersed counts. Both report rate ratios. Both
 offer <a href="#diagnostic-plots-for-the-other-families">diagnostic plots</a>, as do the
 zero-inflated and hurdle count models.</p>
+<h3 id="zero-inflated--hurdle">Zero-Inflated / Hurdle</h3>
+<p><strong>When.</strong> Counts with <strong>excess zeros</strong>: <strong>zero-inflated</strong> mixes in a class of
+structural zeros; <strong>hurdle</strong> fits zero-vs-positive, then a zero-truncated count.</p>
+<p><strong>Dialog.</strong> A non-negative integer count <strong>Dependent</strong> (refused if it has
+no zeros), <strong>Predictors</strong> shared by both parts, <strong>Model</strong> (<em>Zero-inflated
+(mixture)</em>, the default, or <em>Hurdle (two-part)</em>) and <strong>Counts</strong> (<em>Poisson</em>,
+the default, or <em>Negative binomial</em>). The same analysis is the
+<code>zero_inflated</code> tool.</p>
+<p><strong>Output.</strong> <strong>Count Model</strong> and <strong>Zero Model</strong> (B, S.E., Wald, df, Sig.,
+Exp(B), and its Wald Lower/Upper): count Exp(B) is a rate ratio; zero
+Exp(B) is the odds of an <em>excess zero</em> under zero-inflation, of a <em>positive
+count</em> under the hurdle. A <strong>Vuong Test</strong> against the plain count model
+(positive favours the zero model) and <strong>Model Fit</strong> (log likelihood, α for
+negative binomial, parameters, AIC, BIC). SEs are observed-information, α
+fixed. <strong>Diagnostic plots</strong> draw the mixture's
+<a href="#diagnostic-plots-for-the-other-families">quantile residuals</a> on the count
+linear predictor. <strong>Weight Cases is honoured</strong>: the case weight is a
+frequency weight in every part of the fit.</p>
 <h3 id="gamma">Gamma</h3>
 <p>For a <strong>strictly positive, right-skewed continuous</strong> outcome — costs, durations,
 concentrations — where the spread grows with the mean. A <strong>Link</strong> option offers

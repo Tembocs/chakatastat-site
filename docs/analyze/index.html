@@ -138,12 +138,22 @@ every run is recorded in the <a href="../advanced/reproducibility/">Syntax conso
 <tr>
 <td><strong><a href="correlation-and-regression/">Correlation &amp; Regression</a></strong></td>
 <td>Correlate, Regression, GLM, Mixed</td>
-<td>Bivariate/partial correlation (bivariate with a <a href="correlation-and-regression/#permutation-test">permutation test</a>); linear (with <a href="correlation-and-regression/#regularized-ridge--lasso--elastic-net">regularized</a>, <a href="correlation-and-regression/#robust-huber--tukey">robust</a>, <a href="correlation-and-regression/#nonlinear">nonlinear</a> and <a href="correlation-and-regression/#instrumental-variables-2sls">instrumental-variables</a> variants), logistic, Poisson, negative-binomial, gamma, multinomial, ordinal, <a href="correlation-and-regression/#quantile">quantile</a>, <a href="correlation-and-regression/#generalized-estimating-equations">GEE</a> and <a href="correlation-and-regression/#loglinear">loglinear</a> regression; mediation analysis (with moderated mediation and the interaction plot); factorial GLM/ANCOVA; linear and <a href="correlation-and-regression/#generalized-linear-mixed-model">generalized linear</a> mixed models; repeated measures &amp; MANOVA</td>
+<td>Bivariate/partial correlation (bivariate with a <a href="correlation-and-regression/#permutation-test">permutation test</a>) and <a href="correlation-and-regression/#polychoric--tetrachoric">polychoric / tetrachoric</a> correlation; linear (with <a href="correlation-and-regression/#regularized-ridge--lasso--elastic-net">regularized</a>, <a href="correlation-and-regression/#robust-huber--tukey">robust</a>, <a href="correlation-and-regression/#nonlinear">nonlinear</a> and <a href="correlation-and-regression/#instrumental-variables-2sls">instrumental-variables</a> variants), logistic, Poisson, negative-binomial, <a href="correlation-and-regression/#zero-inflated--hurdle">zero-inflated / hurdle</a>, gamma, multinomial, ordinal, <a href="correlation-and-regression/#quantile">quantile</a>, <a href="correlation-and-regression/#generalized-estimating-equations">GEE</a> and <a href="correlation-and-regression/#loglinear">loglinear</a> regression; mediation analysis (with moderated mediation and the interaction plot); factorial GLM/ANCOVA; linear and <a href="correlation-and-regression/#generalized-linear-mixed-model">generalized linear</a> mixed models; repeated measures &amp; MANOVA</td>
 </tr>
 <tr>
 <td><strong><a href="panel/">Panel Regression</a></strong></td>
 <td>Regression</td>
 <td>Fixed effects (within), random effects (Swamy–Arora GLS) and pooled OLS for long-format panel data; the Hausman test; cluster-robust (by entity) standard errors; within/between/overall R²</td>
+</tr>
+<tr>
+<td><strong><a href="power/">Power Analysis</a></strong></td>
+<td>Power Analysis</td>
+<td>Power, required sample size or minimum detectable effect for the t tests, one-way ANOVA, a correlation, two proportions and the regression R² — no dataset needed</td>
+</tr>
+<tr>
+<td><strong><a href="bootstrap/">Bootstrap Confidence Intervals</a></strong></td>
+<td>Bootstrap Confidence Intervals</td>
+<td>Percentile or BCa intervals, with bias and standard error, for a mean, median, SD, variance, CV, correlation or two-group mean difference; reproducible by seed</td>
 </tr>
 <tr>
 <td><strong><a href="meta-analysis/">Meta-Analysis</a></strong></td>
@@ -163,7 +173,7 @@ every run is recorded in the <a href="../advanced/reproducibility/">Syntax conso
 <tr>
 <td><strong><a href="scale-reduction-classify/">Scale, Reduction &amp; Classify</a></strong></td>
 <td>Scale, Dimension Reduction, Classify, ROC Curve</td>
-<td>Reliability; intraclass correlation; factor analysis; k-means, hierarchical &amp; two-step cluster; discriminant analysis; ROC curve / AUC</td>
+<td>Reliability; intraclass correlation; factor analysis, canonical correlation, correspondence analysis, multidimensional scaling; k-means, hierarchical &amp; two-step cluster; discriminant analysis; decision trees (CART / CHAID); ROC curve / AUC</td>
 </tr>
 <tr>
 <td><strong><a href="method-comparison/">Method Comparison (Bland-Altman)</a></strong></td>
@@ -193,7 +203,7 @@ every run is recorded in the <a href="../advanced/reproducibility/">Syntax conso
 <tr>
 <td><strong><a href="survival-and-time-series/">Survival &amp; Time Series</a></strong></td>
 <td>Survival, Time Series</td>
-<td>Kaplan-Meier, Cox regression; autocorrelation, ARIMA/SARIMA with forecasting, stationarity tests, exponential smoothing, seasonal decomposition, cross-correlation</td>
+<td>Kaplan-Meier, Cox regression, parametric (AFT) survival, competing risks; autocorrelation, ARIMA/SARIMA with forecasting, stationarity tests, exponential smoothing, seasonal decomposition, cross-correlation</td>
 </tr>
 <tr>
 <td><strong><a href="var-granger/">VAR &amp; Granger Causality</a></strong></td>

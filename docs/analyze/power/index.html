@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Custom Tables — ChakataStat User Guide</title>
-  <link rel="canonical" href="https://chakatastat.app/docs/analyze/tables/">
+  <title>Power Analysis — ChakataStat User Guide</title>
+  <link rel="canonical" href="https://chakatastat.app/docs/analyze/power/">
   <link rel="icon" type="image/svg+xml" href="../../../assets/logo-mark.svg">
   <link rel="alternate icon" href="../../../assets/favicon-256.png">
   <meta name="theme-color" content="#107C41" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1412" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Custom Tables — ChakataStat User Guide">
-  <meta property="og:url" content="https://chakatastat.app/docs/analyze/tables/">
+  <meta property="og:title" content="Power Analysis — ChakataStat User Guide">
+  <meta property="og:url" content="https://chakatastat.app/docs/analyze/power/">
   <meta property="og:image" content="https://chakatastat.app/assets/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preload" href="../../../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
@@ -91,59 +91,89 @@
       </ul>
       </aside>
       <article class="docs-content">
-<h1 id="custom-tables">Custom Tables</h1>
-<p><strong>Analyze → Tables.</strong> When the fixed-shape tables from the other procedures are
-not the layout you want, these two build a table to your specification.</p>
-<h2 id="custom-tables-2">Custom Tables</h2>
-<p><strong>When to use it.</strong> To pivot one or more categorical variables against others,
-with a cell statistic of your choosing — a generalisation of a crosstab and of a
-means-by-factor breakdown in one tool.</p>
-<p><strong>Dialog.</strong></p>
-<ul>
-<li><strong>Rows</strong> and (nested) <strong>Rows</strong> — the categorical variables down the side.</li>
-<li><strong>Columns</strong> and (nested) <strong>Columns</strong> — the categorical variables across the
-top.</li>
-<li><strong>Statistics</strong> — what each cell shows. Choose any of: <strong>Count</strong>, <strong>Valid N</strong>,
-<strong>Mean, Sum, Median, Min, Max, Std. Deviation</strong> of a measure variable, or
-<strong>Row / Column / Total percentage</strong>. You can show several at once (e.g. count
-<strong>and</strong> column percentage together).</li>
-<li><strong>Compare column proportions</strong> — adds a column-proportions z-test (Bonferroni
-adjusted) to test whether column percentages differ.</li>
-</ul>
-<p><strong>Output.</strong> The pivot table you described, with margins computed over the margin
-cases, and (if requested) a <strong>Column Proportions Comparisons</strong> table.</p>
-<p><strong>Example.</strong> <em>StudyZone</em> (rows) × <em>Sex</em> (columns) showing the <strong>mean</strong> <em>SystolicBP</em>
-in each cell; or <em>SmokingStatus</em> (rows) × <em>Hypertensive</em> (columns) showing count
-and column percentage together, with a column-proportions test.</p>
-<h2 id="multiple-response">Multiple Response</h2>
-<p><strong>When to use it.</strong> When a &quot;pick all that apply&quot; question is stored across
-<strong>several variables</strong> — either as a set of yes/no <strong>dichotomies</strong> (one variable
-per option) or as several variables sharing a common <strong>category</strong> coding.</p>
-<p><strong>Dialog.</strong> Move the variables of the response set in, and choose the <strong>set
-type</strong>:</p>
-<ul>
-<li><strong>Dichotomy</strong> (default) — each variable is a yes/no flag; set the <strong>counted
-value</strong> that means &quot;selected&quot; (default 1).</li>
-<li><strong>Category</strong> — the variables share a category coding; the table pools the
-distinct categories across them.</li>
-</ul>
-<p><strong>Output.</strong> A frequency table over the set: for each option/category, the count,
-the <strong>percent of responses</strong> and the <strong>percent of cases</strong>. A case counts as valid
-if it is non-missing on at least one variable in the set.</p>
-<p><strong>Example.</strong> If several columns recorded different reported symptoms as yes/no,
-a dichotomy multiple-response table shows how often each symptom was reported,
-both as a share of all responses and as a share of participants.</p>
+<h1 id="power-analysis">Power Analysis</h1>
+<p><strong>Analyze → Power Analysis.</strong> Plans a study before you collect it: how likely
+a test is to detect an effect of a given size (its <strong>power</strong>), how many cases
+you need to reach a target power, or the smallest effect a given sample can
+detect. Power analysis takes <strong>no dataset</strong> — every input is a number you
+supply — so it works with an empty grid, and Select, Weight and Split have no
+effect on it.</p>
+<p>Five designs sit under the menu, one dialog each:</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Design</th>
+<th>Effect size</th>
+<th>Sample size means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Means (t test)</strong> — one sample, paired samples, or two independent samples</td>
+<td>Cohen's <em>d</em></td>
+<td>per group for two samples; the number of observations (pairs) otherwise</td>
+</tr>
+<tr>
+<td><strong>One-Way ANOVA</strong> — <em>k</em> groups</td>
+<td>Cohen's <em>f</em></td>
+<td>the total <em>N</em></td>
+</tr>
+<tr>
+<td><strong>Correlation</strong> — Pearson's <em>r</em> against zero</td>
+<td>the correlation <em>r</em></td>
+<td><em>N</em></td>
+</tr>
+<tr>
+<td><strong>Two Proportions</strong> — two independent groups</td>
+<td>the two proportions (Cohen's <em>h</em> is computed from them)</td>
+<td>per group</td>
+</tr>
+<tr>
+<td><strong>Multiple Regression (R²)</strong> — <em>u</em> predictors tested together</td>
+<td>Cohen's <em>f²</em></td>
+<td>the total <em>N</em></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="filling-the-dialog">Filling the dialog</h2>
+<p>Pick what to <strong>solve for</strong> — <strong>Power (1 − β)</strong>, <strong>Sample size</strong> or <strong>Effect
+size</strong> — and fill the other two, with the <strong>significance level (α)</strong> (default
+0.05). The <em>t</em> test, correlation and two-proportion designs also take
+<strong>Two-tailed</strong> (default) or <strong>One-tailed</strong>; ANOVA and the regression R² test
+are F tests, one-sided by nature. The two-proportion design solves for power or
+sample size only: its effect is fixed by the two proportions you enter.</p>
+<p>Conventional effect sizes (Cohen's) if you have nothing better: <em>d</em> = 0.2 /
+0.5 / 0.8, <em>f</em> = 0.10 / 0.25 / 0.40, <em>r</em> = 0.1 / 0.3 / 0.5, <em>f²</em> = 0.02 /
+0.15 / 0.35 for small / medium / large. An effect estimated from a pilot or
+the literature is always better.</p>
+<h2 id="reading-the-output">Reading the output</h2>
+<p>One table, <strong>Power Analysis — <em>design</em></strong>, lists the inputs and the answer.
+Solving for <strong>sample size</strong> rounds up to the next whole case and also prints
+the <strong>Achieved power</strong> at that size, which is at least the target. Solving for
+<strong>effect size</strong> prints the <strong>Detectable effect</strong> — the smallest effect the
+design reaches the target power for. The note under the table names the
+distribution the power came from.</p>
+<p><em>Example.</em> Two independent groups, <em>d</em> = 0.5, α = 0.05 two-tailed, target
+power 0.80: solving for sample size gives <strong>64 per group</strong> (achieved power
+about 0.80).</p>
 <h2 id="how-this-is-computed">How this is computed</h2>
 <p>This section names <em>which</em> method each procedure prints — the estimator, the statistic, its degrees of freedom, and the tie, missing-value and weight rules — and links the recorded convention that explains the choice. The full index is the <a href="../../validation/conventions/README/">convention inventory</a>; every number here is validated against independent packages per the <a href="../../validation/#coverage">validation suite</a>.</p>
 <ul>
-<li><strong>Custom Tables</strong> — counts, percentages and summary statistics over the (value, weight) pairs of the cases, so a frequency weight counts a case that many times (<a href="../../validation/tolerances/">case weighting</a>); the mean, SD and percentiles are the same definitions as Descriptives — n − 1 and the type-2 percentile (<a href="../../validation/conventions/classical/#quantiles">quantiles</a>). The <strong>column-proportion z tests</strong> are the pooled two-proportion <em>z</em> with no continuity correction and no multiple-comparison adjustment (<a href="../../validation/conventions/classical/#column-proportion-z-tests-custom-tables">column tests</a>); the χ² rows are Pearson's without a continuity correction (<a href="../../validation/conventions/classical/#pearson-chi-square-no-continuity-correction">Pearson χ²</a>).</li>
-<li><strong>Multiple Response</strong> — the dichotomy and category counting modes are layout rules over the same counts, not new statistics (<a href="../../validation/#coverage">validation</a>); percentages are of cases or of responses as the dialog says.</li>
+<li><strong>Every design</strong> — power is the probability, under the alternative, of landing beyond the <strong>central</strong> critical value: a tail of the noncentral distribution at the alternative's noncentrality; two-tailed by default (<a href="../../validation/conventions/classical/#power-analysis">power analysis</a>). Sample size and detectable effect invert that function by a bracketing root-find; a sample size is rounded up.</li>
+<li><strong>Means</strong> — noncentral <em>t</em>: df = <em>n</em> − 1 and δ = <em>d</em>√<em>n</em> for one sample or pairs; df = 2<em>n</em> − 2 and δ = <em>d</em>√(<em>n</em>/2) for two groups of <em>n</em>.</li>
+<li><strong>One-way ANOVA</strong> — noncentral <em>F</em> on (<em>k</em> − 1, <em>N</em> − <em>k</em>) df with λ = <em>f</em>²<em>N</em>.</li>
+<li><strong>Correlation</strong> — the Fisher <em>z</em> normal approximation: δ = atanh(|<em>r</em>|)·√(<em>N</em> − 3).</li>
+<li><strong>Two proportions</strong> — Cohen's <em>h</em> = 2 asin√<em>p</em>₁ − 2 asin√<em>p</em>₂; two-tailed through the noncentral χ²(1) with λ = <em>h</em>²<em>n</em>/2, one-tailed through the equivalent normal tail.</li>
+<li><strong>Multiple regression</strong> — noncentral <em>F</em> on (<em>u</em>, <em>N</em> − <em>u</em> − 1) df with λ = <em>f</em>²<em>N</em>.</li>
 </ul>
-<h2 id="see-also">See also</h2>
-<ul>
-<li><a href="../descriptive-statistics/#crosstabs">Crosstabs</a> — for the standard
-two-variable contingency table with chi-square and association measures.</li>
-</ul>
+<h2 id="reproducibility">Reproducibility</h2>
+<p>Each run journals a syntax command, for example:</p>
+<pre><code>power_means test=two_sample, solve=n, effect=0.5, power=0.8
+</code></pre>
+<p>and the five designs are the tools <code>power_means</code>, <code>power_anova</code>,
+<code>power_correlation</code>, <code>power_proportions</code> and <code>power_regression</code> — available to
+the AI assistant, MCP and batch scripts like every analysis. See the
+<a href="../../reference/commands/">command reference</a> for every argument.</p>
       </article>
     </div>
   </main>

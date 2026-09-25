@@ -183,7 +183,8 @@ asserts the set of ids in the JSON and the set exercised by the probes are
 <code>test/validation_pin_guard_test.dart</code>
 (0.24.0 item 1; code review 2026-09-02, finding A7):</p>
 <ol>
-<li><strong>Every pin can fail.</strong> A linear pin's tolerance must be smaller than
+<li>
+<p><strong>Every pin can fail.</strong> A linear pin's tolerance must be smaller than
 the value it pins. The alternative shapes are explicit, never implied:
 a value too small for an absolute tolerance (a tiny p-value) is pinned
 on the <strong>log10 scale</strong> (<code>&quot;scale&quot;: &quot;log10&quot;</code>, tolerance in decades, at
@@ -194,14 +195,30 @@ sweeps every reference file, family files included; a pin that a zero
 from the engine would satisfy fails the suite. The scale-aware
 comparison lives in one place,
 <code>test/validation/reference_loader.dart</code>,
-and every validation suite asserts through it.</li>
-<li><strong>A new analysis kind ships with a pinned deterministic reference
+and every validation suite asserts through it.</p>
+<p><strong>Nor can a pin pass a visibly wrong value.</strong> A linear pin's
+tolerance is also at most <strong>1% of its value</strong> (code review
+2026-09-25, finding V1): &quot;smaller than the value&quot; alone let 44 pins
+accept values 1–56% off — <code>reg_negbin/age_B</code> held 0.0089 within 0.005
+— where the engine and both oracles agree to six digits or better. The
+cap is a floor on what a pin catches, not a precision claim; measured
+agreement is what the cross-OS report shows. A pin whose honest
+tolerance is wider — a Monte Carlo estimate held to its standard error
+— is recorded with its reason in the guard's <code>wideRelativePins</code> map;
+none is exempted silently. The generators apply the same cap at the
+source (<code>cap_rel</code> in the R scripts, explicit values in
+<code>generate_references.py</code>), so a regeneration reproduces the committed
+tolerances.</p>
+</li>
+<li>
+<p><strong>A new analysis kind ships with a pinned deterministic reference
 value.</strong> The guard parses the engine's <code>analyze</code> dispatch from source
 and requires every kind to be exercised by a probe in a
 reference-pinned validation suite. Kinds that predate this rule are
 listed in the guard's legacy map with the location of their inline
 pins; the map is closed to new entries and only shrinks — a legacy
-kind that gains a reference-file probe is forced out of the map.</li>
+kind that gains a reference-file probe is forced out of the map.</p>
+</li>
 </ol>
 <h3 id="shared-byte-identical-inputs">Shared, byte-identical inputs</h3>
 <p>The reference tools and the engine must see <em>exactly</em> the same data, or a
@@ -272,8 +289,8 @@ implementations that share no code with the Python ones, and writes
 suite asserts the engine against <strong>both</strong> at the pin's own tolerance (the
 second oracle has no tolerance of its own), so the claim for a covered pin is
 <em>two independent implementations agree, and the engine agrees with both</em>.</p>
-<p><strong>267 of the 267 pins in <code>reference_values.json</code> have a second oracle, across
-52 of its 52 families</strong> (asserted by a guard in
+<p><strong>353 of the 353 pins in <code>reference_values.json</code> have a second oracle, across
+53 of its 53 families</strong> (asserted by a guard in
 <code>numerical_validation_test.dart</code>,
 like the coverage sentence above). The inventory, by the plan's lanes plus
 the fifth lane the maintainer added on 2026-08-28 so that nothing stays
@@ -290,15 +307,15 @@ single-oracle:</p>
 <tbody>
 <tr>
 <td>1 — linear models and GLMs</td>
-<td><code>reg_linear</code> (16) · <code>nls</code> (5) · <code>iv</code> (6) · <code>reg_logistic</code> (4) · <code>reg_probit</code> (2) · <code>reg_poisson</code> (3) · <code>reg_gamma</code> (6) · <code>reg_negbin</code> (2) · <code>glm_resid</code> (17) · <code>multinomial</code> (3) · <code>ordinal</code> (2) · <code>mediation</code> (7) · <code>mediation_mod</code> (14)</td>
-<td>87</td>
+<td><code>reg_linear</code> (16) · <code>nls</code> (5) · <code>iv</code> (6) · <code>reg_logistic</code> (10) · <code>reg_probit</code> (2) · <code>reg_poisson</code> (3) · <code>reg_gamma</code> (6) · <code>reg_negbin</code> (2) · <code>glm_resid</code> (17) · <code>multinomial</code> (3) · <code>ordinal</code> (2) · <code>mediation</code> (7) · <code>mediation_mod</code> (14)</td>
+<td>93</td>
 <td>base <code>lm</code> / <code>glm</code> / <code>nls</code> (partially linear), <code>ivreg</code>, MASS <code>glm.nb</code> / <code>polr</code>, nnet <code>multinom</code>; the quantile-residual brackets from R's <code>ppois</code> / <code>pnbinom</code> / <code>pgamma</code> on R's fitted means</td>
 </tr>
 <tr>
 <td>2 — survival</td>
-<td><code>survival_km</code> (2) · <code>survival_cox</code> (2) · <code>ph_test</code> (3)</td>
-<td>7</td>
-<td>survival <code>survdiff</code>, <code>coxph(ties = &quot;efron&quot;)</code>, <code>cox.zph</code></td>
+<td><code>survival_km</code> (12) · <code>survival_cox</code> (7) · <code>ph_test</code> (3)</td>
+<td>22</td>
+<td>survival <code>survdiff</code>, <code>survfit</code>, <code>coxph(ties = &quot;efron&quot;)</code>, <code>cox.zph</code></td>
 </tr>
 <tr>
 <td>3 — meta-analysis</td>
@@ -308,14 +325,14 @@ single-oracle:</p>
 </tr>
 <tr>
 <td>4 — classical tests and descriptives</td>
-<td><code>explore</code> (10) · <code>crosstabs</code> (5) · <code>ttest_one</code> (4) · <code>ttest_ind</code> (7) · <code>ttest_paired</code> (4) · <code>anova</code> (5) · <code>levene</code> (2) · <code>means</code> (2) · <code>correlate</code> (6) · <code>partial</code> (1) · <code>glm</code> (4) · <code>manova</code> (3) · <code>rm_anova</code> (3) · <code>mann_whitney</code> (4) · <code>kruskal</code> (2) · <code>normality</code> (3) · <code>wilcoxon</code> (2) · <code>sign</code> (1) · <code>friedman</code> (2) · <code>binomial</code> (1) · <code>runs</code> (2)</td>
-<td>73</td>
+<td><code>explore</code> (12) · <code>crosstabs</code> (19) · <code>ttest_one</code> (4) · <code>ttest_ind</code> (7) · <code>ttest_paired</code> (8) · <code>anova</code> (13) · <code>levene</code> (2) · <code>means</code> (2) · <code>correlate</code> (9) · <code>partial</code> (1) · <code>glm</code> (4) · <code>manova</code> (3) · <code>rm_anova</code> (3) · <code>mann_whitney</code> (4) · <code>kruskal</code> (2) · <code>normality</code> (3) · <code>wilcoxon</code> (4) · <code>sign</code> (1) · <code>friedman</code> (2) · <code>binomial</code> (1) · <code>runs</code> (2) · <code>weighted</code> (16)</td>
+<td>122</td>
 <td>base <code>t.test</code> / <code>cor.test</code> / <code>chisq.test</code> / <code>wilcox.test</code> / <code>kruskal.test</code> / <code>shapiro.test</code> / <code>ks.test</code> / <code>friedman.test</code> / <code>binom.test</code> / <code>manova</code> / <code>quantile(type = 5)</code>, car <code>Anova(type = 3)</code> / <code>leveneTest</code>, psych <code>skew</code> / <code>kurtosi</code> / <code>partial.r</code></td>
 </tr>
 <tr>
 <td>5 — the remainder</td>
-<td><code>cfa</code> (27) · <code>panel</code> (27) · <code>propensity</code> (8) · <code>acf</code> <code>pacf</code> <code>adf</code> <code>kpss</code> <code>arima</code> <code>ets</code> (10) · <code>factor</code> <code>discriminant</code> <code>hier</code> <code>reliability</code> (9) · <code>violin</code> (4)</td>
-<td>85</td>
+<td><code>cfa</code> (27) · <code>panel</code> (27) · <code>propensity</code> (8) · <code>acf</code> <code>pacf</code> <code>adf</code> <code>kpss</code> <code>arima</code> <code>ets</code> (23) · <code>factor</code> <code>discriminant</code> <code>hier</code> <code>reliability</code> (12) · <code>violin</code> (4)</td>
+<td>101</td>
 <td>lavaan <code>cfa</code>; plm <code>within</code> / <code>random(swar)</code> / <code>pooling</code> / <code>within_intercept</code> / <code>phtest</code> / <code>vcovHC</code>; MatchIt <code>matchit(nearest, linear.logit)</code>; base <code>acf</code> / <code>pacf</code> / <code>Box.test</code> / <code>HoltWinters</code>, urca <code>ur.df</code> / <code>punitroot</code> / <code>ur.kpss</code>; base <code>eigen</code> / <code>dist</code> / <code>manova</code>, psych <code>alpha</code>; the Gaussian KDE as a formula at the engine's grid</td>
 </tr>
 </tbody>
@@ -352,7 +369,7 @@ iteratively-estimated families are where the digits go — <code>cfa</code> 6.2 
 optimizers on F_ML), <code>reg_negbin</code> 6.1 (two estimators of θ), <code>multinomial</code>
 6.4, <code>ordinal</code> 5.7, <code>glm_resid</code> 6.4 (brackets from two IRLS fits),
 <code>survival_cox</code> 7.6, <code>meta_analysis</code> 7.8 (REML), <code>ets</code> 7.1 (a one-parameter
-optimum), <code>pacf</code> 4.8, <code>nls</code> 3.3 on a flat objective where the pinned SSE
+optimum), <code>nls</code> 3.3 on a flat objective where the pinned SSE
 and R² are optimizer-invariant but the parameters are not — and <code>adf/p</code>
 2.3, two published approximations (MacKinnon 1994 and 1996) of the same
 Dickey–Fuller distribution, both inside the pin's 1e-3. The generator
@@ -447,7 +464,7 @@ stated once in the conventions inventory's
 <a href="conventions/classical/#degenerate-inputs--the-0230-conventions">degenerate inputs</a>
 section, which closed the inventory's last two waiting rows.</p>
 <h2 id="coverage">Coverage</h2>
-<p>267 statistics across 52 procedure families — essentially the full analytic
+<p>353 statistics across 53 procedure families — essentially the full analytic
 catalog. (These two numbers are <strong>asserted</strong>, not transcribed: a guard in
 <code>numerical_validation_test.dart</code>
 parses this very sentence and fails if it disagrees with
@@ -614,13 +631,18 @@ end to end through the engine in
 risk is pinned to a <strong>hand-computed</strong> value (four cases split into two groups
 give <code>Ĥ = 12/7</code>), with the deciles-of-risk grouping verified to scale a
 frequency weight exactly like replication (the χ² doubles when every weight
-doubles) and the degrees of freedom to be <code>g − 2</code>. It rides this dedicated test
-rather than the shared-CSV harness because the pinned reference set (SciPy,
-statsmodels, scikit-learn, lifelines, pingouin) has no Hosmer-Lemeshow
-implementation, and the statistic's group cutpoints are convention-dependent.
-<code>rust/src/analyze/tests.rs</code> pins the three
+doubles), the degrees of freedom to be <code>g − 2</code>, and tied predicted
+probabilities to stay in one group, so the statistic cannot depend on row
+order (code review 2026-09-25, S3).
+<code>rust/src/analyze/tests.rs</code> pins the four
 properties; <code>test/tool_dispatcher_test.dart</code>
-re-checks it end to end through a fitted logistic model.</li>
+re-checks it end to end through a fitted logistic model. It now also rides
+the shared-CSV harness (<code>reg_logistic/hl_chisq</code>, <code>hl_p</code>, code review
+2026-09-25, V3): no pinned package implements it, so <strong>both oracles compute
+it by formula</strong> with the engine's recorded grouping
+(<a href="conventions/classical/#hosmerlemeshow">Hosmer–Lemeshow</a>) on
+their own fitted probabilities, and agree with each other and the engine to
+14 digits.</li>
 <li><strong>Bootstrap confidence intervals</strong> (the <code>bootstrap</code> kind) — a resampling
 procedure cannot ride the shared-CSV harness: the interval depends on a
 pseudo-random resample, and no two packages agree on a bootstrap CI unless they

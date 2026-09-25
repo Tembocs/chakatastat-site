@@ -192,12 +192,14 @@ deduplicates them only to satisfy Parquet's unique-name requirement).</p>
 <code>variables</code>, with the engine's two storage types:</p>
 <ul>
 <li>a <strong>numeric</strong> variable → an <code>f64</code> column — unless its cells include an
-integer beyond exact double precision, in which case the column is written
-as <strong>text</strong> (the sheet's exact digits) so a save/reopen can never silently
-change an identifier (0.24.0 item 14c; review G4 — the convention is
-<code>docs/development/io-and-formats.md</code> § &quot;Exact integer identity&quot;);
-<code>meta.json</code> still records the variable as numeric, and the reader
-restores cell text from whatever the data part holds;</li>
+integer beyond exact double precision, or any text that does not parse
+to a finite number, in which case the column is written as <strong>text</strong> (the
+sheet's exact cell text) so a save/reopen can never silently change an
+identifier or delete a cell (0.24.0 item 14c, review G4 — the convention
+is <code>docs/development/io-and-formats.md</code> § &quot;Exact integer identity&quot;; code
+review 2026-09-25, D2 for off-type text); <code>meta.json</code> still records the
+variable as numeric, and the reader restores cell text from whatever the
+data part holds;</li>
 <li>a <strong>string</strong> or <strong>date</strong> variable → a UTF-8 string column.</li>
 </ul>
 <p>The data is stored <strong>faithfully</strong> — and this is the key design point:</p>
@@ -224,19 +226,19 @@ untouched.</p>
 <tbody>
 <tr>
 <td>Numeric value</td>
-<td>Round-trips as a number; integral values print without a trailing <code>.0</code> (<code>34</code>, not <code>34.0</code>).</td>
+<td>Round-trips as a number; integral values print as their exact digits without a trailing <code>.0</code> (<code>34</code>, not <code>34.0</code>; <code>1152921504606846976</code>, not <code>1152921504606847000.0</code> — code review 2026-09-25, D3).</td>
 </tr>
 <tr>
 <td>Numeric <em>formatting</em> (e.g. <code>3.10</code>, <code>007</code>)</td>
-<td><strong>Normalised</strong> by typed storage — <code>3.10</code> → <code>3.1</code>, <code>007</code> → <code>7</code>. Keep such values in a <strong>string</strong> column to preserve exact text.</td>
+<td><strong>Normalised</strong> by typed storage — <code>3.10</code> → <code>3.1</code>, <code>007</code> → <code>7</code> — in a column stored as <code>f64</code>; a numeric variable's value is the number, not its spelling. (A column stored as text for the reasons above keeps every spelling.) Keep identifier-like values in a <strong>string</strong> column to preserve exact text.</td>
 </tr>
 <tr>
 <td>Declared user-missing value</td>
 <td><strong>Preserved</strong> (real value kept; definition restored from <code>meta.json</code>).</td>
 </tr>
 <tr>
-<td>Off-type text in a numeric column (a stray word)</td>
-<td><strong>Dropped to blank.</strong> It cannot be represented as <code>f64</code>; this is the one inherent loss of typed columnar storage. Same mapping the engine already applies.</td>
+<td>Off-type text in a numeric column (a stray word, <code>&lt;0.01</code>, <code>1,5</code>)</td>
+<td><strong>Preserved.</strong> The column is written as text, every cell verbatim — the same fallback as an inexact integer. (Until the 2026-09-25 review, D2, such cells were dropped to blank.) Analyses still treat the cells as missing, counted and badged.</td>
 </tr>
 <tr>
 <td>String / date value</td>

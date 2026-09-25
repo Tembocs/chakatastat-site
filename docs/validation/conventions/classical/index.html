@@ -120,12 +120,23 @@ is <em>s</em>/√n. Under a frequency weight, <em>n</em> is the sum of the weigh
 (the <a href="../../tolerances/">case-weighting convention</a>). The population
 (divisor <em>n</em>) forms are not printed anywhere.</p>
 <h3 id="quantiles">Quantiles</h3>
-<p>Recorded in <a href="../../tolerances/">tolerances.md</a>: the <strong>Hazen</strong> definition,
-plotting position (k − ½)/n — R type 5, NumPy <code>hazen</code>. It is used for every
-percentile the application prints, the median included, the box plot's
-quartiles and fences, and the quantile method of <em>Bin variable</em>. Readers
-of SPSS should note that its default (<code>HAVERAGE</code>, R type 6) is a different
-rule.</p>
+<p>Every percentile the application prints — the median included, the box
+plot's quartiles and fences, the quantile method of <em>Bin variable</em>, custom
+tables — is the <strong>inverse empirical CDF, averaging at an exact boundary</strong>:
+the first value whose cumulative share reaches p, or the mean of the two
+values either side when the share lands exactly on p. That is <strong>R type 2</strong>
+(NumPy <code>averaged_inverted_cdf</code>), weighted or not: the one implementation
+below, with all weights 1 when no weight is active. Under it an integer
+weight equals replication exactly, which the frequency-weight convention
+needs. Readers of SPSS should note that its default (<code>HAVERAGE</code>, R type 6)
+is a different rule, and so is Hazen (type 5).</p>
+<p><em>Corrected by code review 2026-09-25 (V3).</em> This section used to record
+<strong>Hazen</strong>, (k − ½)/n; the engine never implemented it. The two rules agree
+whenever n·p is a whole number (so the existing pins, at n = 60, could not
+tell them apart) and differ otherwise — on 1…7 the engine's quartiles are 2
+and 6, Hazen's 2.25 and 5.75. The shipped rule was recorded rather than
+changed, and the pins <code>explore/wright1/p25</code>/<code>p75</code> (n = 17) now separate
+the two.</p>
 <p><strong>Weighted quantiles</strong> (0.24.0 item 7) have <strong>one</strong> implementation,
 <code>stats::weighted_quantile</code>, used by every
 weighted percentile the application prints — Frequencies/Explore/
@@ -163,7 +174,10 @@ included</strong> — no Yates correction. The likelihood-ratio χ² is
 <code>correction = False</code>, R <code>chisq.test(correct = FALSE)</code>). SPSS prints a
 &quot;Continuity Correction&quot; row beside the Pearson row for 2 × 2 tables;
 ChakataStat does not, and the exact alternative for a small 2 × 2 is
-Fisher's test, below.</p>
+Fisher's test, below. A statistic of exactly 0 — a proportional table —
+has p = 1, its exact upper-tail probability; it printed blank until the
+2026-09-25 review (S7), as did an F of 0 and the zero Kruskal–Wallis,
+Friedman and Kendall's W statistics.</p>
 <h3 id="fishers-exact-test-the-two-sided-rule">Fisher's exact test: the two-sided rule</h3>
 <p>Two-sided <em>p</em> is the sum of the probabilities of every table with the same
 margins whose probability is <strong>no more likely than the observed table</strong> —
@@ -183,6 +197,21 @@ to for two treatments (recorded in
 <p>φ = √(χ²/N) and V = √(χ²/(N·(k − 1))) with <em>k</em> the smaller dimension —
 the classical, <strong>uncorrected</strong> forms. Bergsma's bias-corrected V is not
 printed.</p>
+<h3 id="ordinal-and-nominal-association-measures">Ordinal and nominal association measures</h3>
+<p>Recorded 2026-09-25 (code review V3), when they gained pins:</p>
+<ul>
+<li><strong>Goodman–Kruskal γ</strong> = (P − Q)/(P + Q) over concordant and discordant
+pairs; its <strong>Approx. Sig.</strong> is the large-sample z = γ·√((P + Q)/(N·(1 −
+γ²))), two-sided on the normal — not SPSS's ASE0-based test. Yule's Q is
+γ on a 2 × 2 table.</li>
+<li><strong>Goodman–Kruskal λ</strong> (symmetric and each direction) by the textbook
+formulas; its <strong>Asymp. Std. Error</strong> is ASE1 and <strong>Approx. T</strong> is λ/ASE1.
+Where the dependent variable's modal category is tied, the first maximum
+(table order) is taken.</li>
+<li><strong>Cohen's κ</strong> with the Fleiss–Cohen–Everitt <strong>null</strong> variance for its
+significance (statsmodels <code>var_kappa0</code>), printed when the row and column
+variables share their categories.</li>
+</ul>
 <h3 id="mantelhaenszel-and-cochrans-tests">Mantel–Haenszel and Cochran's tests</h3>
 <p>The stratified 2 × 2 tests print both: the Mantel–Haenszel statistic <strong>with</strong>
 its continuity correction and Cochran's <strong>without</strong>, as the table note says.</p>
@@ -222,6 +251,16 @@ large-sample normal approximation).</li>
 <p>η² = SS_between / SS_total; ε² = (SS_between − df_between·MS_within) /
 SS_total; ω² = (SS_between − df_between·MS_within) / (SS_total +
 MS_within) — the Olejnik–Algina forms. Pin <code>anova/eta_squared</code>.</p>
+<h3 id="which-levels-are-groups">Which levels are groups</h3>
+<p>A factor level counts as a group only if at least one of its cases has a
+valid value of the dependent variable. A level whose dependent values
+are all missing adds no mean and no degree of freedom — to the ANOVA's
+<em>k</em> (and so df_between, df_within, F and the post hoc tests' <em>k</em>), to
+Levene's df, and to the Kruskal–Wallis df — exactly as if its cases were
+absent, which is what R's <code>aov</code> and <code>kruskal.test</code> and SPSS do. Welch's
+F* already dropped such a level; the classic F now agrees with it on the
+same data. The validation suite asserts this against the pinned
+references by adding an all-missing level to the pinned data.</p>
 <h3 id="post-hoc-tests">Post hoc tests</h3>
 <p>After a one-way ANOVA the pairwise table carries three adjusted
 significances on the <strong>pooled within-groups MS</strong>: <strong>Bonferroni</strong>,
@@ -240,13 +279,20 @@ the ranks they span); significance by the <strong>t approximation</strong> on n 
 t = ρ√((n−2)/(1−ρ²)) — SciPy's rule and SPSS's. R's <code>cor.test</code> uses the
 exact / AS 89 distribution for n &lt; 1290, which differs in the third digit at
 n = 60 (the second oracle recomputes the t form on R's ρ; pin
-<code>correlate/spearman_age_bp_p</code>).</p>
+<code>correlate/spearman_age_bp_p</code>). Under a weight the ranks are the
+<strong>frequency-weighted mid-ranks</strong> (the weight below a value plus the mean
+position of its tie group) and the correlation of the ranks is weighted,
+so a weight equals replication — ranking the unweighted values, as before
+the 2026-09-25 review (S6), gave ρ = 0.8627 where the replicated data give
+0.8228 (asserted in <code>test/spearman_weights_test.dart</code>).</p>
 <h3 id="kendalls-">Kendall's τ</h3>
 <p><strong>τ-b</strong>, the tie-corrected form; significance by the normal approximation
-with the <strong>no-tie variance</strong> 2(2n + 5)/(9n(n − 1)). Under a weight the
-concordances are weighted by the product of the two cases' weights and the
-effective N is the sum of the weights. τ-a and τ-c are not printed. Pin
-<code>correlate/kendall_age_bp</code>.</p>
+to S = concordant − discordant with the <strong>tie-corrected variance</strong>
+`[n(n−1)(2n+5) − Σt(t−1)(2t+5) − Σu(u−1)(2u+5)]/18 + Σt(t−1)·Σu(u−1)/(2n(n−1))</p>
+<ul>
+<li>Σt(t−1)(t−2)·Σu(u−1)(u−2)/(9n(n−1)(n−2))<code>over the tie groups t of x and u of y — R's</code>cor.test(exact = FALSE)<code>, SciPy's asymptotic </code>kendalltau<code>and SPSS. Until the 2026-09-25 review (S4) it used the no-tie variance, which is conservative on tied ordinal data (τ-b's main use): on the pinned</code>s1<code>/</code>s2<code>scores it printed p = 9.4e-8 against the correct 1.4e-8. Under a weight the concordances are weighted by the product of the two cases' weights, the effective N is the sum of the weights, and a tie group's size is its summed weight (weight ≡ replication). τ-a and τ-c are not printed. Pins</code>correlate/kendall_age_bp<code>, </code>correlate/kendall_age_bp_p<code>(no ties),</code>correlate/kendall_s1_s2<code>, </code>correlate/kendall_s1_s2_p` (heavy ties; both
+oracles).</li>
+</ul>
 <h3 id="partial-correlation">Partial correlation</h3>
 <p>The first-order partial from the inverse of the correlation matrix over the
 listwise sample, tested on n − 2 − k df, <em>k</em> the number of controls
@@ -266,6 +312,14 @@ regression uses <em>t</em> on the residual df. Under a <strong>survey design</st
 model's inference is <em>t</em> on (design df) − p + 1, the <code>summary.svyglm</code>
 convention (recorded in
 <a href="../clinical-and-survey/#regression-under-a-design">clinical-and-survey.md</a>).</p>
+<h3 id="hosmerlemeshow">Hosmer–Lemeshow</h3>
+<p>The optional goodness-of-fit test (<code>hosmer_lemeshow</code>) sorts the cases by
+fitted probability and assigns each <strong>block of tied probabilities</strong> to group
+⌊(weight before it / total weight) · 10⌋, capped at 9; the χ² sums both
+outcome columns over the non-empty groups, on g − 2 df. Both oracles
+reproduce this grouping by formula (no pinned package implements it), and
+the pins <code>reg_logistic/hl_chisq</code> and <code>hl_p</code> hold it (code review 2026-09-25,
+V3).</p>
 <h3 id="stepwise-selection">Stepwise selection</h3>
 <p>Forward, backward and stepwise linear regression enter a predictor at
 <strong>p ≤ .05</strong> and remove at <strong>p ≥ .10</strong> (<code>p_enter</code>, <code>p_remove</code>) — the SPSS
@@ -360,7 +414,11 @@ draws a <strong>log</strong>-transformed band by default and SPSS none, so bands
 different tools are not comparable without naming the transform. The
 <strong>median survival is the first time at which S(t) ≤ 0.5</strong> (SPSS's rule;
 R's <code>survfit</code> reports the same first crossing, interpolating only when the
-curve sits exactly at 0.5). The log-rank test is
+curve sits exactly at 0.5). &quot;Exactly at 0.5&quot; is decided within 1e-12:
+S(t) is a running product, and an exact half such as 12/24 arrives as
+0.5000000000000001 — which, compared exactly, moved the median one event
+late for 49 of the uncensored sample sizes 2–199 (code review
+2026-09-25, S2; asserted against exact rational arithmetic). The log-rank test is
 Mantel–Cox with the hypergeometric variance; Peto and Gehan–Wilcoxon
 weightings are not offered.</p>
 <h3 id="cox-regression-tie-handling-and-intervals">Cox regression: tie handling and intervals</h3>
@@ -382,13 +440,30 @@ estimator; statsmodels <code>adjusted = False</code>, R <code>acf</code>), Bartl
 <strong>cumulative</strong> standard error √((1 + 2Σ_{j&lt;k} r_j²)/n), and the Box–Ljung
 Q on <strong>k df</strong> at lag k (no model-order adjustment — the residual ACF after
 an ARIMA fit subtracts p + q). The PACF is computed by <strong>Durbin–Levinson</strong>
-from the ACF, not by successive OLS regressions; the two agree to ~5 digits
-at n = 120 (pin <code>pacf/lag1</code>).</p>
+from the ACF, not by successive OLS regressions (statsmodels' default
+<code>method=&quot;ols&quot;</code>); the two agree to only ~5 digits at n = 120. The pins
+<code>pacf/lag1</code> and <code>pacf/lag2</code> are referenced against the same convention —
+statsmodels <code>method=&quot;ldb&quot;</code> and R's <code>stats::pacf</code> — at 1e-9, so a switch of
+estimator fails them (code review 2026-09-25, V2: the reference used to be
+the OLS estimator under a 1e-4 tolerance).</p>
 <h3 id="arima">ARIMA</h3>
 <p><strong>Conditional sum of squares</strong> by default (<code>method: &quot;css&quot;</code>), exact Gaussian
 maximum likelihood by Kalman filter on <code>&quot;ml&quot;</code> (warm-started from CSS); a
-constant is fitted by default for an undifferenced series. Recorded for the
-AR(1) pin in <a href="../../tolerances/">tolerances.md</a>.</p>
+constant is fitted by default for an undifferenced series — it is the
+process <strong>mean</strong> (statsmodels <code>trend=&quot;c&quot;</code>, R's &quot;intercept&quot;). Recorded for the
+AR(1) pin in <a href="../../tolerances/">tolerances.md</a>. Under <code>&quot;ml&quot;</code> (recorded
+2026-09-25, code review V3, with the exact-ML pins):</p>
+<ul>
+<li>σ² is concentrated out (the ML estimate, divisor n), and the standard
+errors are the <strong>inverse observed information</strong> — a numerical Hessian of
+the exact log-likelihood (statsmodels <code>cov_type=&quot;approx&quot;</code>; its default
+OPG and its OIM formula differ, the latter by 15% on the pinned MA(1)).</li>
+<li>A forecast is the conditional expectation at the estimates, with the
+interval ŷ ± z·√(σ̂²·Σψⱼ²) over the ψ-weights; it matches the Kalman
+forecasts of R and statsmodels to ~1e-9 on the pinned series.</li>
+<li>The coefficient table's <strong>Sig.</strong> uses t on (n − parameters) df, where R
+and statsmodels use z — which is why no ARIMA p-value is pinned.</li>
+</ul>
 <h3 id="stationarity-tests">Stationarity tests</h3>
 <p>ADF and KPSS both default their lag / bandwidth to <strong>Schwert's rule</strong>
 ⌊12·(n/100)^¼⌋; ADF's <em>p</em> is <strong>MacKinnon's (1994)</strong> polynomial
@@ -438,7 +513,7 @@ The six ICC forms follow Shrout &amp; Fleiss (recorded in
 <h3 id="box-plot">Box plot</h3>
 <p>Tukey's rule: fences at Q₁ − 1.5·IQR and Q₃ + 1.5·IQR, whiskers to the
 last observation <strong>inside</strong> the fences, points past them listed as
-outliers; the quartiles are the Hazen ones above.</p>
+outliers; the quartiles are the type-2 ones above.</p>
 <h3 id="histogram">Histogram</h3>
 <p>Equal-width bins over [min, max], <strong>10 bins</strong> by default (<code>bins</code>); no
 automatic Sturges / Freedman–Diaconis rule.</p>

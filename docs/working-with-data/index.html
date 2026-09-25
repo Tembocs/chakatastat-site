@@ -216,9 +216,14 @@ same spec is editable as text beside the preview (<code>start-end</code> ranges,
 ranges may skip over junk columns. Once split, columns type-infer exactly
 as CSV's do. Headless (batch or MCP) passes the same spec with
 <code>--fwf-spec</code>.</li>
-<li><strong>Excel (<code>.xlsx</code>)</strong> — the first worksheet, read in pure Dart. Legacy
-<strong><code>.xls</code></strong> and OpenDocument <strong><code>.ods</code></strong> read the first sheet through the
-native engine, with the same header prompt and type inference.</li>
+<li><strong>Excel (<code>.xlsx</code>)</strong>, legacy <strong><code>.xls</code></strong> and OpenDocument <strong><code>.ods</code></strong> —
+the first sheet, read by the native engine, with the same header prompt
+and type inference. A cell holding a formula imports as the value the
+workbook last calculated for it (never the formula text), dates keep the
+workbook's own date system (including the 1904 system of older Mac
+workbooks) and import as <code>YYYY-MM-DD</code>, time-only cells as <code>HH:MM:SS</code>, and
+an error cell (<code>#DIV/0!</code>, <code>#N/A</code>) imports blank — the import tells you
+how many there were.</li>
 <li><strong>Parquet / Arrow</strong> — typed columns read directly by the native engine.</li>
 </ul>
 <blockquote>
@@ -242,7 +247,9 @@ the JSON, so there is no header prompt; each column's type is inferred like
 CSV.</li>
 <li><strong>SPSS (<code>.sav</code>, <code>.zsav</code>)</strong> — typed columns <strong>plus the file's metadata</strong>:
 variable labels, value labels (<code>1 → Male</code> arrives as a ChakataStat value
-label), measurement levels, and discrete user-missing values. SPSS
+label), measurement levels, and discrete user-missing values — on a
+date or time variable too, where the code arrives as a date
+(<code>1900-01-01</code>) matching the cells it marks. SPSS
 <em>ranges</em> of missing values have no equivalent here; the import says so
 in its summary rather than dropping them silently. Legacy portable
 <code>.por</code> files are not read — save them as <code>.sav</code> from SPSS first.</li>
@@ -296,16 +303,51 @@ numeric <code>1/2</code> column means <em>Male/Female</em> — that is a value-l
 An SPSS or Stata import does this for you: the labels arrive with the data.</p>
 </blockquote>
 <h2 id="exporting-data">Exporting data</h2>
-<p><strong>File → Export Data…</strong> writes the current dataset (honouring any active case
-filter) to <strong>CSV/TSV</strong>, <strong>Excel</strong>, <strong>Parquet</strong> or <strong>JSON</strong> (an array of
-records) — the format is chosen from the file extension you give.</p>
+<p><strong>File → Export Data…</strong> writes the current dataset to <strong>CSV</strong>, <strong>TSV</strong>,
+<strong>Excel</strong>, <strong>Parquet</strong>, <strong>JSON</strong> (an array of records) or <strong>NDJSON</strong>
+(<code>.ndjson</code> / <code>.jsonl</code>, one record per line) — the format is chosen from the
+file extension you give, and a name with no extension is written as CSV.
+Every case is written: an active <strong>Select Cases</strong> filter decides what the
+analyses see, it does not remove rows from an export.</p>
+<p>What each format keeps:</p>
+<div class="docs-table-wrap"><table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Cells written</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CSV / TSV</td>
+<td>Every cell exactly as it appears in the grid.</td>
+</tr>
+<tr>
+<td>Excel</td>
+<td>Numbers as numbers and text as text. An integer too long for a double (past 2⁵³ — Excel stores only doubles) is written as text, so its digits survive.</td>
+</tr>
+<tr>
+<td>JSON / NDJSON</td>
+<td>Numbers as JSON numbers, text as strings. A cell in a numeric variable that does not read as a number is written as <code>null</code>. Two variables with the same name get distinct keys (<code>Age</code>, <code>Age_2</code>).</td>
+</tr>
+<tr>
+<td>Parquet</td>
+<td>The <strong>analysis view</strong> — what the engine computes on. User-missing values and cells that do not read as numbers are written empty (so a code such as 99 never reaches pandas or R as data), integers past 2⁵³ are rounded, and date cells are written as their text (not a Parquet date type). The status line after the export counts each of these when there are any.</td>
+</tr>
+</tbody>
+</table></div>
+<p>For a file that keeps everything — including the variable metadata — save
+the dataset as <code>.ckd</code> instead.</p>
 <p>CSV/TSV exports are <strong>protected against spreadsheet formula injection</strong> by
 default: a text cell that starts with <code>=</code>, <code>+</code>, <code>-</code>, <code>@</code>, a tab or a carriage
 return and is not a number is written with a leading apostrophe (<code>'</code>), which
 Excel and Calc read as &quot;this is text&quot; and hide — so a value that arrived in
 your data can never run as a formula on someone else's machine. Numbers such
 as <code>-5</code> are never touched. If you need a byte-faithful file (for a tool that
-would show the apostrophe), turn the guard off under <strong>Settings → Files</strong>.</p>
+would show the apostrophe), turn the guard off under <strong>Settings → Files</strong>.
+A CSV/TSV export that holds non-ASCII text (<code>é</code>, <code>ü</code>, …) starts with a UTF-8
+byte-order mark so Excel reads it correctly; that too can be turned off
+under <strong>Settings → Files</strong>.</p>
 <p>To export <em>results</em> rather than data, see
 <a href="../advanced/reproducibility/#exporting-the-output-log">the output log export</a>.</p>
 <h2 id="the-data-view">The Data View</h2>
@@ -313,7 +355,12 @@ would show the apostrophe), turn the guard off under <strong>Settings → Files<
 <ul>
 <li>Click a cell and type to edit; <strong>Tab</strong>/<strong>Enter</strong> move the active cell.</li>
 <li><strong>Paste</strong> (<code>Ctrl+V</code>) a block from another spreadsheet; rows and columns grow to
-fit. Typing into the empty grid creates the first variables automatically.</li>
+fit. Typing into the empty grid creates the first variables automatically.
+Copy and paste use the spreadsheet clipboard format, quoting included, so a
+cell holding a line break (a multi-line Excel cell, an address) stays one
+cell both ways. One copy or paste handles up to 200,000 cells; a larger
+one does nothing and the status line says why (a cut that large leaves
+the cells in place).</li>
 <li><strong>Find &amp; Replace</strong> (<code>Ctrl+F</code>) opens a search bar with <em>match case</em>, <em>entire
 cell</em> and <em>wrap-around</em> options; <strong>Replace All</strong> is a single undoable edit.</li>
 <li>Hover any <strong>column header</strong> to see that variable's label, type and measurement

@@ -147,8 +147,71 @@ Kaiser criterion line at 1 (the classic pick-the-elbow view);</li>
 rotation adds Pattern, Structure and Factor-Correlation matrices.</p>
 <p><strong>Example.</strong> Reduce the body-measurement and blood-pressure variables to a couple
 of interpretable factors.</p>
+<h2 id="dimension-reduction--canonical-correlation">Dimension Reduction → Canonical Correlation</h2>
+<p><strong>When to use it.</strong> To relate <strong>two sets</strong> of numeric variables to each other
+(the <code>canonical_correlation</code> tool): it finds pairs of weighted combinations,
+one from each set, that are as strongly correlated as possible.</p>
+<p><strong>Dialog.</strong> Tick variables in the <strong>Set 1</strong> and <strong>Set 2</strong> checklists. Only
+numeric variables are offered, and the sets cannot overlap: Set 2 lists only
+variables not already in Set 1. Each set needs at least one variable.</p>
+<p><strong>Output.</strong> A <strong>Canonical Correlations</strong> table with one row per function (as
+many functions as the smaller set has variables): <strong>Canonical R</strong>,
+<strong>R Square</strong>, <strong>Wilks' Lambda</strong>, <strong>Chi-Square</strong>, <strong>df</strong> and <strong>Sig.</strong> Each row
+tests whether the canonical correlations from that function onward are all
+zero (Bartlett's χ²); the note gives N. Two <strong>Standardized Canonical
+Coefficients</strong> tables (Set 1, Set 2) give each variable's weight in each
+<strong>Function</strong>, with signs chosen so every canonical correlation is positive.</p>
+<blockquote>
+<p>Cases missing any variable in either set are left out (listwise). The
+analysis <strong>honours the Weight Cases setting</strong>: the correlations are weighted,
+and N is the sum of the weights. A variable with no variance, or a set whose
+correlation matrix is singular, is refused with a message saying so.</p>
+</blockquote>
+<h2 id="dimension-reduction--correspondence-analysis">Dimension Reduction → Correspondence Analysis</h2>
+<p><strong>When to use it.</strong> To see how the categories of <strong>two categorical variables</strong>
+go together (the <code>correspondence_analysis</code> tool). It breaks down how far their
+two-way table departs from independence into a few dimensions and places every
+row and column category on them.</p>
+<p><strong>Dialog.</strong> Pick a <strong>Row variable</strong> and a <strong>Column variable</strong> (two different
+variables, text or numeric codes) and the number of <strong>Dimensions</strong> to report
+(default 2).</p>
+<p><strong>Output.</strong> A <strong>Correspondence Summary</strong> with one row per dimension —
+<strong>Singular Value</strong>, <strong>Inertia</strong>, <strong>% of Inertia</strong>, <strong>Cumulative %</strong> — and a
+<strong>Total</strong> row; the note gives the χ² test of independence (total inertia =
+χ²/N). <strong>Row Points</strong> and <strong>Column Points</strong> tables list each category's
+<strong>Mass</strong> (its share of the total) and its principal coordinate on each
+<strong>Dimension</strong>.</p>
+<blockquote>
+<p>The categories are the distinct values present, in ascending order; a case
+missing either variable is left out, and each variable needs at least two
+categories. There are at most (smaller category count − 1) dimensions, so a
+2×2 table gives one whatever <strong>Dimensions</strong> says. The analysis <strong>honours the
+Weight Cases setting</strong>: each case adds its weight to its cell of the table.</p>
+</blockquote>
+<h2 id="dimension-reduction--multidimensional-scaling">Dimension Reduction → Multidimensional Scaling</h2>
+<p><strong>When to use it.</strong> To picture the <strong>cases</strong> as points in a few dimensions,
+laid out from their Euclidean distances over a set of numeric variables —
+classical (metric) scaling (the <code>multidimensional_scaling</code> tool).</p>
+<p><strong>Dialog.</strong> Tick at least two numeric <strong>Variables</strong>, then set <strong>Dimensions</strong>
+(default 2) and <strong>Max cases (0 = no cap)</strong> (default 200).</p>
+<p><strong>Output.</strong> An <strong>MDS Model Summary</strong> giving each dimension's <strong>Eigenvalue</strong>,
+<strong>% of Variance</strong> (its share of the positive eigenvalues) and
+<strong>Cumulative %</strong>, and an <strong>MDS Coordinates</strong> table with each case's position on
+each <strong>Dimension</strong> (<strong>Case</strong> is its row number). A dimension whose eigenvalue
+is numerically zero is dropped, so you can get fewer than you asked for.</p>
+<blockquote>
+<p><strong>Scope limits.</strong> Distances are computed on the variables as given (not
+standardized) over the cases complete on every variable — at least three.
+By default only the first <strong>200</strong> complete cases are placed, and the
+coordinates table says so; raise <strong>Max cases</strong>, or set it to <strong>0</strong> to lift
+the default. No setting goes past <strong>3,000 cases</strong>: the method holds two
+n × n matrices and its eigen-decomposition grows with the cube of n, so a
+larger request is refused. The coordinates are <strong>computed unweighted</strong> under
+Weight Cases (a case whose weight is not positive is left out; every other
+case counts once), and the output says so.</p>
+</blockquote>
 <h2 id="classify">Classify</h2>
-<p><strong>Analyze → Classify.</strong> Four ways to group or classify cases.</p>
+<p><strong>Analyze → Classify.</strong> Five ways to group or classify cases.</p>
 <h3 id="k-means-cluster">K-Means Cluster</h3>
 <p>Partition cases into a <strong>fixed number K</strong> of clusters. Reports the final cluster
 centers, an ANOVA of how each variable separates the clusters, the cluster sizes,
@@ -163,8 +226,11 @@ optionally, each case's membership at a chosen number of clusters.</p>
 <blockquote>
 <p><strong>Scope limits.</strong> Capped at <strong>200 cases</strong> by default, because the method's cost
 grows steeply with case count (cubic in time, quadratic in memory). Raise
-<strong>Maximum cases</strong> — or set it to <strong>0</strong> to remove the limit — to cluster more;
-the result then carries a note that the cap was lifted. The agglomeration
+<strong>Maximum cases</strong> — or set it to <strong>0</strong> to lift it — to cluster more; the
+result then carries a note that the cap was lifted. No setting takes it past
+<strong>10,000 cases</strong>: the distance matrix alone would need 800 MB there, and a
+larger request is refused rather than risking a crash (use k-means for
+larger data). The agglomeration
 <strong>honours the Weight Cases setting</strong>: each case enters as a cluster of its own
 weight, so the size-weighted linkages (between-groups average, Ward) are
 weighted. Single and complete linkage use nearest/furthest distances, which do
@@ -197,6 +263,32 @@ tallies.</p>
 </blockquote>
 <p><strong>Example.</strong> Predict <em>Diabetic</em> (Yes/No) from <em>BMI</em>, <em>FastingGlucose</em>, <em>Age</em> and
 <em>SystolicBP</em>, with leave-one-out cross-validation to gauge real accuracy.</p>
+<h3 id="decision-tree">Decision Tree</h3>
+<p><strong>When.</strong> Predict a <strong>class</strong> (a classification tree) or a <strong>numeric value</strong> (a
+regression tree) from numeric predictors, as readable <strong>if-then rules</strong> (the
+<code>decision_tree</code> tool).</p>
+<p><strong>Dialog.</strong> A <strong>Target</strong> (any variable) and the numeric <strong>Predictors</strong>.
+<strong>Method</strong> is <strong>CART</strong> (the default: the split with the largest impurity
+decrease) or <strong>CHAID</strong> (the most significant χ² or F split, kept only when
+p ≤ 0.05 after a Bonferroni correction). <strong>Target type</strong> is <strong>Auto-detect</strong>
+(categorical if the target is text or has at most 10 distinct values) or forced
+to <strong>Categorical</strong> or <strong>Continuous</strong>. <strong>Max depth</strong> defaults to 4. Entropy
+impurity and the minimum node and leaf sizes (2 and 1) are set through the
+command's arguments.</p>
+<p><strong>Output.</strong> <strong>Tree Structure</strong>: one row per node, each split shown as
+<em>predictor ≤ threshold</em>, with n, Impurity, Predicted and each leaf's class
+Distribution. <strong>Variable Importance</strong>: each predictor's share of the total
+impurity decrease. Then a <strong>Classification Table</strong> (actual × predicted, with the
+resubstitution accuracy and the leaf count in the note) or, for a regression
+tree, a <strong>Model Summary</strong> (R², RMSE, N).</p>
+<blockquote>
+<p>Splits are always binary, at the midpoint between two adjacent predictor
+values; a coded categorical predictor is split as if ordered, and CHAID does
+not merge categories. Growth stops at the depth and size limits or at a pure
+node. There is no pruning or cross-validation, so the accuracy is optimistic.
+Cases missing the target or any predictor are dropped. <strong>Weight Cases is
+honoured</strong>.</p>
+</blockquote>
 <h3 id="roc-curve">ROC Curve</h3>
 <p><strong>When.</strong> Judge how well a <strong>continuous score</strong> (a measurement, or a fitted
 probability from logistic regression) separates two known classes — the standard
